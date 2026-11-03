@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test:db
+> vitest run tests/security/database.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  1 passed (1)
+      Tests  85 passed (85)
+   Start at  19:52:37
+   Duration  3.15s (tests 94%, import 4%, transform 2%)
+

@@ -1,0 +1,66 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/flow.test.ts (33 tests | 1 failed) 25ms
+   ❯ regressão de confirmação obrigatória (1)
+     × signup nunca mantém sessão imediata mesmo com provider mal configurado 4ms
+ ❯ tests/auth/http.test.ts (9 tests | 1 failed) 74ms
+   ❯ origem do host (1)
+     × recusa Host incompatível mesmo com Origin local 9ms
+ ❯ tests/auth/runtime.test.ts (1 test | 1 failed) 62ms
+   ❯ validação sem banco nem SDK inicializado (1)
+     × payload inválido é rejeitado antes de instanciar Auth 60ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/flow.test.ts > regressão de confirmação obrigatória > signup nunca mantém sessão imediata mesmo com provider mal configurado
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/flow.test.ts:124:49
+    122|  it('signup nunca mantém sessão imediata mesmo com provider mal config…
+    123|    const g=setup();g.signUp.mockResolvedValue({user,session:true} as n…
+    124|    await run('signup',input,g);expect(g.logout).toHaveBeenCalledOnce();
+       |                                                 ^
+    125|  });
+    126| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/auth/http.test.ts > origem do host > recusa Host incompatível mesmo com Origin local
+AssertionError: expected 503 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 503
+
+ ❯ tests/auth/http.test.ts:43:28
+     41|  it('recusa Host incompatível mesmo com Origin local',async()=>{
+     42|    const run=vi.fn();const response=await handleMutation(request('{}',…
+     43|    expect(response.status).toBe(403);expect(run).not.toHaveBeenCalled(…
+       |                            ^
+     44|  });
+     45| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/auth/runtime.test.ts > validação sem banco nem SDK inicializado > payload inválido é rejeitado antes de instanciar Auth
+AssertionError: expected 503 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 503
+
+ ❯ tests/auth/runtime.test.ts:9:27
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  3 failed | 40 passed (43)
+   Start at  20:11:20
+   Duration  464ms (transform 42%, tests 33%, import 23%, worker 3%)
+

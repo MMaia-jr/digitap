@@ -1,0 +1,58 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/flow.test.ts (37 tests | 4 failed) 35ms
+   ❯ canal público opcional do cadastro (4)
+     × valida e encaminha somente URL pública sem credenciais 5ms
+     × recusa canal javascript:alert(1) 6ms
+     × recusa canal https://usuario:senha@exemplo.invalid 1ms
+     × recusa canal não é uma URL 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/flow.test.ts > canal público opcional do cadastro > valida e encaminha somente URL pública sem credenciais
+FlowError: Pedido inválido.
+ ❯ payload src/lib/auth/flow.server.ts:30:132
+     28| }
+     29| function payload(value: unknown, allowed: string[]): Record<string, un…
+     30|   if (!value || typeof value !== 'object' || Array.isArray(value) || O…
+       |                                                                                                                                    ^
+     31|   return value as Record<string, unknown>;
+     32| }
+ ❯ validateAuthInput src/lib/auth/flow.server.ts:57:13
+ ❯ Module.executeAuth src/lib/auth/flow.server.ts:69:5
+ ❯ run tests/auth/flow.test.ts:16:95
+ ❯ tests/auth/flow.test.ts:130:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/auth/flow.test.ts > canal público opcional do cadastro > recusa canal javascript:alert(1)
+ FAIL  tests/auth/flow.test.ts > canal público opcional do cadastro > recusa canal https://usuario:senha@exemplo.invalid
+ FAIL  tests/auth/flow.test.ts > canal público opcional do cadastro > recusa canal não é uma URL
+AssertionError: expected FlowError: Pedido inválido. { …(2) } to match object { status: 422, fields: { …(1) } }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "fields": {
+-     "canal_publico": Any<String>,
+-   },
+-   "status": 422,
++ FlowError {
++   "fields": undefined,
++   "status": 400,
+  }
+
+ ❯ tests/auth/flow.test.ts:134:95
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 33 passed (37)
+   Start at  20:19:41
+   Duration  365ms (transform 48%, tests 31%, import 17%, worker 4%)
+

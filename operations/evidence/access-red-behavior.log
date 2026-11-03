@@ -1,0 +1,389 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/security/access.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/security/access.test.ts (19 tests | 19 failed) 35ms
+   ❯ fronteira de autorização no servidor — testes unitários, sem alegação de RLS (19)
+     × A09 parcial: visitante não alcança consulta privilegiada 12ms
+     × rejeita identidade sem confirmação de email 2ms
+     × G06 parcial: usuário sem conta explícita não vira editor 1ms
+     × A06 parcial: user_metadata/e-mail não concedem papel editorial 1ms
+     × A08 parcial: conta bloqueada é negada 1ms
+     × A08 parcial: conta desativada é negada 1ms
+     × A05 parcial: organização não acessa objeto de outro tenant 1ms
+     × organização acessa somente o próprio tenant 1ms
+     × organização sem vínculo é negada 1ms
+     × editor ativo recebe acesso editorial explícito 0ms
+     × administrador ativo recebe acesso editorial explícito 0ms
+     × editor não recebe administração de contas 2ms
+     × administrador ativo recebe administração de contas 2ms
+     × não confunde identidade verificada com a conta retornada 1ms
+     × papel desconhecido falha fechado 1ms
+     × falha na verificação da sessão não consulta dados privilegiados 1ms
+     × falha do banco não vaza detalhes internos 2ms
+     × papel é relido em cada operação após bloqueio 1ms
+     × erros de acesso têm classe própria e status sem payload privado 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 19 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > A09 parcial: visitante não alcança consulta privilegiada
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 401 }
+
+- Expected
++ Received
+
+- {
+-   "status": 401,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:16:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > rejeita identidade sem confirmação de email
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:20:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > G06 parcial: usuário sem conta explícita não vira editor
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:23:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > A06 parcial: user_metadata/e-mail não concedem papel editorial
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:26:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > A08 parcial: conta bloqueada é negada
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > A08 parcial: conta desativada é negada
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:29:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > A05 parcial: organização não acessa objeto de outro tenant
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:32:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > organização acessa somente o próprio tenant
+Error: Não implementado.
+ ❯ Module.authorize src/lib/auth/permissions.server.ts:6:9
+      4| }
+      5| export async function authorize(_deps: unknown, _request: unknown): Pr…
+      6|   throw new AccessError(501);
+       |         ^
+      7| }
+      8|
+ ❯ tests/security/access.test.ts:35:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > organização sem vínculo é negada
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:38:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > editor ativo recebe acesso editorial explícito
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > administrador ativo recebe acesso editorial explícito
+Error: Não implementado.
+ ❯ Module.authorize src/lib/auth/permissions.server.ts:6:9
+      4| }
+      5| export async function authorize(_deps: unknown, _request: unknown): Pr…
+      6|   throw new AccessError(501);
+       |         ^
+      7| }
+      8|
+ ❯ tests/security/access.test.ts:41:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > editor não recebe administração de contas
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:44:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > administrador ativo recebe administração de contas
+Error: Não implementado.
+ ❯ Module.authorize src/lib/auth/permissions.server.ts:6:9
+      4| }
+      5| export async function authorize(_deps: unknown, _request: unknown): Pr…
+      6|   throw new AccessError(501);
+       |         ^
+      7| }
+      8|
+ ❯ tests/security/access.test.ts:47:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > não confunde identidade verificada com a conta retornada
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:50:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > papel desconhecido falha fechado
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:53:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > falha na verificação da sessão não consulta dados privilegiados
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 503 }
+
+- Expected
++ Received
+
+- {
+-   "status": 503,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ denied tests/security/access.test.ts:11:78
+      9|   findAccount: vi.fn().mockResolvedValue(a),
+     10| });
+     11| const denied = (promise: Promise<unknown>, status: number) => expect(p…
+       |                                                                              ^
+     12|
+     13| describe('fronteira de autorização no servidor — testes unitários, sem…
+ ❯ tests/security/access.test.ts:57:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > falha do banco não vaza detalhes internos
+AssertionError: expected Error: Não implementado. { status: 501 } to match object { status: 503, …(1) }
+
+- Expected
++ Received
+
+- {
+-   "message": "Serviço indisponível.",
+-   "status": 503,
++ AccessError {
++   "status": 501,
+  }
+
+ ❯ tests/security/access.test.ts:62:59
+     60|   it('falha do banco não vaza detalhes internos', async () => {
+     61|     const deps = setup(); deps.findAccount.mockRejectedValue(new Error…
+     62|     await expect(authorize(deps, { action: 'editorial' })).rejects.toM…
+       |                                                           ^
+     63|   });
+     64|   it('papel é relido em cada operação após bloqueio', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > papel é relido em cada operação após bloqueio
+Error: Não implementado.
+ ❯ Module.authorize src/lib/auth/permissions.server.ts:6:9
+      4| }
+      5| export async function authorize(_deps: unknown, _request: unknown): Pr…
+      6|   throw new AccessError(501);
+       |         ^
+      7| }
+      8|
+ ❯ tests/security/access.test.ts:66:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/19]⎯
+
+ FAIL  tests/security/access.test.ts > fronteira de autorização no servidor — testes unitários, sem alegação de RLS > erros de acesso têm classe própria e status sem payload privado
+AssertionError: expected Error: Não implementado. { status: 403 } to match object { status: 403, …(1) }
+
+- Expected
++ Received
+
+- {
+-   "message": "Acesso negado.",
++ AccessError {
+    "status": 403,
+  }
+
+ ❯ tests/security/access.test.ts:72:34
+     70|   });
+     71|   it('erros de acesso têm classe própria e status sem payload privado'…
+     72|     expect(new AccessError(403)).toMatchObject({ status: 403, message:…
+       |                                  ^
+     73|   });
+     74| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/19]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  19 failed (19)
+   Start at  19:08:10
+   Duration  585ms (transform 45%, tests 29%, import 20%, worker 5%)
+

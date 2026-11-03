@@ -1,0 +1,75 @@
+{
+  "note": "HTTP real contra Next.js local, Supabase parado, sem autenticação real.",
+  "checks": [
+    {
+      "name": "HTML /cadastro",
+      "status": "PASS",
+      "http": 200
+    },
+    {
+      "name": "HTML /login",
+      "status": "PASS",
+      "http": 200
+    },
+    {
+      "name": "HTML /recuperar-acesso",
+      "status": "PASS",
+      "http": 200
+    },
+    {
+      "name": "GET de confirmação não consome OTP",
+      "status": "PASS",
+      "http": 200
+    },
+    {
+      "name": "Link de recuperação renderiza formulário específico",
+      "status": "PASS",
+      "http": 200
+    },
+    {
+      "name": "Validação antes do SDK",
+      "status": "PASS",
+      "http": 422
+    },
+    {
+      "name": "Origem externa negada",
+      "status": "PASS",
+      "http": 403
+    },
+    {
+      "name": "JSON malformado negado",
+      "status": "PASS",
+      "http": 400
+    },
+    {
+      "name": "Corpo excessivo negado",
+      "status": "PASS",
+      "http": 413
+    },
+    {
+      "name": "Elevação de papel negada antes do SDK",
+      "status": "PASS",
+      "http": 400
+    },
+    {
+      "name": "Método GET de organização negado",
+      "status": "PASS",
+      "http": 405
+    },
+    {
+      "name": "Rota editorial não implementada é inacessível",
+      "status": "PASS",
+      "http": 404
+    },
+    {
+      "name": "Auth não configurado retorna indisponibilidade sem sucesso falso",
+      "status": "PASS",
+      "http": 503
+    },
+    {
+      "name": "Dashboard sem serviço não expõe organização",
+      "status": "PASS",
+      "http": 200
+    }
+  ]
+}

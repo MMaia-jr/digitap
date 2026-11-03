@@ -1,0 +1,1 @@
+{"_tag":"Error","error":{"code":"DockerLifecycleInspectError","message":"failed to inspect container health: permission denied while trying to connect to the docker API at unix:///Users/alexandrechagasleaocryptoboy/.docker/run/docker.sock"}}

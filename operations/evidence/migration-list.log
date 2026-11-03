@@ -1,0 +1,2 @@
+Target: local stack (127.0.0.1:56152)
+{"migrations":[{"local":"20261103221114","remote":"20261103221114","time":"2026-11-03 22:11:14"}],"message":"Migrations listed","target":{"kind":"local","host":"127.0.0.1","port":56152}}

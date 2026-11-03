@@ -1,0 +1,24 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/gateway.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/gateway.test.ts [ tests/auth/gateway.test.ts ]
+Error: Cannot find module '/src/lib/auth/gateway.server' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/auth/gateway.test.ts
+ ❯ tests/auth/gateway.test.ts:2:1
+      1| import { describe,it,expect,vi } from 'vitest';
+      2| import { createGateway } from '../../src/lib/auth/gateway.server';
+       | ^
+      3| vi.mock('server-only',()=>({}));
+      4| const setup=()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  20:05:43
+   Duration  370ms (worker 97%, environment 3%)
+

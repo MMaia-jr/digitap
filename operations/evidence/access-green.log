@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/security/access.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  19:10:21
+   Duration  413ms (transform 57%, import 22%, tests 14%, worker 6%)
+

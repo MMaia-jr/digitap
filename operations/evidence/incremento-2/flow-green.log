@@ -1,0 +1,38 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/flow.test.ts (32 tests | 1 failed) 28ms
+   ❯ A01–A09: fluxo com provider simulado, não integração real (32)
+     × limitação do provider preservada em recover 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/flow.test.ts > A01–A09: fluxo com provider simulado, não integração real > limitação do provider preservada em recover
+AssertionError: expected FlowError: Pedido inválido. { …(2) } to match object { status: 429 }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 429,
++ FlowError {
++   "status": 400,
+  }
+
+ ❯ tests/auth/flow.test.ts:110:38
+    108|   it.each(['signup','signin','recover'] as const)('limitação do provid…
+    109|     const g=setup();const fn= action==='signup'?g.signUp:action==='sig…
+    110|     await expect(run(action,input,g)).rejects.toMatchObject({status:42…
+       |                                      ^
+    111|   });
+    112|   it('falhas inesperadas não expõem detalhes', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 31 passed (32)
+   Start at  20:04:22
+   Duration  361ms (transform 48%, tests 27%, import 20%, worker 5%)
+

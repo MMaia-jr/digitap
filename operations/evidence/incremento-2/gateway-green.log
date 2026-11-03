@@ -1,0 +1,9 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  3 passed (3)
+      Tests  46 passed (46)
+   Start at  20:06:23
+   Duration  566ms (transform 60%, tests 23%, import 14%, worker 3%)
+

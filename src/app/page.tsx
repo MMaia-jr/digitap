@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function Home(){return <section className="card"><p className="eyebrow">Acesso de organizações</p><h1>Comece com um encontro.</h1><p>A Praça está em preparação para conectar organizações e atividades de Itaperuna e região.</p><p>Nesta etapa, você pode criar seu acesso e cadastrar uma organização para revisão. O cadastro não confirma representação institucional nem parceria.</p><div className="actions"><Link className="button" href="/cadastro">Criar meu acesso</Link><Link href="/login">Já tenho conta</Link></div></section>;}

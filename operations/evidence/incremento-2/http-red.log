@@ -1,0 +1,24 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/http.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/http.test.ts [ tests/auth/http.test.ts ]
+Error: Cannot find module '/src/lib/auth/http.server' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/auth/http.test.ts
+ ❯ tests/auth/http.test.ts:2:1
+      1| import { describe, it, expect, vi } from 'vitest';
+      2| import { handleMutation } from '../../src/lib/auth/http.server';
+       | ^
+      3| import { FlowError } from '../../src/lib/auth/flow.server';
+      4| vi.mock('server-only', () => ({}));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  20:04:47
+   Duration  289ms (worker 97%, environment 3%)
+

@@ -1,0 +1,55 @@
+# Criado pela CLI 3.0.0 e reduzido para o incremento de segurança local.
+project_id = "a-praca-v1-5"
+[api]
+enabled = true
+port = 56151
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+auto_expose_new_tables = false
+[db]
+port = 56152
+shadow_port = 56150
+major_version = 17
+[db.pooler]
+enabled = false
+port = 56159
+[db.seed]
+enabled = false
+[realtime]
+enabled = false
+[studio]
+enabled = false
+port = 56153
+[local_smtp]
+enabled = true
+port = 56154
+[storage]
+enabled = false
+[storage.vector]
+enabled = false
+[storage.s3_protocol]
+enabled = false
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3215"
+additional_redirect_urls = ["http://127.0.0.1:3215/auth/confirm"]
+enable_signup = true
+enable_anonymous_sign_ins = false
+minimum_password_length = 12
+[auth.email]
+enabled = true
+enable_confirmations = true
+[edge_runtime]
+enabled = false
+[analytics]
+enabled = false
+port = 56157
+
+# Templates locais preparados no incremento 2; não aplicados ao stack parado.
+[auth.email.template.confirmation]
+subject = "Confirme seu acesso à Praça"
+content_path = "./templates/confirmation.html"
+[auth.email.template.recovery]
+subject = "Recupere seu acesso à Praça"
+content_path = "./templates/recovery.html"

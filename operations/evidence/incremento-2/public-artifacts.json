@@ -1,0 +1,5 @@
+{
+  "filesScanned": 13,
+  "matches": [],
+  "note": "Verifica nomes/prefixos privados nos artefatos públicos. Nenhuma credencial real foi configurada; não substitui teste de vazamento com segredos sintéticos e sessão real."
+}

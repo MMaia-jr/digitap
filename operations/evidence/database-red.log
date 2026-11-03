@@ -1,0 +1,82 @@
+
+> a-praca-v1-5@0.1.0 test:db
+> vitest run tests/security/database.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/security/database.test.ts (83 tests | 11 failed) 2552ms
+   ❯ segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 (83)
+     × organizacoes existe com RLS e sem grants aos clientes 14ms
+     × contas_acesso existe com RLS e sem grants aos clientes 2ms
+     × atividades existe com RLS e sem grants aos clientes 2ms
+     × registros_realizacao existe com RLS e sem grants aos clientes 2ms
+     × evidencias existe com RLS e sem grants aos clientes 2ms
+     × autorizacoes_publicacao existe com RLS e sem grants aos clientes 1ms
+     × apoios existe com RLS e sem grants aos clientes 2ms
+     × parceiros existe com RLS e sem grants aos clientes 2ms
+     × eventos_editoriais existe com RLS e sem grants aos clientes 2ms
+     × RLS continua negando leitura mesmo se SELECT for concedido por engano (rollback) 4ms
+     × tentativas públicas não alteraram os registros fictícios 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > organizacoes existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > contas_acesso existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > atividades existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > registros_realizacao existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > evidencias existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > autorizacoes_publicacao existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > apoios existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > parceiros existe com RLS e sem grants aos clientes
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > eventos_editoriais existe com RLS e sem grants aos clientes
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/security/database.test.ts:59:18
+     57|   it.each(tables)('%s existe com RLS e sem grants aos clientes', async…
+     58|     const { rows } = await db.query(`select c.relrowsecurity as rls fr…
+     59|     expect(rows).toHaveLength(1);
+       |                  ^
+     60|     expect(rows[0].rls).toBe(true);
+     61|     for (const role of ['anon', 'authenticated']) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > RLS continua negando leitura mesmo se SELECT for concedido por engano (rollback)
+error: relation "public.contas_acesso" does not exist
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ tests/security/database.test.ts:90:7
+     88|     await db.query('begin');
+     89|     try {
+     90|       await db.query('grant select on public.contas_acesso to anon');
+       |       ^
+     91|       await db.query('set local role anon');
+     92|       const result = await db.query('select * from public.contas_acess…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  tests/security/database.test.ts > segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 > tentativas públicas não alteraram os registros fictícios
+error: relation "public.contas_acesso" does not exist
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ tests/security/database.test.ts:98:20
+     96|
+     97|   it('tentativas públicas não alteraram os registros fictícios', async…
+     98|     const result = await db.query('select auth_user_id, papel, situaca…
+       |                    ^
+     99|     expect(result.rows).toEqual([{ auth_user_id: userId, papel: 'organ…
+    100|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 72 passed (83)
+   Start at  19:47:52
+   Duration  2.94s (tests 94%, import 4%, transform 2%)
+

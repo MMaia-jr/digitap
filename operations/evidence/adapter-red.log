@@ -1,0 +1,28 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/security/access.test.ts tests/security/adapter.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/security/adapter.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/security/adapter.test.ts [ tests/security/adapter.test.ts ]
+Error: Cannot find module '/src/lib/auth/supabase-access.server' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/security/adapter.test.ts
+ ❯ tests/security/adapter.test.ts:2:1
+      1| import { describe, it, expect, vi } from 'vitest';
+      2| import { createAccessDependencies } from '../../src/lib/auth/supabase-…
+       | ^
+      3| vi.mock('server-only', () => ({}));
+      4| describe('adapter Supabase server-only', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  19 passed (19)
+   Start at  19:50:20
+   Duration  377ms (worker 47%, transform 25%, import 16%, tests 11%)
+

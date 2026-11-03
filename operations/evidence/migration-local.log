@@ -1,0 +1,2 @@
+Target: local stack (127.0.0.1:56152)
+{"target":{"kind":"local","host":"127.0.0.1","port":56152},"_tag":"Error","error":{"code":"DbQueryExecError","message":"failed to execute query: error: cannot insert multiple commands into a prepared statement"}}

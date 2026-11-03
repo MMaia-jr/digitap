@@ -1,0 +1,62 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/session.test.ts (0 test)
+ ❯ tests/auth/cookies.test.ts (2 tests | 2 failed) 12ms
+   ❯ cookies SSR server-only simulados (2)
+     × preserva nomes dos chunks e força HttpOnly/SameSite 9ms
+     × logout apaga somente cookies próprios, incluindo chunks e verifier 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/session.test.ts [ tests/auth/session.test.ts ]
+Error: Cannot find module '/src/lib/auth/organization-access.server' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/auth/session.test.ts
+ ❯ tests/auth/session.test.ts:2:1
+      1| import { describe,it,expect,vi } from 'vitest';
+      2| import { loadOrganizationAccess } from '../../src/lib/auth/organizatio…
+       | ^
+      3| vi.mock('server-only',()=>({}));
+      4| const user={id:'user-ficticio',email_confirmed_at:'2026-11-03'};
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/cookies.test.ts > cookies SSR server-only simulados > preserva nomes dos chunks e força HttpOnly/SameSite
+AssertionError: expected { path: '/', httpOnly: true, …(3) } to not have property "name"
+
+- Expected:
+undefined
+
++ Received:
+"ap-auth"
+
+ ❯ tests/auth/cookies.test.ts:13:41
+     11|    await options.cookies.setAll?.([{name:'ap-auth.0',value:'token-fict…
+     12|    expect(jar.set).toHaveBeenCalledWith('ap-auth.0','token-ficticio',e…
+     13|    expect(jar.set.mock.calls[0][2]).not.toHaveProperty('name');
+       |                                         ^
+     14|  });
+     15|  it('logout apaga somente cookies próprios, incluindo chunks e verifie…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/auth/cookies.test.ts > cookies SSR server-only simulados > logout apaga somente cookies próprios, incluindo chunks e verifier
+AssertionError: expected "vi.fn()" to be called 2 times, but got 1 times
+ ❯ tests/auth/cookies.test.ts:17:49
+     15|  it('logout apaga somente cookies próprios, incluindo chunks e verifie…
+     16|    jar.getAll.mockReturnValue([{name:'ap-auth.0',value:'ficticio'},{na…
+     17|    (await clearAuthCookies())();expect(jar.set).toHaveBeenCalledTimes(…
+       |                                                 ^
+     18|    expect(jar.set).not.toHaveBeenCalledWith('outro-projeto',expect.any…
+     19|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed (2)
+   Start at  20:09:44
+   Duration  293ms (transform 58%, import 20%, tests 13%, worker 9%)
+

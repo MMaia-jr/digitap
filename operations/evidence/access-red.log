@@ -1,0 +1,28 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/security/access.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/security/access.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/security/access.test.ts [ tests/security/access.test.ts ]
+Error: Cannot find module '/src/lib/auth/permissions.server' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/security/access.test.ts
+ ❯ tests/security/access.test.ts:2:1
+      1| import { describe, it, expect, vi } from 'vitest';
+      2| import { authorize, AccessError } from '../../src/lib/auth/permissions…
+       | ^
+      3|
+      4| vi.mock('server-only', () => ({}));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  19:07:38
+   Duration  345ms (worker 97%, environment 3%)
+
