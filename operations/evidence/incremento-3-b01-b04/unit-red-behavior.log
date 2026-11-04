@@ -1,0 +1,340 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/activities.test.ts (49 tests | 22 failed) 30ms
+   ❯ B02/B03 — domínio puro (30)
+     × aceita dados válidos e conserva o instante com fuso explícito 5ms
+     × aceita texto Unicode nos limites medidos como PostgreSQL e URL opcional 0ms
+     × converte datetime-local explicitamente em America/Sao_Paulo 1ms
+   ❯ B01–B04 — serviço com ports simulados, sem alegação de SQL real (19)
+     × B01: visitante não abre transação privilegiada 6ms
+     × B01: conta sem confirmação não abre transação 1ms
+     × B01: vínculo/papel inválido falha fechado 1ms
+     × B01: vínculo/papel inválido falha fechado 1ms
+     × B01: vínculo/papel inválido falha fechado 1ms
+     × B01: organização suspensa não cria rascunho 1ms
+     × B01: cria rascunho com tenant/autor derivados do banco 0ms
+     × B01: outro tenant recebe 404 e consulta é filtrada pelo vínculo próprio 1ms
+     × B01: editor explícito lê detalhe mas não cria ou envia 1ms
+     × B01: administrador explícito lê detalhe mas não cria ou envia 0ms
+     × B01: edição usa versão esperada e incrementa revisão privada 0ms
+     × B01: conflito de versão impede sobrescrita 0ms
+     × B04: enviada não pode ser editada 1ms
+     × B04: envio registra estado e evento na mesma transação fornecida 0ms
+     × B04: retry da versão enviada não cria outro evento 0ms
+     × B03/B04: revalida data persistida antes de enviar 1ms
+     × B02: payload incompleto não cria rascunho 0ms
+     × B04: cliente não define a transição ou snapshot 0ms
+     × falha interna não expõe SQL/credenciais 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 22 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/activities.test.ts > B02/B03 — domínio puro > aceita dados válidos e conserva o instante com fuso explícito
+Error: Não implementado.
+ ❯ Module.validateDraft src/lib/activities/domain.ts:4:92
+      2|   constructor(public readonly status:number,message:string,public read…
+      3| }
+      4| export function validateDraft(_input:unknown,_now=new Date()):Record<s…
+       |                                                                                            ^
+      5| export function validateVersion(_input:unknown):number{throw new Activ…
+      6| export function localStartToInstant(_input:string,_now=new Date()):str…
+ ❯ tests/activities/activities.test.ts:11:80
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B02/B03 — domínio puro > aceita texto Unicode nos limites medidos como PostgreSQL e URL opcional
+Error: Não implementado.
+ ❯ Module.validateDraft src/lib/activities/domain.ts:4:92
+      2|   constructor(public readonly status:number,message:string,public read…
+      3| }
+      4| export function validateDraft(_input:unknown,_now=new Date()):Record<s…
+       |                                                                                            ^
+      5| export function validateVersion(_input:unknown):number{throw new Activ…
+      6| export function localStartToInstant(_input:string,_now=new Date()):str…
+ ❯ tests/activities/activities.test.ts:18:90
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B02/B03 — domínio puro > converte datetime-local explicitamente em America/Sao_Paulo
+Error: Não implementado.
+ ❯ Module.localStartToInstant src/lib/activities/domain.ts:6:81
+      4| export function validateDraft(_input:unknown,_now=new Date()):Record<s…
+      5| export function validateVersion(_input:unknown):number{throw new Activ…
+      6| export function localStartToInstant(_input:string,_now=new Date()):str…
+       |                                                                                 ^
+      7|
+ ❯ tests/activities/activities.test.ts:21:78
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: visitante não abre transação privilegiada
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 401 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 401,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:45:128
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: conta sem confirmação não abre transação
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 403 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:46:147
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: vínculo/papel inválido falha fechado
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: vínculo/papel inválido falha fechado
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: vínculo/papel inválido falha fechado
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 403 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:47:184
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: organização suspensa não cria rascunho
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 403 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:48:120
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: cria rascunho com tenant/autor derivados do banco
+Error: Não implementado.
+ ❯ Object.missing src/lib/activities/service.server.ts:4:50
+      2| import { ActivityError } from './domain';
+      3| export function createActivityService(_deps:unknown){
+      4|  const missing=async(..._args:unknown[])=>{throw new ActivityError(503…
+       |                                                  ^
+      5|  return {create:missing,get:missing,list:missing,update:missing,submit…
+      6| }
+ ❯ tests/activities/activities.test.ts:49:104
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: outro tenant recebe 404 e consulta é filtrada pelo vínculo próprio
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 404 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 404,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:50:148
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: editor explícito lê detalhe mas não cria ou envia
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: administrador explícito lê detalhe mas não cria ou envia
+AssertionError: promise rejected "Error: Não implementado. { …(2) }" instead of resolving
+ ❯ tests/activities/activities.test.ts:51:200
+
+
+Caused by: Error: Não implementado.
+ ❯ Object.missing src/lib/activities/service.server.ts:4:50
+ ❯ tests/activities/activities.test.ts:51:192
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { status: 503, fields: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: edição usa versão esperada e incrementa revisão privada
+AssertionError: promise rejected "Error: Não implementado. { …(2) }" instead of resolving
+ ❯ tests/activities/activities.test.ts:52:157
+
+
+Caused by: Error: Não implementado.
+ ❯ Object.missing src/lib/activities/service.server.ts:4:50
+ ❯ tests/activities/activities.test.ts:52:117
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { status: 503, fields: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: conflito de versão impede sobrescrita
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 409 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 409,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:53:140
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B04: enviada não pode ser editada
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 409 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 409,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:54:137
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B04: envio registra estado e evento na mesma transação fornecida
+AssertionError: promise rejected "Error: Não implementado. { …(2) }" instead of resolving
+ ❯ tests/activities/activities.test.ts:55:152
+
+
+Caused by: Error: Não implementado.
+ ❯ Object.missing src/lib/activities/service.server.ts:4:50
+ ❯ tests/activities/activities.test.ts:55:121
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { status: 503, fields: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B04: retry da versão enviada não cria outro evento
+Error: Não implementado.
+ ❯ Object.missing src/lib/activities/service.server.ts:4:50
+      2| import { ActivityError } from './domain';
+      3| export function createActivityService(_deps:unknown){
+      4|  const missing=async(..._args:unknown[])=>{throw new ActivityError(503…
+       |                                                  ^
+      5|  return {create:missing,get:missing,list:missing,update:missing,submit…
+      6| }
+ ❯ tests/activities/activities.test.ts:56:117
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B03/B04: revalida data persistida antes de enviar
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 422 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:57:166
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B02: payload incompleto não cria rascunho
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 422 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:58:117
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B04: cliente não define a transição ou snapshot
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 400 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 400,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:59:154
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/22]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > falha interna não expõe SQL/credenciais
+AssertionError: expected Error: Não implementado. { …(2) } to match object { status: 503, …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "message": "Serviço indisponível. Tente novamente.",
++ ActivityError {
+    "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:60:211
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/22]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  22 failed | 27 passed (49)
+   Start at  11:41:29
+   Duration  401ms (tests 38%, transform 34%, import 23%, worker 5%)

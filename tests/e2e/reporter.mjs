@@ -11,8 +11,10 @@ export default class Reporter {
   onError(){console.log('Erro do runner; conteúdo omitido para proteger credenciais.');}
   onEnd(result){
     const summary={status:result.status,PASS:this.checks.filter(c=>c.status==='PASS').length,FAIL:this.checks.filter(c=>c.status==='FAIL').length,SKIP:this.checks.filter(c=>c.status==='SKIP').length,checks:this.checks};
-    mkdirSync('operations/evidence/incremento-2c',{recursive:true});
-    writeFileSync('operations/evidence/incremento-2c/e2e.json',JSON.stringify(summary,null,2)+'\n');
+    const dir=process.env.A_PRACA_EVIDENCE_DIR??'operations/evidence/incremento-2c';
+    if(!/^operations\/evidence\/[a-zA-Z0-9-]+$/.test(dir))throw new Error('Diretório de evidência fora do projeto.');
+    mkdirSync(dir,{recursive:true});
+    writeFileSync(dir+'/e2e.json',JSON.stringify(summary,null,2)+'\n');
     console.log(JSON.stringify({status:summary.status,PASS:summary.PASS,FAIL:summary.FAIL,SKIP:summary.SKIP}));
   }
 }

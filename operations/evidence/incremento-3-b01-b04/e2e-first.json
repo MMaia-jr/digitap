@@ -1,0 +1,8 @@
+{
+  "command": "Playwright tests/e2e/activities.spec.mjs --project=chromium, with local browser path and authorized fixture cleanup",
+  "exit_code": 0,
+  "PASS": 4,
+  "FAIL": 0,
+  "SKIP": 0,
+  "note": "Resultado da primeira execução específica observado no retorno do processo; execução completa posterior está em e2e.json."
+}

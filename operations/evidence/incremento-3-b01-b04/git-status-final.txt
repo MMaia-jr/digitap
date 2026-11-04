@@ -1,0 +1,24 @@
+ M .env.example
+ M operations/progresso.md
+ M package-lock.json
+ M package.json
+ M scripts/e2e-server.mjs
+ M specs/contratos-api.md
+ M specs/matriz-testes-v1.5.md
+ M src/app/dashboard/page.tsx
+ M tests/e2e/auth.spec.mjs
+ M tests/e2e/reporter.mjs
+ M vitest.config.ts
+?? operations/arquivos-incremento-3-b01-b04.txt
+?? operations/evidence/incremento-3-b01-b04/
+?? operations/incremento-3-b01-b04.md
+?? src/app/api/atividades/
+?? src/app/dashboard/atividade/
+?? src/app/dashboard/nova-atividade/
+?? src/components/ActivityForm.tsx
+?? src/lib/activities/
+?? src/lib/database.server.ts
+?? tests/activities/
+?? tests/components/activity-form.test.tsx
+?? tests/e2e/activities.spec.mjs
+?? tests/integration/activities.database.test.ts

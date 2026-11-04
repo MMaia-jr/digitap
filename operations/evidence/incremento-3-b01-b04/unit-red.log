@@ -1,0 +1,24 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/activities.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/activities.test.ts [ tests/activities/activities.test.ts ]
+Error: Cannot find module '/src/lib/activities/domain' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/activities/activities.test.ts
+ ❯ tests/activities/activities.test.ts:3:1
+      1| import { describe,it,expect,vi } from 'vitest';
+      2| import type { Sql,Transaction } from '../../src/lib/database.server';
+      3| import { validateDraft,validateVersion,ActivityError,localStartToInsta…
+       | ^
+      4| import { createActivityService } from '../../src/lib/activities/servic…
+      5| vi.mock('server-only',()=>({}));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  11:41:13
+   Duration  307ms (worker 96%, environment 4%)

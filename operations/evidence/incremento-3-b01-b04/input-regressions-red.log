@@ -1,0 +1,31 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/activities.test.ts (51 tests | 2 failed) 43ms
+   ❯ B02/B03 — domínio puro (32)
+     × B03: rejeita URL imprópria: https://exemplo.invalid/
+agenda 3ms
+     × B03: rejeita HTML ou conteúdo excessivo 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/activities.test.ts > B02/B03 — domínio puro > B03: rejeita URL imprópria: https://exemplo.invalid/
+agenda
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/activities/activities.test.ts:16:225
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/activities/activities.test.ts > B02/B03 — domínio puro > B03: rejeita HTML ou conteúdo excessivo
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/activities/activities.test.ts:17:219
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 49 passed (51)
+   Start at  12:22:09
+   Duration  370ms (transform 37%, import 34%, tests 27%, worker 2%)

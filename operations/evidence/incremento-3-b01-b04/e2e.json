@@ -1,0 +1,99 @@
+{
+  "status": "passed",
+  "PASS": 13,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "B01",
+      "test": "B01: rascunho privado, edição própria, visitante e tenant alheio negados; editor lê",
+      "status": "PASS",
+      "duration_ms": 4755,
+      "errors": []
+    },
+    {
+      "id": "B02",
+      "test": "B02: campos obrigatórios ausentes impedem salvar/enviar por UI/API",
+      "status": "PASS",
+      "duration_ms": 622,
+      "errors": []
+    },
+    {
+      "id": "B03",
+      "test": "B03: API rejeita datas/URL/HTML e IDs de organização forjados",
+      "status": "PASS",
+      "duration_ms": 100,
+      "errors": []
+    },
+    {
+      "id": "B04",
+      "test": "B04: envio real permanece privado, audita uma vez e retry é idempotente",
+      "status": "PASS",
+      "duration_ms": 2613,
+      "errors": []
+    },
+    {
+      "id": "A01",
+      "test": "A01: cadastro, confirmação, vínculo pendente e sessão SSR",
+      "status": "PASS",
+      "duration_ms": 8199,
+      "errors": []
+    },
+    {
+      "id": "A02",
+      "test": "A02: validação e cadastro duplicado sem enumeração",
+      "status": "PASS",
+      "duration_ms": 145,
+      "errors": []
+    },
+    {
+      "id": "A03",
+      "test": "A03: login incorreto negado e login válido restaura SSR",
+      "status": "PASS",
+      "duration_ms": 2251,
+      "errors": []
+    },
+    {
+      "id": "A04",
+      "test": "A04: recuperação, token expirado e replay negados",
+      "status": "PASS",
+      "duration_ms": 4398,
+      "errors": []
+    },
+    {
+      "id": "A05",
+      "test": "A05: duas organizações isoladas e vínculo concorrente idempotente",
+      "status": "PASS",
+      "duration_ms": 3256,
+      "errors": []
+    },
+    {
+      "id": "A06",
+      "test": "A06: cliente não promove papel",
+      "status": "PASS",
+      "duration_ms": 48,
+      "errors": []
+    },
+    {
+      "id": "A07",
+      "test": "A07: organização pendente não publica nem acessa administração",
+      "status": "PASS",
+      "duration_ms": 930,
+      "errors": []
+    },
+    {
+      "id": "A08",
+      "test": "A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada",
+      "status": "PASS",
+      "duration_ms": 5680,
+      "errors": []
+    },
+    {
+      "id": "A09",
+      "test": "A09: visitante não acessa área restrita/editorial",
+      "status": "PASS",
+      "duration_ms": 1119,
+      "errors": []
+    }
+  ]
+}

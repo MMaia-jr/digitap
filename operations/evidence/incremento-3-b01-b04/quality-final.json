@@ -1,0 +1,58 @@
+{
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0
+  },
+  "typecheck": {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 0
+  },
+  "runtime-dependency": {
+    "command": [
+      "npm",
+      "ls",
+      "pg",
+      "--omit=dev"
+    ],
+    "exit_code": 0
+  },
+  "unit": {
+    "command": "npm test",
+    "exit_code": 0,
+    "PASS": 183,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "lint": {
+    "command": "npm run lint",
+    "exit_code": 0
+  },
+  "integration": {
+    "command": [
+      "npm",
+      "run",
+      "test:onboarding:db"
+    ],
+    "exit_code": 0,
+    "PASS": 100,
+    "FAIL": 0,
+    "SKIP": 0,
+    "summary": "Tests  100 passed (100)"
+  },
+  "e2e": {
+    "status": "passed",
+    "PASS": 13,
+    "FAIL": 0,
+    "SKIP": 0,
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-3-b01-b04 npm run test:e2e"
+  },
+  "scope": "B01–B04 e regressões existentes; não é aceite integral de A07 ou dos 74 cenários"
+}

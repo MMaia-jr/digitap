@@ -1,0 +1,21 @@
+{
+  "format_only": [
+    "unit-final.log",
+    "integration-first.log",
+    "unit-red.log",
+    "typecheck-final.log",
+    "typecheck-initial.log",
+    "refactor-green.log",
+    "form-red.log",
+    "unit-red-behavior.log",
+    "input-regressions-green.log",
+    "build-final.log",
+    "unit-green.log",
+    "input-regressions-red.log",
+    "lint-final.log",
+    "runtime-dependency-final.log",
+    "lint-initial.log",
+    "integration-final.log"
+  ],
+  "effect": "Removidos espaços finais/CR e linhas vazias finais; resultados e texto significativo preservados."
+}

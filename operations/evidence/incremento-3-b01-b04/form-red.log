@@ -1,0 +1,32 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/activity-form.test.tsx (3 tests | 1 failed) 615ms
+   × B02/B04: mudança não salva impede envio acidental da versão anterior 524ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/activity-form.test.tsx > B02/B04: mudança não salva impede envio acidental da versão anterior
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/components/activity-form.test.tsx:12:88
+     10|  expect(screen.getByRole('button',{name:'Enviar atividade'}).hasAttrib…
+     11|  fireEvent.change(screen.getByLabelText('Título'),{target:{value:''}});
+     12|  expect(screen.getByRole('button',{name:'Enviar atividade'}).hasAttrib…
+       |                                                                                        ^
+     13| });
+     14| it('B01: HTML de rascunho bloqueia submit antes da hidratação',()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  12:20:18
+   Duration  3.99s (environment 65%, tests 17%, import 14%, transform 4%, worker 1%)

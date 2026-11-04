@@ -79,8 +79,10 @@ test.afterAll(async()=>{
       const removed=await admin.auth.admin.deleteUser(f.id);if(removed.error)throw new Error('Limpeza da fixture Auth falhou.');
     }
   }
-  await db?.end();mkdirSync('operations/evidence/incremento-2c',{recursive:true});
-  writeFileSync('operations/evidence/incremento-2c/observations.json',JSON.stringify({observations,consoles,requests,cleanup:'Contas e organizações fictícias desta execução removidas; mensagens locais podem permanecer.'},null,2)+'\n');
+  const out=process.env.A_PRACA_EVIDENCE_DIR??'operations/evidence/incremento-2c';
+  if(!/^operations\/evidence\/[a-zA-Z0-9-]+$/.test(out))throw new Error('Diretório inválido.');
+  await db?.end();mkdirSync(out,{recursive:true});
+  writeFileSync(out+'/auth-observations.json',JSON.stringify({observations,consoles,requests,cleanup:'Contas e organizações fictícias desta execução removidas; mensagens locais podem permanecer.'},null,2)+'\n');
 });
 
 test('A01: cadastro, confirmação, vínculo pendente e sessão SSR',async({browser})=>{
@@ -156,9 +158,8 @@ test('A06: cliente não promove papel',async()=>{
 test('A07: organização pendente não publica nem acessa administração',async()=>{
   const status=await db.query('select estado_validacao from public.organizacoes where id=$1',[a.org]);expect(status.rows[0].estado_validacao).toBe('pendente');
   await a.page.goto('/dashboard');await expect(a.page.getByText('Pendente de revisão',{exact:true})).toBeVisible();
-  for(const path of ['/api/atividades','/api/admin/atividades/'+randomUUID()+'/publicar']){
-    const result=await a.page.request.post(path,{headers:{origin},data:{organizacao_id:b.org}});expect(result.status()).toBe(404);
-  }
+  const invalid=await a.page.request.post('/api/atividades',{headers:{origin},data:{organizacao_id:b.org}});expect(invalid.status()).toBe(400);
+  const publish=await a.page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{organizacao_id:b.org}});expect(publish.status()).toBe(404);
   await a.page.goto('/admin');expect((await a.page.locator('body').innerText()).includes(a.name)).toBe(false);
   note('A07','UI+Next HTTP+SQL','Sem rota de publicação neste incremento: 404, não autorização editorial positiva. Organização segue pendente; publicação fora do escopo.');
 });

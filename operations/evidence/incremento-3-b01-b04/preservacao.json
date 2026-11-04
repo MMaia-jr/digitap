@@ -1,0 +1,10 @@
+{
+  "migrations_unchanged": {
+    "supabase/migrations/20261103230507_organization_onboarding.sql": "bfb593729a65959df5d6514044efed8b58c88fbaf2436a630e2e002b3456a20d",
+    "supabase/migrations/20261103221114_security_foundation.sql": "5556204cee77a877f63e306bc529fcfb44c0bb239a741fcee98f06200bc8e02d"
+  },
+  "production_auth_modules_changed": false,
+  "permanent_grants_or_rls_changes": false,
+  "cleanup_authorized": "Somente contas, organizações, atividades e eventos fictícios criados nesta execução, por UUIDs próprios",
+  "Docker_operations": "Nenhum start/stop/alteração; CLI status e listeners usados somente para leitura."
+}

@@ -1,0 +1,4 @@
+a-praca-v1-5@0.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+└─┬ pg@8.23.1
+  └─┬ pg-pool@3.14.0
+    └── pg@8.23.1 deduped

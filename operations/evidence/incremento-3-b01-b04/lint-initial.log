@@ -1,0 +1,9 @@
+
+> a-praca-v1-5@0.1.0 lint
+> eslint .
+
+
+/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/activities/activities.test.ts
+  31:38  warning  'values' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "./node_modules/.bin/vitest",
+    "run",
+    "--config",
+    "vitest.database.config.ts",
+    "tests/integration/activities.database.test.ts"
+  ],
+  "exit_code": 0,
+  "cleanup": "Somente fixtures da execução, autorização explícita recebida"
+}
