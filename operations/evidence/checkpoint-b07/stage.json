@@ -1,0 +1,17 @@
+{
+  "base": "7c8c80d478890cf1e350b6c397151ed3aa767f3e",
+  "staged_count": 41,
+  "manifest": "operations/checkpoint-b07-files.txt",
+  "manifest_exact_match": true,
+  "reviewed_hashes_match_index": true,
+  "disk_matches_index": true,
+  "cached_check_exit_code": 0,
+  "cached_check_output": "",
+  "commit_executed": false,
+  "A07": "PASS local",
+  "B07": "PASS local",
+  "A08": "PASS com manipulação temporal controlada",
+  "B08-B12": "NOT RUN",
+  "suites_reexecuted": false,
+  "next_step": "Aguardar autorização explícita para commit local; não iniciar B08."
+}

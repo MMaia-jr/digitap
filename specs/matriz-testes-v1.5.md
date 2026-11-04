@@ -1,8 +1,8 @@
-# Matriz normativa — incremento 3, recorte B05–B06
+# Matriz normativa — incremento 3, recorte B07
 
-Atualização vigente: A01–A06, A08 e A09 PASS no recorte local de autenticação; A07 **PENDENTE no aceite integral**, com evidência parcial de 404 em rota inexistente. Evidência real Chromium/Next/Auth/SQL em operations/evidence/incremento-2c/. A ferramenta registrou 9 testes E2E passando, além de 129 testes de unidade/componentes; isso não equivale ao aceite integral de A07 nem dos 74 cenários. Na etapa 2C a integração anterior (89 PASS) não foi repetida; no recorte B01–B04 ela foi reexecutada na suíte de 100 casos. A08 foi validado com manipulação temporal controlada apenas nas fixtures, sem espera natural de expiração. As notas históricas no fim preservam o que estava disponível em cada etapa, mas não representam o estado atual.
+Estado vigente em 04/11/2026: **A01–A09 e B01–B07 PASS no ambiente local**, com a ressalva temporal de A08 preservada. A07 foi reexecutado contra a rota real de publicação e atividade aprovada, substituindo a prova parcial histórica de rota inexistente. Não há aceite de 74/74 nem autorização de produção.
 
-B01–B04: PASS no recorte local; resultados finais separados: 183 unitários/componentes, 100 integração (89 preservados + 11 novos), 13 E2E (9 regressões Auth + 4 atividades). A07 continua PENDENTE no aceite integral; A08 mantém tempo controlado. B05–B06 foram implementados no recorte seguinte, com resultados abaixo; B07–B12 permanecem fora do escopo.
+Resultados de regressão do recorte B07: **262 unitários/componentes**, **152 integrações PostgreSQL reais** e **27 E2E Chromium/Next**, todos PASS; zero FAIL/SKIP finais. Lint/typecheck/build exit 0. Detalhes em [relatório B07](../operations/incremento-3-b07.md). B08–B12 e demais cenários não aceitos permanecem NOT RUN. As seções históricas abaixo preservam os resultados e limitações de cada etapa, sem substituir o estado vigente desta tabela.
 
 | ID | Prioridade | Status integral | Evidência / pendência |
 |---|---|---|---|
@@ -12,7 +12,7 @@ B01–B04: PASS no recorte local; resultados finais separados: 183 unitários/co
 | A04 | P0 | PASS | UI + Mailpit + Auth real PASS: recuperação, troca, senha anterior e replay negados; expiração da fixture via recovery_sent_at em A08. Não houve espera natural de 30 dias. Ver ../operations/incremento-2c.md. |
 | A05 | P0 | PASS | Dois contextos Chromium + Next API + SQL PASS: tenant próprio, payload alheio negado, 6 vínculos concorrentes e retry sem duplicação. Ver ../operations/incremento-2c.md. |
 | A06 | P0 | PASS | API + SQL PASS: payload editor/admin negado, papel permanece organizacao. Ver ../operations/incremento-2c.md. |
-| A07 | P0 | PENDENTE | Evidência parcial UI/HTTP/SQL: organização pendente e publicação inexistente respondendo 404. Isso não comprova negação pela autorização de uma rota de publicação funcional. **Exige nova prova quando a publicação existir**. Fluxo de publicação futura NÃO foi implementado/testado. Ver ../operations/incremento-2c.md. |
+| A07 | P0 | PASS | Chromium + Next API real + SQL: proprietário e organização alheia com metadata admin recebem 403 na rota funcional; payload de papel 400, visitante 401. Editor não publica atividade aprovada de organização pendente (422); nenhum snapshot produzido. Integração real cobre as mesmas negativas. Ver ../operations/incremento-3-b07.md e testes publication. |
 | A08 | P1 | PASS (tempo controlado) | UI + Auth/SQL: conta bloqueada, organização suspensa, logout e cookie inválido. **Validado com manipulação temporal controlada** de not_after e recovery_sent_at nas fixtures e refresh forçado; sem espera natural de expiração. Ver ../operations/incremento-2c.md. |
 | A09 | P0 | PASS | Navegador + Next API PASS: visitante redirecionado, vínculo retorna 401 e /admin inexistente retorna 404. Ver ../operations/incremento-2c.md. |
 | B01 | P0 | PASS | PASS: 51 casos domínio/serviço + 3 componentes (subconjuntos), integração real e Chromium. Criar/editar/listar próprio tenant; outro tenant e visitante negados; editor/admin explícito lê detalhe, sem escrever. Ver operations/incremento-3-b01-b04.md. |
@@ -21,12 +21,12 @@ B01–B04: PASS no recorte local; resultados finais separados: 183 unitários/co
 | B04 | P0 | PASS | PASS: rascunho → enviada continua privado; transação pg única para estado/evento; falha FK 23503 reverte ambos, concorrência e retries geram um evento. Unitário, banco real e E2E. Sem publicação. |
 | B05 | P0 | PASS | Revisão/aprovação privadas por editor/admin ativo; autorização vinculada à atividade, divulgacao e atividade:versao:N, com vigência/revogação verificadas inclusive em retry. Unitário, integração real e E2E; concorrência, versão e rollback de auditoria. Sem publicação/snapshot/apoio. Ver ../operations/incremento-3-b05-b06.md. |
 | B06 | P0 | PASS | Devolução/rejeição atômicas, motivo obrigatório 10–1500 sem HTML; proprietário/editor consultam apenas o motivo, terceiro/visitante negados. Unitário, banco real e Chromium; retries, conflito e falha de auditoria. Edição/reenvio não incluídos. Ver ../operations/incremento-3-b05-b06.md. |
-| B07 | P0 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B08 | P0 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B09 | P0 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B10 | P1 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B11 | P0 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B12 | P1 | NOT RUN | Fora do recorte B05–B06; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B07 | P0 | PASS | Publicação explícita por editor/admin ativo, organização validada, autorização original vigente da atividade/escopo/versão e hash do conteúdo aprovado. Snapshot, número, timestamp, estado e auditoria atômicos; concorrência, retries, rollback FK, privacidade e consultas públicas separados. 24 novas integrações + 8 novos E2E; ver relatório B07. |
+| B08 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B09 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B10 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B11 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B12 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
 | C01 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | C02 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | C03 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
@@ -85,6 +85,14 @@ B01–B04: PASS no recorte local; resultados finais separados: 183 unitários/co
 
 Integração real agora executada: 89 PASS, incluindo 85 de segurança e 4 de onboarding após aplicação local autorizada. H02 tem evidência parcial real de grants/RLS e RPC; aceite integral permanece distinto. Auth SDK/API/Mailpit: 17 verificações PASS. A01–A09 continuam integralmente NOT RUN porque navegador/SSR e expiração temporal não foram comprovados. Ver matriz discriminada em ../operations/isolamento-rede-20261104.md; esta nota supera as afirmações históricas de integração não executada, sem reclassificar mocks como prova real.
 
-## Validação B05–B06
+## Histórico — validação B05–B06
 
 Resultados finais: 223 unitários/componentes PASS (183 anteriores + 33 revisão + 4 Auth + 3 UI), 128 integração PASS (100 anteriores + 28 revisão), 19 E2E PASS (13 anteriores + 6 novos); 0 FAIL/SKIP finais. Lint/typecheck/build exit 0. A07 continua PENDENTE no aceite integral, apesar do PASS técnico de sua checagem parcial de rota ausente. A08 conserva datas controladas nas fixtures. B07–B12 não foram implementados.
+
+## Validação vigente — B07
+
+B07: 39 verificações unitárias/componentes adicionadas (29 publicação, 7 consultas públicas, 2 interface e 1 hash na aprovação), 24 integrações e 8 E2E novos. Regressões anteriores preservadas na execução completa: 262/152/27 PASS, em camadas separadas. A07 PASS pela rota real, com publicação positiva do editor em outro caso de controle; A08 conserva expiração temporal controlada, sem espera natural.
+
+Aprovação interna sozinha continua privada. Aprovações novas registram hash do conteúdo; registros antigos sem essa prova não são publicados automaticamente. Edição/reenvio após devolução não foram implementados. B08–B12 não foram iniciados. Revogação foi aplicada somente a fixtures para verificar leitura/retry; não existe novo fluxo de retirada. Apoios continuam fechados.
+
+Evidências: `operations/evidence/incremento-3-b07/quality-final.json`, `e2e.json`, `integration-final.log`, logs RED/GREEN e relatório. Os resultados simulados estão discriminados e não substituem integração/Chromium. Nenhum novo aceite é inferido para os demais cenários.

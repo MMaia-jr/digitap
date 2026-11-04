@@ -1,18 +1,17 @@
 # A Praça v1.5 — progresso atual
 
-Atualização: 04/11/2026. Base: commit 012394d02fd27ce0ca847cb77e521e8acdbece22.
+Atualização: 04/11/2026. Base: commit 7c8c80d478890cf1e350b6c397151ed3aa767f3e.
 
-- Incremento 3, B05–B06: **PASS no ambiente local**. Editor/admin ativo inicia revisão, aprova com autorização válida da atividade/escopo/versão, devolve ou rejeita com motivo restrito.
-- Transições + auditoria na mesma transação pg; provas reais de conflito, idempotência, rollback FK e revogação concorrente. Retry de aprovação também revalida vigência.
-- Testes finais: **223 PASS** unidade/componentes, **128 PASS** integração real, **19 PASS** E2E Chromium/Next; zero FAIL/SKIP. Lint/typecheck/build exit 0.
-- Login editorial real habilitado conforme papel do banco e sessão SSR privada; cadastro/onboarding não concede esse papel. Sem criação de editor/admin real.
-- Nove tabelas, RLS, grants permanentes e ambas as migrações preservados. Nenhum snapshot público, publicação ou apoio habilitado.
-- A07 **PENDENTE no aceite integral**, a ser revalidado quando publicação existir. A08 conserva manipulação temporal controlada das fixtures.
-- Criação/limpeza de fixtures recebeu autorização específica deste recorte; somente UUIDs próprios removidos. Next encerrado; Supabase não reiniciado nem reconfigurado.
-- Sem instalação, migração, commit, push, deploy ou mudanças remotas/globais. B07–B12 não implementados; parar e aguardar decisão humana.
+- Incremento 3, **B07 PASS local**: publicação explícita de snapshot autorizado, por editor/admin ativo; organização validada e autorização original específica, vigente e vinculada à versão/conteúdo aprovados.
+- Snapshot + número + timestamp + estado + evento na mesma transação PostgreSQL. Repetições/concorrência não duplicam; falha FK de auditoria reverte tudo. Leitura pública separada das rotas privadas, por lista branca, com no-store e revalidação de elegibilidade.
+- **A07 PASS** reexecutado contra publicação real; A08 conserva manipulação temporal controlada das fixtures. A01–A09 e B01–B06 preservados nas regressões.
+- Testes: **262 PASS** unitários/componentes, **152 PASS** integrações reais, **27 PASS** E2E Chromium/Next; zero FAIL/SKIP finais. Lint/typecheck/build aprovados. Não equivale a 74/74.
+- Nove tabelas, RLS, grants permanentes e duas migrações preservados; nenhuma dependência instalada ou migração executada. Aprovações antigas sem hash de conteúdo não são publicáveis; não há backfill automático.
+- Fixtures fictícias e regressões criadas/limpas com autorização específica desta execução; Next loopback encerrado, porta 3215 livre; Supabase preservado sem reinício/reconfiguração.
+- **Sem commit, push, deploy ou operação remota/global**. B08–B12 não iniciados. Edição/reenvio após devolução, republicação, retirada, apoios, selos e indicadores continuam fora deste recorte.
 
-[Relatório](incremento-3-b05-b06.md) · [Evidências](evidence/incremento-3-b05-b06/) · [Matriz](../specs/matriz-testes-v1.5.md)
+[Relatório B07](incremento-3-b07.md) · [Evidências](evidence/incremento-3-b07/) · [Matriz](../specs/matriz-testes-v1.5.md)
 
-## Preparação do checkpoint B05–B06
+## Checkpoint B07 preparado
 
-Stage limitado ao [manifesto versionável](checkpoint-b05-b06-files.txt), sem logs brutos/observações e sem commit. [Revisão](checkpoint-b05-b06.md) e hashes/resumos sanitizados preservam os resultados anteriores sem repetir suítes. B05/B06 PASS, B07 NOT RUN, A07 PENDENTE; edição/reenvio após devolução não implementados. Aguardar autorização de commit; não iniciar B07.
+Stage limitado ao [manifesto versionável](checkpoint-b07-files.txt), com hashes e revisão de evidências em [checkpoint-b07.md](checkpoint-b07.md). Logs/observações/processos brutos permanecem locais e ignorados. Nenhuma suíte repetida ou código funcional alterado na preparação. A07/B07 PASS local, A08 com ressalva temporal e B08–B12 NOT RUN. **Aguardar autorização de commit; não iniciar B08.**

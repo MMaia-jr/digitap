@@ -18,3 +18,14 @@ operations/evidence/incremento-3-b05-b06/*
 !operations/evidence/incremento-3-b05-b06/catalog.json
 !operations/evidence/incremento-3-b05-b06/secret-values.json
 !operations/evidence/incremento-3-b05-b06/inspect-preservation.mjs
+
+# Checkpoint B07: material bruto/intermediário preservado apenas localmente.
+operations/evidence/incremento-3-b07/*
+!operations/evidence/incremento-3-b07/quality-final.json
+!operations/evidence/incremento-3-b07/e2e.json
+!operations/evidence/incremento-3-b07/catalog.json
+!operations/evidence/incremento-3-b07/secret-values.json
+!operations/evidence/incremento-3-b07/inspect-preservation.mjs
+!operations/evidence/incremento-3-b07/inspect-secrets.mjs
+!operations/evidence/incremento-3-b07/observations-errata.md
+operations/evidence/checkpoint-b07/*.local.*

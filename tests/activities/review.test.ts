@@ -58,4 +58,5 @@ describe('B05/B06 — serviço com ports simulados',()=>{
   const s=setup({state:'aprovada',auth:false,events:[{executada_por_conta_id:actor.id,justificativa_restrita:metadata}]});
   await expect(s.service.review(id,approve)).rejects.toMatchObject({status:422});
  });
+ it('aprovação registra impressão digital do conteúdo revisado',async()=>{const s=setup({state:'em_revisao'});await s.service.review(id,approve);const call=s.query.mock.calls.find(([q])=>q.includes('insert into public.eventos_editoriais'));expect(JSON.parse(String(call?.[1]?.[5])).conteudo_sha256).toMatch(/^[0-9a-f]{64}$/);});
 });

@@ -8,8 +8,10 @@ import { createGateway } from '../auth/gateway.server';
 import { handleMutation,privateHeaders } from '../auth/http.server';
 import { FlowError } from '../auth/flow.server';
 import { appOrigin } from '../supabase/config.server';
+import {validatePublish,createSnapshot,parseSnapshot} from './publication';
+import {requireVersionAuthorization as requireAuthorization,approvalForVersion,publicationRecord,snapshotHash,approvedContentHash} from './publication.server';
 const columns='id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida';
-const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada')";
+const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada')";
 type Row=Omit<PrivateActivity,'inicio_previsto'> & {inicio_previsto:Date|string};
 type Actor=AccessAccount & {id:string};
 const dto=(row:Row):PrivateActivity=>({...row,inicio_previsto:row.inicio_previsto instanceof Date?row.inicio_previsto.toISOString():row.inicio_previsto});
@@ -35,10 +37,6 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   const result=await sql.query<Row>(`select ${columns} from public.atividades where id=$1 and ($2::uuid is null or organizacao_id = $2) and estado_editorial in ${privateStates}${write?' for update':''}`,[identifier(id),owner]);
   if(!result.rows[0])throw new ActivityError(404,'Atividade não encontrada.');return dto(result.rows[0]);
  }
- async function requireAuthorization(sql:Sql,row:PrivateActivity,authorizationId:string|null){
-  const authorized=await sql.query<{id:string}>("select id from public.autorizacoes_publicacao where id=$1 and objeto_tipo='atividade' and objeto_id=$2 and situacao='vigente' and revogada_em is null and autorizada_em<=clock_timestamp() and (validade_ate is null or validade_ate>clock_timestamp()) and 'divulgacao'=any(escopo_autorizado) and $3=any(escopo_autorizado) and char_length(trim(papel_autorizante))>0 and char_length(trim(comprovante_restrito))>0 for share",[authorizationId,row.id,'atividade:versao:'+row.versao_submetida]);
-  if(!authorized.rows[0])throw new ActivityError(422,'Autorização indisponível ou incompatível com esta atividade e versão.');
- }
  return {
   async create(input:unknown){
    const value=validateDraft(input,now());
@@ -47,7 +45,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    });
   },
   async list(){return run('organizacao',async(sql,actor)=>(await sql.query<Row>(`select ${columns} from public.atividades where organizacao_id=$1 and estado_editorial in ${privateStates} order by criada_em desc limit 100`,[actor.organizacao_id])).rows.map(dto));},
-  async reviewQueue(){return run('editorial',async sql=>(await sql.query<Row>(`select ${columns} from public.atividades where estado_editorial in ('enviada','em_revisao') order by criada_em limit 100`)).rows.map(dto));},
+  async reviewQueue(){return run('editorial',async sql=>(await sql.query<Row>(`select ${columns} from public.atividades where estado_editorial in ('enviada','em_revisao','aprovada') order by criada_em limit 100`)).rows.map(dto));},
   async get(id:string){return run('leitura',async(sql,actor)=>{
    const activity=await load(sql,actor,id);
    if(activity.estado_editorial==='devolvida'||activity.estado_editorial==='rejeitada'){
@@ -57,7 +55,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     activity.motivo_editorial=meta.motivo;
    }
    const editorial=['editor','administrador'].includes(actor.papel);
-   return {...activity,pode_editar:actor.papel==='organizacao'&&activity.estado_editorial==='rascunho',acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial)};
+   return {...activity,pode_editar:actor.papel==='organizacao'&&activity.estado_editorial==='rascunho',acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada'};
   });},
   async update(id:string,input:unknown){
    const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada']);const version=validateVersion(body.versao_esperada);
@@ -85,14 +83,38 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     if(row.versao_submetida!==command.versao_esperada)throw new ActivityError(409,'A versão mudou. Recarregue antes de revisar.');
     const history=(await sql.query<{executada_por_conta_id:string|null;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=$1 and acao like 'atividade_revisao_%'",[row.id])).rows;
     const previous=history.find(event=>{try{const meta=JSON.parse(event.justificativa_restrita);return meta.tipo==='revisao.v1'&&meta.pedido_id===command.pedido_id;}catch{return false;}});
-    if(previous){if(previous.executada_por_conta_id!==actor.id||previous.justificativa_restrita!==metadata)throw new ActivityError(409,'Identificador de pedido já utilizado.');if(command.acao==='aprovar')await requireAuthorization(sql,row,command.autorizacao_id);return {...row,repetida:true};}
+    if(previous){const {conteudo_sha256:ignored,...core}=JSON.parse(previous.justificativa_restrita);void ignored;if(previous.executada_por_conta_id!==actor.id||JSON.stringify(core)!==metadata)throw new ActivityError(409,'Identificador de pedido já utilizado.');if(command.acao==='aprovar')await requireAuthorization(sql,row,command.autorizacao_id);return {...row,repetida:true};}
     const transitions:Record<ReviewAction,{from:string[];to:PrivateActivity['estado_editorial']}>= {iniciar:{from:['enviada'],to:'em_revisao'},aprovar:{from:['em_revisao'],to:'aprovada'},devolver:{from:['enviada','em_revisao'],to:'devolvida'},rejeitar:{from:['enviada','em_revisao'],to:'rejeitada'}};
     const transition=transitions[command.acao];
     if(row.estado_editorial!==command.estado_esperado||!transition.from.includes(row.estado_editorial))throw new ActivityError(409,'O estado mudou ou não permite esta decisão.');
     if(command.acao==='aprovar')await requireAuthorization(sql,row,command.autorizacao_id);
     const result=dto((await sql.query<Row>(`update public.atividades set estado_editorial=$2,atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id,transition.to])).rows[0]);
-    await sql.query("insert into public.eventos_editoriais (objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,$2,$3,$4,$5,$6)",[row.id,'atividade_revisao_'+transition.to,actor.id,row.estado_editorial,transition.to,metadata]);
+    const auditMetadata=command.acao==='aprovar'?JSON.stringify({...JSON.parse(metadata),conteudo_sha256:approvedContentHash(row)}):metadata;
+    await sql.query("insert into public.eventos_editoriais (objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,$2,$3,$4,$5,$6)",[row.id,'atividade_revisao_'+transition.to,actor.id,row.estado_editorial,transition.to,auditMetadata]);
     return {...result,repetida:false};
+   });
+  },
+  async publish(id:string,input:unknown){
+   const command=validatePublish(input);
+   return run('editorial',async(sql,actor)=>{
+    const row=await load(sql,actor,id,true);
+    if(row.versao_submetida!==command.versao_esperada||!['aprovada','publicada'].includes(row.estado_editorial))throw new ActivityError(409,'Estado ou versão não permite publicação.');
+    const stored=(await sql.query<{organizacao_id:string;estado_programacao:string;versao_publicada:unknown;numero_versao_publicada:number|null;publicada_em:Date|null}>('select organizacao_id,estado_programacao,versao_publicada,numero_versao_publicada,publicada_em from public.atividades where id=$1',[row.id])).rows[0];
+    const org=(await sql.query<{id:string;nome_publico:string;estado_validacao:string}>('select id,nome_publico,estado_validacao from public.organizacoes where id=$1 for share',[stored.organizacao_id])).rows[0];
+    if(!org||org.estado_validacao!=='validada')throw new ActivityError(422,'Organização não está validada e apta à publicação.');
+    const publishedSnapshot=row.estado_editorial==='publicada'?parseSnapshot(stored.versao_publicada):null;
+    const approval=await approvalForVersion(sql,publishedSnapshot?{...publishedSnapshot,versao_submetida:publishedSnapshot.versao}:row);await requireAuthorization(sql,row,approval.authorization_id);
+    if(row.estado_editorial==='publicada'){
+     const event=await publicationRecord(sql,row.id),snapshot=parseSnapshot(stored.versao_publicada);
+     if(event.author!==actor.id||event.pedido_id!==command.pedido_id||event.versao_esperada!==command.versao_esperada||event.autorizacao_id!==approval.authorization_id||event.aprovacao_evento_id!==approval.event_id||snapshot.id!==row.id||snapshot.versao!==stored.numero_versao_publicada||event.snapshot_sha256!==snapshotHash(snapshot))throw new ActivityError(409,'Publicação já concluída ou inconsistente.');
+     return {...row,repetida:true};
+    }
+    if(stored.versao_publicada!==null||stored.numero_versao_publicada!==null||stored.publicada_em!==null)throw new ActivityError(409,'Não é permitida republicação neste recorte.');
+    const timestamp=now(),snapshot=createSnapshot(row,org,stored.estado_programacao,timestamp,timestamp);
+    const published=dto((await sql.query<Row>(`update public.atividades set versao_publicada=$2::jsonb,numero_versao_publicada=$3,publicada_em=$4,estado_editorial='publicada',apoios_abertos=false,atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id,JSON.stringify(snapshot),row.versao_submetida,timestamp.toISOString()])).rows[0]);
+    const metadata=JSON.stringify({tipo:'publicacao.v1',...command,autorizacao_id:approval.authorization_id,aprovacao_evento_id:approval.event_id,snapshot_sha256:snapshotHash(snapshot)});
+    await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_publicada',$2,'aprovada','publicada',$3)",[row.id,actor.id,metadata]);
+    return {...published,repetida:false};
    });
   },
  };
@@ -101,13 +123,13 @@ export const activities=createActivityService();
 export async function activityResponse(operation:()=>Promise<unknown>){
  try{return Response.json(await operation(),{headers:privateHeaders});}catch(error){return Response.json({message:error instanceof ActivityError?error.message:'Serviço indisponível. Tente novamente.'},{status:error instanceof ActivityError?error.status:503,headers:privateHeaders});}
 }
-export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review',id?:string){
+export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish',id?:string){
  // Route exports limit methods. Normalize PATCH only for reuse of the existing
  // JSON/origin/payload boundary; the original method is still PATCH over HTTP.
  return handleMutation(request.method==='PATCH'?new Request(request,{method:'POST'}):request,appOrigin(),async input=>{
   try{
-   const activity=action==='create'?await activities.create(input):action==='update'?await activities.update(id!,input):action==='review'?await activities.review(id!,input):await activities.submit(id!,input);
-   return {message:action==='review'?'Decisão editorial registrada. A atividade continua privada.':action==='submit'?'Atividade enviada. Ela continua privada.':'Rascunho salvo.',atividade:activity,next:'/dashboard/atividade/'+activity.id};
+   const activity=action==='create'?await activities.create(input):action==='update'?await activities.update(id!,input):action==='review'?await activities.review(id!,input):action==='publish'?await activities.publish(id!,input):await activities.submit(id!,input);
+   return {message:action==='publish'?'Snapshot da versão aprovada publicado.':action==='review'?'Decisão editorial registrada. A atividade continua privada.':action==='submit'?'Atividade enviada. Ela continua privada.':'Rascunho salvo.',atividade:activity,next:'/dashboard/atividade/'+activity.id};
   }catch(error){if(error instanceof ActivityError)throw new FlowError(error.status,error.message,error.fields);throw error;}
  });
 }

@@ -159,9 +159,9 @@ test('A07: organização pendente não publica nem acessa administração',async
   const status=await db.query('select estado_validacao from public.organizacoes where id=$1',[a.org]);expect(status.rows[0].estado_validacao).toBe('pendente');
   await a.page.goto('/dashboard');await expect(a.page.getByText('Pendente de revisão',{exact:true})).toBeVisible();
   const invalid=await a.page.request.post('/api/atividades',{headers:{origin},data:{organizacao_id:b.org}});expect(invalid.status()).toBe(400);
-  const publish=await a.page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{organizacao_id:b.org}});expect(publish.status()).toBe(404);
+  const publish=await a.page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{versao_esperada:1,pedido_id:randomUUID()}});expect(publish.status()).toBe(403);
   await a.page.goto('/admin');expect((await a.page.locator('body').innerText()).includes(a.name)).toBe(false);
-  note('A07','UI+Next HTTP+SQL','Sem rota de publicação neste incremento: 404, não autorização editorial positiva. Organização segue pendente; publicação fora do escopo.');
+  note('A07','UI+Next HTTP+SQL','Rota real de publicação com payload válido nega organização por papel (403); organização segue pendente. Prova complementar em publication.spec.mjs usa atividade real aprovada e testa organização pendente sob editor.');
 });
 test('A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada',async()=>{
   await db.query("update public.organizacoes set estado_validacao='suspensa' where id=$1",[b.org]);

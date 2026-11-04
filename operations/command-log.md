@@ -25,3 +25,13 @@ Versões obtidas com `npm view`: Next 16.4.5, React 19.3.1, Supabase JS 2.118.0,
 15. Encerramento final somente via `supabase stop --project-id a-praca-v1-5 --workdir <raiz>`, preservando volumes. Inicialização automática bloqueada até resolver loopback.
 
 Os comandos redirecionaram saídas de teste para arquivos de evidence e consultaram esses arquivos com tail/cat. Todos os caminhos de escrita pertencem ao projeto, exceto recursos Docker locais próprios explicitamente autorizados. Não foi inicializado Git, feito commit/push, criado remoto ou efetuado deploy.
+
+## 04/11/2026 — B07 (local)
+
+Base 7c8c80d478890cf1e350b6c397151ed3aa767f3e, sem commit novo. Comandos reproduzíveis, escopo, saídas e limitações em [incremento-3-b07.md](incremento-3-b07.md) e evidence/incremento-3-b07/quality-final.json. Testes RED de publicação/consultas/interface/hash precederam implementação mínima; resultados finais 262 unidade/componentes, 152 integração e 27 E2E PASS, 0 FAIL/SKIP finais. Lint/typecheck/build exit 0. Cli status somente local, valores restritos capturados em memória; primeira tentativa negada pelo sandbox, repetição autorizada sem alteração de infraestrutura.
+
+Fixtures criadas/limpas com autorização específica da execução por UUID próprio. Next iniciado só em 127.0.0.1:3215 e encerrado por SIGTERM só após verificar processo/cwd/cadeia própria. Supabase preservado; nada global/remoto alterado. Inspeção de catálogo somente leitura (9 tabelas sem divergência) e comparação de segredos sem impressão de valores. Sem instalação, migração, stage, commit, push ou deploy. B08–B12 não iniciados.
+
+## Preparação do checkpoint B07
+
+HEAD 7c8c80d478890cf1e350b6c397151ed3aa767f3e confirmado. Revisão de diffs/não rastreados, código de transação/hash/projeção/autorizações e logs existentes, sem novas suítes. Leitura do catálogo pelo inspetor existente, comparação de segredos em memória e do bundle, manifesto literal, stage restrito e git diff --cached --check. Evidências em checkpoint-b07.md e evidence/checkpoint-b07/. Sem commit, push, deploy, migração ou alteração global.

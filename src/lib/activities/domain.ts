@@ -2,7 +2,7 @@ export class ActivityError extends Error {
   constructor(public readonly status:number,message:string,public readonly fields?:Record<string,string>){super(message);}
 }
 export interface DraftInput {titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
-export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada';
+export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada';
 export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;motivo_editorial?:string}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}

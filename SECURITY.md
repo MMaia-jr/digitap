@@ -33,3 +33,13 @@ As observações históricas de banco parado acima foram superadas nesta execuç
 ## Browser real — incremento 2C
 
 A01–A09 verificados em Chromium/Next/Supabase locais; expiração de token/sessão exercitada por timestamps vencidos somente nas fixtures, sem alterar relógio global. HTML inicial mantém submit desabilitado até hidratação. Cookies HttpOnly/SameSite, cache no-store, isolamento, bloqueio e payload de papel foram exercitados na aplicação. Testes sem traces/vídeos/screenshots/storageState, com logs de rotas sem query e comparação de valores secretos sem imprimir credenciais. Binários/resultados temporários ficam ignorados no projeto. Ver operations/incremento-2c.md. Sem mudança de RLS/grants, migrações ou infraestrutura nesta etapa; prova de rede anterior mantém suas limitações.
+
+## Publicação local — incremento 3, B07 (04/11/2026)
+
+Estado vigente: B07 possui publicação explícita em processo local loopback, sem deploy. Textos anteriores de publicação inexistente descrevem apenas etapas históricas. RLS/grants das nove tabelas e migrações permanecem inalterados; acesso SQL direto de anon/authenticated segue negado. Sessão confirmada e conta editorial ativa do banco são obrigatórias em cada publicação, sem papel por payload/metadata.
+
+Snapshot, versão, timestamp, estado e evento são atômicos na transação pg existente. Aprovação nova vincula hash de conteúdo e autorização da atividade/escopo/versão; aprovação antiga sem esse hash não publica automaticamente. Não fazer backfill/alterar registros anteriores para contornar a recusa. Autorização e organização são revalidadas inclusive em repetição; apoios permanecem fechados.
+
+Consultas públicas separadas em `/api/public/atividades` e páginas `/atividades`/`/atividade/[id]`: somente projeção explícita do snapshot, sem contatos, comprovantes, motivo ou auditoria. Elas conferem organização validada e vigência da autorização original, com no-store; falhas não revelam conteúdo privado. Rotas privadas não foram abertas. Scripts de inspeção comparam valores secretos em memória sem imprimi-los. Relatório/evidências em operations/incremento-3-b07.md.
+
+B08–B12, retirada/republicação e demais recursos não foram habilitados. Supabase não foi reiniciado neste recorte; nenhuma prova histórica autoriza reinício automático sem verificar novamente todas as portas. Não alterar Docker/firewall global ou outros projetos. Não há autorização de publicação externa.

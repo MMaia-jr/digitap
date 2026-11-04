@@ -1,0 +1,173 @@
+{
+  "base": "7c8c80d478890cf1e350b6c397151ed3aa767f3e",
+  "unit": {
+    "command": "npm test",
+    "exit": 0,
+    "PASS": 262,
+    "FAIL": 0,
+    "SKIP": 0,
+    "files": 21,
+    "evidence": "unit-regression.log"
+  },
+  "integration": {
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 npm run test:onboarding:db",
+    "exit": 0,
+    "PASS": 152,
+    "FAIL": 0,
+    "SKIP": 0,
+    "files": 5,
+    "evidence": "integration-final.log"
+  },
+  "e2e": {
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-3-b07 npm run test:e2e",
+    "exit": 0,
+    "PASS": 27,
+    "FAIL": 0,
+    "SKIP": 0,
+    "evidence": "e2e.json"
+  },
+  "checks": {
+    "build-final": {
+      "command": "npm run build",
+      "exit": 0
+    },
+    "lint-final": {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    "typecheck-final": {
+      "command": "npm run typecheck",
+      "exit": 0
+    }
+  },
+  "red_green": {
+    "publication": {
+      "RED": {
+        "FAIL": 27,
+        "PASS": 0,
+        "log": "unit-red.log"
+      },
+      "GREEN": {
+        "PASS": 27,
+        "log": "unit-green.log"
+      }
+    },
+    "public_queries": {
+      "RED": {
+        "FAIL": 7,
+        "PASS": 0,
+        "log": "public-queries-red.log"
+      },
+      "GREEN": {
+        "PASS": 34,
+        "scope": "publication + public_queries",
+        "log": "public-queries-green.log"
+      }
+    },
+    "publish_ui": {
+      "RED": {
+        "FAIL": 2,
+        "PASS": 0,
+        "log": "form-red.log"
+      },
+      "GREEN": {
+        "PASS": 36,
+        "scope": "publication + public_queries + UI",
+        "log": "form-green.log"
+      }
+    },
+    "approved_content_binding": {
+      "RED": {
+        "FAIL": 3,
+        "PASS": 60,
+        "log": "approved-content-red.log"
+      },
+      "GREEN": {
+        "PASS": 63,
+        "scope": "publication + review",
+        "log": "approved-content-green.log"
+      }
+    }
+  },
+  "catalog": {
+    "tables": 9,
+    "findings": [],
+    "evidence": "catalog.json"
+  },
+  "scope": {
+    "B07": "PASS",
+    "A07": "PASS",
+    "A08": "PASS com manipulação temporal controlada",
+    "B08-B12": "NOT RUN"
+  },
+  "e2e_initial_failures": [
+    {
+      "PASS": 1,
+      "FAIL": 1,
+      "SKIP": 6,
+      "reason": "Seletor do teste procurava alerta em form; componente usa section. Corrigido somente o teste.",
+      "evidence": "e2e-specific-first.json"
+    },
+    {
+      "PASS": 3,
+      "FAIL": 1,
+      "SKIP": 4,
+      "reason": "Teste esperava snapshot sem envelope; rota retorna {atividade: snapshot}. Corrigidas expectativas de teste de detalhe/lista; produção preservada.",
+      "evidence": "e2e-specific-second.json"
+    }
+  ],
+  "hashes": {
+    "activities-observations.json": "27bc6e03c6384834aba0a732508cd42254ccedc6c820dafaf1ec93366c5d798c",
+    "approved-content-green.log": "1a12f84e52db0780c3c215bcf1a9c05166b148e65e562585a3969038ec014cda",
+    "approved-content-red.log": "8724789a471e66446e560d302ce301b038e29d8d189ae6728278c02abc8858d9",
+    "auth-observations.json": "62aa47d0ca473112f315d0a87d04eddd1939b638ad727a28f0625aedb045044d",
+    "build-final.log": "de795af00de81989d859f00f6372d1dcb9333deaebd85b8f110b669b405a845f",
+    "build-lint-typecheck.json": "968d91fbe3188ec7b7a6d3d091c94c2c4c28bdc26575ccbabc6a7381475cd704",
+    "catalog.json": "8acabe020a400a92eaa21fe16e140f5b6d39873f6c4d00b1a969f38c9981c6ad",
+    "checks-initial.json": "7c4f2a5f542748c10c8e15a48d3204b8a1e4faadd2f2025b9234c3527adb6f4d",
+    "e2e-specific-first.json": "c33b81b11c0dec55769ec604dfd8a064757a5ea39aa18ba3566dbb57f726bbfb",
+    "e2e-specific-green.json": "d823c85ed37ea760d561628ceb1d157bf7df9b6935a12448f5f7ab6691446b56",
+    "e2e-specific-second.json": "0d1d6698ed6f853957de96379248d1fc1cf3de8dd2d2abcb8e819a13b69251d7",
+    "e2e.json": "8413af249c062e71436ae13205f1be4cec03bec131bd7e0b7aed505556840ad7",
+    "form-green.log": "8c21767e38b95626ee53026076b2fc8a7a198146003845dd23b24779d582140e",
+    "form-red.log": "a6737fa9f4c8e4e005eda62eb2bd403bad73561b20d2359a0bd8b94419c09720",
+    "git-diff-check.txt": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431",
+    "git-status-final.txt": "f83c3d171408ce763c647386ed8f050f2fa0e5b10241cff9c370d05b057ff865",
+    "inspect-preservation.mjs": "2947698d53ba23163384ec4004f0fe2fdf22cbbfd5ec9759ad1e36d852c4d556",
+    "inspect-secrets.mjs": "97f2bab87f260ccd562b2c2361b2322c9c5586f1a39172ca23be18166dd731dd",
+    "integration-final.json": "19db7b23ab417a72ab0bec014d000afe1c985875d28885a91dba9b569d5eff3b",
+    "integration-final.log": "df5e4630c056884ef239f61a5e96d43e92046abdacc57976e68c6b570c2d8fea",
+    "lint-final.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+    "lint-initial.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+    "next-process.json": "d77ce5535254502875263d55e041d9a5dd0210541f96f30eacad86bbbedb88b3",
+    "observations-errata.md": "e2f12dde8f994c4279e9ee92f800fd600dbd43ee19e20bf3af89f6d25ef6c9b1",
+    "public-queries-green.log": "75c6814ad42a36cb084ddd996eb8747fc19a32e10cdeb8ba2a955419c55fe31e",
+    "public-queries-red.log": "af6b307c2d21c08bf05fcb41dd062b1810af787619eae2435759bb6af4ad7de0",
+    "publication-db-initial-result.json": "5bc232b82de377a5655a39a2af9d7ae0fc868de5b9df957e18905cb914606c88",
+    "publication-db-initial.log": "27022f2265547624753f92a8a38818e441091fe1335f41151bfa97e6f9232637",
+    "publication-observations.json": "3a172526a0b1cad02baf158bfaa41d31146c7614ef2cd15c308e0be0ee886197",
+    "review-observations.json": "0efb7449687849ff076964ee30aa817e4b0ad4049b779d66dc5c2eb816fb782e",
+    "secret-values.json": "433a42536cbc5c9fa9ae83c4e431cd28fd8e413f611bca1212e937516d56f049",
+    "server.log": "b8d811694c254fb8b20ebe4447c8a8fcf33591711c3127c2b3cda21a0fd5835a",
+    "typecheck-current.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "typecheck-final.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "typecheck-initial.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "unit-green.log": "7d2eae0e54613208cf5e1f72a9656e23e19790d5170760f69be70d91a65dcf0e",
+    "unit-red.log": "03d55c62f3dbbb8f1e40f00acabb7e313e5de81a4be4c62e54d365a3e95e1615",
+    "unit-regression.log": "95457bac1d999f4f0d94febf4863347322095ee9afdf50243e7685ae6a0a2d1c"
+  },
+  "secret_values": {
+    "files_checked": 80,
+    "findings": [],
+    "scope": "Arquivos novos/modificados não ignorados + .next/static + public. Valores reais conhecidos comparados somente em memória; nenhum valor impresso.",
+    "hmac_configured": false,
+    "limits": "Não detecta todo segredo desconhecido; .env privados ignorados não são conteúdo versionável. Artefatos server-side não são bundle público. HTML/HTTP real também verificado no Chromium B07."
+  },
+  "git": {
+    "HEAD": "7c8c80d478890cf1e350b6c397151ed3aa767f3e",
+    "stage_empty": true,
+    "diff_check": "PASS",
+    "inventory": "operations/arquivos-incremento-3-b07.txt",
+    "inventory_files": 67
+  }
+}
