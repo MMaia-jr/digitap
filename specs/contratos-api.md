@@ -1,6 +1,6 @@
-# Contratos — incremento 2
+# Contratos — incremento 3, B05–B06
 
-Nenhuma rota de atividades, apoio, selos, indicadores ou administração foi habilitada.
+Atividades e revisão editorial têm rotas privadas neste recorte. Não há publicação, apoio, selos, indicadores ou administração de contas. As seções B01–B04 e B05–B06 abaixo complementam os contratos de autenticação.
 
 ## Fronteira comum
 
@@ -9,7 +9,7 @@ POST com Origin igual a APP_ORIGIN e Host compatível quando presente; Sec-Fetch
 | Rota | Entrada permitida | Comportamento |
 |---|---|---|
 | POST /api/auth/cadastro | email, password | Auth signup sem metadata de papel; resposta genérica para novo/duplicado; sessão inesperada é encerrada. Não cria organização. |
-| POST /api/auth/login | email, password | Auth signInWithPassword; e-mail confirmado e sessão obrigatórios; relê conta ativa. Sem vínculo conduz a /dashboard/organizacao. Conta bloqueada/desativada ou papel incompatível nega acesso e limpa sessão. Falhas de transporte/provider e identidade vazia também negam acesso e limpam eventual sessão parcial. |
+| POST /api/auth/login | email, password | Auth signInWithPassword; e-mail confirmado e sessão obrigatórios; relê conta ativa. Sem vínculo conduz a /dashboard/organizacao; organização vai a /dashboard e editor/admin ativo do banco a /admin/atividades. Conta bloqueada/desativada ou papel desconhecido nega acesso e limpa sessão. Falhas de transporte/provider e identidade vazia também negam acesso e limpam eventual sessão parcial. |
 | POST /api/auth/sair | objeto vazio | signOut com scope local; cookies próprios removidos também em falha do provider ou de inicialização do SDK, após validar origem e payload; não se declara revogação remota quando o provider falha. Não toca em cookies de outros projetos. |
 | POST /api/auth/recuperar | email | resetPasswordForEmail; resposta genérica para conta inexistente/elegível. 429 preservado. |
 | POST /api/auth/confirmar | token_hash | verifyOtp de signup; somente confirmação com sessão e identidade não vazia confirmada permite onboarding; falhas limpam eventual sessão parcial. |
@@ -22,15 +22,15 @@ Campos: e-mail normalizado, máximo 254; senha 12–128 caracteres sem trim; nom
 
 ## Confirmação e recuperação
 
-GET /auth/confirm com token_hash e type=signup ou recovery apenas apresenta o formulário e **não consome OTP**. A verificação ocorre no POST após ação explícita. O token próprio é enviado somente ao endpoint correspondente; a URL é limpa após hidratação. Referrer-Policy no-referrer, noindex e cache privado; logging de URLs de entrada desativado. Os templates locais usam .SiteURL e .TokenHash; foram preparados, não exercitados com entrega de e-mail real.
+GET /auth/confirm com token_hash e type=signup ou recovery apenas apresenta o formulário e **não consome OTP**. A verificação ocorre no POST após ação explícita. O token próprio é enviado somente ao endpoint correspondente; a URL é limpa após hidratação. Referrer-Policy no-referrer, noindex e cache privado; logging de URLs de entrada desativado. Os templates locais usam .SiteURL e .TokenHash e foram exercitados com Mailpit local no incremento 2C e nas regressões.
 
-Tokens de confirmação não são usados como autorização de recuperação: o tipo é escolhido pelo endpoint no servidor. Expiração e uso único dependem do provider; foram simulados nos testes, sem alegação de comprovação real neste incremento.
+Tokens de confirmação não são usados como autorização de recuperação: o tipo é escolhido pelo endpoint no servidor. Expiração e uso único dependem do provider: consumo/replay foram exercitados no provider real, e expiração foi validada com datas controladas somente nas fixtures, conforme ressalva A08.
 
 ## SSR e isolamento
 
 Cookies ap-auth e seus chunks são HttpOnly, SameSite=Lax e Path=/. Secure=false é restrito por configuração a HTTP loopback; este runtime não aceita ambiente remoto. O proxy renova sessão para páginas de dashboard; a autorização permanece no servidor, por Auth.getUser e papel/estado do banco. Sem cache de autorização entre requisições e sem user_metadata/e-mail como fonte de papel. O cliente administrativo é separado e não recebe cookies de usuário.
 
-O dashboard lê somente id/nome/estado da organização vinculada à identidade verificada. IDs do cliente não selecionam o tenant. Org suspensa e conta sem papel organizacional ativo são negadas. Não há rota editorial neste incremento; /admin responde 404.
+O dashboard lê somente id/nome/estado da organização vinculada à identidade verificada. IDs do cliente não selecionam o tenant. Org suspensa e conta sem papel organizacional ativo são negadas. A fila /admin/atividades exige editor/admin ativo; o caminho base /admin continua 404. A autorização editorial é refeita no servidor em cada operação.
 
 ## Idempotência e falhas parciais
 
@@ -51,3 +51,17 @@ IDs de organização/autor, estados e snapshots nunca vêm do cliente. versao_su
 Auth.getUser fora da transação; conta/papel/situação/organização relidos e bloqueados dentro dela. Envios e eventos_editoriais usam a mesma conexão pg com BEGIN/COMMIT/ROLLBACK. Não usar chamadas HTTP separadas como transação. Conexão server-only aceita só o banco local 127.0.0.1:56152; segredo SUPABASE_DB_URL nunca público. Sem nova migração/RPC/grant. Editor lê detalhe conhecido, sem edição, envio ou interface de revisão.
 
 Fonte técnica: https://node-postgres.com/features/transactions (todas as instruções de uma transação devem usar a mesma instância de client). Não há rota pública de atividade, revisão, aprovação ou publicação neste recorte.
+
+## Incremento 3 — contrato B05–B06 (definido antes da implementação)
+
+POST /api/admin/atividades/[id]/revisar: sessão verificada e editor/administrador ativo relido no banco. Organização e visitante não revisam. Body restrito: acao (iniciar/aprovar/devolver/rejeitar), versao_esperada, estado_esperado (enviada/em_revisao), pedido_id UUID. Aprovar exige autorizacao_id; devolver/rejeitar exigem motivo textual 10–1500, sem HTML. Campos extras de papel/snapshot/autor são rejeitados. Sem senha ou comprovação de autorização em respostas.
+
+Transições: enviada → em_revisao; em_revisao → aprovada; enviada ou em_revisao → devolvida/rejeitada. Aprovar diretamente de enviada é conflito. Versão privada não muda em transições editoriais: revisão vincula exatamente a versão salva, bloqueada para edição organizacional fora de rascunho. Nenhuma transição habilita publicação ou apoio.
+
+Autorização válida: objeto_tipo=atividade, objeto_id igual ao ID, situacao=vigente, revogada_em nula, autorizada_em não futura, validade_ate nula ou futura, escopos divulgacao **e atividade:versao:N** com N igual à versão revisada. Papel autorizante e comprovação restrita não vazios. O marcador da versão é uma restrição explícita no text[] existente; autorização genérica ou de outra versão não basta. Sem nova coluna/migração e sem UI de criação de autorização. A legitimidade material da comprovação continua sendo exame humano restrito, não reputação automática.
+
+Estado da atividade, conta e autorização são bloqueados na mesma transação pg; transição e evento persistidos juntos. Idempotência por pedido_id contextual à atividade: evento guarda metadata JSON textual em justificativa_restrita (tipo revisao.v1, versão, estado esperado, ação, motivo e autorização). Mesmo pedido/autor/payload retorna reconhecimento sem nova transição, condicionado às permissões atuais; reuso com payload/autor diferente ou conflito de versão retorna 409. Mesmo um retry de aprovação revalida a autorização: revogação/expiração passa a retornar 422 sem novo evento. Nenhuma repetição torna autorização inválida utilizável.
+
+GET privado de atividade é estendido aos estados em_revisao/aprovada/devolvida/rejeitada; proprietário e editor/admin autorizados recebem somente o motivo de devolução/rejeição, nunca metadata bruta/prova/autorizações. Outro tenant: 404 antes de consultar motivo. Esses estados permanecem privados. Devolução/rejeição não implementam edição/reenvio neste recorte.
+
+Login de editor/admin ativo confirmado no banco conduz a /admin/atividades, fila privada somente editorial. Nenhum papel vem de payload, e-mail textual ou user_metadata. Organização continua /dashboard. /admin base pode permanecer 404; aprovação não autoriza publicação. SSR privado/proxy também cobre /admin/*.

@@ -1,0 +1,955 @@
+{
+  "read_only": true,
+  "base": "012394d02fd27ce0ca847cb77e521e8acdbece22",
+  "tables": [
+    {
+      "name": "organizacoes",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "nome_publico",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "canal_publico",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "estado_validacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "criada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "organizacoes_estado_validacao_check",
+          "kind": "c",
+          "definition": "CHECK ((estado_validacao = ANY (ARRAY['pendente'::text, 'validada'::text, 'suspensa'::text])))"
+        },
+        {
+          "name": "organizacoes_nome_publico_check",
+          "kind": "c",
+          "definition": "CHECK (((char_length(TRIM(BOTH FROM nome_publico)) >= 2) AND (char_length(TRIM(BOTH FROM nome_publico)) <= 160)))"
+        },
+        {
+          "name": "organizacoes_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "organizacoes_pkey",
+          "indexdef": "CREATE UNIQUE INDEX organizacoes_pkey ON public.organizacoes USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "contas_acesso",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "auth_user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "papel",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "situacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "criada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "contas_acesso_auth_user_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (auth_user_id) REFERENCES auth.users(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "contas_acesso_auth_user_id_key",
+          "kind": "u",
+          "definition": "UNIQUE (auth_user_id)"
+        },
+        {
+          "name": "contas_acesso_organizacao_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (organizacao_id) REFERENCES organizacoes(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "contas_acesso_papel_check",
+          "kind": "c",
+          "definition": "CHECK ((papel = ANY (ARRAY['organizacao'::text, 'editor'::text, 'administrador'::text])))"
+        },
+        {
+          "name": "contas_acesso_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "contas_acesso_situacao_check",
+          "kind": "c",
+          "definition": "CHECK ((situacao = ANY (ARRAY['ativa'::text, 'bloqueada'::text, 'desativada'::text])))"
+        },
+        {
+          "name": "papel_vinculo",
+          "kind": "c",
+          "definition": "CHECK (((papel <> 'organizacao'::text) OR (organizacao_id IS NOT NULL)))"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "contas_acesso_auth_user_id_key",
+          "indexdef": "CREATE UNIQUE INDEX contas_acesso_auth_user_id_key ON public.contas_acesso USING btree (auth_user_id)"
+        },
+        {
+          "indexname": "contas_acesso_pkey",
+          "indexdef": "CREATE UNIQUE INDEX contas_acesso_pkey ON public.contas_acesso USING btree (id)"
+        },
+        {
+          "indexname": "contas_organizacao_idx",
+          "indexdef": "CREATE INDEX contas_organizacao_idx ON public.contas_acesso USING btree (organizacao_id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "atividades",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "organizacao_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "criada_por_conta_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "titulo",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "descricao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "inicio_previsto",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "orientacao_acesso",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "referencia_oficial",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "estado_programacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "estado_editorial",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "versao_submetida",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "versao_publicada",
+          "type": "jsonb",
+          "not_null": false
+        },
+        {
+          "name": "numero_versao_publicada",
+          "type": "integer",
+          "not_null": false
+        },
+        {
+          "name": "publicada_em",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "apoios_abertos",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "criada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "atualizada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "atividades_criada_por_conta_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (criada_por_conta_id) REFERENCES contas_acesso(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "atividades_descricao_check",
+          "kind": "c",
+          "definition": "CHECK (((char_length(TRIM(BOTH FROM descricao)) >= 10) AND (char_length(TRIM(BOTH FROM descricao)) <= 5000)))"
+        },
+        {
+          "name": "atividades_estado_editorial_check",
+          "kind": "c",
+          "definition": "CHECK ((estado_editorial = ANY (ARRAY['rascunho'::text, 'enviada'::text, 'em_revisao'::text, 'aprovada'::text, 'publicada'::text, 'devolvida'::text, 'rejeitada'::text, 'retirada'::text])))"
+        },
+        {
+          "name": "atividades_estado_programacao_check",
+          "kind": "c",
+          "definition": "CHECK ((estado_programacao = ANY (ARRAY['programada'::text, 'adiada'::text, 'cancelada'::text, 'realizada'::text])))"
+        },
+        {
+          "name": "atividades_numero_versao_publicada_check",
+          "kind": "c",
+          "definition": "CHECK ((numero_versao_publicada > 0))"
+        },
+        {
+          "name": "atividades_organizacao_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (organizacao_id) REFERENCES organizacoes(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "atividades_orientacao_acesso_check",
+          "kind": "c",
+          "definition": "CHECK (((char_length(TRIM(BOTH FROM orientacao_acesso)) >= 3) AND (char_length(TRIM(BOTH FROM orientacao_acesso)) <= 600)))"
+        },
+        {
+          "name": "atividades_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "atividades_titulo_check",
+          "kind": "c",
+          "definition": "CHECK (((char_length(TRIM(BOTH FROM titulo)) >= 3) AND (char_length(TRIM(BOTH FROM titulo)) <= 180)))"
+        },
+        {
+          "name": "atividades_versao_submetida_check",
+          "kind": "c",
+          "definition": "CHECK ((versao_submetida > 0))"
+        },
+        {
+          "name": "snapshot_coerente",
+          "kind": "c",
+          "definition": "CHECK ((((versao_publicada IS NULL) AND (numero_versao_publicada IS NULL) AND (publicada_em IS NULL)) OR ((jsonb_typeof(versao_publicada) = 'object'::text) AND (versao_publicada IS NOT NULL) AND (numero_versao_publicada IS NOT NULL) AND (publicada_em IS NOT NULL))))"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "atividades_criador_idx",
+          "indexdef": "CREATE INDEX atividades_criador_idx ON public.atividades USING btree (criada_por_conta_id)"
+        },
+        {
+          "indexname": "atividades_organizacao_idx",
+          "indexdef": "CREATE INDEX atividades_organizacao_idx ON public.atividades USING btree (organizacao_id, estado_editorial, inicio_previsto)"
+        },
+        {
+          "indexname": "atividades_pkey",
+          "indexdef": "CREATE UNIQUE INDEX atividades_pkey ON public.atividades USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "registros_realizacao",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "atividade_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "data_realizacao",
+          "type": "date",
+          "not_null": true
+        },
+        {
+          "name": "descricao_factual",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "origem_informacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "estado_apuracao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "estado_editorial",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "versao_publicada",
+          "type": "jsonb",
+          "not_null": false
+        },
+        {
+          "name": "numero_versao_publicada",
+          "type": "integer",
+          "not_null": false
+        },
+        {
+          "name": "publicada_em",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "registros_realizacao_atividade_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (atividade_id) REFERENCES atividades(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "registros_realizacao_atividade_id_key",
+          "kind": "u",
+          "definition": "UNIQUE (atividade_id)"
+        },
+        {
+          "name": "registros_realizacao_descricao_factual_check",
+          "kind": "c",
+          "definition": "CHECK (((char_length(TRIM(BOTH FROM descricao_factual)) >= 10) AND (char_length(TRIM(BOTH FROM descricao_factual)) <= 5000)))"
+        },
+        {
+          "name": "registros_realizacao_estado_apuracao_check",
+          "kind": "c",
+          "definition": "CHECK ((estado_apuracao = ANY (ARRAY['declarado'::text, 'corroborado'::text, 'contestado'::text])))"
+        },
+        {
+          "name": "registros_realizacao_estado_editorial_check",
+          "kind": "c",
+          "definition": "CHECK ((estado_editorial = ANY (ARRAY['rascunho'::text, 'enviada'::text, 'em_revisao'::text, 'aprovada'::text, 'publicada'::text, 'devolvida'::text, 'rejeitada'::text, 'retirada'::text])))"
+        },
+        {
+          "name": "registros_realizacao_numero_versao_publicada_check",
+          "kind": "c",
+          "definition": "CHECK ((numero_versao_publicada > 0))"
+        },
+        {
+          "name": "registros_realizacao_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "registros_realizacao_atividade_id_key",
+          "indexdef": "CREATE UNIQUE INDEX registros_realizacao_atividade_id_key ON public.registros_realizacao USING btree (atividade_id)"
+        },
+        {
+          "indexname": "registros_realizacao_pkey",
+          "indexdef": "CREATE UNIQUE INDEX registros_realizacao_pkey ON public.registros_realizacao USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "evidencias",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "registro_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "tipo_fonte",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "url_publica",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "afirmacao_sustentada",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "consultada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "aprovada_publicacao",
+          "type": "boolean",
+          "not_null": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "evidencias_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "evidencias_registro_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (registro_id) REFERENCES registros_realizacao(id) ON DELETE RESTRICT"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "evidencias_pkey",
+          "indexdef": "CREATE UNIQUE INDEX evidencias_pkey ON public.evidencias USING btree (id)"
+        },
+        {
+          "indexname": "evidencias_registro_idx",
+          "indexdef": "CREATE INDEX evidencias_registro_idx ON public.evidencias USING btree (registro_id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "autorizacoes_publicacao",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "objeto_tipo",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "objeto_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "escopo_autorizado",
+          "type": "text[]",
+          "not_null": true
+        },
+        {
+          "name": "papel_autorizante",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "comprovante_restrito",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "autorizada_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "situacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "validade_ate",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "revogada_em",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "autorizacoes_publicacao_escopo_autorizado_check",
+          "kind": "c",
+          "definition": "CHECK ((cardinality(escopo_autorizado) > 0))"
+        },
+        {
+          "name": "autorizacoes_publicacao_objeto_tipo_check",
+          "kind": "c",
+          "definition": "CHECK ((objeto_tipo = ANY (ARRAY['organizacao'::text, 'atividade'::text, 'registro'::text, 'parceiro'::text])))"
+        },
+        {
+          "name": "autorizacoes_publicacao_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "autorizacoes_publicacao_situacao_check",
+          "kind": "c",
+          "definition": "CHECK ((situacao = ANY (ARRAY['vigente'::text, 'revogada'::text, 'expirada'::text])))"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "autorizacoes_objeto_idx",
+          "indexdef": "CREATE INDEX autorizacoes_objeto_idx ON public.autorizacoes_publicacao USING btree (objeto_tipo, objeto_id, situacao)"
+        },
+        {
+          "indexname": "autorizacoes_publicacao_pkey",
+          "indexdef": "CREATE UNIQUE INDEX autorizacoes_publicacao_pkey ON public.autorizacoes_publicacao USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "apoios",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "atividade_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "chave_anonima_hash",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "situacao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "encerrado_em",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "apoio_unico_navegador_atividade",
+          "kind": "u",
+          "definition": "UNIQUE (atividade_id, chave_anonima_hash)"
+        },
+        {
+          "name": "apoios_atividade_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (atividade_id) REFERENCES atividades(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "apoios_chave_anonima_hash_check",
+          "kind": "c",
+          "definition": "CHECK ((chave_anonima_hash ~ '^[0-9a-f]{64}$'::text))"
+        },
+        {
+          "name": "apoios_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "apoios_situacao_check",
+          "kind": "c",
+          "definition": "CHECK ((situacao = ANY (ARRAY['ativo'::text, 'cancelado'::text, 'invalidado'::text])))"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "apoio_unico_navegador_atividade",
+          "indexdef": "CREATE UNIQUE INDEX apoio_unico_navegador_atividade ON public.apoios USING btree (atividade_id, chave_anonima_hash)"
+        },
+        {
+          "indexname": "apoios_ativos_idx",
+          "indexdef": "CREATE INDEX apoios_ativos_idx ON public.apoios USING btree (atividade_id) WHERE (situacao = 'ativo'::text)"
+        },
+        {
+          "indexname": "apoios_pkey",
+          "indexdef": "CREATE UNIQUE INDEX apoios_pkey ON public.apoios USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "parceiros",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "nome_publico",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "categoria",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "referencia_publica",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "colaboracao_publica",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "situacao_parceria",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "autorizacao_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "inicio_vigencia",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "fim_vigencia",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "contato_restrito",
+          "type": "text",
+          "not_null": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "parceiros_autorizacao_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (autorizacao_id) REFERENCES autorizacoes_publicacao(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "parceiros_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "parceiros_situacao_parceria_check",
+          "kind": "c",
+          "definition": "CHECK ((situacao_parceria = ANY (ARRAY['proposta'::text, 'confirmada'::text, 'suspensa'::text, 'encerrada'::text])))"
+        },
+        {
+          "name": "parceria_com_autorizacao",
+          "kind": "c",
+          "definition": "CHECK (((situacao_parceria <> 'confirmada'::text) OR (autorizacao_id IS NOT NULL)))"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "parceiros_autorizacao_idx",
+          "indexdef": "CREATE INDEX parceiros_autorizacao_idx ON public.parceiros USING btree (autorizacao_id)"
+        },
+        {
+          "indexname": "parceiros_pkey",
+          "indexdef": "CREATE UNIQUE INDEX parceiros_pkey ON public.parceiros USING btree (id)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    },
+    {
+      "name": "eventos_editoriais",
+      "rls": true,
+      "columns_match_baseline": true,
+      "constraint_counts_match": true,
+      "index_count_match": true,
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "objeto_tipo",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "objeto_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "acao",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "executada_por_conta_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "estado_anterior",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "estado_novo",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "justificativa_restrita",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "ocorrida_em",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "eventos_editoriais_executada_por_conta_id_fkey",
+          "kind": "f",
+          "definition": "FOREIGN KEY (executada_por_conta_id) REFERENCES contas_acesso(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "eventos_editoriais_pkey",
+          "kind": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ],
+      "indexes": [
+        {
+          "indexname": "eventos_autor_idx",
+          "indexdef": "CREATE INDEX eventos_autor_idx ON public.eventos_editoriais USING btree (executada_por_conta_id)"
+        },
+        {
+          "indexname": "eventos_editoriais_pkey",
+          "indexdef": "CREATE UNIQUE INDEX eventos_editoriais_pkey ON public.eventos_editoriais USING btree (id)"
+        },
+        {
+          "indexname": "eventos_objeto_idx",
+          "indexdef": "CREATE INDEX eventos_objeto_idx ON public.eventos_editoriais USING btree (objeto_tipo, objeto_id, ocorrida_em DESC)"
+        }
+      ],
+      "client_privileges": {
+        "anon": false,
+        "authenticated": false
+      },
+      "public_grants": 0,
+      "policies": 0,
+      "service_role": {
+        "SELECT": true,
+        "INSERT": true,
+        "UPDATE": true,
+        "DELETE": true
+      }
+    }
+  ],
+  "migrations": [
+    {
+      "version": "20261103221114",
+      "name": "security_foundation"
+    },
+    {
+      "version": "20261103230507",
+      "name": "organization_onboarding"
+    }
+  ],
+  "migrations_sha256": {
+    "supabase/migrations/20261103221114_security_foundation.sql": "5556204cee77a877f63e306bc529fcfb44c0bb239a741fcee98f06200bc8e02d",
+    "supabase/migrations/20261103230507_organization_onboarding.sql": "bfb593729a65959df5d6514044efed8b58c88fbaf2436a630e2e002b3456a20d"
+  },
+  "findings": []
+}

@@ -1,18 +1,18 @@
 # A Praça v1.5 — progresso atual
 
-Atualização: 04/11/2026. Base: commit 954299ece3c831003a221efc37adc9ba304ded2b.
+Atualização: 04/11/2026. Base: commit 012394d02fd27ce0ca847cb77e521e8acdbece22.
 
-- Incremento 3, recorte B01–B04: **PASS no ambiente local**, com criação/edição de rascunhos privados e envio para enviada, mantendo privacidade.
-- Testes finais: **183 PASS** em unidade/componentes, **100 PASS** em integração real (89 anteriores + 11 novos), **13 PASS** em Chromium/Next reais (9 Auth + 4 atividades); 0 FAIL/SKIP nessas suítes.
-- Lint, typecheck e build: exit 0; pg 8.23.1 existente promovido a dependência runtime sem instalação.
-- Atomicidade comprovada em PostgreSQL: envio + evento na mesma transação; erro FK na auditoria reverte envio; concorrência/retry sem duplicação.
-- Nove tabelas/RLS/grants permanentes e ambas as migrações preservados. Sem snapshots ou publicação.
-- A07 **PENDENTE no aceite integral**, exige nova prova quando existir publicação. A08: PASS com datas controladas das fixtures.
-- Fixtures desta execução removidas com autorização específica; nenhum dado anterior excluído. Next encerrado; Supabase preservado, sem start/stop/configuração.
-- Sem migração, instalação, commit, push, deploy ou operação remota nesta etapa. B05–B12 não implementados; aguardar nova decisão humana.
+- Incremento 3, B05–B06: **PASS no ambiente local**. Editor/admin ativo inicia revisão, aprova com autorização válida da atividade/escopo/versão, devolve ou rejeita com motivo restrito.
+- Transições + auditoria na mesma transação pg; provas reais de conflito, idempotência, rollback FK e revogação concorrente. Retry de aprovação também revalida vigência.
+- Testes finais: **223 PASS** unidade/componentes, **128 PASS** integração real, **19 PASS** E2E Chromium/Next; zero FAIL/SKIP. Lint/typecheck/build exit 0.
+- Login editorial real habilitado conforme papel do banco e sessão SSR privada; cadastro/onboarding não concede esse papel. Sem criação de editor/admin real.
+- Nove tabelas, RLS, grants permanentes e ambas as migrações preservados. Nenhum snapshot público, publicação ou apoio habilitado.
+- A07 **PENDENTE no aceite integral**, a ser revalidado quando publicação existir. A08 conserva manipulação temporal controlada das fixtures.
+- Criação/limpeza de fixtures recebeu autorização específica deste recorte; somente UUIDs próprios removidos. Next encerrado; Supabase não reiniciado nem reconfigurado.
+- Sem instalação, migração, commit, push, deploy ou mudanças remotas/globais. B07–B12 não implementados; parar e aguardar decisão humana.
 
-[Relatório](incremento-3-b01-b04.md) · [Evidências](evidence/incremento-3-b01-b04/) · [Matriz](../specs/matriz-testes-v1.5.md)
+[Relatório](incremento-3-b05-b06.md) · [Evidências](evidence/incremento-3-b05-b06/) · [Matriz](../specs/matriz-testes-v1.5.md)
 
-## Checkpoint B01–B04
+## Preparação do checkpoint B05–B06
 
-Revisão e stage preparados conforme [manifesto exato](checkpoint-b01-b04-files.txt) e [relatório](checkpoint-b01-b04.md). Aguarda autorização explícita para commit; B05–B06 continuam não iniciados. A07 permanece PENDENTE. A preparação do checkpoint não repetiu as suítes nem alterou código funcional, dados ou infraestrutura.
+Stage limitado ao [manifesto versionável](checkpoint-b05-b06-files.txt), sem logs brutos/observações e sem commit. [Revisão](checkpoint-b05-b06.md) e hashes/resumos sanitizados preservam os resultados anteriores sem repetir suítes. B05/B06 PASS, B07 NOT RUN, A07 PENDENTE; edição/reenvio após devolução não implementados. Aguardar autorização de commit; não iniciar B07.

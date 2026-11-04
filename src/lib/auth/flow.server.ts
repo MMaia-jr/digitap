@@ -57,6 +57,9 @@ function channel(value: unknown):string|undefined {
 function activeAccount(account: AccessAccount | null, user: VerifiedUser) {
   if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa' || account.papel !== 'organizacao' || !account.organizacao_id)) throw new FlowError(403, 'Acesso indisponível para esta conta.');
 }
+function activeLoginAccount(account:AccessAccount|null,user:VerifiedUser){
+ if(account&&(account.auth_user_id!==user.id||account.situacao!=='ativa'||!['organizacao','editor','administrador'].includes(account.papel)||(account.papel==='organizacao'&&!account.organizacao_id)))throw new FlowError(403,'Acesso indisponível para esta conta.');
+}
 
 function hasConfirmedIdentity(user: VerifiedUser | null | undefined): user is VerifiedUser {
   return Boolean(user?.id && user.email_confirmed_at);
@@ -104,8 +107,8 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
         if (result.error || !result.session || !hasConfirmedIdentity(result.user)) {
           throw new FlowError(401,loginMessage);
         }
-        const account=await gateway.account(result.user.id); activeAccount(account,result.user);
-        return {message:'Acesso confirmado.',next:account?'/dashboard':'/dashboard/organizacao'};
+        const account=await gateway.account(result.user.id); activeLoginAccount(account,result.user);
+        return {message:'Acesso confirmado.',next:account?account.papel==='organizacao'?'/dashboard':'/admin/atividades':'/dashboard/organizacao'};
       });
     }
     if (action === 'recover') {

@@ -1,0 +1,141 @@
+{
+  "status": "passed",
+  "PASS": 19,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "B01",
+      "test": "B01: rascunho privado, edição própria, visitante e tenant alheio negados; editor lê",
+      "status": "PASS",
+      "duration_ms": 2469,
+      "errors": []
+    },
+    {
+      "id": "B02",
+      "test": "B02: campos obrigatórios ausentes impedem salvar/enviar por UI/API",
+      "status": "PASS",
+      "duration_ms": 382,
+      "errors": []
+    },
+    {
+      "id": "B03",
+      "test": "B03: API rejeita datas/URL/HTML e IDs de organização forjados",
+      "status": "PASS",
+      "duration_ms": 99,
+      "errors": []
+    },
+    {
+      "id": "B04",
+      "test": "B04: envio real permanece privado, audita uma vez e retry é idempotente",
+      "status": "PASS",
+      "duration_ms": 1474,
+      "errors": []
+    },
+    {
+      "id": "A01",
+      "test": "A01: cadastro, confirmação, vínculo pendente e sessão SSR",
+      "status": "PASS",
+      "duration_ms": 4490,
+      "errors": []
+    },
+    {
+      "id": "A02",
+      "test": "A02: validação e cadastro duplicado sem enumeração",
+      "status": "PASS",
+      "duration_ms": 87,
+      "errors": []
+    },
+    {
+      "id": "A03",
+      "test": "A03: login incorreto negado e login válido restaura SSR",
+      "status": "PASS",
+      "duration_ms": 1309,
+      "errors": []
+    },
+    {
+      "id": "A04",
+      "test": "A04: recuperação, token expirado e replay negados",
+      "status": "PASS",
+      "duration_ms": 2233,
+      "errors": []
+    },
+    {
+      "id": "A05",
+      "test": "A05: duas organizações isoladas e vínculo concorrente idempotente",
+      "status": "PASS",
+      "duration_ms": 2061,
+      "errors": []
+    },
+    {
+      "id": "A06",
+      "test": "A06: cliente não promove papel",
+      "status": "PASS",
+      "duration_ms": 32,
+      "errors": []
+    },
+    {
+      "id": "A07",
+      "test": "A07: organização pendente não publica nem acessa administração",
+      "status": "PASS",
+      "duration_ms": 533,
+      "errors": []
+    },
+    {
+      "id": "A08",
+      "test": "A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada",
+      "status": "PASS",
+      "duration_ms": 3179,
+      "errors": []
+    },
+    {
+      "id": "A09",
+      "test": "A09: visitante não acessa área restrita/editorial",
+      "status": "PASS",
+      "duration_ms": 639,
+      "errors": []
+    },
+    {
+      "id": "B05a",
+      "test": "B05a: login editorial real, revisão privada e papéis forjados/visitantes negados",
+      "status": "PASS",
+      "duration_ms": 1394,
+      "errors": []
+    },
+    {
+      "id": "B05b",
+      "test": "B05b: autorização compatível permite aprovação; inválidas bloqueiam sem snapshot",
+      "status": "PASS",
+      "duration_ms": 995,
+      "errors": []
+    },
+    {
+      "id": "B06a",
+      "test": "B06a: devolução motivada visível ao dono; terceiro e público não recebem motivo",
+      "status": "PASS",
+      "duration_ms": 1644,
+      "errors": []
+    },
+    {
+      "id": "B06b",
+      "test": "B06b: rejeição concorrente, idempotência e conflitos preservam o motivo inicial",
+      "status": "PASS",
+      "duration_ms": 540,
+      "errors": []
+    },
+    {
+      "id": "B05c",
+      "test": "B05c: editor bloqueado perde acesso com sessão existente; admin ativo revisa",
+      "status": "PASS",
+      "duration_ms": 935,
+      "errors": []
+    },
+    {
+      "id": "B05/B06",
+      "test": "B05/B06: todas as decisões continuam privadas e sem apoio/snapshot",
+      "status": "PASS",
+      "duration_ms": 1610,
+      "errors": []
+    }
+  ]
+}

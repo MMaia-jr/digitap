@@ -1,0 +1,49 @@
+{
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0
+  },
+  "typecheck": {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 0
+  },
+  "unit": {
+    "command": "npm test",
+    "exit_code": 0,
+    "PASS": 223,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "lint": {
+    "command": "npm run lint",
+    "exit_code": 0
+  },
+  "integration": {
+    "command": [
+      "npm",
+      "run",
+      "test:onboarding:db"
+    ],
+    "exit_code": 0,
+    "PASS": 128,
+    "FAIL": 0,
+    "SKIP": 0,
+    "summary": "Tests  128 passed (128)"
+  },
+  "e2e": {
+    "status": "passed",
+    "PASS": 19,
+    "FAIL": 0,
+    "SKIP": 0,
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-3-b05-b06 npm run test:e2e"
+  },
+  "scope": "B05–B06 e regressões. A07 permanece PENDENTE no aceite integral; nenhum aceite de publicação ou 74/74."
+}

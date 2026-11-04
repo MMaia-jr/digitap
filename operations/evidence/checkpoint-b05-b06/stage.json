@@ -1,0 +1,13 @@
+{
+  "base": "012394d02fd27ce0ca847cb77e521e8acdbece22",
+  "staged_count": 31,
+  "manifest_exact_match": true,
+  "cached_check_exit_code": 0,
+  "cached_check_output": "",
+  "commit_executed": false,
+  "A07": "PENDENTE",
+  "B05": "PASS",
+  "B06": "PASS",
+  "B07": "NOT RUN",
+  "next_step": "Aguardar autorização explícita para commit; não iniciar B07."
+}

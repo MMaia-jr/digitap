@@ -1,0 +1,108 @@
+{
+  "base": "012394d02fd27ce0ca847cb77e521e8acdbece22",
+  "review_only_no_suites_reexecuted": true,
+  "recorded_test_evidence": [
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/unit-red.log",
+      "sha256": "bda1de324bd89769ccbcb50413070e07df8065cede0b8ec44cc66a93b9621e1c",
+      "PASS": 39,
+      "FAIL": 33,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/unit-green.log",
+      "sha256": "2b79113e27c74e49403a48dcebef6b0737ec2faf2071cb3dd2b02bf21beb3ff1",
+      "PASS": 72,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/form-red.log",
+      "sha256": "86c403d47cec08ab31d3c41e0ce9abfa43792fd4c9c26565a7a6d5baf84e0c51",
+      "PASS": 0,
+      "FAIL": 3,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/unit-form-green.log",
+      "sha256": "793f987e5101b1615f8fdd6de6e10a67fe35deb29cdfc4b1ed10e47ecc1c205f",
+      "PASS": 75,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/editor-navigation-red.log",
+      "sha256": "2fc6dc8f184bf544c0f8a09c5caea3eb55461bbe94a324203ef15a09ce21c1a3",
+      "PASS": 31,
+      "FAIL": 1,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/editor-navigation-green.log",
+      "sha256": "cb2cd52294951e75c574ce72ef89c149fe20f313fd325fbc92da855d99abc990",
+      "PASS": 32,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/retry-authorization-red.log",
+      "sha256": "d2e59ae68ac930d65dd43ebd537555f7db9d9e381d3bb91a2bee804861b4f28a",
+      "PASS": 32,
+      "FAIL": 1,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/retry-authorization-green.log",
+      "sha256": "eabb98f250f598f891bcaf5e4f57de72d0255f8b041d7d98ba0e0dec22ee591c",
+      "PASS": 33,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/integration-first.log",
+      "sha256": "6da64a99550a1888fa10411deae8a3334d4552feca09b55981a6a84109db01ba",
+      "PASS": 26,
+      "FAIL": 1,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/integration-green.log",
+      "sha256": "066c6e3126ccdc519407ac16c600e44a4fc39acd0cce5824c485b47bf47056f9",
+      "PASS": 27,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/unit-final.log",
+      "sha256": "3e78ad5694f45599e92277a3f059daea1687d03a31f22f9fef54c4d0ebff1b2e",
+      "PASS": 223,
+      "FAIL": 0,
+      "SKIP": 0
+    },
+    {
+      "source_local_only": "operations/evidence/incremento-3-b05-b06/integration-final.log",
+      "sha256": "73606ae10132f5c6198d55920194a7360d3d998c09f282de7212bd5704e33971",
+      "PASS": 128,
+      "FAIL": 0,
+      "SKIP": 0
+    }
+  ],
+  "final_totals": {
+    "unit_PASS": 223,
+    "integration_PASS": 128,
+    "e2e_PASS": 19,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "quality_exit_codes": {
+    "lint": 0,
+    "typecheck": 0,
+    "build": 0
+  },
+  "notes": [
+    "Logs brutos e observações de requisições preservados apenas localmente, fora do stage.",
+    "Primeira integração 26 PASS/1 FAIL: monitor de lock com snapshot de estatísticas; corrigido no teste. Novo caso de retry revogado completou 28 novos testes na suíte de 128.",
+    "A07 permanece PENDENTE no aceite integral; o PASS do runner nessa checagem é parcial.",
+    "Edição/reenvio após devolução não implementados."
+  ]
+}

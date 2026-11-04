@@ -2,7 +2,10 @@ export class ActivityError extends Error {
   constructor(public readonly status:number,message:string,public readonly fields?:Record<string,string>){super(message);}
 }
 export interface DraftInput {titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
-export interface PrivateActivity extends DraftInput {id:string;estado_editorial:'rascunho'|'enviada';versao_submetida:number}
+export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada';
+export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;motivo_editorial?:string}
+export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
+export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
 const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial'];
 export function objectInput(input:unknown,allowed:string[]):Record<string,unknown>{
  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!allowed.includes(k)))throw new ActivityError(400,'Pedido inválido.');
@@ -38,6 +41,15 @@ export function validateDraft(input:unknown,now=new Date()):DraftInput{
 }
 export function validateVersion(value:unknown):number{
  if(typeof value!=='number'||!Number.isInteger(value)||value<1||value>2147483646)throw new ActivityError(422,'Informe a versão esperada válida.');return value;
+}
+export function validateReview(input:unknown):ReviewInput{
+ const common=['acao','versao_esperada','estado_esperado','pedido_id'];
+ const body=objectInput(input,[...common,'motivo','autorizacao_id']);
+ if(!['iniciar','aprovar','devolver','rejeitar'].includes(String(body.acao))||!['enviada','em_revisao'].includes(String(body.estado_esperado)))throw new ActivityError(422,'Ação ou estado esperado inválido.');
+ const acao=body.acao as ReviewAction;
+ objectInput(body,[...common,...(acao==='aprovar'?['autorizacao_id']:acao==='devolver'||acao==='rejeitar'?['motivo']:[])]);
+ const uuid=(value:unknown,field:string)=>{if(typeof value!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value))return invalid(field,'Informe um UUID válido.');return value.toLowerCase();};
+ return {pedido_id:uuid(body.pedido_id,'pedido_id'),acao,versao_esperada:validateVersion(body.versao_esperada),estado_esperado:body.estado_esperado as ReviewInput['estado_esperado'],motivo:acao==='devolver'||acao==='rejeitar'?text(body.motivo,'motivo',10,1500):null,autorizacao_id:acao==='aprovar'?uuid(body.autorizacao_id,'autorizacao_id'):null};
 }
 function localParts(date:Date){
  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);

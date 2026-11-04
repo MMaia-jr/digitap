@@ -11,3 +11,10 @@ supabase/.branches/
 # Diagnóstico bruto com endereços das interfaces do Mac; resumo sanitizado versionável.
 operations/evidence/isolamento-20261104T121252Z/network.json
 operations/evidence/isolamento-20261104T121252Z/network-before-loopback-filter.json
+# Checkpoint B05–B06: logs e observações brutas ficam somente locais.
+operations/evidence/incremento-3-b05-b06/*
+!operations/evidence/incremento-3-b05-b06/quality-final.json
+!operations/evidence/incremento-3-b05-b06/e2e.json
+!operations/evidence/incremento-3-b05-b06/catalog.json
+!operations/evidence/incremento-3-b05-b06/secret-values.json
+!operations/evidence/incremento-3-b05-b06/inspect-preservation.mjs

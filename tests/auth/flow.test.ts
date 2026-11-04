@@ -43,6 +43,20 @@ describe('A01–A09: fluxo com provider simulado, não integração real', () =>
     const g=setup();g.account.mockResolvedValue(account as never);
     expect(await run('signin',input,g)).toMatchObject({next:'/dashboard'});
   });
+  it.each(['editor','administrador'])('B05: %s ativo do banco entra na fila editorial',async papel=>{
+    const g=setup();g.account.mockResolvedValue({...account,papel,organizacao_id:null} as never);
+    expect(await run('signin',input,g)).toMatchObject({next:'/admin/atividades'});expect(g.logout).not.toHaveBeenCalled();
+  });
+  it('B05: editor bloqueado continua negado no login',async()=>{
+    const g=setup();g.account.mockResolvedValue({...account,papel:'editor',situacao:'bloqueada'} as never);
+    await expect(run('signin',input,g)).rejects.toMatchObject({status:403});expect(g.logout).toHaveBeenCalled();
+  });
+  it('B05: papel desconhecido ou forjado por metadata não cria acesso editorial',async()=>{
+    const g=setup();g.account.mockResolvedValue({...account,papel:'supereditor'} as never);
+    await expect(run('signin',input,g)).rejects.toMatchObject({status:403});
+    g.account.mockResolvedValue(account as never);g.signIn.mockResolvedValue({user:{...user,user_metadata:{papel:'editor'}},session:true} as never);
+    expect(await run('signin',input,g)).toMatchObject({next:'/dashboard'});
+  });
   it('A07: login sem email confirmado é negado e limpa sessão', async () => {
     const g=setup();g.signIn.mockResolvedValue({user:{...user,email_confirmed_at:null},session:true} as never);
     await expect(run('signin',input,g)).rejects.toMatchObject({status:401});expect(g.logout).toHaveBeenCalled();

@@ -19,4 +19,4 @@ export async function proxy(request:NextRequest){
  }catch{/* Pages perform the authoritative checks and show safe unavailability. */}
  return response;
 }
-export const config={matcher:['/dashboard/:path*']};
+export const config={matcher:['/dashboard/:path*','/admin/:path*']};
