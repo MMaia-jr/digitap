@@ -1,0 +1,10 @@
+Arquivos protegidos comparados ao HEAD dedc9c6:
+supabase
+src/lib/auth/permissions.server.ts
+src/lib/auth/supabase-access.server.ts
+src/lib/supabase
+package.json
+package-lock.json
+scripts/start-local.mjs
+
+git diff --exit-code -- <arquivos acima>: exit 0, sem diferenças. Não houve operações de banco/Docker/infraestrutura.

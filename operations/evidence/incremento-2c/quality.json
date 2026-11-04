@@ -1,0 +1,109 @@
+{
+  "unit": {
+    "command": "npm test",
+    "PASS": 129,
+    "FAIL": 0,
+    "SKIP": 0,
+    "evidence": "unit.log"
+  },
+  "e2e": {
+    "status": "passed",
+    "PASS": 9,
+    "FAIL": 0,
+    "SKIP": 0,
+    "checks": [
+      {
+        "id": "A01",
+        "test": "A01: cadastro, confirmação, vínculo pendente e sessão SSR",
+        "status": "PASS",
+        "duration_ms": 4632,
+        "errors": []
+      },
+      {
+        "id": "A02",
+        "test": "A02: validação e cadastro duplicado sem enumeração",
+        "status": "PASS",
+        "duration_ms": 71,
+        "errors": []
+      },
+      {
+        "id": "A03",
+        "test": "A03: login incorreto negado e login válido restaura SSR",
+        "status": "PASS",
+        "duration_ms": 1478,
+        "errors": []
+      },
+      {
+        "id": "A04",
+        "test": "A04: recuperação, token expirado e replay negados",
+        "status": "PASS",
+        "duration_ms": 2016,
+        "errors": []
+      },
+      {
+        "id": "A05",
+        "test": "A05: duas organizações isoladas e vínculo concorrente idempotente",
+        "status": "PASS",
+        "duration_ms": 1897,
+        "errors": []
+      },
+      {
+        "id": "A06",
+        "test": "A06: cliente não promove papel",
+        "status": "PASS",
+        "duration_ms": 31,
+        "errors": []
+      },
+      {
+        "id": "A07",
+        "test": "A07: organização pendente não publica nem acessa administração",
+        "status": "PASS",
+        "duration_ms": 516,
+        "errors": []
+      },
+      {
+        "id": "A08",
+        "test": "A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada",
+        "status": "PASS",
+        "duration_ms": 2968,
+        "errors": []
+      },
+      {
+        "id": "A09",
+        "test": "A09: visitante não acessa área restrita/editorial",
+        "status": "PASS",
+        "duration_ms": 667,
+        "errors": []
+      }
+    ]
+  },
+  "lint": {
+    "command": "npm run lint",
+    "exit_code": 0,
+    "evidence": "lint.log"
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0
+  },
+  "typecheck": {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 0
+  },
+  "prior_results_not_repeated": {
+    "integration": 89,
+    "Auth_API_Mailpit": 17
+  },
+  "processes": {
+    "Next": "Encerrado somente o supervisor criado nesta execução; porta 3215 sem listener depois.",
+    "Supabase": "Sem start/stop/configuração/migração nesta execução."
+  }
+}

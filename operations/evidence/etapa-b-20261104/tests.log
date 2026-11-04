@@ -1,0 +1,13 @@
+$ npm test
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  12 passed (12)
+      Tests  125 passed (125)
+   Start at  04:23:55
+   Duration  2.29s (environment 55%, tests 20%, import 20%, transform 4%, worker 2%)

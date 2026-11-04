@@ -1,0 +1,36 @@
+{
+  "unit": {
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "test"
+    ],
+    "PASS": 127,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "lint": {
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ]
+  },
+  "typecheck": {
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ]
+  },
+  "build": {
+    "exit_code": 0,
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ]
+  }
+}

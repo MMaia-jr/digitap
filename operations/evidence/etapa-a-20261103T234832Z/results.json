@@ -1,0 +1,55 @@
+{
+  "commands": {
+    "test": {
+      "command": "npm test",
+      "exit_code": 0,
+      "summary": "Tests  100 passed (100)",
+      "PASS": 100,
+      "FAIL": 0,
+      "SKIP": 0,
+      "TODO": 0
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exit_code": 0
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "exit_code": 0
+    }
+  },
+  "database_tests": {
+    "PASS": 0,
+    "FAIL": 0,
+    "SKIP": 0,
+    "NOT_RUN": 89,
+    "reason": "85 casos de segurança + 4 onboarding; stack parado, não executados."
+  },
+  "canary_scan": {
+    "positive_control_in_memory": "PASS",
+    "canaries_set_for_build": [
+      "SUPABASE_SECRET_KEY",
+      "APOIO_HMAC_SECRET"
+    ],
+    "actual_values_available": {
+      "SUPABASE_SECRET_KEY": false,
+      "APOIO_HMAC_SECRET": false
+    },
+    "public_files_scanned": 113,
+    "static_files_scanned": 13,
+    "public_value_matches": [],
+    "raw_command_logs_with_matches": [],
+    "operation_files_scanned": 52,
+    "operation_value_matches": [],
+    "tracked_files_scanned": 106,
+    "tracked_value_matches": [],
+    "git_commits_scanned": 1,
+    "git_blobs_scanned": 104,
+    "git_history_value_matches": [],
+    "scope": "Comparação exata e Base64 de canários/valores disponíveis. Sem tráfego autenticado real, cookies ou execução dinâmica em navegador."
+  }
+}

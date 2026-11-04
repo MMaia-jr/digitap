@@ -1,0 +1,13 @@
+Verificação somente leitura, Etapa A.
+
+Comando:
+docker ps --filter 'name=^/supabase_.*_a-praca-v1-5$' --format '{{.ID}}\t{{.Names}}\t{{.Ports}}'
+
+Resultado observado: saída vazia, exit 0. Nenhum container ativo pertencente ao stack A Praça foi listado.
+
+docker port: NOT RUN, porque não há container próprio ativo a inspecionar.
+
+lsof -nP -iTCP:56150 -iTCP:56151 -iTCP:56152 -iTCP:56153 -iTCP:56154 -iTCP:56157 -iTCP:56159 -sTCP:LISTEN
+Resultado observado: saída vazia (exit 1, nenhum listener encontrado).
+
+O Supabase NÃO foi iniciado. Não houve alteração de config.toml, rede Docker, configurações globais, volumes ou outros projetos. Ausência de portas publicadas agora não comprova que um futuro start será isolado. O bloqueio de startup permanece.

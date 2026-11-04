@@ -1,0 +1,225 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/session-recovery.test.ts (18 tests | 11 failed) 42ms
+   ❯ Etapa B — regressões de sessão e retomada com provider/banco simulados (18)
+     × A03: login com identidade vazia não produz acesso nem consulta conta 15ms
+     × A01: confirmação sem identidade não deixa uma sessão válida 3ms
+     × A05/A07: vínculo não aceita identidade vazia nem consulta banco 2ms
+     × A08: falha 429 de login encerra a sessão parcial 4ms
+     × A08: falha 503 de login encerra a sessão parcial 1ms
+     × A08: falha de transporte de login também encerra a sessão 1ms
+     × A01/A08: falha do provider na confirmação limpa a sessão 1ms
+     × A04: exceção na confirmação também limpa a sessão 1ms
+     × A01: confirmação sem sessão não preserva dados parciais 2ms
+     × repetir cadastro já vinculado não escreve novamente nem depende da RPC 2ms
+     × retoma após resposta perdida do vínculo sem recriar identidade/organização 1ms
+ ❯ tests/auth/logout-runtime.test.ts (4 tests | 2 failed) 52ms
+   ❯ A08: logout e falhas de inicialização no runtime simulado (4)
+     × apaga cookies próprios mesmo sem conseguir inicializar o SDK 47ms
+     × configuração fora do escopo retorna 503 privado sem exceção crua 1ms
+ ❯ tests/components/auth-concurrency.test.tsx (1 test | 1 failed) 268ms
+   ❯ cadastro: requisições concorrentes no componente simulado (1)
+     × dois submits no mesmo instante fazem um POST e uma nova tentativa é permitida após erro 266ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/logout-runtime.test.ts > A08: logout e falhas de inicialização no runtime simulado > apaga cookies próprios mesmo sem conseguir inicializar o SDK
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/logout-runtime.test.ts:19:60
+     17|   it('apaga cookies próprios mesmo sem conseguir inicializar o SDK', a…
+     18|     const response = await mutation('signout', request());
+     19|     expect(response.status).toBe(503); expect(mocks.clear).toHaveBeenC…
+       |                                                            ^
+     20|     expect(await response.text()).not.toContain('segredo privado');
+     21|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  tests/auth/logout-runtime.test.ts > A08: logout e falhas de inicialização no runtime simulado > configuração fora do escopo retorna 503 privado sem exceção crua
+Error: Origem fora do escopo local autorizado.
+ ❯ appOrigin src/lib/supabase/config.server.ts:5:45
+      3| export function appOrigin(){
+      4|   const origin=process.env.APP_ORIGIN??'http://127.0.0.1:3215';
+      5|   if(origin!=='http://127.0.0.1:3215')throw new Error('Origem fora do …
+       |                                             ^
+      6|   return origin;
+      7| }
+ ❯ Module.mutation src/lib/auth/runtime.server.ts:9:33
+ ❯ tests/auth/logout-runtime.test.ts:32:28
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A03: login com identidade vazia não produz acesso nem consulta conta
+AssertionError: promise resolved "{ message: 'Acesso confirmado.', …(1) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "message": "Acesso confirmado.",
++   "next": "/dashboard/organizacao",
+  }
+
+ ❯ tests/auth/session-recovery.test.ts:25:56
+     23|   it('A03: login com identidade vazia não produz acesso nem consulta c…
+     24|     const g = fixture(); g.signIn.mockResolvedValue({ user: { ...user,…
+     25|     await expect(executeAuth('signin', credentials, g)).rejects.toMatc…
+       |                                                        ^
+     26|     expect(g.account).not.toHaveBeenCalled(); expect(g.logout).toHaveB…
+     27|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A01: confirmação sem identidade não deixa uma sessão válida
+AssertionError: promise resolved "{ message: 'E-mail confirmado.', …(1) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "message": "E-mail confirmado.",
++   "next": "/dashboard/organizacao",
+  }
+
+ ❯ tests/auth/session-recovery.test.ts:30:76
+     28|   it('A01: confirmação sem identidade não deixa uma sessão válida', as…
+     29|     const g = fixture(); g.verify.mockResolvedValue({ user: { ...user,…
+     30|     await expect(executeAuth('confirm', { token_hash: 'a'.repeat(64) }…
+       |                                                                            ^
+     31|     expect(g.logout).toHaveBeenCalledOnce();
+     32|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A05/A07: vínculo não aceita identidade vazia nem consulta banco
+AssertionError: promise resolved "{ …(2) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "message": "Organização vinculada. Validação institucional pendente.",
++   "next": "/dashboard",
+  }
+
+ ❯ tests/auth/session-recovery.test.ts:35:79
+     33|   it('A05/A07: vínculo não aceita identidade vazia nem consulta banco'…
+     34|     const g = fixture(); g.currentUser.mockResolvedValue({ ...user, id…
+     35|     await expect(executeAuth('organization', { nome_publico: 'Fictícia…
+       |                                                                               ^
+     36|     expect(g.account).not.toHaveBeenCalled(); expect(g.registerOrganiz…
+     37|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A08: falha 429 de login encerra a sessão parcial
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A08: falha 503 de login encerra a sessão parcial
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/session-recovery.test.ts:41:22
+     39|     const g = fixture(); g.signIn.mockResolvedValue({ error: { status …
+     40|     await expect(executeAuth('signin', credentials, g)).rejects.toMatc…
+     41|     expect(g.logout).toHaveBeenCalledOnce();
+       |                      ^
+     42|   });
+     43|   it('A08: falha de transporte de login também encerra a sessão', asyn…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A08: falha de transporte de login também encerra a sessão
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/session-recovery.test.ts:46:22
+     44|     const g = fixture(); g.signIn.mockRejectedValue(new Error('detalhe…
+     45|     await expect(executeAuth('signin', credentials, g)).rejects.toMatc…
+     46|     expect(g.logout).toHaveBeenCalledOnce();
+       |                      ^
+     47|   });
+     48|   it('A01/A08: falha do provider na confirmação limpa a sessão', async…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A01/A08: falha do provider na confirmação limpa a sessão
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/session-recovery.test.ts:51:22
+     49|     const g = fixture(); g.verify.mockResolvedValue({ error: { status:…
+     50|     await expect(executeAuth('confirm', { token_hash: 'a'.repeat(64) }…
+     51|     expect(g.logout).toHaveBeenCalledOnce();
+       |                      ^
+     52|   });
+     53|   it('A04: exceção na confirmação também limpa a sessão', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A04: exceção na confirmação também limpa a sessão
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/session-recovery.test.ts:56:22
+     54|     const g = fixture(); g.verify.mockRejectedValue(new Error('detalhe…
+     55|     await expect(executeAuth('confirm', { token_hash: 'a'.repeat(64) }…
+     56|     expect(g.logout).toHaveBeenCalledOnce();
+       |                      ^
+     57|   });
+     58|   it('A01: confirmação sem sessão não preserva dados parciais', async …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > A01: confirmação sem sessão não preserva dados parciais
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/auth/session-recovery.test.ts:61:22
+     59|     const g = fixture(); g.verify.mockResolvedValue({ user, session: f…
+     60|     await expect(executeAuth('confirm', { token_hash: 'a'.repeat(64) }…
+     61|     expect(g.logout).toHaveBeenCalledOnce();
+       |                      ^
+     62|   });
+     63|   it('confirmação bem-sucedida mantém a sessão para onboarding', async…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > repetir cadastro já vinculado não escreve novamente nem depende da RPC
+FlowError: Serviço indisponível. Tente novamente.
+ ❯ unavailable src/lib/auth/flow.server.ts:23:27
+     21| }
+     22| export interface FlowResult { message: string; next?: string }
+     23| const unavailable = () => new FlowError(503, 'Serviço indisponível. Te…
+       |                           ^
+     24| const loginMessage = 'Não foi possível entrar. Confira seus dados e a …
+     25| function provider(result: ProviderResult) {
+ ❯ Module.executeAuth src/lib/auth/flow.server.ts:136:11
+ ❯ tests/auth/session-recovery.test.ts:76:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/14]⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > Etapa B — regressões de sessão e retomada com provider/banco simulados > retoma após resposta perdida do vínculo sem recriar identidade/organização
+AssertionError: expected "vi.fn()" to be called once, but got 2 times
+ ❯ tests/auth/session-recovery.test.ts:85:36
+     83|     await expect(executeAuth('organization', { nome_publico: 'Fictícia…
+     84|     expect(await executeAuth('organization', { nome_publico: 'Fictícia…
+     85|     expect(g.registerOrganization).toHaveBeenCalledOnce(); expect(g.si…
+       |                                    ^
+     86|   });
+     87|   it.each(['editor', 'administrador'] as const)('retry não converte co…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/14]⎯
+
+ FAIL  tests/components/auth-concurrency.test.tsx > cadastro: requisições concorrentes no componente simulado > dois submits no mesmo instante fazem um POST e uma nova tentativa é permitida após erro
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ ❯ tests/components/auth-concurrency.test.tsx:17:21
+     15|       form.dispatchEvent(new Event('submit', { bubbles: true, cancelab…
+     16|     });
+     17|     expect(fetcher).toHaveBeenCalledTimes(1);
+       |                     ^
+     18|     await act(async () => { release({ ok: false, json: async () => ({ …
+     19|     fireEvent.submit(form); expect(fetcher).toHaveBeenCalledTimes(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  14 failed | 9 passed (23)
+   Start at  04:11:59
+   Duration  2.09s (environment 55%, import 20%, tests 16%, transform 8%, worker 1%)

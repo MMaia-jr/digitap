@@ -1,0 +1,48 @@
+ M README.md
+ M SECURITY.md
+ M operations/incremento-2.md
+ M specs/contratos-api.md
+ M specs/matriz-testes-v1.5.md
+ M src/components/AuthForm.tsx
+ M src/lib/auth/flow.server.ts
+ M src/lib/auth/organization-access.server.ts
+ M src/lib/auth/runtime.server.ts
+ M tests/auth/session.test.ts
+?? operations/etapa-b-incremento-2.md
+?? operations/evidence/etapa-a-20261103T234832Z/build.log
+?? operations/evidence/etapa-a-20261103T234832Z/commands.md
+?? operations/evidence/etapa-a-20261103T234832Z/docker.txt
+?? operations/evidence/etapa-a-20261103T234832Z/git-log.txt
+?? operations/evidence/etapa-a-20261103T234832Z/git-status.txt
+?? operations/evidence/etapa-a-20261103T234832Z/lint.log
+?? operations/evidence/etapa-a-20261103T234832Z/report.md
+?? operations/evidence/etapa-a-20261103T234832Z/results.json
+?? operations/evidence/etapa-a-20261103T234832Z/test.log
+?? operations/evidence/etapa-a-20261103T234832Z/typecheck.log
+?? operations/evidence/etapa-a-20261103T234832Z/verify.py
+?? operations/evidence/etapa-b-20261104/arquivos.txt
+?? operations/evidence/etapa-b-20261104/build.log
+?? operations/evidence/etapa-b-20261104/commands.md
+?? operations/evidence/etapa-b-20261104/green-before-refactor.log
+?? operations/evidence/etapa-b-20261104/green.log
+?? operations/evidence/etapa-b-20261104/identity-green.log
+?? operations/evidence/etapa-b-20261104/identity-red.log
+?? operations/evidence/etapa-b-20261104/lint.log
+?? operations/evidence/etapa-b-20261104/preservacao.txt
+?? operations/evidence/etapa-b-20261104/red.log
+?? operations/evidence/etapa-b-20261104/results.json
+?? operations/evidence/etapa-b-20261104/tests.log
+?? operations/evidence/etapa-b-20261104/typecheck.log
+?? operations/evidence/fase-a-20261104T065521Z/build.log
+?? operations/evidence/fase-a-20261104T065521Z/git-log.txt
+?? operations/evidence/fase-a-20261104T065521Z/git-status.txt
+?? operations/evidence/fase-a-20261104T065521Z/lint.log
+?? operations/evidence/fase-a-20261104T065521Z/report.md
+?? operations/evidence/fase-a-20261104T065521Z/results.json
+?? operations/evidence/fase-a-20261104T065521Z/test.log
+?? operations/evidence/fase-a-20261104T065521Z/typecheck.log
+?? operations/evidence/fase-a-20261104T065521Z/verify.py
+?? operations/progresso.md
+?? tests/auth/logout-runtime.test.ts
+?? tests/auth/session-recovery.test.ts
+?? tests/components/auth-concurrency.test.tsx

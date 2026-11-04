@@ -1,0 +1,78 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 8,
+  "checks": [
+    {
+      "id": "A01",
+      "test": "A01: cadastro, confirmação, vínculo pendente e sessão SSR",
+      "status": "FAIL",
+      "duration_ms": 21415,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/auth.spec.mjs:90:90"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "test": "A02: validação e cadastro duplicado sem enumeração",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A03",
+      "test": "A03: login incorreto negado e login válido restaura SSR",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A04",
+      "test": "A04: recuperação, token expirado e replay negados",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A05",
+      "test": "A05: duas organizações isoladas e vínculo concorrente idempotente",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A06",
+      "test": "A06: cliente não promove papel",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A07",
+      "test": "A07: organização pendente não publica nem acessa administração",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A08",
+      "test": "A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    },
+    {
+      "id": "A09",
+      "test": "A09: visitante não acessa área restrita/editorial",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    }
+  ]
+}

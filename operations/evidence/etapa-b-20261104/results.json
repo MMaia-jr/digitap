@@ -1,0 +1,98 @@
+{
+  "checks": {
+    "test": {
+      "command": "npm test",
+      "exit_code": 0,
+      "PASS": 125,
+      "FAIL": 0,
+      "SKIP": 0,
+      "TODO": 0
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exit_code": 0
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exit_code": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "exit_code": 0,
+      "evidence": "build.log",
+      "note": "Saída 0 confirmada na execução anterior desta Etapa B, após a refatoração; nenhum código de produto mudou depois."
+    }
+  },
+  "database": {
+    "PASS": 0,
+    "FAIL": 0,
+    "SKIP": 0,
+    "NOT_RUN": 89
+  },
+  "browser": "NOT RUN",
+  "acceptance_increment_2": "PENDENTE",
+  "A01_A09": {
+    "A01": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A02": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A03": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A04": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A05": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A06": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A07": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A08": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    },
+    "A09": {
+      "partial_simulated": "PASS",
+      "integral": "NOT RUN"
+    }
+  },
+  "tdd": {
+    "initial_red": {
+      "FAIL": 14,
+      "PASS": 9
+    },
+    "initial_green": {
+      "PASS": 23,
+      "FAIL": 0
+    },
+    "identity_red": {
+      "FAIL": 2,
+      "PASS": 29
+    },
+    "identity_green": {
+      "PASS": 31,
+      "FAIL": 0
+    },
+    "before_refactor": {
+      "PASS": 125,
+      "FAIL": 0
+    }
+  },
+  "no_new_installation": true,
+  "no_docker_operations": true,
+  "no_sql_changes": true,
+  "no_remote_operations": true
+}

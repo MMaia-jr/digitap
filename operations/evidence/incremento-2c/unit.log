@@ -1,0 +1,12 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  14 passed (14)
+      Tests  129 passed (129)
+   Start at  10:39:22
+   Duration  2.96s (environment 50%, tests 17%, import 17%, transform 16%, worker 1%)

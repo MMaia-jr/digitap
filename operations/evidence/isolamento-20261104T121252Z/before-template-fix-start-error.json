@@ -1,0 +1,4 @@
+{
+  "code": "StartInvalidConfigError",
+  "message": "Invalid config for auth.email.template.confirmation.content_path: ENOENT: no such file or directory, open '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/templates/confirmation.html'"
+}

@@ -3,13 +3,32 @@ import { userClient, clearAuthCookies } from '../supabase/server';
 import { adminClient } from '../supabase/admin.server';
 import { createGateway } from './gateway.server';
 import { executeAuth, validateAuthInput, type AuthAction } from './flow.server';
-import { handleMutation } from './http.server';
+import { handleMutation, privateHeaders } from './http.server';
 import { appOrigin } from '../supabase/config.server';
 export async function mutation(action:AuthAction,request:Request){
-  return handleMutation(request,appOrigin(),async input=>{
+  let origin: string;
+  try {
+    origin = appOrigin();
+  } catch {
+    return Response.json({message:'Serviço indisponível. Tente novamente.'},{status:503,headers:privateHeaders});
+  }
+  return handleMutation(request,origin,async input=>{
     validateAuthInput(action,input);
-    const client=await userClient();
-    const gateway=createGateway(client,adminClient,await clearAuthCookies());
-    return executeAuth(action,input,gateway);
+    const clear = await clearAuthCookies();
+    let cleared = false;
+    const clearOnce = () => {
+      if (!cleared) {
+        clear();
+        cleared = true;
+      }
+    };
+    try {
+      const client=await userClient();
+      const gateway=createGateway(client,adminClient,clearOnce);
+      return await executeAuth(action,input,gateway);
+    } finally {
+      // Only after origin and payload validation; never clear on a cross-site POST.
+      if (action === 'signout') clearOnce();
+    }
   });
 }

@@ -1,0 +1,16 @@
+{
+  "target": "127.0.0.1:56152",
+  "migrations": [
+    {
+      "version": "20261103221114",
+      "name": "security_foundation"
+    },
+    {
+      "version": "20261103230507",
+      "name": "organization_onboarding"
+    }
+  ],
+  "rpc": {
+    "function_name": "criar_organizacao_pendente(uuid,text,text)"
+  }
+}

@@ -1,0 +1,23 @@
+ M README.md
+ M SECURITY.md
+ M operations/incremento-2.md
+ M specs/contratos-api.md
+ M specs/matriz-testes-v1.5.md
+ M src/components/AuthForm.tsx
+ M src/lib/auth/flow.server.ts
+ M src/lib/auth/organization-access.server.ts
+ M src/lib/auth/runtime.server.ts
+ M supabase/config.toml
+ M tests/auth/session.test.ts
+ M tests/integration/onboarding.database.test.ts
+?? operations/etapa-b-incremento-2.md
+?? operations/evidence/etapa-a-20261103T234832Z/
+?? operations/evidence/etapa-b-20261104/
+?? operations/evidence/fase-a-20261104T065521Z/
+?? operations/evidence/isolamento-20261104T121252Z/
+?? operations/isolamento-rede-20261104.md
+?? operations/progresso.md
+?? tests/auth/email-templates.test.ts
+?? tests/auth/logout-runtime.test.ts
+?? tests/auth/session-recovery.test.ts
+?? tests/components/auth-concurrency.test.tsx

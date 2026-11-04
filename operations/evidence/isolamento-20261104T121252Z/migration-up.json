@@ -1,0 +1,10 @@
+{
+  "authorization": "Autorização explícita: Autorizar somente essa migração local",
+  "command": "./node_modules/.bin/supabase migration up --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5",
+  "exit_code": 0,
+  "target": "127.0.0.1:56152",
+  "applied": [
+    "20261103230507_organization_onboarding.sql"
+  ],
+  "verification": "database-state.json e integration.json"
+}

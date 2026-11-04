@@ -78,3 +78,7 @@ Consulte autenticacao-local.md para a sequência futura após comprovar isolamen
 - https://nextjs.org/docs/app/guides/authentication
 
 As assinaturas também foram conferidas nos SDKs instalados e as versões no registry oficial npm. A leitura de documentação não substituiu testes reais que permaneceram bloqueados.
+
+## Continuidade autorizada — Etapa B de 04/11/2026
+
+O relatório acima permanece como histórico da primeira implementação. A complementação da Etapa B corrigiu lacunas de sessão/identidade, retomada de vínculo e envio concorrente no componente. A suíte atual tem 125 testes de unidade/componentes passando. Integração real e navegador continuam NOT RUN, sem aceite definitivo. Ver [relatório atualizado](etapa-b-incremento-2.md) e [progresso atual](progresso.md).

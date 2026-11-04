@@ -1,0 +1,35 @@
+ M .gitignore
+ M README.md
+ M SECURITY.md
+ M eslint.config.mjs
+ M operations/incremento-2.md
+ M package-lock.json
+ M package.json
+ M specs/contratos-api.md
+ M specs/matriz-testes-v1.5.md
+ M src/components/AuthForm.tsx
+ M src/lib/auth/flow.server.ts
+ M src/lib/auth/organization-access.server.ts
+ M src/lib/auth/runtime.server.ts
+ M supabase/config.toml
+ M tests/auth/session.test.ts
+ M tests/integration/onboarding.database.test.ts
+?? AGENTS.md
+?? operations/etapa-b-incremento-2.md
+?? operations/evidence/etapa-a-20261103T234832Z/
+?? operations/evidence/etapa-b-20261104/
+?? operations/evidence/fase-a-20261104T065521Z/
+?? operations/evidence/incremento-2c/
+?? operations/evidence/isolamento-20261104T121252Z/
+?? operations/incremento-2c.md
+?? operations/isolamento-rede-20261104.md
+?? operations/progresso.md
+?? playwright.config.mjs
+?? scripts/e2e-evidence-check.mjs
+?? scripts/e2e-server.mjs
+?? tests/auth/email-templates.test.ts
+?? tests/auth/logout-runtime.test.ts
+?? tests/auth/session-recovery.test.ts
+?? tests/components/auth-concurrency.test.tsx
+?? tests/components/auth-hydration.test.tsx
+?? tests/e2e/

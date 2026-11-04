@@ -49,7 +49,7 @@ port = 56157
 # Templates locais preparados no incremento 2; não aplicados ao stack parado.
 [auth.email.template.confirmation]
 subject = "Confirme seu acesso à Praça"
-content_path = "./templates/confirmation.html"
+content_path = "./supabase/templates/confirmation.html"
 [auth.email.template.recovery]
 subject = "Recupere seu acesso à Praça"
-content_path = "./templates/recovery.html"
+content_path = "./supabase/templates/recovery.html"

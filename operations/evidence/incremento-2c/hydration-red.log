@@ -1,0 +1,33 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/auth-hydration.test.tsx (2 tests | 1 failed) 160ms
+   ❯ envio de autenticação antes de hidratação (2)
+     × HTML inicial desabilita envio nativo até o handler JSON estar disponível 29ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/auth-hydration.test.tsx > envio de autenticação antes de hidratação > HTML inicial desabilita envio nativo até o handler JSON estar disponível
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/components/auth-hydration.test.tsx:11:56
+      9|     const html=renderToString(<AuthForm mode="signout"/>);
+     10|     const document=new DOMParser().parseFromString(html,'text/html');
+     11|     expect(document.querySelector('button')?.disabled).toBe(true);
+       |                                                        ^
+     12|   });
+     13|   it('habilita botão quando o componente está montado',()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  10:37:30
+   Duration  2.01s (environment 72%, import 15%, tests 9%, transform 3%)

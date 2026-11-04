@@ -1,0 +1,297 @@
+{
+  "candidate_count": 113,
+  "candidate_manifest": "operations/checkpoint-incremento-2-files.txt",
+  "findings": [],
+  "excluded_preserved_raw_network": [
+    "operations/evidence/isolamento-20261104T121252Z/network.json",
+    "operations/evidence/isolamento-20261104T121252Z/network-before-loopback-filter.json"
+  ],
+  "scope": "Somente arquivos novos/modificados candidatos; valores conhecidos comparados em memória, sem impressão. Não é nova auditoria de aplicação ou de rede.",
+  "staged_files": [],
+  "diff_check_exit_code": 0,
+  "sha256_excluding_this_scan_file": {
+    ".gitignore": "e3891dfe27d516adc8018233fb64ff39e0ac95a6946e9eecbabcbc0a7f036c3c",
+    "AGENTS.md": "063098f6cb31bb44c6f8fbea25b3876de7ee1e5f7d00a50dbab506f6415eb7f0",
+    "README.md": "b03000de5c932cc0ce3930221d4d423e89c43b5e68c004e99f6a529d2393382c",
+    "SECURITY.md": "6b74fcc9e1e6ab532ad20ddddb569fc3c6240b45c61f4072d4e0f632f72ced67",
+    "eslint.config.mjs": "822de8f24b1f3bfdb09eead2ea247b4d6db70ac122c6c8e943cdd56efdd6e2ba",
+    "operations/checkpoint-incremento-2-files.txt": "5efc944af0a98f48fccdf5103606ce18a2e132ee7cd8d4da785c97a06f86f190",
+    "operations/checkpoint-incremento-2.md": "7e98eca1b5710a30dfe7654fa66177bde7e5361ff5100099377a800ef8d9a6b3",
+    "operations/etapa-b-incremento-2.md": "da9e9eeace0ee59efcc32fcc49e6fc7eb39a5fef2f74f4008a1676f608e0f37d",
+    "operations/evidence/etapa-a-20261103T234832Z/build.log": "de5b520f1dab5f8ca835399d996061a307852446709599a216cc2e3093e4fa42",
+    "operations/evidence/etapa-a-20261103T234832Z/commands.md": "a668566a1f678ad8c897b9fcda53ea49c3143c8d8297e6fac6601d9e583d0291",
+    "operations/evidence/etapa-a-20261103T234832Z/docker.txt": "e52bdfeab75612de4e526f83a97e2f2bc9d9f9be9b256ea2bb1676f112c66f59",
+    "operations/evidence/etapa-a-20261103T234832Z/git-log.txt": "9ef7339de5e0feb3bb37172bc9df5a8d3a05c0f0bd9c2917ac6d7a0cd0b671c6",
+    "operations/evidence/etapa-a-20261103T234832Z/git-status.txt": "2b1de1dae27fe0e918572f4eecb732d13e8602df26969d9f669723265d43d1ef",
+    "operations/evidence/etapa-a-20261103T234832Z/lint.log": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20",
+    "operations/evidence/etapa-a-20261103T234832Z/report.md": "47d16f4c8581b19ea3cd61e0da2a8ebfd2380bd2ab74b31328239c9d9f9250e2",
+    "operations/evidence/etapa-a-20261103T234832Z/results.json": "4b4b7b08308ba0f853f9b6406a87cf2fcecd2aa0f93fa1bb80a0287fd65344a6",
+    "operations/evidence/etapa-a-20261103T234832Z/test.log": "5d7eb36436770cc175f25ba1f11f0f76539cc466a36e8192e6d2c61a2891be4d",
+    "operations/evidence/etapa-a-20261103T234832Z/typecheck.log": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863",
+    "operations/evidence/etapa-a-20261103T234832Z/verify.py": "a4540ffff7c35eefda422fb8319273440e042c95da1d054d589b14ea7a0f7965",
+    "operations/evidence/etapa-b-20261104/arquivos.txt": "5aab04655e7a9452297cf18c9eca72baeb2eca4f05e46e63dd8eaacc18fbf995",
+    "operations/evidence/etapa-b-20261104/build.log": "1d23d77d4ae337621431649cd42f65387d7162fae80c0f616c9ef099a55716b7",
+    "operations/evidence/etapa-b-20261104/commands.md": "fdd7d989a09d2897540436aaaaeff822425d307c1d042befb110bc8ccace36c1",
+    "operations/evidence/etapa-b-20261104/git-status.txt": "499afbfa43b1e6460140894c27875f9a3b53ab3d25d767344acb18eda011372e",
+    "operations/evidence/etapa-b-20261104/green-before-refactor.log": "08ab6b4806baa5b304ab29fe7c1b083eba76ee5109333a316243cce605072183",
+    "operations/evidence/etapa-b-20261104/green.log": "214c89fb2ee926026a3d4df8d975f90942421e9bbed6b8c1d3512d9b5b698a1f",
+    "operations/evidence/etapa-b-20261104/identity-green.log": "052679d8091ff9ee27fd53a7a99af3b107c140afdd36c1d02092c75044784269",
+    "operations/evidence/etapa-b-20261104/identity-red.log": "0216833d1d5ea19634ac732029e17b62a25d367d176b20883b7c3a2affcd921e",
+    "operations/evidence/etapa-b-20261104/lint.log": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20",
+    "operations/evidence/etapa-b-20261104/preservacao.txt": "04d304d80037172726e27690ba385310fc3de2973df845c023b0c05a7e8cecbc",
+    "operations/evidence/etapa-b-20261104/red.log": "0a5fa3cb1310f6574d28bd2166cd01b565eaee455b2d1da534313aef069c5f35",
+    "operations/evidence/etapa-b-20261104/results.json": "f11f92bbf45e82634c0cfedbfe1078c85264209ebe1428194a04228bea0f286a",
+    "operations/evidence/etapa-b-20261104/tests.log": "a7094374589da67c3cf6728360e78461c172b41cea4d3223f77a047e50030513",
+    "operations/evidence/etapa-b-20261104/typecheck.log": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863",
+    "operations/evidence/fase-a-20261104T065521Z/build.log": "5859890b875c7eb4ebed50fe9dd4550d8c22b07212f57ef8ab4cb7c6a2ff13c7",
+    "operations/evidence/fase-a-20261104T065521Z/git-log.txt": "9ef7339de5e0feb3bb37172bc9df5a8d3a05c0f0bd9c2917ac6d7a0cd0b671c6",
+    "operations/evidence/fase-a-20261104T065521Z/git-status.txt": "36ab3102474b914ee30ac78d943280855a5da8ebe3cf1901d3766979b85cf194",
+    "operations/evidence/fase-a-20261104T065521Z/lint.log": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20",
+    "operations/evidence/fase-a-20261104T065521Z/report.md": "d39875a403cd0c60ffd547b210df0ff60bad3aa9a07808cfea951679a4ba975e",
+    "operations/evidence/fase-a-20261104T065521Z/results.json": "a649c5fb6b9197aa8972826dca824d460e6b4e6e51200ffa6a2714f1af7bb96e",
+    "operations/evidence/fase-a-20261104T065521Z/test.log": "15a0e2af629d3ac870b09ed2d71da68c5148f593f3788a6c9562feeba7d1a6bb",
+    "operations/evidence/fase-a-20261104T065521Z/typecheck.log": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863",
+    "operations/evidence/fase-a-20261104T065521Z/verify.py": "a4540ffff7c35eefda422fb8319273440e042c95da1d054d589b14ea7a0f7965",
+    "operations/evidence/incremento-2c/build-typecheck.json": "d58dea18f19b94e18ede8efa4fff4ab400a55914ef538fb91be8a95260201220",
+    "operations/evidence/incremento-2c/build.log": "30b6d4d65c7bf298ac5febe45b90261a9388a3ea9a41e0e818af9728a04fd4bb",
+    "operations/evidence/incremento-2c/e2e-red-hydration.json": "5d43f79c4611f2ce9b4b4ecf49fbf18c80d47fbb212d9dbf6e0c51920d37ee48",
+    "operations/evidence/incremento-2c/e2e.json": "6a43d2df688edba64aa491aa5bceeecf361f7e185f55f979569124a55aa49169",
+    "operations/evidence/incremento-2c/git-status-final.txt": "4e3552435105df4610a31c9aed551a060d8fd0f1efbc06d63bc2f8d24ddccd93",
+    "operations/evidence/incremento-2c/hydration-green.log": "26734388414d4a0f259efcefd243d0b83abdfaf92b90f8024b17eea26e290d6b",
+    "operations/evidence/incremento-2c/hydration-red.log": "9a3cced9990de3fa64062509e9b13a690503e2787aad650b9c558480b611fc2a",
+    "operations/evidence/incremento-2c/lint.log": "eee7bb9d347af0500dd82cc0d223f929313c500911ce1603220cff5dbd79d638",
+    "operations/evidence/incremento-2c/observations.json": "62aa47d0ca473112f315d0a87d04eddd1939b638ad727a28f0625aedb045044d",
+    "operations/evidence/incremento-2c/quality.json": "1ac73daa73f61ca9653f2664a70f83a189d1f536770036a42491e4ee355d56d6",
+    "operations/evidence/incremento-2c/secret-values.json": "4a0ecc5a46fc3b19b3819404c85ec34945ab8ee5bb06934a1b94f59a84fb10aa",
+    "operations/evidence/incremento-2c/server.log": "eb1f9d86573c18954e35247cbe83f5b477a8d94f9cda51a2d7325c96ecedffbd",
+    "operations/evidence/incremento-2c/typecheck.log": "9cc429cc6fe6f0227b4fe8e9761af708e35f2fc3e44fde8328d8eef37f9d817f",
+    "operations/evidence/incremento-2c/unit.log": "1bf4d5ab79a88e52ecec55ee12840f38d399e7029d681fe06c286a4a170d6cb2",
+    "operations/evidence/isolamento-20261104T121252Z/auth-backend.json": "057864b1bd28326c8946f5d54715c7ab962326b05063275b884ed83ef21048cc",
+    "operations/evidence/isolamento-20261104T121252Z/auth-backend.mjs": "99c1bac97e5591f37887edf1bd69cb769e62ba9d1fccc7e7f6c5bb44835fe26a",
+    "operations/evidence/isolamento-20261104T121252Z/autorizacao.md": "3c0775ea16944f6ceffffd6b214e1e2e2c2ab6ccceeea0bee1debc6404d02d68",
+    "operations/evidence/isolamento-20261104T121252Z/before-template-fix-start-error.json": "64a869acc90f4b33cf61991d771ceace2ef21b1c52f9e0a18daa408caa1aa2f0",
+    "operations/evidence/isolamento-20261104T121252Z/before-template-fix-start-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "operations/evidence/isolamento-20261104T121252Z/before-template-fix-start.json": "fe678a849efcce93b38984c6e3936f6f274936dcf071ee55c6d3a1cbcac7ae1b",
+    "operations/evidence/isolamento-20261104T121252Z/build.log": "1d9ba91f7200661d646f059d5f92da32e82826d209428449377a3af838f61bbe",
+    "operations/evidence/isolamento-20261104T121252Z/database-state.json": "275c36910faa1aabbf6828a3dac0e790eb2c1e64d112d53ff35511ac38d55acb",
+    "operations/evidence/isolamento-20261104T121252Z/diagnose-db.mjs": "2f1a5cb06242aa34240076fb6340c72f0374ce0a2e906b94e7b9741835b7cf8d",
+    "operations/evidence/isolamento-20261104T121252Z/git-status-final.txt": "d0a73e205527c7a5e1e8f5a05eb36e405ecb5feab95ddd99fab556dc201e7092",
+    "operations/evidence/isolamento-20261104T121252Z/integration-before-strengthening.json": "f01be0aaf3a5a3a075c33e12aaabef78025d6528b172c7100d687556ca3846ba",
+    "operations/evidence/isolamento-20261104T121252Z/integration-before-strengthening.log": "8c8c535c48df0672899f9a5869817f6ea589eb362faec61d3e0959ec96c97723",
+    "operations/evidence/isolamento-20261104T121252Z/integration-strict-red.json": "768714625f16cd714bf02c2bf46a3220caf11e4bb12a1f9a4382eaba195aac09",
+    "operations/evidence/isolamento-20261104T121252Z/integration-strict-red.log": "763c5237d3ef18070e6bf9823d217cebec3424f1226d0b4b4eed866a09ff579b",
+    "operations/evidence/isolamento-20261104T121252Z/integration.json": "8603ae174889fba7ea88b350ba32049c19d1790bd2fd4457d32bb868f7f51c3d",
+    "operations/evidence/isolamento-20261104T121252Z/integration.log": "4a87e876663976c7e8f596a0a95d5e3a34ae516453850153d4bd11adb50c90d7",
+    "operations/evidence/isolamento-20261104T121252Z/lint.log": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20",
+    "operations/evidence/isolamento-20261104T121252Z/migration-up.json": "efb4cfb90e06f2e0352fa39ae87db22d4266c43f991c6915be71faeac51b0e1e",
+    "operations/evidence/isolamento-20261104T121252Z/network-summary.json": "1452abedc198d18cafd8c9923016e675a20a9256c29cfd517dc2d948ce165070",
+    "operations/evidence/isolamento-20261104T121252Z/quality.json": "13aa0cbf1ada8483084b72d2f19c46c7dd5b3d8ef2521779f5d514d53c89a0fc",
+    "operations/evidence/isolamento-20261104T121252Z/run-integration.py": "ec860babced23a15105401cb7016b836540f0c182ee34b53e0f8f0287b939319",
+    "operations/evidence/isolamento-20261104T121252Z/start-error.json": "64a869acc90f4b33cf61991d771ceace2ef21b1c52f9e0a18daa408caa1aa2f0",
+    "operations/evidence/isolamento-20261104T121252Z/start-stderr.log": "6549cb91d8659e478e3a172daee26f2a0de2d34655d65887d4ce23f4388d6f09",
+    "operations/evidence/isolamento-20261104T121252Z/start.json": "16f2bcd5c4ed96684eeb16ffa534f84a02073617d7f75d748dc822dcbcae9f50",
+    "operations/evidence/isolamento-20261104T121252Z/start.py": "0332fc4cb90f4eea89cf68ccae97bc0b179bbd42a613bfa9f884d5bef281b0ca",
+    "operations/evidence/isolamento-20261104T121252Z/templates-green.log": "42975f821a972e262f7b18120457d84b615f99021aad4500bc690ac1214bea59",
+    "operations/evidence/isolamento-20261104T121252Z/templates-red.log": "1b907c4eaa7b625776299436cdc3d341bb9dc097cdc89eba499106193763a216",
+    "operations/evidence/isolamento-20261104T121252Z/typecheck.log": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863",
+    "operations/evidence/isolamento-20261104T121252Z/unit.log": "1803383b04aac4bea994b687fc1d0e03d5c802c2ff7dfbddd83b1993c04a9d13",
+    "operations/evidence/isolamento-20261104T121252Z/verify-network.py": "640e7049c67e82a693aec79b087c9fdc8423c2202b9a871230021b3deec0beba",
+    "operations/incremento-2.md": "0d15e76d141cc76ebb63b3e402981410a1f581a6807c729019d18bff4d2ac0ee",
+    "operations/incremento-2c.md": "82f7c35b09c3468274d17b10b0a2fe8ba5ccdd7ad0d0ed9b274c10542afdc3fa",
+    "operations/isolamento-rede-20261104.md": "835496b096fa4d831bd4bfa990d83959fbd825444be0bf9735fff8b20dcdd383",
+    "operations/progresso.md": "582461f64deafebba56d824e3625b80ccb10157970957374445979b46d3ee141",
+    "operations/proposta-incremento-3-b01-b04.md": "a9f4134b987afd945c4afe56f1fd259da52a5864fce0d20f9adae12535e08660",
+    "package-lock.json": "1e48a6aea29308d1e397c76af84d954a03665ef1ef2221b9f3cd957cd4f03450",
+    "package.json": "779ad112b846feb37aaa508d27b003848441437519b654815fc89f810c6b1fcc",
+    "playwright.config.mjs": "549f8a9657fa8a79d4be48c427d19be0a19f90b5e4f4a1d30b28f84415203b86",
+    "scripts/e2e-evidence-check.mjs": "08553edbb1a786934921fc1cce7ec3a727e4568d319f89e3307106444dc6d6e6",
+    "scripts/e2e-server.mjs": "ba9281e21dba4d0bde42ff07673baace814743ac90fed43437965cc794913dd3",
+    "specs/contratos-api.md": "0aaf6479adfc7b1fa92b015da8e7e047716ba2ef54b7ad7314737f00463c1636",
+    "specs/matriz-testes-v1.5.md": "5f13f099b30bf716b17efca562d1a6b63cf9162b035807bbc4776731fdd56ee9",
+    "src/components/AuthForm.tsx": "3d2fa9aaab9c387c1715fd7ab61ab735a042f44c71910845abe27d26e5a6df49",
+    "src/lib/auth/flow.server.ts": "8beb4cf4ced19b54a847897ac7f88cbf4097c84dadf2356b16dcd6997f14e9d2",
+    "src/lib/auth/organization-access.server.ts": "c468881105de163bd25b2081d5f5cf00a96af9df462d7ce033c6971895d52e90",
+    "src/lib/auth/runtime.server.ts": "572086a43739a46becd4aa5f18e719cd45162bdd8cdc24fde9fd1e19d7d1434d",
+    "supabase/config.toml": "bb43ca0de19f132642a99b4a340bf391b6de7fa97a57e25c3c2a940f5fa2a5ab",
+    "tests/auth/email-templates.test.ts": "ec928ca4f07685a5bc97f642dbc223ad2bc1c9ab6b19e76df4a1365557d77fa0",
+    "tests/auth/logout-runtime.test.ts": "2961697a19cd910474744c01b64a49d8ddbc0953da278e82fc16849c4c5db3c9",
+    "tests/auth/session-recovery.test.ts": "5316c341f46a314f7f5807aed46e1bffee6b2ed3d2c0091f7b20d34524d0b7de",
+    "tests/auth/session.test.ts": "b2879827efefead6fc3c2961ec3e4c7e5069491134bb1b124b5fc8730386742f",
+    "tests/components/auth-concurrency.test.tsx": "d2a710cc5f93c13c581e8b1e0395f0093d90ab067eafbefe5df9255ff9a65997",
+    "tests/components/auth-hydration.test.tsx": "d6c16782a8a10e8c5ae9ae6a617d0b95ee8c836f74707ea023feca787c23f393",
+    "tests/e2e/auth.spec.mjs": "9854f1f13c02b2f5f1b0ca1e61c42d1440a98c789db9a57ae1ad958a04b34b3a",
+    "tests/e2e/reporter.mjs": "6eb259ba79df05ac9b891003f13151f32db2fd846cbffa71faceb4da9b291095",
+    "tests/integration/onboarding.database.test.ts": "e17f271fcf9e89540f581b8c6e228792acecfdda8e81c3db6146b53350f95ad4"
+  },
+  "authorized_document_adjustment": "A07 PENDENTE no aceite integral; evidência parcial 404; ressalva temporal A08 preservada.",
+  "pre_stage_rescan": {
+    "files_checked": 113,
+    "findings": [],
+    "production_code_changed_since_review": false,
+    "commit_title_authorized": "fix(auth): concluir autenticacao e validacao local do incremento 2"
+  },
+  "staged_whitespace_check_initial": "FAIL: trailing whitespace/EOF blank lines in evidence logs; no code error.",
+  "evidence_log_formatting_normalization": [
+    {
+      "path": "operations/evidence/etapa-a-20261103T234832Z/build.log",
+      "before_sha256": "54d98da6b576a69840c3a711503dc6682568aba43fc9dd4e5aad41b23f4a637a",
+      "after_sha256": "de5b520f1dab5f8ca835399d996061a307852446709599a216cc2e3093e4fa42"
+    },
+    {
+      "path": "operations/evidence/etapa-a-20261103T234832Z/lint.log",
+      "before_sha256": "71367a4c0588d22c4baa8670abb86ea2dd0d68749e46cd9aaabb628c015b6de3",
+      "after_sha256": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20"
+    },
+    {
+      "path": "operations/evidence/etapa-a-20261103T234832Z/test.log",
+      "before_sha256": "7dcdb48c4f87092f8ae9e0070eddfd6a0d40e5f67ca3a1cd570c18d2b82bd9c3",
+      "after_sha256": "5d7eb36436770cc175f25ba1f11f0f76539cc466a36e8192e6d2c61a2891be4d"
+    },
+    {
+      "path": "operations/evidence/etapa-a-20261103T234832Z/typecheck.log",
+      "before_sha256": "4a357ffb7fd322d91a280e2cde0c0fb8ccc67276e11c8f1641903a8b1bc735ac",
+      "after_sha256": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/build.log",
+      "before_sha256": "62811db3a7c8a3c84e30bc343df3cc6faaffca4ca9afb899ca4f93d8bb1efac3",
+      "after_sha256": "1d23d77d4ae337621431649cd42f65387d7162fae80c0f616c9ef099a55716b7"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/green-before-refactor.log",
+      "before_sha256": "bfef69f47585c8d1545966d08650a5802b63d2b5ce92aabbfea7fc3e815e3fcc",
+      "after_sha256": "08ab6b4806baa5b304ab29fe7c1b083eba76ee5109333a316243cce605072183"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/green.log",
+      "before_sha256": "35df2a4c0d9bb9bbc23ced9717c70ff49a76ccd5e11526e29122e1b7c3c76535",
+      "after_sha256": "214c89fb2ee926026a3d4df8d975f90942421e9bbed6b8c1d3512d9b5b698a1f"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/identity-green.log",
+      "before_sha256": "708c794892a413f095188da6bd9498d34ca2fe660fd3bcdbd135b52fed9c59b8",
+      "after_sha256": "052679d8091ff9ee27fd53a7a99af3b107c140afdd36c1d02092c75044784269"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/identity-red.log",
+      "before_sha256": "382c20701451190a20ea5cfe129a19ca647013d3d0de17a7a70eeded78b0a486",
+      "after_sha256": "0216833d1d5ea19634ac732029e17b62a25d367d176b20883b7c3a2affcd921e"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/lint.log",
+      "before_sha256": "71367a4c0588d22c4baa8670abb86ea2dd0d68749e46cd9aaabb628c015b6de3",
+      "after_sha256": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/red.log",
+      "before_sha256": "d5cec297a53349084786e98f005167b7b02647ec232d1c287ac4bb13108a2017",
+      "after_sha256": "0a5fa3cb1310f6574d28bd2166cd01b565eaee455b2d1da534313aef069c5f35"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/tests.log",
+      "before_sha256": "d2571b9aa48b62537a1f4a3f6e7f3752e620adcbae2df9dae3986e3643fd7461",
+      "after_sha256": "a7094374589da67c3cf6728360e78461c172b41cea4d3223f77a047e50030513"
+    },
+    {
+      "path": "operations/evidence/etapa-b-20261104/typecheck.log",
+      "before_sha256": "4a357ffb7fd322d91a280e2cde0c0fb8ccc67276e11c8f1641903a8b1bc735ac",
+      "after_sha256": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863"
+    },
+    {
+      "path": "operations/evidence/fase-a-20261104T065521Z/build.log",
+      "before_sha256": "aae6080eb4d2b8b00383100ed1ba0df50bb345590f4e5cb486e4162adcb5064b",
+      "after_sha256": "5859890b875c7eb4ebed50fe9dd4550d8c22b07212f57ef8ab4cb7c6a2ff13c7"
+    },
+    {
+      "path": "operations/evidence/fase-a-20261104T065521Z/lint.log",
+      "before_sha256": "71367a4c0588d22c4baa8670abb86ea2dd0d68749e46cd9aaabb628c015b6de3",
+      "after_sha256": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20"
+    },
+    {
+      "path": "operations/evidence/fase-a-20261104T065521Z/test.log",
+      "before_sha256": "e387c9c6275feba508931e0354f6db5e92fc47237a799d6e60215f9628b389f1",
+      "after_sha256": "15a0e2af629d3ac870b09ed2d71da68c5148f593f3788a6c9562feeba7d1a6bb"
+    },
+    {
+      "path": "operations/evidence/fase-a-20261104T065521Z/typecheck.log",
+      "before_sha256": "4a357ffb7fd322d91a280e2cde0c0fb8ccc67276e11c8f1641903a8b1bc735ac",
+      "after_sha256": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/build.log",
+      "before_sha256": "5b40fe1f5a32822fb1d8260d33d8924686041d8f90f95845996a99b84f10ee64",
+      "after_sha256": "30b6d4d65c7bf298ac5febe45b90261a9388a3ea9a41e0e818af9728a04fd4bb"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/hydration-green.log",
+      "before_sha256": "846561a97ee0b9871c981ea8c1eb2514fb5afab4a32d23651cd61a7395c3c0d5",
+      "after_sha256": "26734388414d4a0f259efcefd243d0b83abdfaf92b90f8024b17eea26e290d6b"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/hydration-red.log",
+      "before_sha256": "e16a80927282f05178c300a531f8172e99ca2bd681207c61691ac81de6fb15dc",
+      "after_sha256": "9a3cced9990de3fa64062509e9b13a690503e2787aad650b9c558480b611fc2a"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/lint.log",
+      "before_sha256": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+      "after_sha256": "eee7bb9d347af0500dd82cc0d223f929313c500911ce1603220cff5dbd79d638"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/typecheck.log",
+      "before_sha256": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+      "after_sha256": "9cc429cc6fe6f0227b4fe8e9761af708e35f2fc3e44fde8328d8eef37f9d817f"
+    },
+    {
+      "path": "operations/evidence/incremento-2c/unit.log",
+      "before_sha256": "e5e5dd44e8686e160f28bd1324db91820ab49936a96eb9da28f15b57bde82a33",
+      "after_sha256": "1bf4d5ab79a88e52ecec55ee12840f38d399e7029d681fe06c286a4a170d6cb2"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/build.log",
+      "before_sha256": "562041b1769f80391b181341125e693b78e55201cec67d9f489f68897fc62f44",
+      "after_sha256": "1d9ba91f7200661d646f059d5f92da32e82826d209428449377a3af838f61bbe"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/integration-before-strengthening.log",
+      "before_sha256": "c264a7aeba9604c8db8a72ccd80a4c8fa2ee1bf0bc20b7f783bb1337a60bd09f",
+      "after_sha256": "8c8c535c48df0672899f9a5869817f6ea589eb362faec61d3e0959ec96c97723"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/integration-strict-red.log",
+      "before_sha256": "3c39e887ce1743a76fa1d0e7d42dad176244efce40f5084842616b1b4eea1df0",
+      "after_sha256": "763c5237d3ef18070e6bf9823d217cebec3424f1226d0b4b4eed866a09ff579b"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/integration.log",
+      "before_sha256": "ca7c795ee4d55cc0a7f8974943d8f30359e51469332bd8c4c10b79b0b0628efb",
+      "after_sha256": "4a87e876663976c7e8f596a0a95d5e3a34ae516453850153d4bd11adb50c90d7"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/lint.log",
+      "before_sha256": "71367a4c0588d22c4baa8670abb86ea2dd0d68749e46cd9aaabb628c015b6de3",
+      "after_sha256": "df686e14c33531b75c439e0263db1b0a75b296acb86f8f2913c067aee3661f20"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/templates-green.log",
+      "before_sha256": "db62596adcf7d39208e205390f5c60464ec9ed9aae5ddb88fec01a86992ac53a",
+      "after_sha256": "42975f821a972e262f7b18120457d84b615f99021aad4500bc690ac1214bea59"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/templates-red.log",
+      "before_sha256": "c61356f64313b2d57ffc2131718443e11bd2a8d285726133afd22cb022bcf5c1",
+      "after_sha256": "1b907c4eaa7b625776299436cdc3d341bb9dc097cdc89eba499106193763a216"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/typecheck.log",
+      "before_sha256": "4a357ffb7fd322d91a280e2cde0c0fb8ccc67276e11c8f1641903a8b1bc735ac",
+      "after_sha256": "009b899f1b3aae19415a8b1a354234d271ebf46e9c1ffe40837316bda5c91863"
+    },
+    {
+      "path": "operations/evidence/isolamento-20261104T121252Z/unit.log",
+      "before_sha256": "c3da61e9d15c042784afdb073dda84d9d614d5a64c327eb5ab23e8773aa9f9a3",
+      "after_sha256": "1803383b04aac4bea994b687fc1d0e03d5c802c2ff7dfbddd83b1993c04a9d13"
+    }
+  ],
+  "staged_whitespace_check_after_normalization": "PASS"
+}

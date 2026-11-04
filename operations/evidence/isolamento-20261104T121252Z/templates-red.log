@@ -1,0 +1,35 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/email-templates.test.ts (2 tests | 2 failed) 12ms
+   ❯ templates de Auth resolvidos pela CLI a partir da raiz do projeto (2)
+     × confirmation aponta para arquivo local existente 10ms
+     × recovery aponta para arquivo local existente 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/email-templates.test.ts > templates de Auth resolvidos pela CLI a partir da raiz do projeto > confirmation aponta para arquivo local existente
+ FAIL  tests/auth/email-templates.test.ts > templates de Auth resolvidos pela CLI a partir da raiz do projeto > recovery aponta para arquivo local existente
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/auth/email-templates.test.ts:11:66
+      9|     expect(relative).toBeTruthy();
+     10|     const file = resolve(relative!);
+     11|     expect(file.startsWith(resolve('supabase/templates') + '/')).toBe(…
+       |                                                                  ^
+     12|     expect(existsSync(file)).toBe(true);
+     13|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  09:16:59
+   Duration  334ms (transform 47%, import 23%, tests 19%, worker 10%)

@@ -1,0 +1,11 @@
+?? operations/evidence/etapa-a-20261103T234832Z/build.log
+?? operations/evidence/etapa-a-20261103T234832Z/commands.md
+?? operations/evidence/etapa-a-20261103T234832Z/docker.txt
+?? operations/evidence/etapa-a-20261103T234832Z/git-log.txt
+?? operations/evidence/etapa-a-20261103T234832Z/git-status.txt
+?? operations/evidence/etapa-a-20261103T234832Z/lint.log
+?? operations/evidence/etapa-a-20261103T234832Z/report.md
+?? operations/evidence/etapa-a-20261103T234832Z/results.json
+?? operations/evidence/etapa-a-20261103T234832Z/test.log
+?? operations/evidence/etapa-a-20261103T234832Z/typecheck.log
+?? operations/evidence/etapa-a-20261103T234832Z/verify.py

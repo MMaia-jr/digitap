@@ -1,0 +1,14 @@
+{
+  "command": [
+    "./node_modules/.bin/supabase",
+    "start",
+    "--workdir",
+    "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5",
+    "--network-id",
+    "a-praca-v1-5-loopback",
+    "--exclude",
+    "realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor"
+  ],
+  "exit_code": 1,
+  "stdout": "Omitido integralmente: CLI pode retornar credenciais locais."
+}

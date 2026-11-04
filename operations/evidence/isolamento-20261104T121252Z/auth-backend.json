@@ -1,0 +1,83 @@
+{
+  "kind": "Auth real por SDK/API + Mailpit; NÃO é teste de navegador ou de cookies SSR da aplicação",
+  "fixture_tag": "94d0f87d-8661-460a-8b05-dafcae3f0b3f",
+  "checks": [
+    {
+      "name": "A01: signup real exige confirmação de e-mail",
+      "status": "PASS"
+    },
+    {
+      "name": "A01/A07: login antes da confirmação negado",
+      "status": "PASS"
+    },
+    {
+      "name": "A01: e-mail de confirmação recebido no Mailpit local",
+      "status": "PASS"
+    },
+    {
+      "name": "A01: confirmação real estabelece identidade",
+      "status": "PASS"
+    },
+    {
+      "name": "A04 parcial: OTP de confirmação consumido não é reutilizado",
+      "status": "PASS"
+    },
+    {
+      "name": "A03: senha incorreta negada pelo Auth real",
+      "status": "PASS"
+    },
+    {
+      "name": "Login real confirmado",
+      "status": "PASS"
+    },
+    {
+      "name": "A08 parcial: logout remove sessão do cliente SDK",
+      "status": "PASS"
+    },
+    {
+      "name": "A08 parcial: refresh revogado não renova sessão",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: solicitação real de recuperação aceita",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: e-mail de recuperação recebido no Mailpit local",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: token real de recuperação verificado",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: senha atualizada no Auth real",
+      "status": "PASS"
+    },
+    {
+      "name": "A04 parcial: token de recuperação consumido não é reutilizado",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: senha anterior não autentica",
+      "status": "PASS"
+    },
+    {
+      "name": "A04: nova senha autentica",
+      "status": "PASS"
+    },
+    {
+      "name": "Falha parcial: identidade confirmada não cria vínculo/papel automaticamente",
+      "status": "PASS"
+    }
+  ],
+  "pass": 17,
+  "fail": 0,
+  "cleanup": "PASS",
+  "limits": [
+    "Sem browser, Next UI, cookies SSR ou fluxo completo A01–A09.",
+    "Replay de token consumido foi testado; expiração por passagem de tempo não foi exercitada.",
+    "Somente dados fictícios locais; tokens, senhas e chaves mantidos em memória, sem serem impressos/gravados.",
+    "Mensagens de teste podem permanecer no Mailpit; usuário fictício removido conforme cleanup."
+  ]
+}

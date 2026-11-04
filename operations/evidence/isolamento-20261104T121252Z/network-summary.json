@@ -1,0 +1,19 @@
+{
+  "status": "LOCAL_EFFECTIVE_LOOPBACK_CONFIRMED",
+  "published_host_ports": [
+    56151,
+    56152,
+    56154
+  ],
+  "effective_listener": "127.0.0.1, according to lsof in original local inspection",
+  "positive_loopback_connections": 3,
+  "negative_interface_probes": 42,
+  "negative_connections_accepted": 0,
+  "metadata_discrepancy": true,
+  "limitations": [
+    "Docker metadata also reported ::; actual lsof/listener probes supported effective IPv4 loopback isolation.",
+    "No second-device LAN test. Timeouts alone do not prove blocking.",
+    "Raw network.json and network-before-loopback-filter.json contain host addresses and remain local, ignored by Git."
+  ],
+  "historical_evidence": "2026-11-04; not a new network inspection or authorization to restart containers"
+}

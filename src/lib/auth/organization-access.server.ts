@@ -5,7 +5,7 @@ interface AccessPorts {currentUser():Promise<VerifiedUser|null>;account(userId:s
 type State={kind:'login'|'onboarding'|'forbidden'|'unavailable'}|{kind:'ready';organization:Organization};
 export async function loadOrganizationAccess(ports:AccessPorts):Promise<State>{
  try{
-   const user=await ports.currentUser();if(!user)return {kind:'login'};
+   const user=await ports.currentUser();if(!user?.id)return {kind:'login'};
    if(!user.email_confirmed_at)return {kind:'forbidden'};
    const account=await ports.account(user.id);if(!account)return {kind:'onboarding'};
    try{await authorize({verifyUser:async()=>user,findAccount:async()=>account},{action:'organizacao',organizationId:account.organizacao_id??''});}catch{return {kind:'forbidden'};}

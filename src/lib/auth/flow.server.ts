@@ -58,6 +58,20 @@ function activeAccount(account: AccessAccount | null, user: VerifiedUser) {
   if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa' || account.papel !== 'organizacao' || !account.organizacao_id)) throw new FlowError(403, 'Acesso indisponível para esta conta.');
 }
 
+function hasConfirmedIdentity(user: VerifiedUser | null | undefined): user is VerifiedUser {
+  return Boolean(user?.id && user.email_confirmed_at);
+}
+
+async function clearOnFailure(gateway: AuthGateway, operation: () => Promise<FlowResult>): Promise<FlowResult> {
+  try {
+    return await operation();
+  } catch (error) {
+    // The gateway clears only this application's cookies, also on provider failure.
+    await gateway.logout();
+    throw error;
+  }
+}
+
 /** Validate before initializing any provider; reused at the HTTP boundary. */
 export function validateAuthInput(action:AuthAction,input:unknown):void {
  const keys:Record<AuthAction,string[]>={signup:['email','password'],signin:['email','password'],recover:['email'],confirm:['token_hash'],reset:['token_hash','password'],signout:[],organization:['nome_publico','canal_publico']};
@@ -85,14 +99,14 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
     }
     if (action === 'signin') {
       const body=payload(input,['email','password']);
-      const result=await gateway.signIn(email(body.email), password(body.password)); provider(result);
-      if (result.error || !result.session || !result.user?.email_confirmed_at) {
-        await gateway.logout(); throw new FlowError(401,loginMessage);
-      }
-      try {
+      return await clearOnFailure(gateway, async () => {
+        const result=await gateway.signIn(email(body.email), password(body.password)); provider(result);
+        if (result.error || !result.session || !hasConfirmedIdentity(result.user)) {
+          throw new FlowError(401,loginMessage);
+        }
         const account=await gateway.account(result.user.id); activeAccount(account,result.user);
         return {message:'Acesso confirmado.',next:account?'/dashboard':'/dashboard/organizacao'};
-      } catch (error) { await gateway.logout(); throw error; }
+      });
     }
     if (action === 'recover') {
       const body=payload(input,['email']); const result=await gateway.recover(email(body.email)); provider(result);
@@ -100,15 +114,18 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
       return {message:'Se houver uma conta elegível, você receberá um e-mail para recuperar o acesso.'};
     }
     if (action === 'confirm') {
-      const body=payload(input,['token_hash']); const result=await gateway.verify(token(body.token_hash),'signup'); provider(result);
-      if (result.error || !result.user?.email_confirmed_at || !result.session) throw new FlowError(422,'Link inválido ou expirado. Solicite um novo cadastro ou entre na sua conta.');
-      return {message:'E-mail confirmado.',next:'/dashboard/organizacao'};
+      const body=payload(input,['token_hash']);
+      return await clearOnFailure(gateway, async () => {
+        const result=await gateway.verify(token(body.token_hash),'signup'); provider(result);
+        if (result.error || !hasConfirmedIdentity(result.user) || !result.session) throw new FlowError(422,'Link inválido ou expirado. Solicite um novo cadastro ou entre na sua conta.');
+        return {message:'E-mail confirmado.',next:'/dashboard/organizacao'};
+      });
     }
     if (action === 'reset') {
       const body=payload(input,['token_hash','password']); const pass=password(body.password); const hash=token(body.token_hash);
       try {
         const verified=await gateway.verify(hash,'recovery'); provider(verified);
-        if (verified.error || !verified.session || !verified.user?.email_confirmed_at) throw new FlowError(422,'Link inválido ou expirado. Solicite um novo link.');
+        if (verified.error || !verified.session || !hasConfirmedIdentity(verified.user)) throw new FlowError(422,'Link inválido ou expirado. Solicite um novo link.');
         const changed=await gateway.changePassword(pass); provider(changed);
         if (changed.error) throw new FlowError(422,'Não foi possível alterar a senha. Solicite um novo link.');
       } finally { const ended=await gateway.logout(); provider(ended); if(ended.error) throw unavailable(); }
@@ -122,13 +139,17 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
       const body=payload(input,['nome_publico','canal_publico']); const name=text(body.nome_publico).trim().normalize('NFC');
       if (name.length < 2 || name.length > 160) throw new FlowError(422,'Confira os campos indicados.',{nome_publico:'Use de 2 a 160 caracteres.'});
       const user=await gateway.currentUser();
-      if (!user) throw new FlowError(401,'Autenticação necessária.');
+      if (!user?.id) throw new FlowError(401,'Autenticação necessária.');
       if (!user.email_confirmed_at) throw new FlowError(403,'Confirme seu e-mail antes de continuar.');
       const account=await gateway.account(user.id); activeAccount(account,user);
+      const completed = {message:'Organização vinculada. Validação institucional pendente.',next:'/dashboard'};
+      // A lost response after commit is recovered through the existing account.
+      // Validate identity, role and status above before bypassing a redundant write.
+      if (account) return completed;
       const publicChannel=channel(body.canal_publico);
       if(publicChannel)await gateway.registerOrganization(user.id,name,publicChannel);
       else await gateway.registerOrganization(user.id,name);
-      return {message:'Organização vinculada. Validação institucional pendente.',next:'/dashboard'};
+      return completed;
     }
     throw new FlowError(404,'Página não encontrada.');
   } catch (error) {

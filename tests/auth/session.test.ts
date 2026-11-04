@@ -17,3 +17,10 @@ describe('A05/A07/A08/A09: acesso à área de organização com portas simuladas
  it('suspensão institucional bloqueia acesso',async()=>{const g=setup();g.organization.mockResolvedValue({...organization,estado_validacao:'suspensa'});expect(await loadOrganizationAccess(g)).toEqual({kind:'forbidden'});});
  it('falha do banco é indisponibilidade, não onboarding nem sucesso',async()=>{const g=setup();g.account.mockRejectedValue(new Error('segredo'));expect(await loadOrganizationAccess(g)).toEqual({kind:'unavailable'});});
 });
+
+describe('identidade mínima antes de onboarding', () => {
+ it('identidade vazia não consulta conta nem habilita cadastro', async () => {
+   const g=setup();g.currentUser.mockResolvedValue({...user,id:''});g.account.mockResolvedValue(null as never);
+   expect(await loadOrganizationAccess(g)).toEqual({kind:'login'});expect(g.account).not.toHaveBeenCalled();
+ });
+});

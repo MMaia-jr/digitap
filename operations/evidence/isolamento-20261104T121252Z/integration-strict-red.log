@@ -1,0 +1,101 @@
+$ npm run test:onboarding:db
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/integration/onboarding.database.test.ts (4 tests | 4 failed) 2462ms
+   × RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional 9ms
+   × RPC não pode ser executada por authenticated com identidade de outro usuário 2ms
+   × RPC não pode ser executada por anon e não aceita mudança de papel de conta existente 2ms
+   × falha no segundo insert reverte organização (sem órfã) 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/onboarding.database.test.ts > RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional
+AssertionError: A RPC deve existir antes de interpretar erros como autorização ou rollback.: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ requireRpcExists tests/integration/onboarding.database.test.ts:24:111
+     22| async function requireRpcExists() {
+     23|  const result=await db.query("select to_regprocedure('public.criar_org…
+     24|  expect(result.rows[0].exists, 'A RPC deve existir antes de interpreta…
+       |                                                                                                               ^
+     25| }
+     26| it('RPC idempotente concorrente cria exatamente uma organização penden…
+ ❯ tests/integration/onboarding.database.test.ts:27:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/integration/onboarding.database.test.ts > RPC não pode ser executada por authenticated com identidade de outro usuário
+AssertionError: A RPC deve existir antes de interpretar erros como autorização ou rollback.: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ requireRpcExists tests/integration/onboarding.database.test.ts:24:111
+     22| async function requireRpcExists() {
+     23|  const result=await db.query("select to_regprocedure('public.criar_org…
+     24|  expect(result.rows[0].exists, 'A RPC deve existir antes de interpreta…
+       |                                                                                                               ^
+     25| }
+     26| it('RPC idempotente concorrente cria exatamente uma organização penden…
+ ❯ tests/integration/onboarding.database.test.ts:34:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/integration/onboarding.database.test.ts > RPC não pode ser executada por anon e não aceita mudança de papel de conta existente
+AssertionError: A RPC deve existir antes de interpretar erros como autorização ou rollback.: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ requireRpcExists tests/integration/onboarding.database.test.ts:24:111
+     22| async function requireRpcExists() {
+     23|  const result=await db.query("select to_regprocedure('public.criar_org…
+     24|  expect(result.rows[0].exists, 'A RPC deve existir antes de interpreta…
+       |                                                                                                               ^
+     25| }
+     26| it('RPC idempotente concorrente cria exatamente uma organização penden…
+ ❯ tests/integration/onboarding.database.test.ts:40:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/integration/onboarding.database.test.ts > falha no segundo insert reverte organização (sem órfã)
+AssertionError: A RPC deve existir antes de interpretar erros como autorização ou rollback.: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ requireRpcExists tests/integration/onboarding.database.test.ts:24:111
+     22| async function requireRpcExists() {
+     23|  const result=await db.query("select to_regprocedure('public.criar_org…
+     24|  expect(result.rows[0].exists, 'A RPC deve existir antes de interpreta…
+       |                                                                                                               ^
+     25| }
+     26| it('RPC idempotente concorrente cria exatamente uma organização penden…
+ ❯ tests/integration/onboarding.database.test.ts:51:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  4 failed | 85 passed (89)
+   Start at  09:28:15
+   Duration  5.62s (tests 95%, import 3%, transform 1%)

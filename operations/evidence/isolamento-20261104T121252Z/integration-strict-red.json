@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:onboarding:db"
+  ],
+  "exit_code": 1,
+  "PASS": 85,
+  "FAIL": 4,
+  "SKIP": 0,
+  "TODO": 0,
+  "vitest_summary": "Tests  4 failed | 85 passed (89)"
+}

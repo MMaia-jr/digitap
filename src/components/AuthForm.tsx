@@ -1,17 +1,20 @@
 'use client';
-import { useEffect,useRef,useState,type FormEvent } from 'react';
+import { useEffect,useRef,useState,useSyncExternalStore,type FormEvent } from 'react';
+const subscribeHydration=()=>()=>{};
 type Mode='signup'|'signin'|'recover'|'confirm'|'reset'|'organization'|'signout';
 const config={
  signup:{endpoint:'/api/auth/cadastro',label:'Criar acesso'},signin:{endpoint:'/api/auth/login',label:'Entrar'},recover:{endpoint:'/api/auth/recuperar',label:'Enviar link de recuperação'},confirm:{endpoint:'/api/auth/confirmar',label:'Confirmar meu e-mail'},reset:{endpoint:'/api/auth/redefinir',label:'Atualizar senha'},organization:{endpoint:'/api/organizacoes',label:'Vincular organização'},signout:{endpoint:'/api/auth/sair',label:'Sair'},
 };
 const destinations=new Set(['/dashboard','/dashboard/organizacao','/login','/login?status=senha-atualizada']);
 export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:string;onNavigate?:(path:string)=>void}){
+ const ready=useSyncExternalStore(subscribeHydration,()=>true,()=>false);
  const [pending,setPending]=useState(false);const [feedback,setFeedback]=useState<{message:string;error:boolean;fields?:Record<string,string>}|null>(null);const summary=useRef<HTMLDivElement>(null);
+ const inFlight=useRef(false);
  useEffect(()=>{if(feedback)summary.current?.focus();},[feedback]);
  useEffect(()=>{if(tokenHash)window.history.replaceState(null,'','/auth/confirm');},[tokenHash]);
  const email=['signup','signin','recover'].includes(mode);const password=['signup','signin','reset'].includes(mode);
  async function submit(event:FormEvent<HTMLFormElement>){
-   event.preventDefault();if(pending)return;const form=event.currentTarget;const data=new FormData(form);const body:Record<string,unknown>={};
+   event.preventDefault();if(inFlight.current)return;inFlight.current=true;const form=event.currentTarget;const data=new FormData(form);const body:Record<string,unknown>={};
    if(email)body.email=data.get('email');if(password)body.password=data.get('password');if(mode==='organization'){body.nome_publico=data.get('nome_publico');const channel=data.get('canal_publico');if(typeof channel==='string'&&channel.trim())body.canal_publico=channel;}if(tokenHash)body.token_hash=tokenHash;
    setPending(true);setFeedback(null);
    try{
@@ -19,7 +22,7 @@ export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:strin
      const result=await response.json();setFeedback({message:result.message??'Não foi possível concluir.',error:!response.ok,fields:result.fields});
      if(response.ok&&destinations.has(result.next)){if(onNavigate)onNavigate(result.next);else window.location.assign(result.next);}
    }catch{setFeedback({message:'Não foi possível conectar. Tente novamente.',error:true});}
-   finally{const pass=form.querySelector<HTMLInputElement>('input[type=password]');if(pass)pass.value='';setPending(false);}
+   finally{const pass=form.querySelector<HTMLInputElement>('input[type=password]');if(pass)pass.value='';inFlight.current=false;setPending(false);}
  }
  const field=(name:string,label:string,type='text',required=true)=><div className="field" key={name}>
    <label htmlFor={name}>{label}</label>
@@ -30,6 +33,6 @@ export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:strin
  return <form method="post" action={config[mode].endpoint} onSubmit={submit} aria-label={config[mode].label} aria-busy={pending}>
    {feedback&&<div ref={summary} tabIndex={-1} role={feedback.error?'alert':'status'} className={feedback.error?'feedback error':'feedback'}>{feedback.message}</div>}
    {email&&field('email','E-mail','email')}{password&&field('password',mode==='reset'?'Nova senha':'Senha','password')}{mode==='organization'&&<>{field('nome_publico','Nome público da organização')}{field('canal_publico','Canal público (opcional)','url',false)}</>}
-   <button type="submit" disabled={pending}>{pending?'Aguarde…':config[mode].label}</button>
+   <button type="submit" disabled={pending||!ready}>{pending?'Aguarde…':config[mode].label}</button>
  </form>;
 }

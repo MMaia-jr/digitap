@@ -27,7 +27,7 @@ npm run build
 node scripts/check-public-artifacts.mjs
 ```
 
-- `npm test`: 100 testes de unidade/componentes; inclui 24 regressões do incremento 1. Provider, cookies e banco são simulados nesses testes.
+- `npm test`: 125 testes de unidade/componentes; inclui 24 regressões do incremento 1. Provider, cookies e banco são simulados nesses testes.
 - `scripts/http-smoke.mjs`: 14 verificações HTTP contra o Next.js de produção local, com Supabase parado e sem credenciais. Exige servir o build em 127.0.0.1:3215. Não prova login ou envio de e-mail reais.
 - `npm run test:db`: suíte real de segurança do incremento 1, **não reexecutada** neste incremento.
 - `npm run test:onboarding:db`: suíte real de segurança + 4 testes preparados de RPC/idempotência/rollback. **NOT RUN**; exige isolamento comprovado e aplicação local da nova migração.
@@ -43,3 +43,15 @@ O cadastro é de duas etapas: Auth confirmado primeiro, organização pendente d
 Não foram implementados envio de atividades, apoio, selos, painel de movimento, bootstrap editorial ou administração de contas. A interface deste recorte usa CSS local para limitar dependências; Next.js e Supabase permanecem como stack principal.
 
 Auditoria executada: dependências de execução com zero avisos; cadeia de desenvolvimento com 16 entradas moderadas relacionadas a minimatch/ESLint. Há incompatibilidades entre as versões mais recentes de TypeScript/ESLint e os plugins; TypeScript 6.0.3 e ESLint 9.39.5 foram fixados para lint/build funcionarem. O npm indica ESLint 9 fora de suporte. A dívida de atualização está documentada; nenhuma correção forçada foi aplicada.
+
+## Complementação da Etapa B — 04/11/2026
+
+Foram corrigidas lacunas de logout em falha de inicialização, sessão parcial após login/confirmação malsucedidos, identidade vazia e repetição do vínculo já existente. O formulário agora bloqueia dois submits no mesmo instante, sem substituir a garantia de unicidade do banco.
+
+A suíte disponível passou com **125 testes** (100 anteriores + 25 novas regressões/controles), além de lint, typecheck e build. **89 testes reais de banco/Auth e o fluxo em navegador permanecem NOT RUN**. Nenhuma operação Docker, instalação ou migração foi executada nesta etapa.
+
+O incremento 2 permanece com aceite **PENDENTE**. Veja [progresso atual](operations/progresso.md), [relatório da Etapa B](operations/etapa-b-incremento-2.md) e [evidências RED/GREEN](operations/evidence/etapa-b-20261104/). Não avançar ao incremento 3.
+
+## Validação posterior — incremento 2C
+
+Os estados históricos acima foram superados: A01–A09 passaram em Chromium contra Next/Supabase locais, com expiração temporal controlada nas fixtures; 129 testes unitários/componentes e lint/typecheck/build aprovados. Integração anterior 89 PASS preservada. Consulte [relatório e limites](operations/incremento-2c.md). Sem autorização de produção ou avanço ao incremento 3.

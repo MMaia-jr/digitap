@@ -1,0 +1,1 @@
+Autorização humana recebida para iniciar somente Supabase local de A Praça, preservar volumes e verificar isolamento antes de executar integração. Sem configurações globais, outros projetos ou remotos.

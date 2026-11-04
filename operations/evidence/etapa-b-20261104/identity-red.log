@@ -1,0 +1,61 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/session.test.ts (12 tests | 1 failed) 54ms
+   ❯ identidade mínima antes de onboarding (1)
+     × identidade vazia não consulta conta nem habilita cadastro 20ms
+ ❯ tests/auth/session-recovery.test.ts (19 tests | 1 failed) 80ms
+   ❯ A04: identidade no fluxo de recuperação simulado (1)
+     × OTP sem identidade não permite alterar senha e encerra sessão temporária 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/session-recovery.test.ts > A04: identidade no fluxo de recuperação simulado > OTP sem identidade não permite alterar senha e encerra sessão temporária
+AssertionError: promise resolved "{ …(2) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "message": "Senha atualizada. Entre novamente.",
++   "next": "/login?status=senha-atualizada",
+  }
+
+ ❯ tests/auth/session-recovery.test.ts:110:106
+    108|   it('OTP sem identidade não permite alterar senha e encerra sessão te…
+    109|     const g = fixture(); g.verify.mockResolvedValue({ user: { ...user,…
+    110|     await expect(executeAuth('reset', { token_hash: 'a'.repeat(64), pa…
+       |                                                                                                          ^
+    111|     expect(g.changePassword).not.toHaveBeenCalled(); expect(g.logout).…
+    112|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/auth/session.test.ts > identidade mínima antes de onboarding > identidade vazia não consulta conta nem habilita cadastro
+AssertionError: expected { kind: 'onboarding' } to deeply equal { kind: 'login' }
+
+- Expected
++ Received
+
+  {
+-   "kind": "login",
++   "kind": "onboarding",
+  }
+
+ ❯ tests/auth/session.test.ts:24:44
+     22|  it('identidade vazia não consulta conta nem habilita cadastro', async…
+     23|    const g=setup();g.currentUser.mockResolvedValue({...user,id:''});g.…
+     24|    expect(await loadOrganizationAccess(g)).toEqual({kind:'login'});exp…
+       |                                            ^
+     25|  });
+     26| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 29 passed (31)
+   Start at  04:14:41
+   Duration  458ms (transform 44%, tests 34%, import 18%, worker 4%)
