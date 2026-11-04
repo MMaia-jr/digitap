@@ -29,3 +29,13 @@ operations/evidence/incremento-3-b07/*
 !operations/evidence/incremento-3-b07/inspect-secrets.mjs
 !operations/evidence/incremento-3-b07/observations-errata.md
 operations/evidence/checkpoint-b07/*.local.*
+
+# B08–B09: logs, observações e processos permanecem somente locais.
+operations/evidence/incremento-3-b08-b09/*
+!operations/evidence/incremento-3-b08-b09/quality-final.json
+!operations/evidence/incremento-3-b08-b09/e2e.json
+!operations/evidence/incremento-3-b08-b09/catalog.json
+!operations/evidence/incremento-3-b08-b09/secret-values.json
+!operations/evidence/incremento-3-b08-b09/inspect-preservation.mjs
+!operations/evidence/incremento-3-b08-b09/inspect-secrets.mjs
+!operations/evidence/incremento-3-b08-b09/traceability.json

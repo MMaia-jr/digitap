@@ -43,3 +43,9 @@ Snapshot, versão, timestamp, estado e evento são atômicos na transação pg e
 Consultas públicas separadas em `/api/public/atividades` e páginas `/atividades`/`/atividade/[id]`: somente projeção explícita do snapshot, sem contatos, comprovantes, motivo ou auditoria. Elas conferem organização validada e vigência da autorização original, com no-store; falhas não revelam conteúdo privado. Rotas privadas não foram abertas. Scripts de inspeção comparam valores secretos em memória sem imprimi-los. Relatório/evidências em operations/incremento-3-b07.md.
 
 B08–B12, retirada/republicação e demais recursos não foram habilitados. Supabase não foi reiniciado neste recorte; nenhuma prova histórica autoriza reinício automático sem verificar novamente todas as portas. Não alterar Docker/firewall global ou outros projetos. Não há autorização de publicação externa.
+
+## Versões pendentes e retirada — B08–B09
+
+A primeira publicação continua explícita; edição de publicada cria versão pendente privada, com snapshot anterior preservado e arquivado no evento. Apenas aprovação editorial da nova versão, com autorização específica/hash e organização validada, substitui o snapshot corrente na mesma transação e registra ambos os eventos. A consulta pública valida o evento/autorização da versão efetivamente publicada, não da pendência, e nunca lê campos pendentes como conteúdo público.
+
+Retirada é servidor/editorial, motivo obrigatório e restrito, estado retirada + apoios fechados + evento em transação única. Snapshot/histórico permanecem internos e a consulta pública exclui retirada. Repetições ou comandos antigos não reativam; reabertura não foi implementada. RLS, grants permanentes e migrações preservados; sem nova entidade ou chave no navegador. Ver operations/incremento-3-b08-b09.md. A08 mantém ressalva temporal controlada; B10–B12 e C01–C08 não iniciados.

@@ -1,0 +1,140 @@
+{
+  "base": "c015cdeffbe06512a34a4fc9b1242a43834c3adb",
+  "unit": {
+    "command": "npm test",
+    "exit": 0,
+    "PASS": 283,
+    "FAIL": 0,
+    "SKIP": 0,
+    "files": 24,
+    "evidence": "unit-final.log"
+  },
+  "integration": {
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 npm run test:onboarding:db",
+    "exit": 0,
+    "PASS": 163,
+    "FAIL": 0,
+    "SKIP": 0,
+    "files": 6,
+    "evidence": "integration-final.log"
+  },
+  "e2e": {
+    "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-3-b08-b09 npm run test:e2e",
+    "exit": 0,
+    "PASS": 30,
+    "FAIL": 0,
+    "SKIP": 0,
+    "evidence": "e2e.json"
+  },
+  "checks": {
+    "build-final": {
+      "command": "npm run build",
+      "exit": 0
+    },
+    "lint-final": {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    "typecheck-final": {
+      "command": "npm run typecheck",
+      "exit": 0
+    }
+  },
+  "red_green": {
+    "unit_initial": {
+      "FAIL": 2,
+      "PASS": 0,
+      "red": "unit-red.log",
+      "green": "unit-green.log",
+      "GREEN_PASS": 2
+    },
+    "database_initial": {
+      "FAIL": 2,
+      "PASS": 0,
+      "red": "integration-red.log",
+      "green": "integration-green-initial.log",
+      "GREEN_PASS": 11
+    },
+    "chromium": {
+      "FAIL": 2,
+      "PASS": 0,
+      "SKIP": 0,
+      "red": "e2e-red.json",
+      "green_specific": "e2e-green-specific.json",
+      "GREEN_PASS": 3
+    },
+    "withdrawal_accessibility": {
+      "red": "form-red.log",
+      "PASS": 1,
+      "FAIL": 2,
+      "notes": "Uma falha de associação aria-invalid e outra por import incorreto de act no teste. Erro de acessibilidade corrigido antes da tentativa com 20 PASS/1 FAIL, que ainda tinha import incorreto. Import do teste corrigido, suíte final 283 PASS.",
+      "intermediate": "form-and-unit-green-initial.log",
+      "green": "unit-final.log"
+    }
+  },
+  "schema": {
+    "nine_tables": true,
+    "rls_grants_migrations_unchanged": true,
+    "catalog": "catalog.json"
+  },
+  "scope": {
+    "B08": "PASS local",
+    "B09": "PASS local",
+    "A08": "PASS com tempo controlado",
+    "B10-B12_C01-C08": "NOT RUN"
+  },
+  "hashes": {
+    "activities-observations.json": "3480b87dd666891ad0190e8ebb8ff7e4f855f89e382e113ed8f0218c842178b4",
+    "auth-observations.json": "7664284bb49e72fca63a89e291c2483c6805d3d8b82c737c34392194a4e95691",
+    "build-final.log": "5af045a90039c91fd0a4f4d024589009939bed0451164ef9d1d8f5b9559a3118",
+    "catalog.json": "21a35cf7a27dc65981d507f466325e965c16e13b49e227efa98180861815206f",
+    "checks-current.json": "298d2f50399298200aead3792a4c75578f5f2419bfe30a59c15b1410a24f5031",
+    "checks-initial.json": "139cebc81a23d576ad87879c98e1712221f52efa271f92b47d3ed8cac787228d",
+    "e2e-green-specific.json": "07eba8aed115d63efa966f7891664aa315acf904a9345f7b4b794426511e17c3",
+    "e2e-red.json": "5b2cab39152eb14f287a9a0e94bf8c2938e99557b89abcbdbac270248b94b7f5",
+    "e2e.json": "47e54daeb60729512b25d0161e241452eaecfe3cfaa6f107469e10ad106e771f",
+    "form-and-unit-green-initial.log": "9cbcb4c4209162c9a09cef077a38e083fa7d4bf9af98240ae0ca715a0707dee3",
+    "form-and-unit-green.log": "9cbcb4c4209162c9a09cef077a38e083fa7d4bf9af98240ae0ca715a0707dee3",
+    "form-red.log": "2a4b19c26f4d892eb6564eeff9908e4f05c7b5593b17d13259ea4be6119719b7",
+    "git-status-final.txt": "e9ca6d76a98c6fdc2aae72c965dfdec7cf4d89a22505265cc2a25586b062a8c1",
+    "inspect-preservation.mjs": "f0a9e499f7a46fd9adf56a28bf5f9fcbb29588018968bb7386803bf62df9b386",
+    "inspect-secrets.mjs": "ed33f2cd1a4682ca3acaf115ed63c0d4753a73261e7c5dcc8f727904137a6d36",
+    "integration-final.json": "ad2618b400177aa01534166830cd3f6d7dc9a6016e45690b613a45ba5c7bb252",
+    "integration-final.log": "cb7807fd0efdc424d09305202cc3d6748ff203e81626e6010621eb01ca34efb5",
+    "integration-green-initial.log": "185ddc124bdaaaa26a297fd12e7eca212ff7a2e3fca6175369ca6c1bfecad5bd",
+    "integration-red.log": "ed8202ab28e9dc95394f44d43f8dde0cd4393d405be34dcfdc921797e9746550",
+    "lint-current.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+    "lint-final.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+    "lint-initial.log": "a250cb31aaa077a44875354591e1b8248070b799356dbd9ef6eb15e28409566f",
+    "listeners.json": "6edc06ef519858c134c5e2d413e3a426238cca6af4bf8961f8f31cfbccf41415",
+    "next-process.json": "de513d76c0b8040d89e961e1b5b9174e8c7cd337bcb48fc9d0c6d7fb9a669f1a",
+    "publication-observations.json": "ea0fef11b6622b74b0823969f995bcdd14a84d2c19165ca783986c4db02492c5",
+    "quality-checks.json": "c96b89fdafc866492078eab647606d6e138d2c370e3400444774935351e9a8df",
+    "review-observations.json": "13b463d4988347027d6fb8f5fb5aff464f2f0d345193b0e9ffe505329f5fd7b9",
+    "revisions-observations.json": "e770ee66fc6b096be3a77c6e662a7d663a02c94bd5add4556e39ba82498cd4a1",
+    "secret-values.json": "f926de94ebbe7ca388867ee7b42a4662dd4ff927ab73a56cacbb360619a5d302",
+    "server.log": "a68ec799aeb043dbfbe714c6e38e83aeff719ef79ce0b000decadce91909cb77",
+    "traceability.json": "d4a6a1fc52968207f6baca7df3fc495a2b08675295d02997454bded0283b1774",
+    "typecheck-current.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "typecheck-final.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "typecheck-initial.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "unit-final.log": "063a8d1744075e41ad4a973dce9f08743ceb081403ffc4952fc3e9c8248aa32e",
+    "unit-green.log": "ed793a147100a3291a29d9c57e805957ac7ed0881265dc60ad83930f8f419821",
+    "unit-red.log": "399217c0c9e1a8f208f23bdd911b127a27e050ca86b5a2a2d6853d796f4f03f2",
+    "unit-regression-initial.log": "b20fd233ddc7e975dc7b9e889d5e344cab55b3f525cc37ab01101303d002a359"
+  },
+  "secret_values": {
+    "files_checked": 45,
+    "findings": [],
+    "scope": "Arquivos novos/modificados não ignorados + .next/static + public. Valores reais conhecidos comparados somente em memória; nenhum valor impresso.",
+    "hmac_configured": false,
+    "limits": "Não detecta todo segredo desconhecido; .env privados ignorados não são conteúdo versionável. Artefatos server-side não são bundle público. HTML/HTTP real também verificado no Chromium B07."
+  },
+  "git": {
+    "HEAD": "c015cdeffbe06512a34a4fc9b1242a43834c3adb",
+    "stage_empty": true,
+    "diff_check": "PASS",
+    "versionable_files": 32,
+    "inventory": "operations/arquivos-incremento-3-b08-b09.txt"
+  }
+}

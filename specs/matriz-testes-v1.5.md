@@ -1,8 +1,8 @@
-# Matriz normativa — incremento 3, recorte B07
+# Matriz normativa — incremento 3, recorte B08–B09
 
-Estado vigente em 04/11/2026: **A01–A09 e B01–B07 PASS no ambiente local**, com a ressalva temporal de A08 preservada. A07 foi reexecutado contra a rota real de publicação e atividade aprovada, substituindo a prova parcial histórica de rota inexistente. Não há aceite de 74/74 nem autorização de produção.
+Estado vigente: **A01–A09 e B01–B09 PASS local**, com a ressalva temporal de A08 preservada. B08/B09 foram comprovados com unidade/componentes, PostgreSQL e Chromium reais, com RED/GREEN por cenário. Resultados: **283 unitários/componentes**, **163 integrações** e **30 E2E**, 0 FAIL/SKIP finais; build/lint/typecheck exit 0. Não há aceite de 74/74 ou autorização de produção.
 
-Resultados de regressão do recorte B07: **262 unitários/componentes**, **152 integrações PostgreSQL reais** e **27 E2E Chromium/Next**, todos PASS; zero FAIL/SKIP finais. Lint/typecheck/build exit 0. Detalhes em [relatório B07](../operations/incremento-3-b07.md). B08–B12 e demais cenários não aceitos permanecem NOT RUN. As seções históricas abaixo preservam os resultados e limitações de cada etapa, sem substituir o estado vigente desta tabela.
+[Relatório B08–B09](../operations/incremento-3-b08-b09.md) e rastreabilidade em operations/evidence/incremento-3-b08-b09/traceability.json. B10–B12 e C01–C08 não foram iniciados. As seções históricas abaixo não substituem esta tabela vigente.
 
 | ID | Prioridade | Status integral | Evidência / pendência |
 |---|---|---|---|
@@ -22,8 +22,8 @@ Resultados de regressão do recorte B07: **262 unitários/componentes**, **152 i
 | B05 | P0 | PASS | Revisão/aprovação privadas por editor/admin ativo; autorização vinculada à atividade, divulgacao e atividade:versao:N, com vigência/revogação verificadas inclusive em retry. Unitário, integração real e E2E; concorrência, versão e rollback de auditoria. Sem publicação/snapshot/apoio. Ver ../operations/incremento-3-b05-b06.md. |
 | B06 | P0 | PASS | Devolução/rejeição atômicas, motivo obrigatório 10–1500 sem HTML; proprietário/editor consultam apenas o motivo, terceiro/visitante negados. Unitário, banco real e Chromium; retries, conflito e falha de auditoria. Edição/reenvio não incluídos. Ver ../operations/incremento-3-b05-b06.md. |
 | B07 | P0 | PASS | Publicação explícita por editor/admin ativo, organização validada, autorização original vigente da atividade/escopo/versão e hash do conteúdo aprovado. Snapshot, número, timestamp, estado e auditoria atômicos; concorrência, retries, rollback FK, privacidade e consultas públicas separados. 24 novas integrações + 8 novos E2E; ver relatório B07. |
-| B08 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B09 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
+| B08 | P0 | PASS | Edição própria de publicada cria versão privada com incremento; snapshot anterior continua em lista/detalhe/API/HTML/metadados. Envio/revisão/devolução/rejeição não o substituem; aprovação autorizada da nova versão substitui e audita na mesma transação. Hash/histórico preservados, isolamento/conflitos/rollback/concorrência comprovados. Ver relatório B08–B09. |
+| B09 | P0 | PASS | Editor/admin ativo retira com motivo obrigatório, estado retirada, apoios_abertos=false e auditoria atômica. Público perde lista/detalhe/API; motivo só dono/editor. Permissões, idempotência, falha FK, retirada durante revisão e bloqueio de republicação/edição/envio comprovados em PostgreSQL/Chromium. Ver relatório B08–B09. |
 | B10 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
 | B11 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
 | B12 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
@@ -89,10 +89,16 @@ Integração real agora executada: 89 PASS, incluindo 85 de segurança e 4 de on
 
 Resultados finais: 223 unitários/componentes PASS (183 anteriores + 33 revisão + 4 Auth + 3 UI), 128 integração PASS (100 anteriores + 28 revisão), 19 E2E PASS (13 anteriores + 6 novos); 0 FAIL/SKIP finais. Lint/typecheck/build exit 0. A07 continua PENDENTE no aceite integral, apesar do PASS técnico de sua checagem parcial de rota ausente. A08 conserva datas controladas nas fixtures. B07–B12 não foram implementados.
 
-## Validação vigente — B07
+## Histórico — validação B07
 
 B07: 39 verificações unitárias/componentes adicionadas (29 publicação, 7 consultas públicas, 2 interface e 1 hash na aprovação), 24 integrações e 8 E2E novos. Regressões anteriores preservadas na execução completa: 262/152/27 PASS, em camadas separadas. A07 PASS pela rota real, com publicação positiva do editor em outro caso de controle; A08 conserva expiração temporal controlada, sem espera natural.
 
 Aprovação interna sozinha continua privada. Aprovações novas registram hash do conteúdo; registros antigos sem essa prova não são publicados automaticamente. Edição/reenvio após devolução não foram implementados. B08–B12 não foram iniciados. Revogação foi aplicada somente a fixtures para verificar leitura/retry; não existe novo fluxo de retirada. Apoios continuam fechados.
 
 Evidências: `operations/evidence/incremento-3-b07/quality-final.json`, `e2e.json`, `integration-final.log`, logs RED/GREEN e relatório. Os resultados simulados estão discriminados e não substituem integração/Chromium. Nenhum novo aceite é inferido para os demais cenários.
+
+## Validação vigente — B08–B09
+
+283 unitários/componentes PASS (262 anteriores + 21 novos), 163 integrações reais PASS (152 anteriores + 11 novos), 30 E2E Chromium PASS (27 anteriores + 3 novos), 0 FAIL/SKIP finais. RED iniciais: 2 unidades e 2 integrações FAIL, uma de cada cenário; Chromium 2 FAIL/0 SKIP por ausência dos controles esperados, depois 3 PASS específicos e 30 PASS completos. Falha acessível do motivo também recebeu RED antes de correção, discriminada no relatório de erros do próprio teste.
+
+Duas expectativas históricas de B07 que exigiam edição publicada bloqueada/ausente foram atualizadas para o contrato B08, mantendo assertivas do snapshot anterior e envio explícito da versão pendente. Isso não muda IDs/prioridades dos 74 cenários. A07 PASS contra rota real preservado; A08 mantém tempo controlado. Não há reabertura de retirada, edição/reenvio de devolvida/rejeitada, B10–B12, C01–C08 ou módulos posteriores neste recorte.

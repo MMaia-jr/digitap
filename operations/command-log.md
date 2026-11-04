@@ -35,3 +35,9 @@ Fixtures criadas/limpas com autorização específica da execução por UUID pr�
 ## Preparação do checkpoint B07
 
 HEAD 7c8c80d478890cf1e350b6c397151ed3aa767f3e confirmado. Revisão de diffs/não rastreados, código de transação/hash/projeção/autorizações e logs existentes, sem novas suítes. Leitura do catálogo pelo inspetor existente, comparação de segredos em memória e do bundle, manifesto literal, stage restrito e git diff --cached --check. Evidências em checkpoint-b07.md e evidence/checkpoint-b07/. Sem commit, push, deploy, migração ou alteração global.
+
+## B08–B09 — execução local após c015cde
+
+Comandos, resultados e ressalvas em operations/incremento-3-b08-b09.md. RED unitário, PostgreSQL e Chromium (2 FAIL em cada camada, 0 SKIP no browser) antes da implementação; GREEN completos 283/163/30 PASS, 0 FAIL/SKIP. Correção acessível do motivo precedida por teste; erro de import act do próprio teste discriminado no relatório. Build/lint/typecheck exit 0. Modelo/schema/grants preservados por inspeção somente leitura.
+
+Fixtures desta execução e regressões criadas/limpas com autorização específica, somente UUIDs próprios. Next iniciou em 127.0.0.1:3215 e foi encerrado pelo supervisor próprio após verificar processo/cwd; Supabase não reiniciado. Sem instalação, migração, stage, commit, push, deploy ou infraestrutura global. B10–B12/C01–C08 não iniciados; aguardar autorização de commit.

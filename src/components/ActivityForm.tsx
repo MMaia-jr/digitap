@@ -31,11 +31,11 @@ export function ActivityForm({activity}:{activity?:PrivateActivity}){
   const props={id:name,name,defaultValue:value,maxLength:max,required:name!=='referencia_oficial','aria-invalid':feedback?.fields?.[name]?'true' as const:undefined,'aria-describedby':feedback?.fields?.[name]?name+'-error':undefined};
   return <div className="field" key={name}><label htmlFor={name}>{label}</label>{name==='descricao'||name==='orientacao_acesso'?<textarea {...props} rows={name==='descricao'?6:3}/>:<input {...props} type={type}/>}{feedback?.fields?.[name]&&<p className="error" id={name+'-error'}>{feedback.fields[name]}</p>}</div>;
  };
- return <form onSubmit={save} onChange={()=>setDirty(true)} noValidate aria-label={activity?'Editar rascunho':'Nova atividade'} aria-busy={pending}>
+ return <form onSubmit={save} onChange={()=>setDirty(true)} noValidate aria-label={activity?(activity.estado_editorial==='publicada'?'Editar atividade publicada':'Editar rascunho'):'Nova atividade'} aria-busy={pending}>
   {feedback&&<div className="feedback error" role="alert" ref={summary} tabIndex={-1}>{feedback.message}</div>}
   {field('titulo','Título',180)}{field('descricao','Descrição',5000)}{field('inicio_previsto','Data e horário (America/Sao_Paulo)',32,'datetime-local')}{field('orientacao_acesso','Orientação de acesso',600)}{field('referencia_oficial','Link oficial (opcional)',2048,'url')}
-  <p>O rascunho e o envio permanecem privados. Enviar não significa publicar.</p>
+  <p>{activity?.estado_editorial==='publicada'?'Salvar cria uma versão pendente; a versão pública atual continua visível até a aprovação editorial.':'O rascunho e o envio permanecem privados. Enviar não significa publicar.'}</p>
   <button type="submit" disabled={!ready||pending}>{pending?'Aguarde…':activity?'Salvar alterações':'Salvar rascunho'}</button>
-  {activity&&<><p>Salve as alterações antes de enviar a versão {activity.versao_submetida}.</p><button type="button" disabled={!ready||pending||dirty} onClick={()=>request({versao_esperada:activity.versao_submetida},true)}>Enviar atividade</button></>}
+  {activity?.estado_editorial==='rascunho'&&<><p>Salve as alterações antes de enviar a versão {activity.versao_submetida}.</p><button type="button" disabled={!ready||pending||dirty} onClick={()=>request({versao_esperada:activity.versao_submetida},true)}>Enviar atividade</button></>}
  </form>;
 }

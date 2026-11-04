@@ -2,8 +2,8 @@ export class ActivityError extends Error {
   constructor(public readonly status:number,message:string,public readonly fields?:Record<string,string>){super(message);}
 }
 export interface DraftInput {titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
-export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada';
-export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;motivo_editorial?:string}
+export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada'|'retirada';
+export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;motivo_editorial?:string;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
 const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial'];
@@ -62,4 +62,10 @@ export function localStartToInstant(value:string,now=new Date()):string{
  const offset=new Date(localParts(guess)+'Z').getTime()-guess.getTime();const result=new Date(guess.getTime()-offset);
  if(localParts(result)!==value)return invalid('inicio_previsto','Data ou horário inválido.');
  return start(result.toISOString(),now);
+}
+
+export function validateWithdrawal(input:unknown){
+ const body=objectInput(input,['versao_esperada','pedido_id','motivo']);
+ if(typeof body.pedido_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.pedido_id))throw new ActivityError(422,'Identificador de pedido inválido.');
+ return {versao_esperada:validateVersion(body.versao_esperada),pedido_id:body.pedido_id.toLowerCase(),motivo:text(body.motivo,'motivo',10,1500)};
 }

@@ -1,0 +1,64 @@
+{
+  "base": "c015cdeffbe06512a34a4fc9b1242a43834c3adb",
+  "scenarios": {
+    "B08": {
+      "status": "PASS local",
+      "contract": "Edição publicada cria versão pendente, preserva snapshot público até aprovação autorizada da nova versão.",
+      "tests": {
+        "unit": [
+          "tests/activities/revisions.test.ts"
+        ],
+        "integration": [
+          "tests/integration/revisions.database.test.ts"
+        ],
+        "e2e": [
+          "tests/e2e/revisions.spec.mjs"
+        ]
+      },
+      "RED": {
+        "unit": "unit-red.log: 2 FAIL, uma falha por cenário",
+        "integration": "integration-red.log: 2 FAIL, uma falha por cenário",
+        "chromium": "e2e-red.json: 2 FAIL, 0 SKIP; ausência dos campos de edição/retirada, timeout de ação"
+      },
+      "GREEN": {
+        "unit": "unit-final.log: 283 PASS, inclui os 21 novos",
+        "integration": "integration-final.log: 163 PASS, inclui 11 novos",
+        "chromium": "e2e.json: 30 PASS, inclui 3 novos"
+      },
+      "limits": [
+        "Data futura e validação do conteúdo seguem contratos anteriores; devolvida/rejeitada não ganhou reenvio."
+      ]
+    },
+    "B09": {
+      "status": "PASS local",
+      "contract": "Retirada editorial atômica com motivo restrito, fechamento de apoios, ocultação pública e republicação bloqueada.",
+      "tests": {
+        "unit": [
+          "tests/activities/revisions.test.ts",
+          "tests/activities/withdrawal-validation.test.ts",
+          "tests/components/withdraw-form.test.tsx"
+        ],
+        "integration": [
+          "tests/integration/revisions.database.test.ts"
+        ],
+        "e2e": [
+          "tests/e2e/revisions.spec.mjs"
+        ]
+      },
+      "RED": {
+        "unit": "unit-red.log: 2 FAIL, uma falha por cenário",
+        "integration": "integration-red.log: 2 FAIL, uma falha por cenário",
+        "chromium": "e2e-red.json: 2 FAIL, 0 SKIP; ausência dos campos de edição/retirada, timeout de ação"
+      },
+      "GREEN": {
+        "unit": "unit-final.log: 283 PASS, inclui os 21 novos",
+        "integration": "integration-final.log: 163 PASS, inclui 11 novos",
+        "chromium": "e2e.json: 30 PASS, inclui 3 novos"
+      },
+      "limits": [
+        "Reabertura após retirada não implementada; retirada pode ocorrer durante revisão.",
+        "Não há módulo de apoios: fechamento da flag existente comprovado."
+      ]
+    }
+  }
+}
