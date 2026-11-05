@@ -5,6 +5,7 @@ import {validateDraft} from '../../src/lib/activities/domain';
 import {parseSnapshot} from '../../src/lib/activities/publication';
 import PublicList from '../../src/app/atividades/page';
 import PublicDetail from '../../src/app/atividade/[id]/page';
+vi.mock('../../src/lib/queries/records.server',()=>({publicRecords:{get:async()=>{throw new Error('Registro indisponível fictício');}}}));
 const {list,get}=vi.hoisted(()=>({list:vi.fn(),get:vi.fn()}));
 vi.mock('../../src/lib/queries/public.server',()=>({publicActivities:{list,get}}));
 const id='10000000-0000-4000-8000-000000000001',org='20000000-0000-4000-8000-000000000001';

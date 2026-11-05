@@ -10,6 +10,10 @@ import { FlowError } from '../auth/flow.server';
 import { appOrigin } from '../supabase/config.server';
 import {validatePublish,createSnapshot,parseSnapshot} from './publication';
 import {requireVersionAuthorization as requireAuthorization,approvalForVersion,publicationRecord,snapshotHash,approvedContentHash} from './publication.server';
+import {validateContestation,contestRecord,privateContestations} from './contestation.server';
+import {validateRevocation,revokeAuthorization} from './revocation.server';
+import {validateRecordTransition} from './record-workflow';
+import {transitionRecord,recordContent,recordHash} from './records.server';
 const columns='id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida,numero_versao_publicada,estado_programacao';
 const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada','retirada')";
 type Row=Omit<PrivateActivity,'inicio_previsto'> & {inicio_previsto:Date|string};
@@ -60,6 +64,12 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     return {...published,repetida:false};
  }
  return {
+  async contestRecord(id:string,input:unknown){const command=validateContestation(input,now());return run('leitura',async(sql,actor)=>{await load(sql,actor,id,true);return contestRecord(sql,actor.id,id,command);});},
+  async revokeAuthorization(id:string,input:unknown){const command=validateRevocation(input);return run('editorial',async(sql,actor)=>{await load(sql,actor,id,true);return revokeAuthorization(sql,actor.id,id,command);});},
+  async recordTransition(id:string,input:unknown){
+   const command=validateRecordTransition(input);
+   return run(command.acao==='enviar'?'organizacao':'editorial',async(sql,actor)=>{await load(sql,actor,id,true);return transitionRecord(sql,actor.id,id,command,now());});
+  },
   async addEvidence(id:string,input:unknown){
    const command=validateEvidence(input,now()),metadata=JSON.stringify({tipo:'evidencia.v1',...command});
    return run('organizacao',async(sql,actor)=>{
@@ -79,7 +89,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    return run('organizacao',async(sql,actor)=>{
     const activity=await load(sql,actor,id,true);
     if(activity.versao_submetida!==command.versao_esperada)throw new ActivityError(409,'A versão mudou. Recarregue antes de registrar.');
-    const existing=(await sql.query("select id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
+    const existing=(await sql.query("select id,atividade_id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
     if(existing){
      const event=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='registro_criado'",[existing.id])).rows;
      if(event.length!==1||event[0].executada_por_conta_id!==actor.id||event[0].justificativa_restrita!==metadata)throw new ActivityError(409,'Já existe registro para esta atividade.');
@@ -92,10 +102,10 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   },
   async getRecord(id:string){return run('leitura',async(sql,actor)=>{
    const activity=await load(sql,actor,id);
-   const record=(await sql.query('select id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1',[activity.id])).rows[0];
+   const record=(await sql.query('select id,atividade_id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1',[activity.id])).rows[0];
    if(!record)throw new ActivityError(404,'Registro não encontrado.');
    const evidencias=(await sql.query('select id,tipo_fonte,url_publica,afirmacao_sustentada,consultada_em,aprovada_publicacao from public.evidencias where registro_id=$1 order by consultada_em,id',[record.id])).rows;
-   return {...record,evidencias};
+   return {...record,evidencias,contestacoes:await privateContestations(sql,record.id),conteudo_sha256:recordHash(recordContent(record as import('./records.server').RecordRow,evidencias))};
   });},
   async schedule(id:string,input:unknown){
    const command=validateScheduling(input),metadata=JSON.stringify({tipo:'programacao.v1',...command});
@@ -204,11 +214,18 @@ export const activities=createActivityService();
 export async function activityResponse(operation:()=>Promise<unknown>){
  try{return Response.json(await operation(),{headers:privateHeaders});}catch(error){return Response.json({message:error instanceof ActivityError?error.message:'Serviço indisponível. Tente novamente.'},{status:error instanceof ActivityError?error.status:503,headers:privateHeaders});}
 }
-export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence',id?:string){
+export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence'|'recordSend'|'recordReview'|'revokeAuthorization'|'contestRecord',id?:string){
  // Route exports limit methods. Normalize PATCH only for reuse of the existing
  // JSON/origin/payload boundary; the original method is still PATCH over HTTP.
  return handleMutation(request.method==='PATCH'?new Request(request,{method:'POST'}):request,appOrigin(),async input=>{
   try{
+   if(action==='contestRecord'){const contestacao=await activities.contestRecord(id!,input);return {message:'Divergência registrada, sem conclusão consensual.',contestacao,next:'/dashboard/atividade/'+id};}
+   if(action==='revokeAuthorization'){const revogacao=await activities.revokeAuthorization(id!,input);return {message:'Autorização revogada.',revogacao,next:'/dashboard/atividade/'+id};}
+   if(action==='recordSend'||action==='recordReview'){
+    if(action==='recordSend')objectInput(input,['pedido_id','estado_esperado','conteudo_esperado']);
+    else if((input as {acao?:unknown})?.acao==='enviar')throw new ActivityError(403,'Envio exclusivo da organização.');
+    const registro=await activities.recordTransition(id!,action==='recordSend'?{...input as object,acao:'enviar'}:input);return {message:'Transição do registro registrada.',registro,next:'/dashboard/atividade/'+id};
+   }
    if(action==='addEvidence'){const evidencia=await activities.addEvidence(id!,input);return {message:'Referência privada registrada.',evidencia,next:'/dashboard/atividade/'+id};}
    if(action==='createRecord'){const registro=await activities.createRecord(id!,input);return {message:'Declaração privada registrada.',registro,next:'/dashboard/atividade/'+id};}
    const activity=action==='schedule'?await activities.schedule(id!,input):action==='create'?await activities.create(input):action==='update'?await activities.update(id!,input):action==='review'?await activities.review(id!,input):action==='publish'?await activities.publish(id!,input):action==='withdraw'?await activities.withdraw(id!,input):await activities.submit(id!,input);

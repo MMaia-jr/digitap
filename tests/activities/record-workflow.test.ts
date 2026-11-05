@@ -1,0 +1,14 @@
+import {it,expect} from 'vitest';
+import {validateRecordTransition} from '../../src/lib/activities/record-workflow';
+import {validateRevocation} from '../../src/lib/activities/revocation.server';
+import {validateContestation} from '../../src/lib/activities/contestation.server';
+import {vi} from 'vitest';
+vi.mock('server-only',()=>({}));
+const id='10000000-0000-4000-8000-000000000001',digest='a'.repeat(64),base={pedido_id:id,estado_esperado:'em_revisao',conteudo_esperado:digest,acao:'aprovar',autorizacao_id:id,evidencias_aprovadas:[]};
+it('C05: comando canônico não aceita aprovação sem referência explícita à autorização',()=>{expect(validateRecordTransition(base)).toMatchObject({autorizacao_id:id,evidencias_aprovadas:[]});});
+it.each([{autorizacao_id:null},{evidencias_aprovadas:null},{evidencias_aprovadas:['invalido']},{evidencias_aprovadas:[id,id]},{conteudo_esperado:''},{pedido_id:''},{estado_esperado:'retirada'},{acao:'corroborar'}])('C05/C07: comando inválido %j é recusado',patch=>{expect(()=>validateRecordTransition({...base,...patch})).toThrow();});
+it.each([{papel:'administrador'},{organizacao_id:id},{estado_apuracao:'corroborado'},{versao_publicada:{}}])('C05/C07: payload privilegiado %j é recusado',patch=>{expect(()=>validateRecordTransition({...base,...patch})).toThrow();});
+it.each(['devolver','rejeitar','retirar'])('C07: %s exige motivo textual',acao=>{expect(()=>validateRecordTransition({pedido_id:id,acao,estado_esperado:'enviada',conteudo_esperado:digest,motivo:''})).toThrow();});
+it.each([{autorizacao_id:''},{motivo:''},{motivo:'<script>alert(1)</script>'},{organizacao_id:id}])('C06: revogação inválida %j é recusada',patch=>{expect(()=>validateRevocation({pedido_id:id,autorizacao_id:id,motivo:'Revogação fictícia restrita.',...patch})).toThrow();});
+it.each([{divergencia:''},{divergencia:'<img src=x onerror=alert(1)>'},{conteudo_esperado:''},{referencia_publica:'http://127.0.0.1/privado'},{referencia_publica:'https://example.invalid/?email=fixture@example.invalid'},{estado_apuracao:'corroborado'}])('C08: contestação inválida %j é recusada',patch=>{expect(()=>validateContestation({pedido_id:id,conteudo_esperado:digest,divergencia:'Divergência fictícia sem consenso.',...patch},new Date('2026-11-05T12:00:00Z'))).toThrow();});
+it('C08: referência opcional não é publicada nem implica consenso',()=>{expect(validateContestation({pedido_id:id,conteudo_esperado:digest,divergencia:'Divergência fictícia sem consenso.'},new Date())).toMatchObject({referencia_publica:null});});

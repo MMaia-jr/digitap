@@ -22,3 +22,8 @@ export async function publicationRecord(sql:Sql,id:string,version?:number):Promi
  if(events.length!==1)throw new ActivityError(409,'Registro de publicação inconsistente.');
  try{const e=events[0],m=JSON.parse(e.justificativa_restrita);if(m.tipo!=='publicacao.v1'||!e.executada_por_conta_id||!uuid(m.pedido_id)||!uuid(m.autorizacao_id)||!uuid(m.aprovacao_evento_id)||!Number.isInteger(m.versao_esperada)||!/^[0-9a-f]{64}$/.test(m.snapshot_sha256))throw new Error();return {...m,author:e.executada_por_conta_id};}catch{throw new ActivityError(409,'Registro de publicação inconsistente.');}
 }
+
+export async function requireRecordAuthorization(sql:Sql,recordId:string,authorizationId:string){
+ const result=await sql.query<{id:string}>("select id from public.autorizacoes_publicacao where id=$1 and objeto_tipo='registro' and objeto_id=$2 and situacao='vigente' and revogada_em is null and autorizada_em<=clock_timestamp() and (validade_ate is null or validade_ate>clock_timestamp()) and 'registro_realizacao'=any(escopo_autorizado) and 'registro:versao:1'=any(escopo_autorizado) and char_length(trim(papel_autorizante))>0 and char_length(trim(comprovante_restrito))>0 for share",[authorizationId,recordId]);
+ if(!result.rows[0])throw new ActivityError(422,'Autorização indisponível ou incompatível com este registro e finalidade.');
+}

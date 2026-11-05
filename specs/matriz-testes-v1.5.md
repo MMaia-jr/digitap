@@ -31,10 +31,10 @@ Estado vigente: **A01–A09 e B01–B09 PASS local**, com a ressalva temporal de
 | C02 | P0 | PASS | Declaração permanece declarado/rascunho, sem corroboração ou publicação automática; payload de estado/snapshot negado. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
 | C03 | P0 | PASS | Referência guarda afirmação delimitada, não aprovada e privada, sem corroborar relato total; concorrência/retries e rollback comprovados. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
 | C04 | P0 | PASS | Referências impróprias/locais ou com contatos/identificadores/credenciais detectáveis são bloqueadas antes de persistir; exame material humano continua necessário antes de eventual publicação. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
-| C05 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C06 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C07 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C08 | P1 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
+| C05 | P0 | PASS | PASS local informado pelo proponente nas regressões unitária, PostgreSQL e Chromium. Evidências: ../operations/evidence/incremento-3-c05-c08/. |
+| C06 | P0 | PASS | PASS local informado pelo proponente nas regressões unitária, PostgreSQL e Chromium. Evidências: ../operations/evidence/incremento-3-c05-c08/. |
+| C07 | P0 | PASS | PASS local informado pelo proponente nas regressões unitária, PostgreSQL e Chromium. Evidências: ../operations/evidence/incremento-3-c05-c08/. |
+| C08 | P1 | PASS | PASS local informado pelo proponente nas regressões unitária, PostgreSQL e Chromium. Evidências: ../operations/evidence/incremento-3-c05-c08/. |
 | D01 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | D02 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | D03 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
