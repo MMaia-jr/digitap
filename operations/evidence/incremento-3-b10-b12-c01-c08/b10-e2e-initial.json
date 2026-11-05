@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "PASS": 1,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: editor adia e cancela; público mostra estado atual e mantém conteúdo aprovado",
+      "status": "FAIL",
+      "duration_ms": 20576,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/scheduling.spec.mjs:62:119"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: servidor rejeita visitante e organizações, sem confiar em payload editorial",
+      "status": "PASS",
+      "duration_ms": 974,
+      "errors": []
+    }
+  ]
+}

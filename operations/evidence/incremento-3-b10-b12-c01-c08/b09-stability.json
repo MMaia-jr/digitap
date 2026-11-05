@@ -1,0 +1,96 @@
+{
+  "command": "npm test -- tests/components/withdraw-form.test.tsx",
+  "before_fix": [
+    {
+      "execution": 1,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-run-1.log"
+    },
+    {
+      "execution": 2,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-run-2.log"
+    },
+    {
+      "execution": 3,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-run-3.log"
+    }
+  ],
+  "after_fix": [
+    {
+      "execution": 1,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-fixed-1.log"
+    },
+    {
+      "execution": 2,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-fixed-2.log"
+    },
+    {
+      "execution": 3,
+      "PASS": 3,
+      "FAIL": 0,
+      "exit": 0,
+      "log": "/private/tmp/a-praca-b09-fixed-3.log"
+    }
+  ],
+  "diagnosis": {
+    "explicit_delay": false,
+    "fake_timers": false,
+    "clock_mock": false,
+    "order_dependency_found": false,
+    "cleanup": "cleanup e unstubAllGlobals em afterEach; restoreMocks configurado; arquivos isolados pelo runner.",
+    "race": "findByRole aguarda presença do alerta, enquanto foco é aplicado por useEffect; asserção imediata não espera o efeito. Falha anterior é compatível com essa corrida. Não comprovado problema exclusivamente ambiental.",
+    "fix": "waitFor mantém a mesma asserção de foco, sem delay fixo ou alteração de produção. O polling tem prazo limitado; continua falhando se o foco não ocorrer."
+  },
+  "related_regression": {
+    "first_full_suite": {
+      "PASS": 331,
+      "FAIL": 1,
+      "exit": 1,
+      "test": "motivo recusado recebe foco e erro associado ao campo",
+      "file": "tests/components/review-form.test.tsx",
+      "exact_assertion": "expect(document.activeElement).toBe(alert)",
+      "expected": "div role=alert tabIndex=-1",
+      "received": "body",
+      "fix": "Mesma sincronização com waitFor após reprodução da falha."
+    },
+    "final_full_suite": {
+      "PASS": 332,
+      "FAIL": 0,
+      "exit": 0
+    },
+    "lint_exit": 0,
+    "typecheck_exit": 0
+  },
+  "production_files_changed": [],
+  "test_files_changed": [
+    "tests/components/withdraw-form.test.tsx",
+    "tests/components/review-form.test.tsx"
+  ],
+  "commit_executed": false,
+  "raw_logs_sha256": {
+    "/private/tmp/a-praca-b09-run-2.log": "abae0a0ff109fc4c99be541f0bb25555e5dc881ac5d7e24838d102bfa830d439",
+    "/private/tmp/a-praca-b09-run-3.log": "ddfd5af44e17d92e0c91bda8af0942a28f3f8f2c83c93c1b0613582b935614e9",
+    "/private/tmp/a-praca-b09-run-1.log": "b06144eaf5629f7343852af41cae5ca8646def5b8f50d0f0aaf862eeb8ddeaa0",
+    "/private/tmp/a-praca-b09-fixed-2.log": "8fa5f6dae568ffbc7b978cedd3de27cde7c5486c2f6c2df8c9beed82ede7f54d",
+    "/private/tmp/a-praca-b09-fixed-3.log": "f856fdf17dae2adf7931a0b03544d2e4318d76be0d8a15f2f243905f3ab6ac54",
+    "/private/tmp/a-praca-b09-fixed-1.log": "d478a73d63e475b578d762f7a58913c8a9d6bbfdf38cba189da7245f47df53a5",
+    "/private/tmp/a-praca-b09-fixed-full.log": "a6b88aced7d010ff06b5d2f3fb9bc8c8413d70bd6bf0f162110599de560fa24f",
+    "/private/tmp/a-praca-b09-review-fixed-full.log": "d2bb2d473c289c51a68d34bf2e836c7c51664376c0a15061a323309680f1f5db",
+    "/private/tmp/a-praca-b09-stability-types.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "/private/tmp/a-praca-b09-stability-lint.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b"
+  }
+}

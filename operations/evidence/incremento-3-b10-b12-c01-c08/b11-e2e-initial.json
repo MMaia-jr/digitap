@@ -1,0 +1,36 @@
+{
+  "status": "failed",
+  "PASS": 2,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: editor adia e cancela; público mostra estado atual e mantém conteúdo aprovado",
+      "status": "PASS",
+      "duration_ms": 3509,
+      "errors": []
+    },
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: servidor rejeita visitante e organizações, sem confiar em payload editorial",
+      "status": "PASS",
+      "duration_ms": 882,
+      "errors": []
+    },
+    {
+      "id": "B11 Chromium",
+      "test": "B11 Chromium: HTML malicioso é recusado; nome legado escapado nunca executa",
+      "status": "FAIL",
+      "duration_ms": 1822,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/scheduling.spec.mjs:82:238"
+          ]
+        }
+      ]
+    }
+  ]
+}

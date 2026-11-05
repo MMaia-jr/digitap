@@ -23,3 +23,12 @@ it('listagem pública não usa cookies/identidade e mantém o mesmo snapshot',as
 it.each([{visible:false},{authorized:false},{missingEvent:true}])('objeto inelegível fica oculto',async options=>{const s=setup(options);await expect(s.publicQueries.get(id)).rejects.toMatchObject({status:404});expect(await s.publicQueries.list()).toEqual([]);});
 it('erro de banco é indisponibilidade, não lista vazia falsa',async()=>{await expect(setup({broken:true}).publicQueries.list()).rejects.toMatchObject({status:503,message:'Serviço indisponível. Tente novamente.'});});
 it('ID malformado não abre transação',async()=>{const s=setup();await expect(s.publicQueries.get('invalido')).rejects.toMatchObject({status:404});expect(s.transaction).not.toHaveBeenCalled();});
+it.each(['adiada','cancelada'])('B10: estado atual %s é público sem alterar snapshot aprovado',async state=>{
+ const base=setup();
+ const transaction=(async(fn:(s:Sql)=>Promise<unknown>)=>fn({query:async(text:string)=>{
+  if(text.includes('from public.atividades'))return {rows:[{id,organizacao_id:org,numero_versao_publicada:1,versao_publicada:snap,estado_programacao:state}]};
+  return base.query(text);
+ }} as unknown as Sql)) as Transaction;
+ const data=await createPublicQueries({transaction}).get(id);
+ expect(data.estado_programacao).toBe(state);expect(snap.estado_programacao).toBe('programada');expect(data.titulo).toBe(snap.titulo);
+});

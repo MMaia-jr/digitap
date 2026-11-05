@@ -1,0 +1,36 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 2,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "C01 Chromium",
+      "test": "C01 Chromium: data futura recusada; declaração efetiva fica privada e isolada",
+      "status": "FAIL",
+      "duration_ms": 913,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/records.spec.mjs:49:406"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C02–C04 Chromium",
+      "test": "C02–C04 Chromium: declaração permanece declarada; referência parcial privada e referência sensível bloqueada",
+      "status": "FAIL",
+      "duration_ms": 211,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/records.spec.mjs:55:519"
+          ]
+        }
+      ]
+    }
+  ]
+}

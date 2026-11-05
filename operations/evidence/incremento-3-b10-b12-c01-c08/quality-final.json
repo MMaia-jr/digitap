@@ -1,0 +1,106 @@
+{
+  "base": "1aa8f1ab1efeff2a915a8037f0367a53b4a5509f",
+  "accepted_scenarios": [
+    "B10",
+    "B11",
+    "B12",
+    "C01",
+    "C02",
+    "C03",
+    "C04"
+  ],
+  "not_run": [
+    "C05",
+    "C06",
+    "C07",
+    "C08"
+  ],
+  "i3_complete": false,
+  "tests": {
+    "unit": {
+      "command": "npm test",
+      "pass": 332,
+      "fail": 0,
+      "skip": 0,
+      "files": 30,
+      "exit": 0
+    },
+    "postgres": {
+      "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 npm run test:onboarding:db",
+      "pass": 178,
+      "fail": 0,
+      "skip": 0,
+      "files": 8,
+      "exit": 0
+    },
+    "chromium": {
+      "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-3-b10-b12-c01-c08 npm run test:e2e",
+      "pass": 36,
+      "fail": 0,
+      "skip": 0,
+      "exit": 0,
+      "evidence": "e2e.json"
+    }
+  },
+  "checks": {
+    "npm run build": {
+      "command": "npm run build",
+      "exit": 0
+    },
+    "npm run lint": {
+      "command": "npm run lint",
+      "exit": 0
+    },
+    "npm run typecheck": {
+      "command": "npm run typecheck",
+      "exit": 0
+    },
+    "git diff --check": {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  },
+  "preservation": {
+    "tables": 9,
+    "catalog_findings": [],
+    "rls_grants_migrations_intact": true,
+    "matrix_ids": 74,
+    "changed_matrix_rows": [
+      "B10",
+      "B11",
+      "B12",
+      "C01",
+      "C02",
+      "C03",
+      "C04"
+    ]
+  },
+  "limits": [
+    "C05–C08 não iniciados; fechamento integral não pronto.",
+    "Teste histórico B09 de foco teve falha intermitente; isolado e regressão completa subsequentes passaram sem alterar o teste.",
+    "Validação de URL/dados detectáveis não substitui exame humano do conteúdo da fonte.",
+    "Scanner compara segredos conhecidos; não garante detectar todo segredo desconhecido."
+  ],
+  "raw_logs_sha256": {
+    "/private/tmp/a-praca-final-unit.log": "fa761020534f7527cb4a080c847172e04622f357189c2d8738828f7d020e47a7",
+    "/private/tmp/a-praca-final-unit-recheck.log": "cc48188d916da85a2517da005c0d9c5b4a6f86a75c38a34fb582ddcb23c135c1",
+    "/private/tmp/a-praca-final-db.log": "a248424e4ddc4cc5a5bd87b6be5f1f8ccc48f9f6c2f6a9f41b76a63ae7d6e36e",
+    "/private/tmp/a-praca-final-e2e.log": "e862efdb0c0cd6f252d35585d65ccdca390086be6b000cfb5ce967387feed889",
+    "/private/tmp/a-praca-final-build.log": "38209749b723651ab4470b7b6618bec7279c1951770d73d271806304e2f21152",
+    "/private/tmp/a-praca-lint-checkpoint.log": "8bde1fe1e792a63b0e72850d3a63141c6cd9e750e5b685ce2d9107c8a6871d3b",
+    "/private/tmp/a-praca-typecheck-checkpoint.log": "937d0598b3e73d582853bc29c369593802556144bcd527e14ec4fc84e9227b5d",
+    "/private/tmp/a-praca-b10-behavior-red.log": "cad61ff646a7449ce851c4d6fe809f3ecb77c9ee9dc684f2da3c4a87aec012cd",
+    "/private/tmp/a-praca-b10-public-red.log": "97c371de30fb384858cea1cb7b4f5d7ff5c1434afb42711c67d3253217893981",
+    "/private/tmp/a-praca-c01-red.log": "6b5ad54ea1d11682a16d0223db6756a13a604b8dd545747dee0c6d9846092367",
+    "/private/tmp/a-praca-c03-behavior-red.log": "2c140fb5108a12ed3739df681c029bb0f8616b46ab0d0007689a456ca0f811f1",
+    "/private/tmp/a-praca-c04-red.log": "c199b3bbb0b8c1248d1c23e0a5a8cdcb446cea0fbb96511afb295b04ab924644",
+    "/private/tmp/a-praca-record-calendar-red.log": "448e05e858d797043b1e9326eda32890b9076169b8b02438255ea385fa1a076f"
+  },
+  "b09_stability_followup": {
+    "evidence": "b09-stability.json",
+    "three_runs_before": "3/3 execuções PASS",
+    "three_runs_after": "3/3 execuções PASS",
+    "full_suite": "332 PASS, exit 0",
+    "focus_assertions_synchronized": true
+  }
+}

@@ -3,7 +3,7 @@ export class ActivityError extends Error {
 }
 export interface DraftInput {titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
 export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada'|'retirada';
-export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;motivo_editorial?:string;motivo_retirada?:string;numero_versao_publicada?:number|null}
+export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
 const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial'];
@@ -68,4 +68,38 @@ export function validateWithdrawal(input:unknown){
  const body=objectInput(input,['versao_esperada','pedido_id','motivo']);
  if(typeof body.pedido_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.pedido_id))throw new ActivityError(422,'Identificador de pedido inválido.');
  return {versao_esperada:validateVersion(body.versao_esperada),pedido_id:body.pedido_id.toLowerCase(),motivo:text(body.motivo,'motivo',10,1500)};
+}
+
+export function validateScheduling(input:unknown){
+ const body=objectInput(input,['versao_esperada','pedido_id','motivo','estado_programacao','estado_esperado']);
+ const common=validateWithdrawal({versao_esperada:body.versao_esperada,pedido_id:body.pedido_id,motivo:body.motivo});
+ if(!['adiada','cancelada'].includes(String(body.estado_programacao))||!['programada','adiada'].includes(String(body.estado_esperado))||body.estado_programacao===body.estado_esperado)throw new ActivityError(422,'Transição de programação inválida.');
+ return {...common,estado_programacao:String(body.estado_programacao),estado_esperado:String(body.estado_esperado)};
+}
+
+export function validateRecord(input:unknown,now=new Date()){
+ const body=objectInput(input,['data_realizacao','descricao_factual','origem_informacao','versao_esperada','pedido_id']);
+ const {versao_esperada,pedido_id}=validateWithdrawal({versao_esperada:body.versao_esperada,pedido_id:body.pedido_id,motivo:'Registro factual privado.'});
+ const date=body.data_realizacao;
+ if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number(date.slice(0,4))<1)return invalid('data_realizacao','Informe uma data válida, não futura.');
+ const instant=new Date(date+'T12:00:00Z');
+ if(!Number.isFinite(instant.getTime())||instant.toISOString().slice(0,10)!==date||date>localParts(now).slice(0,10))return invalid('data_realizacao','Informe uma data válida, não futura.');
+ return {pedido_id,versao_esperada,data_realizacao:date,descricao_factual:text(body.descricao_factual,'descricao_factual',10,5000),origem_informacao:text(body.origem_informacao,'origem_informacao',3,600)};
+}
+
+export function validateEvidence(input:unknown,now=new Date()){
+ const body=objectInput(input,['pedido_id','tipo_fonte','url_publica','afirmacao_sustentada','consultada_em']);
+ const {pedido_id}=validateWithdrawal({pedido_id:body.pedido_id,versao_esperada:1,motivo:'Referência delimitada.'});
+ let url:URL;try{if(typeof body.url_publica!=='string'||body.url_publica.length>2048||/[\u0000-\u0020]/.test(body.url_publica))throw new Error();url=new URL(body.url_publica);if(!['https:','http:'].includes(url.protocol)||url.username||url.password)throw new Error();}catch{return invalid('url_publica','Informe referência pública http/https sem credenciais.');}
+ const host=url.hostname.toLowerCase();
+ if(!host.includes('.')||host.includes(':')||/^\d+(?:\.\d+){3}$/.test(host)||/(?:^|\.)(?:localhost|local|internal)$/.test(host))return invalid('url_publica','Use uma referência pública, sem endereço local ou IP literal.');
+ let decoded=url.href;try{for(let i=0;i<2;i++)decoded=decodeURIComponent(decoded);}catch{return invalid('url_publica','Referência inválida.');}
+ const sensitive=(value:string)=>/[\w.+-]+@[\w.-]+\.[a-z]{2,}/i.test(value)||/(?:\d[ .()+-]*){10,}/.test(value);
+ if(sensitive(decoded)||[...url.searchParams.keys()].some(key=>/email|e-mail|cpf|cnpj|telefone|phone|token|senha|password|auth|session|cookie|contato/i.test(key)))return invalid('url_publica','Não inclua contato, identificadores pessoais ou credenciais na referência.');
+ if([body.tipo_fonte,body.afirmacao_sustentada].some(value=>typeof value==='string'&&sensitive(value)))return invalid('afirmacao_sustentada','Não inclua contatos ou identificadores pessoais na referência.');
+ const consulted=body.consultada_em;
+ if(typeof consulted!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(consulted)||!Number.isFinite(Date.parse(consulted))||Date.parse(consulted)>now.getTime())return invalid('consultada_em','Informe data de consulta válida, não futura, com fuso.');
+ const day=consulted.slice(0,10),calendar=new Date(day+'T12:00:00Z');
+ if(Number(day.slice(0,4))<1||!Number.isFinite(calendar.getTime())||calendar.toISOString().slice(0,10)!==day)return invalid('consultada_em','Informe uma data de calendário válida.');
+ return {pedido_id,tipo_fonte:text(body.tipo_fonte,'tipo_fonte',3,120),url_publica:url.href,afirmacao_sustentada:text(body.afirmacao_sustentada,'afirmacao_sustentada',10,1500),consultada_em:new Date(consulted).toISOString()};
 }

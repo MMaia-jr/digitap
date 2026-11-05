@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "C01 Chromium",
+      "test": "C01 Chromium: data futura recusada; declaração efetiva fica privada e isolada",
+      "status": "FAIL",
+      "duration_ms": 737,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/records.spec.mjs:57:544"
+          ]
+        }
+      ]
+    }
+  ]
+}

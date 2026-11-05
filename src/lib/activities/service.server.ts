@@ -1,5 +1,5 @@
 import 'server-only';
-import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,objectInput,type PrivateActivity,type ReviewAction } from './domain';
+import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,validateEvidence,objectInput,type PrivateActivity,type ReviewAction } from './domain';
 import { withTransaction,type Transaction,type Sql } from '../database.server';
 import { authorize,AccessError,type AccessAccount,type VerifiedUser } from '../auth/permissions.server';
 import { userClient } from '../supabase/server';
@@ -10,7 +10,7 @@ import { FlowError } from '../auth/flow.server';
 import { appOrigin } from '../supabase/config.server';
 import {validatePublish,createSnapshot,parseSnapshot} from './publication';
 import {requireVersionAuthorization as requireAuthorization,approvalForVersion,publicationRecord,snapshotHash,approvedContentHash} from './publication.server';
-const columns='id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida,numero_versao_publicada';
+const columns='id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida,numero_versao_publicada,estado_programacao';
 const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada','retirada')";
 type Row=Omit<PrivateActivity,'inicio_previsto'> & {inicio_previsto:Date|string};
 type Actor=AccessAccount & {id:string};
@@ -60,6 +60,58 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     return {...published,repetida:false};
  }
  return {
+  async addEvidence(id:string,input:unknown){
+   const command=validateEvidence(input,now()),metadata=JSON.stringify({tipo:'evidencia.v1',...command});
+   return run('organizacao',async(sql,actor)=>{
+    const activity=await load(sql,actor,id,true);
+    const record=(await sql.query<{id:string;estado_editorial:string}>("select id,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
+    if(!record)throw new ActivityError(404,'Registro não encontrado.');if(record.estado_editorial!=='rascunho')throw new ActivityError(409,'Registro não permite novas referências neste estado.');
+    const history=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='evidencia_referenciada'",[record.id])).rows;
+    const previous=history.find(e=>{try{return JSON.parse(e.justificativa_restrita).pedido_id===command.pedido_id;}catch{return false;}});
+    if(previous){const {evidencia_id,...core}=JSON.parse(previous.justificativa_restrita);if(previous.executada_por_conta_id!==actor.id||JSON.stringify(core)!==metadata)throw new ActivityError(409,'Identificador de pedido já utilizado.');return {...(await sql.query('select id,tipo_fonte,url_publica,afirmacao_sustentada,consultada_em,aprovada_publicacao from public.evidencias where id=$1 and registro_id=$2',[evidencia_id,record.id])).rows[0],repetida:true};}
+    const evidence=(await sql.query('insert into public.evidencias(registro_id,tipo_fonte,url_publica,afirmacao_sustentada,consultada_em) values($1,$2,$3,$4,$5) returning id,tipo_fonte,url_publica,afirmacao_sustentada,consultada_em,aprovada_publicacao',[record.id,command.tipo_fonte,command.url_publica,command.afirmacao_sustentada,command.consultada_em])).rows[0];
+    await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('registro',$1,'evidencia_referenciada',$2,'rascunho','rascunho',$3)",[record.id,actor.id,JSON.stringify({...JSON.parse(metadata),evidencia_id:evidence.id})]);
+    return {...evidence,repetida:false};
+   });
+  },
+  async createRecord(id:string,input:unknown){
+   const command=validateRecord(input,now()),metadata=JSON.stringify({tipo:'registro-criacao.v1',...command});
+   return run('organizacao',async(sql,actor)=>{
+    const activity=await load(sql,actor,id,true);
+    if(activity.versao_submetida!==command.versao_esperada)throw new ActivityError(409,'A versão mudou. Recarregue antes de registrar.');
+    const existing=(await sql.query("select id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
+    if(existing){
+     const event=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='registro_criado'",[existing.id])).rows;
+     if(event.length!==1||event[0].executada_por_conta_id!==actor.id||event[0].justificativa_restrita!==metadata)throw new ActivityError(409,'Já existe registro para esta atividade.');
+     return {...existing,repetida:true};
+    }
+    const record=(await sql.query("insert into public.registros_realizacao(atividade_id,data_realizacao,descricao_factual,origem_informacao) values($1,$2,$3,$4) returning id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial",[activity.id,command.data_realizacao,command.descricao_factual,command.origem_informacao])).rows[0];
+    await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('registro',$1,'registro_criado',$2,null,'rascunho',$3)",[record.id,actor.id,metadata]);
+    return {...record,repetida:false};
+   });
+  },
+  async getRecord(id:string){return run('leitura',async(sql,actor)=>{
+   const activity=await load(sql,actor,id);
+   const record=(await sql.query('select id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1',[activity.id])).rows[0];
+   if(!record)throw new ActivityError(404,'Registro não encontrado.');
+   const evidencias=(await sql.query('select id,tipo_fonte,url_publica,afirmacao_sustentada,consultada_em,aprovada_publicacao from public.evidencias where registro_id=$1 order by consultada_em,id',[record.id])).rows;
+   return {...record,evidencias};
+  });},
+  async schedule(id:string,input:unknown){
+   const command=validateScheduling(input),metadata=JSON.stringify({tipo:'programacao.v1',...command});
+   return run('editorial',async(sql,actor)=>{
+    const row=await load(sql,actor,id,true);
+    if(row.versao_submetida!==command.versao_esperada||row.estado_editorial==='retirada'||!row.numero_versao_publicada)throw new ActivityError(409,'Estado ou versão não permite alterar a programação.');
+    const stored=(await sql.query<{estado_programacao:string}>('select estado_programacao from public.atividades where id=$1',[row.id])).rows[0];
+    const history=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=$1 and acao='atividade_programacao_alterada'",[row.id])).rows;
+    const previous=history.find(e=>{try{return JSON.parse(e.justificativa_restrita).pedido_id===command.pedido_id;}catch{return false;}});
+    if(previous){if(previous.executada_por_conta_id!==actor.id||previous.justificativa_restrita!==metadata||stored.estado_programacao!==command.estado_programacao)throw new ActivityError(409,'Identificador de pedido já utilizado.');return {...row,estado_programacao:stored.estado_programacao,repetida:true};}
+    if(stored.estado_programacao!==command.estado_esperado)throw new ActivityError(409,'A programação mudou. Recarregue antes de continuar.');
+    await sql.query('update public.atividades set estado_programacao=$2,apoios_abertos=false,atualizada_em=clock_timestamp() where id=$1',[row.id,command.estado_programacao]);
+    await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_programacao_alterada',$2,$3,$4,$5)",[row.id,actor.id,stored.estado_programacao,command.estado_programacao,metadata]);
+    return {...row,estado_programacao:command.estado_programacao,repetida:false};
+   });
+  },
   async create(input:unknown){
    const value=validateDraft(input,now());
    return run('organizacao',async(sql,actor)=>{
@@ -82,7 +134,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     if(meta.tipo!=='retirada.v1'||typeof meta.motivo!=='string')throw unavailable();activity.motivo_retirada=meta.motivo;
    }
    const editorial=['editor','administrador'].includes(actor.papel);
-   return {...activity,pode_editar:actor.papel==='organizacao'&&['rascunho','publicada'].includes(activity.estado_editorial),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
+   return {...activity,pode_editar:actor.papel==='organizacao'&&['rascunho','publicada'].includes(activity.estado_editorial),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
   });},
   async update(id:string,input:unknown){
    const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada']);const version=validateVersion(body.versao_esperada);
@@ -152,13 +204,15 @@ export const activities=createActivityService();
 export async function activityResponse(operation:()=>Promise<unknown>){
  try{return Response.json(await operation(),{headers:privateHeaders});}catch(error){return Response.json({message:error instanceof ActivityError?error.message:'Serviço indisponível. Tente novamente.'},{status:error instanceof ActivityError?error.status:503,headers:privateHeaders});}
 }
-export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw',id?:string){
+export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence',id?:string){
  // Route exports limit methods. Normalize PATCH only for reuse of the existing
  // JSON/origin/payload boundary; the original method is still PATCH over HTTP.
  return handleMutation(request.method==='PATCH'?new Request(request,{method:'POST'}):request,appOrigin(),async input=>{
   try{
-   const activity=action==='create'?await activities.create(input):action==='update'?await activities.update(id!,input):action==='review'?await activities.review(id!,input):action==='publish'?await activities.publish(id!,input):action==='withdraw'?await activities.withdraw(id!,input):await activities.submit(id!,input);
-   return {message:action==='withdraw'?'Publicação retirada.':action==='publish'?'Snapshot da versão aprovada publicado.':action==='review'?'Decisão editorial registrada.':action==='submit'?'Atividade enviada. Ela continua privada.':'Rascunho salvo.',atividade:activity,next:'/dashboard/atividade/'+activity.id};
+   if(action==='addEvidence'){const evidencia=await activities.addEvidence(id!,input);return {message:'Referência privada registrada.',evidencia,next:'/dashboard/atividade/'+id};}
+   if(action==='createRecord'){const registro=await activities.createRecord(id!,input);return {message:'Declaração privada registrada.',registro,next:'/dashboard/atividade/'+id};}
+   const activity=action==='schedule'?await activities.schedule(id!,input):action==='create'?await activities.create(input):action==='update'?await activities.update(id!,input):action==='review'?await activities.review(id!,input):action==='publish'?await activities.publish(id!,input):action==='withdraw'?await activities.withdraw(id!,input):await activities.submit(id!,input);
+   return {message:action==='schedule'?'Programação atualizada.':action==='withdraw'?'Publicação retirada.':action==='publish'?'Snapshot da versão aprovada publicado.':action==='review'?'Decisão editorial registrada.':action==='submit'?'Atividade enviada. Ela continua privada.':'Rascunho salvo.',atividade:activity,next:'/dashboard/atividade/'+activity.id};
   }catch(error){if(error instanceof ActivityError)throw new FlowError(error.status,error.message,error.fields);throw error;}
  });
 }

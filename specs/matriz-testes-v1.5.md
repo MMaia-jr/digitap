@@ -24,13 +24,13 @@ Estado vigente: **A01–A09 e B01–B09 PASS local**, com a ressalva temporal de
 | B07 | P0 | PASS | Publicação explícita por editor/admin ativo, organização validada, autorização original vigente da atividade/escopo/versão e hash do conteúdo aprovado. Snapshot, número, timestamp, estado e auditoria atômicos; concorrência, retries, rollback FK, privacidade e consultas públicas separados. 24 novas integrações + 8 novos E2E; ver relatório B07. |
 | B08 | P0 | PASS | Edição própria de publicada cria versão privada com incremento; snapshot anterior continua em lista/detalhe/API/HTML/metadados. Envio/revisão/devolução/rejeição não o substituem; aprovação autorizada da nova versão substitui e audita na mesma transação. Hash/histórico preservados, isolamento/conflitos/rollback/concorrência comprovados. Ver relatório B08–B09. |
 | B09 | P0 | PASS | Editor/admin ativo retira com motivo obrigatório, estado retirada, apoios_abertos=false e auditoria atômica. Público perde lista/detalhe/API; motivo só dono/editor. Permissões, idempotência, falha FK, retirada durante revisão e bloqueio de republicação/edição/envio comprovados em PostgreSQL/Chromium. Ver relatório B08–B09. |
-| B10 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B11 | P0 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| B12 | P1 | NOT RUN | Fora do recorte B07; não implementado/validado integralmente. Preservar contrato e prioridade. |
-| C01 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C02 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C03 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
-| C04 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
+| B10 | P1 | PASS | Adiamento/cancelamento editorial com estado público atual, snapshot preservado, apoios fechados e auditoria atômica. Permissões, retries, concorrência e rollback comprovados. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| B11 | P0 | PASS | HTML malicioso recusado no servidor/snapshot e escape nas superfícies públicas comprovado; Chromium sem execução, inclusive nome público legado. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| B12 | P1 | PASS | API/lista vazias reais, sem atividades fictícias ou rascunhos expostos; erro de consulta distinto de vazio. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| C01 | P0 | PASS | Registro factual privado com data efetiva não futura/calendário/fuso, tenant do servidor, retries e auditoria transacional; isolamento e rollback comprovados. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| C02 | P0 | PASS | Declaração permanece declarado/rascunho, sem corroboração ou publicação automática; payload de estado/snapshot negado. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| C03 | P0 | PASS | Referência guarda afirmação delimitada, não aprovada e privada, sem corroborar relato total; concorrência/retries e rollback comprovados. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
+| C04 | P0 | PASS | Referências impróprias/locais ou com contatos/identificadores/credenciais detectáveis são bloqueadas antes de persistir; exame material humano continua necessário antes de eventual publicação. Evidências: ../operations/evidence/incremento-3-b10-b12-c01-c08/traceability.md e e2e.json. |
 | C05 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | C06 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |
 | C07 | P0 | NOT RUN | Fora do incremento 1; manter contrato e prioridade P0/P1 do prompt. |

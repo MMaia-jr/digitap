@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import {it,afterEach,expect,vi} from 'vitest';
-import {render,screen,fireEvent,cleanup,act} from '@testing-library/react';
+import {render,screen,fireEvent,cleanup,act,waitFor} from '@testing-library/react';
 import {renderToString} from 'react-dom/server';
 import {ReviewForm} from '../../src/components/ReviewForm';
 const activity={id:'10000000-0000-4000-8000-000000000001',titulo:'Atividade fictícia',descricao:'Descrição fictícia de revisão.',inicio_previsto:'2030-04-12T18:30:00Z',orientacao_acesso:'Entrada fictícia.',referencia_oficial:null,versao_submetida:1,estado_editorial:'enviada' as const};
@@ -21,5 +21,5 @@ it('duplo clique e retry após falha mantêm uma requisição e a chave original
 it('motivo recusado recebe foco e erro associado ao campo',async()=>{
  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:false,json:async()=>({message:'Confira os campos.',fields:{motivo:'Motivo obrigatório.'}})}));
  render(<ReviewForm activity={activity}/>);fireEvent.click(screen.getByRole('button',{name:'Devolver atividade'}));
- const alert=await screen.findByRole('alert');expect(document.activeElement).toBe(alert);expect(screen.getByLabelText('Motivo (devolução ou rejeição)').getAttribute('aria-describedby')).toBe('motivo-error');
+ const alert=await screen.findByRole('alert');await waitFor(()=>expect(document.activeElement).toBe(alert));expect(screen.getByLabelText('Motivo (devolução ou rejeição)').getAttribute('aria-describedby')).toBe('motivo-error');
 });

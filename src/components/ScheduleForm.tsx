@@ -1,0 +1,14 @@
+'use client';
+import {useEffect,useRef,useState,useSyncExternalStore,type FormEvent} from 'react';
+const subscribeHydration=()=>()=>{};
+export function ScheduleForm({id,version,state}:{id:string;version:number;state:string}){
+ const ready=useSyncExternalStore(subscribeHydration,()=>true,()=>false),[pending,setPending]=useState(false),[feedback,setFeedback]=useState<{message:string;fields?:Record<string,string>}|null>(null);
+ const inFlight=useRef(false),retry=useRef<{signature:string;key:string}|null>(null),alert=useRef<HTMLDivElement>(null);
+ useEffect(()=>{if(feedback)alert.current?.focus();},[feedback]);
+ async function submit(event:FormEvent<HTMLFormElement>){
+  event.preventDefault();if(inFlight.current)return;const data=new FormData(event.currentTarget),motivo=String(data.get('motivo')??''),estado_programacao=String(data.get('estado_programacao')),signature=JSON.stringify({version,motivo,estado_programacao,state});
+  if(retry.current?.signature!==signature)retry.current={signature,key:crypto.randomUUID()};inFlight.current=true;setPending(true);setFeedback(null);
+  try{const r=await fetch('/api/admin/atividades/'+id+'/programacao',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({versao_esperada:version,pedido_id:retry.current.key,motivo,estado_programacao,estado_esperado:state})}),result=await r.json();if(r.ok&&result.next==='/dashboard/atividade/'+id)window.location.assign(result.next);else setFeedback({message:result.message??'Não foi possível alterar programação.',fields:result.fields});}catch{setFeedback({message:'Não foi possível conectar. Você pode repetir o pedido.'});}finally{inFlight.current=false;setPending(false);}
+ }
+ return <form onSubmit={submit} aria-label="Alteração da programação" aria-busy={pending} noValidate><h2>Alterar programação</h2><p>O estado público será atualizado e os apoios serão fechados. O conteúdo aprovado será preservado.</p>{feedback&&<div ref={alert} role="alert" tabIndex={-1}>{feedback.message}</div>}<div className="field"><label htmlFor="novo_estado">Novo estado</label><select id="novo_estado" name="estado_programacao">{state==='programada'&&<option value="adiada">Adiada</option>}<option value="cancelada">Cancelada</option></select></div><div className="field"><label htmlFor="motivo_programacao">Motivo da alteração</label><textarea id="motivo_programacao" name="motivo" minLength={10} maxLength={1500} required aria-invalid={feedback?.fields?.motivo?true:undefined} aria-describedby={feedback?.fields?.motivo?'motivo-programacao-error':undefined}/>{feedback?.fields?.motivo&&<p id="motivo-programacao-error" className="error">{feedback.fields.motivo}</p>}</div><button disabled={!ready||pending} type="submit">{pending?'Aguarde…':'Alterar programação'}</button></form>;
+}

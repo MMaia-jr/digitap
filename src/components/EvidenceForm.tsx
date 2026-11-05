@@ -1,0 +1,15 @@
+'use client';
+import {useEffect,useRef,useState,useSyncExternalStore,type FormEvent} from 'react';
+const subscribe=()=>()=>{};
+export function EvidenceForm({id}:{id:string}){
+ const ready=useSyncExternalStore(subscribe,()=>true,()=>false),[pending,setPending]=useState(false),[feedback,setFeedback]=useState<{message:string;fields?:Record<string,string>}|null>(null);
+ const lock=useRef(false),retry=useRef<{signature:string;key:string}|null>(null),alert=useRef<HTMLDivElement>(null);
+ useEffect(()=>{if(feedback)alert.current?.focus();},[feedback]);
+ async function submit(event:FormEvent<HTMLFormElement>){
+  event.preventDefault();if(lock.current)return;const data=new FormData(event.currentTarget),content={tipo_fonte:String(data.get('tipo_fonte')??''),url_publica:String(data.get('url_publica')??''),afirmacao_sustentada:String(data.get('afirmacao_sustentada')??''),consultada_em:(()=>{const value=String(data.get('consultada_em')??'');const date=new Date(value);return Number.isFinite(date.getTime())?date.toISOString():value;})()},signature=JSON.stringify(content);
+  if(retry.current?.signature!==signature)retry.current={signature,key:crypto.randomUUID()};lock.current=true;setPending(true);setFeedback(null);
+  try{const r=await fetch('/api/atividades/'+id+'/registro/evidencias',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({...content,pedido_id:retry.current.key})}),result=await r.json();if(r.ok&&result.next==='/dashboard/atividade/'+id)window.location.assign(result.next);else setFeedback({message:result.message??'Não foi possível registrar.',fields:result.fields});}catch{setFeedback({message:'Não foi possível conectar. Você pode repetir o pedido.'});}finally{lock.current=false;setPending(false);}
+ }
+ const fields=[['tipo_fonte','Tipo da fonte','textarea'],['url_publica','Referência pública','textarea'],['afirmacao_sustentada','Afirmação sustentada','textarea'],['consultada_em','Data da consulta (horário deste navegador)','datetime-local']];
+ return <form onSubmit={submit} aria-label="Referência de evidência" aria-busy={pending} noValidate><h2>Adicionar referência</h2><p>Descreva somente o que a fonte sustenta. Não inclua dados pessoais. A referência permanece privada, sem corroboração ou publicação automática.</p>{feedback&&<div ref={alert} role="alert" tabIndex={-1}>{feedback.message}</div>}{fields.map(([name,label,type])=><div className="field" key={name}><label htmlFor={'registro-'+name}>{label}</label>{type==='datetime-local'?<input id={'registro-'+name} name={name} type="datetime-local" required aria-invalid={!!feedback?.fields?.[name]} aria-describedby={feedback?.fields?.[name]?'erro-'+name:undefined}/>:<textarea id={'registro-'+name} name={name} required maxLength={name==='url_publica'?2048:name==='tipo_fonte'?120:1500} aria-invalid={!!feedback?.fields?.[name]} aria-describedby={feedback?.fields?.[name]?'erro-'+name:undefined}/>} {feedback?.fields?.[name]&&<p className="error" id={'erro-'+name}>{feedback.fields[name]}</p>}</div>)}<button type="submit" disabled={!ready||pending}>{pending?'Aguarde…':'Salvar referência privada'}</button></form>;
+}
