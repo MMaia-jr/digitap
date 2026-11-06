@@ -47,3 +47,5 @@ operations/evidence/incremento-3-b10-b12-c01-c08/*-observations.json
 # C05–C08: logs e observações brutas permanecem locais.
 operations/evidence/incremento-3-c05-c08/*.log
 operations/evidence/incremento-3-c05-c08/*-observations.json
+sitrep/.sitrep-active-session
+sitrep/.sitrep-nudge-state.json
