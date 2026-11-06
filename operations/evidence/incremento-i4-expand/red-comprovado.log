@@ -1,0 +1,17 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/i4/expand.database.test.ts (22 tests | 22 skipped) 10ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/i4/expand.database.test.ts [ tests/i4/expand.database.test.ts ]
+Error: connect EPERM 127.0.0.1:56152 - Local (0.0.0.0:0)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  22 skipped (22)
+   Start at  21:28:43
+   Duration  387ms (import 53%, transform 35%, tests 7%, worker 5%)
+

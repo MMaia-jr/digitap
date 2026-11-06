@@ -1,9 +1,4 @@
-// ENV BLOCKER: execução requer Supabase local rodando (portas 56151/56152).
-// O setup atual usa execFileSync para CLI Supabase, que é bloqueada pelo sandbox.
-// Fix pendente: trocar por conexão direta via 'pg' (node-postgres), já dependência do projeto.
-// Status: RED não comprovado; EXPAND bloqueado até ambiente preparado.
 import { afterAll, afterEach, beforeAll, beforeEach, expect, it } from 'vitest';
-import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { Client } from 'pg';
 
@@ -16,10 +11,10 @@ let subjects: string[] = [];
 
 beforeAll(async () => {
   if (process.env.A_PRACA_ALLOW_FIXTURE_CLEANUP !== '1') throw new Error('Fixtures locais exigem autorização explícita.');
-  const local = JSON.parse(execFileSync('./node_modules/.bin/supabase', ['status', '--workdir', process.cwd(), '--output', 'json'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
-  const url = new URL(local.DB_URL);
-  if (local.API_URL !== 'http://127.0.0.1:56151' || url.hostname !== '127.0.0.1' || url.port !== '56152') throw new Error('Alvo fora do escopo local exclusivo.');
-  db = new Client({ connectionString: local.DB_URL });
+  const connectionString = 'postgresql://postgres:postgres@127.0.0.1:56152/postgres';
+  const url = new URL(connectionString);
+  if (url.hostname !== '127.0.0.1' || url.port !== '56152') throw new Error('Alvo fora do escopo local exclusivo.');
+  db = new Client({ connectionString });
   await db.connect();
 });
 
