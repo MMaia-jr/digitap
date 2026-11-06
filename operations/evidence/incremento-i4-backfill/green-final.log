@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+ok 1 - I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+  ---
+  duration_ms: 81.125712
+  type: 'test'
+  ...
+# Subtest: I4-P06 PG: zero órfãos e nenhuma organização trocada
+ok 2 - I4-P06 PG: zero órfãos e nenhuma organização trocada
+  ---
+  duration_ms: 43.507077
+  type: 'test'
+  ...
+# Subtest: I4-P18 PG: revogação entre lotes/retry permanece revogada
+ok 3 - I4-P18 PG: revogação entre lotes/retry permanece revogada
+  ---
+  duration_ms: 56.672356
+  type: 'test'
+  ...
+# Subtest: I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+ok 4 - I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+  ---
+  duration_ms: 42.261852
+  type: 'test'
+  ...
+# Subtest: I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+ok 5 - I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+  ---
+  duration_ms: 42.746461
+  type: 'test'
+  ...
+# Subtest: I4-BF03 PG: hashes de todas as colunas legadas preservados
+ok 6 - I4-BF03 PG: hashes de todas as colunas legadas preservados
+  ---
+  duration_ms: 67.632034
+  type: 'test'
+  ...
+# Subtest: I4-BF04 PG: lote maior que 100 é recusado antes de DML
+ok 7 - I4-BF04 PG: lote maior que 100 é recusado antes de DML
+  ---
+  duration_ms: 31.669883
+  type: 'test'
+  ...
+# Subtest: I4-BF05 PG: falha no lote reverte os inserts do lote
+ok 8 - I4-BF05 PG: falha no lote reverte os inserts do lote
+  ---
+  duration_ms: 39.059819
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 584.116659

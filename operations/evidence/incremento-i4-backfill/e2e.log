@@ -1,0 +1,45 @@
+
+> a-praca-v1-5@0.1.0 test:e2e
+> PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright-browsers" playwright test --project=chromium
+
+B01: FAIL
+B02: SKIP
+B03: SKIP
+B04: SKIP
+A01: FAIL
+A02: SKIP
+A03: SKIP
+A04: SKIP
+A05: SKIP
+A06: SKIP
+A07: SKIP
+A08: SKIP
+A09: SKIP
+A07/B07: FAIL
+A07/B07: SKIP
+B07: SKIP
+B07: SKIP
+B07: SKIP
+B07: SKIP
+B07: SKIP
+B07: SKIP
+C05 Chromium: FAIL
+C06 Chromium: SKIP
+C07 Chromium: SKIP
+C08 Chromium: SKIP
+C01 Chromium: FAIL
+C02–C04 Chromium: SKIP
+B05a: FAIL
+B05b: SKIP
+B06a: SKIP
+B06b: SKIP
+B05c: SKIP
+B05/B06: SKIP
+B08 RED Chromium: FAIL
+B09 RED Chromium: SKIP
+B09: SKIP
+B10 Chromium: FAIL
+B10 Chromium: SKIP
+B11 Chromium: SKIP
+B12 Chromium: SKIP
+{"status":"failed","PASS":0,"FAIL":8,"SKIP":32}

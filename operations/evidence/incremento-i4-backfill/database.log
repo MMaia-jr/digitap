@@ -1,0 +1,601 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/integration/record-editorial.database.test.ts (28 tests | 28 skipped) 800ms
+ ❯ tests/integration/review.database.test.ts (28 tests | 28 skipped) 503ms
+ ❯ tests/integration/publication.database.test.ts (24 tests | 24 skipped) 596ms
+ ❯ tests/integration/revisions.database.test.ts (11 tests | 11 skipped) 502ms
+ ❯ tests/integration/onboarding.database.test.ts (4 tests | 4 skipped) 508ms
+ ❯ tests/integration/scheduling.database.test.ts (7 tests | 7 skipped) 510ms
+ ❯ tests/integration/activities.database.test.ts (11 tests | 11 skipped) 504ms
+ ❯ tests/integration/records.database.test.ts (8 tests | 8 skipped) 490ms
+ ❯ tests/security/database.test.ts (85 tests | 85 skipped) 497ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/activities.database.test.ts [ tests/integration/activities.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.38772b66-b83b-4677-b26e-038683893b82",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/activities.database.test.ts:14:25
+     12| beforeAll(async()=>{
+     13|  if(process.env.A_PRACA_ALLOW_FIXTURE_CLEANUP!=='1')throw new Error('E…
+     14|  const local=JSON.parse(execFileSync('./node_modules/.bin/supabase',['…
+       |                         ^
+     15|  if(local.API_URL!=='http://127.0.0.1:56151'||new URL(local.DB_URL).ho…
+     16|  process.env.SUPABASE_DB_URL=local.DB_URL;db=new Client({connectionStr…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/integration/onboarding.database.test.ts [ tests/integration/onboarding.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.f9b2673b-71b5-4f98-a486-e73a45d2d476",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/onboarding.database.test.ts:9:25
+      7| let db:Client;let admin:SupabaseClient;let publicClient:SupabaseClient…
+      8| beforeAll(async()=>{
+      9|  const local=JSON.parse(execFileSync('./node_modules/.bin/supabase',['…
+       |                         ^
+     10|  if(local.API_URL!=='http://127.0.0.1:56151'||new URL(local.DB_URL).po…
+     11|  db=new Client({connectionString:local.DB_URL});await db.connect();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/integration/publication.database.test.ts [ tests/integration/publication.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0186b73b-9272-421d-844c-b014f65b760d",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/publication.database.test.ts:19:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/integration/record-editorial.database.test.ts [ tests/integration/record-editorial.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.c7ba4b85-f7c1-4ac2-ac4f-8619b2a625f1",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/record-editorial.database.test.ts:17:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/integration/records.database.test.ts [ tests/integration/records.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.759ef9ba-b9bc-471d-b002-a10e46b41464",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/records.database.test.ts:16:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  tests/integration/review.database.test.ts [ tests/integration/review.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.0351bd93-0c0e-4fef-aef7-17bb082832e1",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/review.database.test.ts:20:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  tests/integration/revisions.database.test.ts [ tests/integration/revisions.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.6b5cfda1-d326-4257-9efd-ef1ca90e0939",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/revisions.database.test.ts:19:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  tests/integration/scheduling.database.test.ts [ tests/integration/scheduling.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.91ec31a1-eb95-4e9e-9151-3871b983f55d",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/integration/scheduling.database.test.ts:18:25
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  tests/security/database.test.ts [ tests/security/database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c)
+       _tag: "PlatformError",
+ ~effect/PlatformError: "~effect/PlatformError",
+
+      at Cf (/$bunfs/root/supabase:32:5519)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+27 | `);r=QM(e)??GR(pV(e.ast),e);break}default:r=Bmt(e);break}return n?`${r}
+28 |   at ${n}`:r}function QM(e){if(e._tag==="Pointer")return;if(e._tag==="Encoding")return QM(e.issue);let r=(e._tag==="Filter"?e.filter.annotations:("annotations"in e)?e.annotations:e.ast.annotations)?.[e._tag==="MissingKey"?"messageMissingKey":e._tag==="UnexpectedKey"?"messageUnexpectedKey":"message"];if(typeof r==="string")return r}var hV="~effect/SchemaIssue/Issue",v_,Fmt,Umt,fg,yV,GHe,hm,dy,Dp,gV,EV,Mmt,Bmt=(e)=>{let n=QM(e);if(n!==void 0)return n;switch(e._tag){case"InvalidType":return GR(pV(e.ast),e);case"InvalidValue":{let r=KHe(e);if(r!==void 0)return GR(r,e);let a=Doe(e);return a===void 0?"Expected a valid value":`Invalid data ${a}`}case"MissingKey":return"Missing key";case"UnexpectedKey":{let r=Doe(e);return r===void 0?"Expected no excess property":`Unexpected key with value ${r}`}case"Forbidden":return"Forbidden operation";case"OneOf":{let r=Doe(e);return r===void 0?"Expected exactly one member to match":`Expected exactly one member to match the input ${r}`}}},Gmt=(e)=>QM(e.issue)??QM(e),SV;var I0=S((
+29 |   at ${nre(n)}`;return Error(e)}var Fht=S(()=>{Gu()});function Uht(e){return`#/$defs/${xht(e)}`}function jV(e,n){if(e===void 0)return;let r={},a=e.title;if(typeof a==="string")r.title=a;let{description:i,expected:u}=e;if(typeof i==="string")r.description=i;else if(n?.generateDescriptions===!0&&typeof u==="string")r.description=u;let s=e.default;if(QR(s))r.default=s;let l=e.examples;if(Array.isArray(l)&&QR(l))r.examples=l;let t=e.readOnly;if(typeof t==="boolean")r.readOnly=t;let o=e.writeOnly;if(typeof o==="boolean")r.writeOnly=o;let c=e.format;if(typeof c==="string")r.format=c;let d=e.contentEncoding;if(typeof d==="string")r.contentEncoding=d;let p=e.contentMediaType;if(typeof p==="string")r.contentMediaType=p;let f=e.contentSchema;if(QR(f))r.contentSchema=f;if(n?.includeAnnotationKey!==void 0)for(let[A,h]of Object.entries(e)){if(w8n.has(A)||!n.includeAnnotationKey(A))continue;if(QR(h))gi(r,A,h)}return Object.keys(r).length===0?void 0:r}function $ht(e){let n=e.type==="number"||e.type==="integer"?e.type:void 0
+30 | `);if(a){if(h===0)f=1,h=p.indexOf(`
+31 | `,f);a=!1}while(A!==-1||h!==-1)if(A===-1||h!==-1&&h<A)c(p.substring(f,h)),f=h+1,h=p.indexOf(`
+32 | `,f);r=r+p.substring(f)}}return qA(o)?o:null}let s=Vt(()=>{if(i._tag==="Some")return za(i.value);return W5(e,{onSuccess:l,onFailure:ea,onDone:(t)=>{if(i=De(t),r.length>0){let o=r;return r="",a=!1,q([o])}return za(t)}})});function l(t){let o=u(t);return o!==null?q(o):s}return s})),iEt,aEt,C$=(e)=>zc((n,r)=>{let a;return q(Vt(()=>{if(a)return a;return e.pipe(sa(r),se((i)=>cl(i)(n,r)),se((i)=>a=i))}))}),t6e,sEt,cEt,lEt,Hj=(e,n,r)=>Vt(()=>{let a=__(),i=cl(e)(za(),a);return Pp(se(i,n),r?r:q).pipe(La((u)=>ro(a,u)))}),uEt,n6e,dEt,pEt=(e)=>Hj(e,(n)=>Uc(n,{disableYield:!0})),r6e,fEt,mEt=(e)=>Vt(()=>{let n=le();return Hj(e,(r)=>r.pipe(Z5,se((a)=>(n=a,za()))),()=>q(n))}),AEt=(e)=>Vt(()=>{let n=Symbol(),r=n;return Hj(e,(a)=>Uc(se(a,(i)=>(r=i,Y)),{disableYield:!0}),()=>r===n?DE:dHe(r))}),Die,hEt,yEt,o6e=(e,n)=>cl(e)(za(),n);var Ij=S(()=>{Hp();kc();ti();Hr();Ku();yg();gr();ON();sk();_$();Yo();Ni();Io();Iie();Dw();G0();ru();nj();pm();uk();HWn={[Pgt]:{_Env:Pn,_InErr:Pn,_InElem:Pn,_OutErr:Pn,_OutElem:Pn},pipe(){return ur(this
+
+error: Unknown: FileSystem.writeFile (/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c)
+       _tag: "Unknown",
+     module: "FileSystem",
+     method: "writeFile",
+ pathOrDescriptor: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c",
+    syscall: "open",
+
+      at Cf (/$bunfs/root/supabase:32:5526)
+      at <anonymous> (/$bunfs/root/supabase:35:9180)
+      at guarded (internal:shared:112:26)
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+EPERM: operation not permitted, open '/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c'
+    path: "/Users/alexandrechagasleaocryptoboy/.supabase/telemetry.json.tmp.ec4cd4ac-09bf-4b28-8b78-92fc82e0461c",
+ syscall: "open",
+   errno: -1,
+    code: "EPERM"
+
+
+Bun v1.4.4 (macOS x64)
+
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5519
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ Cf ../../../../$bunfs/root/supabase:32:5526
+ ❯ <anonymous> ../../../../$bunfs/root/supabase:35:9180
+ ❯ guarded internal:shared:112:26
+ ❯ tests/security/database.test.ts:24:28
+     22|
+     23| beforeAll(async () => {
+     24|   const local = JSON.parse(execFileSync('./node_modules/.bin/supabase'…
+       |                            ^
+     25|   // Hard guard: these tests must never read a remote project or anoth…
+     26|   apiUrl = local.API_URL;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  9 failed (9)
+      Tests  206 skipped (206)
+   Start at  22:20:17
+   Duration  8.10s (tests 79%, import 19%, transform 1%, worker 1%)
+
+    Isolate  9 workers spawned · ~197ms startup each (spawn + environment, per file)
+             at least ~1.57s faster with isolate: false — reuses workers across files instead of one per file
+

@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+not ok 1 - I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+  ---
+  duration_ms: 2.308315
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+# Subtest: I4-P06 PG: zero órfãos e nenhuma organização trocada
+not ok 2 - I4-P06 PG: zero órfãos e nenhuma organização trocada
+  ---
+  duration_ms: 0.372138
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:41:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+# Subtest: I4-P18 PG: revogação entre lotes/retry permanece revogada
+not ok 3 - I4-P18 PG: revogação entre lotes/retry permanece revogada
+  ---
+  duration_ms: 0.299482
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:45:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+# Subtest: I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+not ok 4 - I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+  ---
+  duration_ms: 0.355724
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:50:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+# Subtest: I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+not ok 5 - I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+  ---
+  duration_ms: 0.325868
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:57:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+# Subtest: I4-BF03 PG: hashes de todas as colunas legadas preservados
+not ok 6 - I4-BF03 PG: hashes de todas as colunas legadas preservados
+  ---
+  duration_ms: 0.303925
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs:62:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot find module '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/scripts/i4-backfill.mjs' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/backfill.pg.test.mjs"
+  code: 'ERR_MODULE_NOT_FOUND'
+  stack: |-
+    finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    moduleResolve (node:internal/modules/esm/resolve:861:10)
+    defaultResolve (node:internal/modules/esm/resolve:985:11)
+    #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    ModuleLoader.import (node:internal/modules/esm/loader:679:21)
+    defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:222:31)
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 0
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 203.910176

@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+ok 1 - I4-P38 PG: execução dupla preserva IDs, contagens e timestamps
+  ---
+  duration_ms: 91.877968
+  type: 'test'
+  ...
+# Subtest: I4-P06 PG: zero órfãos e nenhuma organização trocada
+ok 2 - I4-P06 PG: zero órfãos e nenhuma organização trocada
+  ---
+  duration_ms: 44.146018
+  type: 'test'
+  ...
+# Subtest: I4-P18 PG: revogação entre lotes/retry permanece revogada
+ok 3 - I4-P18 PG: revogação entre lotes/retry permanece revogada
+  ---
+  duration_ms: 57.101916
+  type: 'test'
+  ...
+# Subtest: I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+ok 4 - I4-BF01 PG: bijeção e mapeamento conservador de todos os estados
+  ---
+  duration_ms: 43.389315
+  type: 'test'
+  ...
+# Subtest: I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+ok 5 - I4-BF02 PG: editor/admin excluídos e conta bloqueada suspensa
+  ---
+  duration_ms: 42.344481
+  type: 'test'
+  ...
+# Subtest: I4-BF03 PG: hashes de todas as colunas legadas preservados
+ok 6 - I4-BF03 PG: hashes de todas as colunas legadas preservados
+  ---
+  duration_ms: 61.019681
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 546.24438
