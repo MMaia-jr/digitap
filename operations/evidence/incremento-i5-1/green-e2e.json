@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "PASS": 3,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "GG-01",
+      "test": "GG-01: governança pública retorna 200 e identifica editor e canal",
+      "status": "PASS",
+      "duration_ms": 2212,
+      "errors": []
+    },
+    {
+      "id": "GG-02",
+      "test": "GG-02: footer da home oferece link Governança",
+      "status": "PASS",
+      "duration_ms": 450,
+      "errors": []
+    },
+    {
+      "id": "GG-03",
+      "test": "GG-03: footer oferece canal de contestação por e-mail",
+      "status": "PASS",
+      "duration_ms": 355,
+      "errors": []
+    }
+  ]
+}

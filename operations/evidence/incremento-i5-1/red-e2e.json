@@ -1,0 +1,50 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 3,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "GG-01",
+      "test": "GG-01: governança pública retorna 200 e identifica editor e canal",
+      "status": "FAIL",
+      "duration_ms": 1570,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/governanca.spec.mjs:5:29"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GG-02",
+      "test": "GG-02: footer da home oferece link Governança",
+      "status": "FAIL",
+      "duration_ms": 15465,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/governanca.spec.mjs:14:102"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GG-03",
+      "test": "GG-03: footer oferece canal de contestação por e-mail",
+      "status": "FAIL",
+      "duration_ms": 15375,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/governanca.spec.mjs:19:101"
+          ]
+        }
+      ]
+    }
+  ]
+}

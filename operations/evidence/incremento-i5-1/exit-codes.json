@@ -1,0 +1,12 @@
+{
+  "red": 1,
+  "governanca_e2e": 0,
+  "npm_test": 0,
+  "onboarding_db": 0,
+  "e2e_full": 0,
+  "build": 0,
+  "lint": 0,
+  "typecheck": 0,
+  "i3_criteria_check": 0,
+  "diff_check": 0
+}
