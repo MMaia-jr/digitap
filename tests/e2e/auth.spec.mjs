@@ -74,6 +74,9 @@ test.afterAll(async()=>{
     await f.context.close();
     if(!f.id)f.id=(await db.query('select id from auth.users where email=$1',[f.email])).rows[0]?.id;
     if(f.id){
+      // Somente fixtures desta execução; respeitar as FKs aditivas do COMPAT.
+      await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=$1)',[f.id]);
+      await db.query('delete from public.sujeitos_publicadores where organizacao_legada_id in (select organizacao_id from public.contas_acesso where auth_user_id=$1)',[f.id]);
       const linked=await db.query('delete from public.contas_acesso where auth_user_id=$1 returning organizacao_id',[f.id]);
       for(const row of linked.rows)await db.query('delete from public.organizacoes where id=$1',[row.organizacao_id]);
       const removed=await admin.auth.admin.deleteUser(f.id);if(removed.error)throw new Error('Limpeza da fixture Auth falhou.');

@@ -1,0 +1,59 @@
+
+> a-praca-v1-5@0.1.0 build
+> NEXT_TELEMETRY_DISABLED=1 next build
+
+▲ Next.js 16.4.5 (Turbopack)
+✓ Running next.config.ts took 40ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 896ms
+  Running TypeScript ...
+  Finished TypeScript in 2.7s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/10) ...
+  Generating static pages using 11 workers (2/10) 
+  Generating static pages using 11 workers (4/10) 
+  Generating static pages using 11 workers (7/10) 
+✓ Generating static pages using 11 workers (10/10) in 229ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin/atividades
+├ ƒ /api/admin/atividades/[id]/autorizacoes/revogar
+├ ƒ /api/admin/atividades/[id]/programacao
+├ ƒ /api/admin/atividades/[id]/publicar
+├ ƒ /api/admin/atividades/[id]/registro/revisar
+├ ƒ /api/admin/atividades/[id]/retirar
+├ ƒ /api/admin/atividades/[id]/revisar
+├ ƒ /api/atividades
+├ ƒ /api/atividades/[id]
+├ ƒ /api/atividades/[id]/enviar
+├ ƒ /api/atividades/[id]/registro
+├ ƒ /api/atividades/[id]/registro/contestar
+├ ƒ /api/atividades/[id]/registro/enviar
+├ ƒ /api/atividades/[id]/registro/evidencias
+├ ƒ /api/auth/[action]
+├ ƒ /api/organizacoes
+├ ƒ /api/public/atividades
+├ ƒ /api/public/atividades/[id]
+├ ƒ /api/public/atividades/[id]/registro
+├ ƒ /atividade/[id]
+├ ƒ /atividades
+├ ƒ /auth/confirm
+├ ○ /cadastro
+├ ƒ /dashboard
+├ ƒ /dashboard/atividade/[id]
+├ ƒ /dashboard/nova-atividade
+├ ƒ /dashboard/organizacao
+├ ƒ /login
+├ ○ /privacidade
+└ ○ /recuperar-acesso
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

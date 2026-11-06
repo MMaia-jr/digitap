@@ -18,7 +18,7 @@ describe('componentes simulados de autenticação',()=>{
    const alert=await screen.findByRole('alert');expect(alert.textContent).toContain('Confira os campos.');
    expect(screen.getByLabelText('E-mail').getAttribute('aria-invalid')).toBe('true');
    expect(screen.getByLabelText('E-mail').getAttribute('aria-describedby')).toContain('email-error');
-   expect(document.activeElement).toBe(alert);
+   await waitFor(()=>expect(document.activeElement).toBe(alert));
  });
  it('falha de rede tem mensagem acessível sem sucesso falso',async()=>{
    vi.stubGlobal('fetch',vi.fn().mockRejectedValue(new Error('detalhe privado')));render(<AuthForm mode="recover"/>);

@@ -1,0 +1,282 @@
+{
+  "tables": [
+    {
+      "relname": "apoios",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "atestacoes_representacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "atividades",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "autorizacoes_publicacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "casos_moderacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "coletivos_informais",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "contas_acesso",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "eventos_editoriais",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "evidencias",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "organizacoes",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "parceiros",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "pessoas_fisicas",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "registros_realizacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "sujeitos_publicadores",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "vinculos_publicadores",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": false,
+        "INSERT": false,
+        "SELECT": false,
+        "UPDATE": false
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    }
+  ],
+  "functions": [
+    {
+      "signature": "i4_atestacao_integridade()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_atividade_sujeito()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_caso_integridade()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_coletivo_curadoria()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_escopos_validos(text[])",
+      "returns": "boolean",
+      "service_role": false
+    },
+    {
+      "signature": "i4_pf_identidade()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_subtipo_completo()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_sujeito_identidade()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_vinculo_identidade()",
+      "returns": "trigger",
+      "service_role": false
+    },
+    {
+      "signature": "i4_vinculo_integridade()",
+      "returns": "trigger",
+      "service_role": false
+    }
+  ],
+  "historyColumns": [
+    {
+      "column_name": "version",
+      "data_type": "text"
+    },
+    {
+      "column_name": "statements",
+      "data_type": "ARRAY"
+    },
+    {
+      "column_name": "name",
+      "data_type": "text"
+    }
+  ],
+  "history": [
+    {
+      "version": "20261103221114",
+      "name": "security_foundation",
+      "statement_count": 32
+    },
+    {
+      "version": "20261103230507",
+      "name": "organization_onboarding",
+      "statement_count": 5
+    },
+    {
+      "version": "20261106003448",
+      "name": null,
+      "statement_count": null
+    }
+  ]
+}

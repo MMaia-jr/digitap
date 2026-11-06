@@ -1,0 +1,263 @@
+{
+  "tables": [
+    {
+      "relname": "apoios",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "atestacoes_representacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "atividades",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "autorizacoes_publicacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "casos_moderacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "coletivos_informais",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "contas_acesso",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "eventos_editoriais",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "evidencias",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "organizacoes",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "parceiros",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "pessoas_fisicas",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "registros_realizacao",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "sujeitos_publicadores",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    },
+    {
+      "relname": "vinculos_publicadores",
+      "relrowsecurity": true,
+      "policies": 0,
+      "service_role": {
+        "DELETE": true,
+        "INSERT": true,
+        "SELECT": true,
+        "UPDATE": true
+      },
+      "anon_any": false,
+      "authenticated_any": false
+    }
+  ],
+  "functions": [
+    {
+      "signature": "i4_atestacao_integridade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_atividade_sujeito()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_caso_integridade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_coletivo_curadoria()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_escopos_validos(text[])",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_pf_identidade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_subtipo_completo()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_sujeito_identidade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_vinculo_identidade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    },
+    {
+      "signature": "i4_vinculo_integridade()",
+      "service_role": true,
+      "anon": false,
+      "authenticated": false
+    }
+  ],
+  "legacyUnchanged": true,
+  "historyMatchesFile": true
+}

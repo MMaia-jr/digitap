@@ -1,0 +1,44 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/auth/gateway.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/gateway.test.ts (6 tests | 1 failed) 19ms
+   ❯ adapter do fluxo com SDK simulado (6)
+     × RPC COMPAT recebe somente identidade derivada e nome 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/gateway.test.ts > adapter do fluxo com SDK simulado > RPC COMPAT recebe somente identidade derivada e nome
+AssertionError: expected "vi.fn()" to be called with arguments: [ …(2) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -1,7 +1,7 @@
+  [
+-   "criar_organizacao_com_sujeito",
++   "criar_organizacao_pendente",
+    {
+      "p_auth_user_id": "user-ficticio",
+      "p_canal_publico": null,
+      "p_nome_publico": "Organização Fictícia",
+    },
+
+
+Number of calls: 1
+
+ ❯ tests/auth/gateway.test.ts:13:226
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  22:41:37
+   Duration  339ms (transform 49%, import 22%, tests 21%, worker 8%)
+

@@ -1,0 +1,234 @@
+TAP version 13
+# Subtest: CMP-01: wrapper cria organização, conta, sujeito e vínculo atomicamente como service_role
+not ok 1 - CMP-01: wrapper cria organização, conta, sujeito e vínculo atomicamente como service_role
+  ---
+  duration_ms: 47.316854
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:26:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:28:15
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: CMP-02: CHECK do sujeito falha após criação legada e reverte organização e conta
+not ok 2 - CMP-02: CHECK do sujeito falha após criação legada e reverte organização e conta
+  ---
+  duration_ms: 32.05743
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      Comparison {
+    +   code: '42883'
+    -   code: '23514'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: '23514'
+  actual:
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async waitForActual (node:assert:644:5)
+    async Function.rejects (node:assert:767:25)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:41:3
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:41:3
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-03: retry preserva IDs, timestamps, nomes e vínculo sem duplicação
+not ok 3 - CMP-03: retry preserva IDs, timestamps, nomes e vínculo sem duplicação
+  ---
+  duration_ms: 15.870217
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:46:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:47:15
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-04: duas organizações mantêm bijeção e vínculo da conta correta
+not ok 4 - CMP-04: duas organizações mantêm bijeção e vínculo da conta correta
+  ---
+  duration_ms: 15.858761
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:50:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:51:15
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-05: vínculo tem os cinco escopos completos
+not ok 5 - CMP-05: vínculo tem os cinco escopos completos
+  ---
+  duration_ms: 15.286748
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:58:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:59:3
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-06: RPC legada permanece utilizável sem criar sujeito
+ok 6 - CMP-06: RPC legada permanece utilizável sem criar sujeito
+  ---
+  duration_ms: 20.787891
+  type: 'test'
+  ...
+# Subtest: CMP-11: rede de segurança preenche apenas fixture criada pela RPC legada
+not ok 7 - CMP-11: rede de segurança preenche apenas fixture criada pela RPC legada
+  ---
+  duration_ms: 35.260449
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:65:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:69:16
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-12: wrapper preserva conteúdo, snapshots, hashes, eventos, registros, evidências e apoios existentes
+not ok 8 - CMP-12: wrapper preserva conteúdo, snapshots, hashes, eventos, registros, evidências e apoios existentes
+  ---
+  duration_ms: 36.077392
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:71:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:81:41
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP-02 vínculo: falha no INSERT final também reverte sujeito, conta e organização
+not ok 9 - CMP-02 vínculo: falha no INSERT final também reverte sujeito, conta e organização
+  ---
+  duration_ms: 30.220374
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      Comparison {
+    +   code: '42883'
+    -   code: '23514'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: '23514'
+  actual:
+  error: 'function public.criar_organizacao_com_sujeito(unknown, unknown, unknown) does not exist'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async waitForActual (node:assert:644:5)
+    async Function.rejects (node:assert:767:25)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:88:3
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:88:3
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: CMP segurança: invoker, search_path fechado, somente service_role
+not ok 10 - CMP segurança: invoker, search_path fechado, somente service_role
+  ---
+  duration_ms: 16.769779
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:92:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:94:10
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 1
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 449.461289

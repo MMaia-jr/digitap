@@ -1,0 +1,209 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/nova-atividade",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 404
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/nova-atividade",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 400
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/fc25b204-e8f4-4174-a674-59b8c516e500",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/fc25b204-e8f4-4174-a674-59b8c516e500/enviar",
+      "status": 200
+    }
+  ],
+  "consoleErrors": [
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    }
+  ],
+  "cleanup": "Somente fixtures desta execução removidas",
+  "editor": "Papel atribuído manualmente em SQL apenas à fixture já autenticada; sem novo fluxo de login editorial."
+}

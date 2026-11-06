@@ -22,7 +22,7 @@ export function createGateway(user: SupabaseClient, admin: () => SupabaseClient,
     },
     async account(userId){return createAccessDependencies(user,admin()).findAccount(userId);},
     async registerOrganization(userId,name,channel){
-      const {data,error}=await admin().rpc('criar_organizacao_pendente',{p_auth_user_id:userId,p_nome_publico:name,p_canal_publico:channel??null});
+      const {data,error}=await admin().rpc('criar_organizacao_com_sujeito',{p_auth_user_id:userId,p_nome_publico:name,p_canal_publico:channel??null});
       if(error)throw new FlowError(error.code==='42501'?403:503,error.code==='42501'?'Acesso indisponível para esta conta.':'Serviço indisponível. Tente novamente.');
       if(typeof data!=='string')throw new FlowError(503,'Serviço indisponível. Tente novamente.');
       return {organizacao_id:data};

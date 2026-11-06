@@ -1,0 +1,83 @@
+TAP version 13
+# Subtest: CMP-01: wrapper cria organização, conta, sujeito e vínculo atomicamente como service_role
+not ok 1 - CMP-01: wrapper cria organização, conta, sujeito e vínculo atomicamente como service_role
+  ---
+  duration_ms: 35.197111
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:26:1'
+  failureType: 'testCodeFailure'
+  error: 'permission denied for table sujeitos_publicadores'
+  code: '42501'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:17:8)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:28:15
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i4/compat.pg.test.mjs:22:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: CMP-02: CHECK do sujeito falha após criação legada e reverte organização e conta
+ok 2 - CMP-02: CHECK do sujeito falha após criação legada e reverte organização e conta
+  ---
+  duration_ms: 26.126955
+  type: 'test'
+  ...
+# Subtest: CMP-03: retry preserva IDs, timestamps, nomes e vínculo sem duplicação
+ok 3 - CMP-03: retry preserva IDs, timestamps, nomes e vínculo sem duplicação
+  ---
+  duration_ms: 26.616023
+  type: 'test'
+  ...
+# Subtest: CMP-04: duas organizações mantêm bijeção e vínculo da conta correta
+ok 4 - CMP-04: duas organizações mantêm bijeção e vínculo da conta correta
+  ---
+  duration_ms: 28.960847
+  type: 'test'
+  ...
+# Subtest: CMP-05: vínculo tem os cinco escopos completos
+ok 5 - CMP-05: vínculo tem os cinco escopos completos
+  ---
+  duration_ms: 30.009808
+  type: 'test'
+  ...
+# Subtest: CMP-06: RPC legada permanece utilizável sem criar sujeito
+ok 6 - CMP-06: RPC legada permanece utilizável sem criar sujeito
+  ---
+  duration_ms: 23.802342
+  type: 'test'
+  ...
+# Subtest: CMP-11: rede de segurança preenche apenas fixture criada pela RPC legada
+ok 7 - CMP-11: rede de segurança preenche apenas fixture criada pela RPC legada
+  ---
+  duration_ms: 45.203242
+  type: 'test'
+  ...
+# Subtest: CMP-12: wrapper preserva conteúdo, snapshots, hashes, eventos, registros, evidências e apoios existentes
+ok 8 - CMP-12: wrapper preserva conteúdo, snapshots, hashes, eventos, registros, evidências e apoios existentes
+  ---
+  duration_ms: 48.54986
+  type: 'test'
+  ...
+# Subtest: CMP-02 vínculo: falha no INSERT final também reverte sujeito, conta e organização
+ok 9 - CMP-02 vínculo: falha no INSERT final também reverte sujeito, conta e organização
+  ---
+  duration_ms: 44.303065
+  type: 'test'
+  ...
+# Subtest: CMP segurança: invoker, search_path fechado, somente service_role
+ok 10 - CMP segurança: invoker, search_path fechado, somente service_role
+  ---
+  duration_ms: 24.18633
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 9
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 523.005351

@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "CMP-07/CMP-08",
+      "test": "CMP-07/CMP-08: POST mantém contrato e cria sujeito/vínculo sem drift",
+      "status": "FAIL",
+      "duration_ms": 5143,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/i4-compat.spec.mjs:30:18"
+          ]
+        }
+      ]
+    }
+  ]
+}

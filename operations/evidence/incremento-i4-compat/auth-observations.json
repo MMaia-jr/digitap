@@ -1,0 +1,550 @@
+{
+  "observations": [
+    {
+      "id": "A01",
+      "layer": "UI+Next API+Auth+Mailpit+SQL",
+      "description": "Cadastro e confirmação reais; retomada de Auth sem vínculo; organização pendente; cookies HttpOnly; SSR em navegação/reload; e-mail não exibido no dashboard.",
+      "status": "PASS"
+    },
+    {
+      "id": "A02",
+      "layer": "Next API+SQL",
+      "description": "Payload inválido negado; duplicata usa resposta genérica e não duplica usuário.",
+      "status": "PASS"
+    },
+    {
+      "id": "A03",
+      "layer": "UI+Next API+Auth+SSR",
+      "description": "Senha incorreta não libera dashboard; login válido estabelece sessão.",
+      "status": "PASS"
+    },
+    {
+      "id": "A04",
+      "layer": "UI+Next API+Mailpit+Auth",
+      "description": "Recuperação real, mudança de senha e token consumido negado. Expiração será exercitada em A08 com fixture temporal controlada.",
+      "status": "PASS"
+    },
+    {
+      "id": "A05",
+      "layer": "Browser contexts+Next API+SQL",
+      "description": "Duas sessões distintas; query string não troca tenant; payload alheio negado; 6 vínculos concorrentes e retry preservam uma organização.",
+      "status": "PASS"
+    },
+    {
+      "id": "A06",
+      "layer": "Next API+SQL",
+      "description": "Payload privilegiado negado em cadastro e vínculo; papel permanece organizacao.",
+      "status": "PASS"
+    },
+    {
+      "id": "A07",
+      "layer": "UI+Next HTTP+SQL",
+      "description": "Rota real de publicação com payload válido nega organização por papel (403); organização segue pendente. Prova complementar em publication.spec.mjs usa atividade real aprovada e testa organização pendente sob editor.",
+      "status": "PASS"
+    },
+    {
+      "id": "A08",
+      "layer": "UI+Next API+SQL fixture+Auth",
+      "description": "Suspensão/bloqueio negados, logout e cookie inválido sem acesso. Expiração real de sessão/token via timestamps da fixture: não simula SDK nem altera relógio/config global; não é espera de tempo natural.",
+      "status": "PASS"
+    },
+    {
+      "id": "A09",
+      "layer": "UI+Next API",
+      "description": "Visitante redirecionado; vínculo exige autenticação; editorial ausente responde 404.",
+      "status": "PASS"
+    }
+  ],
+  "consoles": [
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    },
+    {
+      "kind": "console.error",
+      "message": "HTTP não-2xx no browser (inclui negativas esperadas)"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/cadastro",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/cadastro",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/confirmar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/organizacao",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/sair",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/organizacao",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/confirmar",
+      "status": 422
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/cadastro",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/cadastro",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/sair",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/recuperar-acesso",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/recuperar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/redefinir",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/redefinir",
+      "status": 422
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/cadastro",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/cadastro",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/confirmar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/organizacao",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 400
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 400
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/cadastro",
+      "status": 400
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/sair",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/recuperar-acesso",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/recuperar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/auth/confirm",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/redefinir",
+      "status": 422
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/organizacoes",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/admin",
+      "status": 404
+    }
+  ],
+  "cleanup": "Contas e organizações fictícias desta execução removidas; mensagens locais podem permanecer."
+}

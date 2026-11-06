@@ -1,0 +1,12 @@
+{
+  "applied": "grants only; wrapper already present",
+  "local": true,
+  "history": [
+    {
+      "version": "20261106014443",
+      "name": "i4_compat",
+      "statement_count": 1
+    }
+  ],
+  "migrationSha256": "e5bf13be0d97d2d2236bc9020ebdaab52a7a0e76f4ca3ab8b888077260a5deb3"
+}
