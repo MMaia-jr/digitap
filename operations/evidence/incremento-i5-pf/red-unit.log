@@ -1,0 +1,147 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/auth/pf-flow.test.ts tests/components/pf-form.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/pf-flow.test.ts (10 tests | 7 failed) 31ms
+   × PF signup adia criação de conta/sujeito até e-mail confirmado 8ms
+   × PF signup recusa nome inválido "" antes de Auth 7ms
+   × PF signup recusa nome inválido "<script>nome</script>" antes de Auth 2ms
+   × PF-09 confirmação deriva identidade do OTP e cria PF pendente 2ms
+   × falha na RPC após OTP limpa sessão; login confirmado retoma onboarding 2ms
+   × PF login com conta publicador própria não vai para organização/editorial 3ms
+   × gateway PF usa metadata somente como intenção e RPC service-only 3ms
+ ❯ tests/components/pf-form.test.tsx (1 test | 1 failed) 26ms
+   × PF-07 formulário PF pede nome público e envia ao endpoint próprio 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > PF signup adia criação de conta/sujeito até e-mail confirmado
+FlowError: Página não encontrada.
+ ❯ validateAuthInput src/lib/auth/flow.server.ts:81:39
+
+ ❯ Module.executeAuth src/lib/auth/flow.server.ts:95:5
+ ❯ tests/auth/pf-flow.test.ts:17:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > PF signup recusa nome inválido "" antes de Auth
+ FAIL  tests/auth/pf-flow.test.ts > PF signup recusa nome inválido "<script>nome</script>" antes de Auth
+AssertionError: expected FlowError: Página não encontrada. { …(2) } to match object { status: 422 }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ FlowError {
++   "status": 404,
+  }
+
+ ❯ tests/auth/pf-flow.test.ts:22:98
+     20| });
+     21| it.each(['','<script>nome</script>'])('PF signup recusa nome inválido …
+     22|  const g=fixture();await expect(executeAuth('signup_pf' as AuthAction,…
+       |                                                                                                  ^
+     23| });
+     24| it('PF-09 confirmação deriva identidade do OTP e cria PF pendente',asy…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > PF-09 confirmação deriva identidade do OTP e cria PF pendente
+AssertionError: expected { message: 'E-mail confirmado.', …(1) } to match object { next: '/dashboard/pessoa-fisica' }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "next": "/dashboard/pessoa-fisica",
++   "next": "/dashboard/organizacao",
+  }
+
+ ❯ tests/auth/pf-flow.test.ts:25:87
+     23| });
+     24| it('PF-09 confirmação deriva identidade do OTP e cria PF pendente',asy…
+     25|  const g=fixture();expect(await executeAuth('confirm',{token_hash:'a'.…
+       |                                                                                       ^
+     26|  expect(g.registerPerson).toHaveBeenCalledWith(id,'Pessoa Fictícia');e…
+     27| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > falha na RPC após OTP limpa sessão; login confirmado retoma onboarding
+AssertionError: promise resolved "{ message: 'E-mail confirmado.', …(1) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "message": "E-mail confirmado.",
++   "next": "/dashboard/organizacao",
+  }
+
+ ❯ tests/auth/pf-flow.test.ts:34:68
+     32| it('falha na RPC após OTP limpa sessão; login confirmado retoma onboar…
+     33|  const g=fixture();g.registerPerson.mockRejectedValueOnce(new Error('F…
+     34|  await expect(executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).re…
+       |                                                                    ^
+     35|  expect(await executeAuth('signin',{email:input.email,password:input.p…
+     36| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > PF login com conta publicador própria não vai para organização/editorial
+FlowError: Acesso indisponível para esta conta.
+ ❯ activeLoginAccount src/lib/auth/flow.server.ts:61:206
+
+ ❯ src/lib/auth/flow.server.ts:110:62
+ ❯ clearOnFailure src/lib/auth/flow.server.ts:70:12
+ ❯ Module.executeAuth src/lib/auth/flow.server.ts:105:14
+ ❯ tests/auth/pf-flow.test.ts:39:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/auth/pf-flow.test.ts > gateway PF usa metadata somente como intenção e RPC service-only
+AssertionError: expected undefined to be type of 'function'
+
+Expected: "function"
+Received: "undefined"
+
+ ❯ tests/auth/pf-flow.test.ts:51:27
+     49|  const signUp=vi.fn().mockResolvedValue({data:{},error:null}),rpc=vi.f…
+     50|  const gateway=createGateway({auth:{signUp}} as never,()=>({rpc}) as n…
+     51|  expect(gateway.signUpPF).toBeTypeOf('function');await gateway.signUpP…
+       |                           ^
+     52|  expect(signUp).toHaveBeenCalledWith({email:input.email,password:input…
+     53|  await gateway.registerPerson!(id,input.nome_publico);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  tests/components/pf-form.test.tsx > PF-07 formulário PF pede nome público e envia ao endpoint próprio
+TypeError: Cannot read properties of undefined (reading 'endpoint')
+ ❯ AuthForm src/components/AuthForm.tsx:33:50
+
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+ ❯ updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10569:19
+ ❯ beginWork node_modules/react-dom/cjs/react-dom-client.development.js:12205:18
+ ❯ runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:19176:22
+ ❯ workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:19004:41
+ ❯ renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:18985:11
+ ❯ performWorkOnRoot node_modules/react-dom/cjs/react-dom-client.development.js:18094:35
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  8 failed | 3 passed (11)
+   Start at  09:08:15
+   Duration  1.71s (environment 77%, import 17%, tests 4%, transform 2%, worker 1%)
+

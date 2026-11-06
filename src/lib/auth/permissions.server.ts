@@ -7,10 +7,10 @@ export class AccessError extends Error {
   }
 }
 
-export interface VerifiedUser { id: string; email_confirmed_at?: string | null }
+export interface VerifiedUser { id: string; email_confirmed_at?: string | null; user_metadata?: Record<string,unknown> }
 export interface AccessAccount {
   auth_user_id: string;
-  papel: 'organizacao' | 'editor' | 'administrador';
+  papel: 'organizacao' | 'editor' | 'administrador' | 'publicador';
   situacao: 'ativa' | 'bloqueada' | 'desativada';
   organizacao_id: string | null;
 }

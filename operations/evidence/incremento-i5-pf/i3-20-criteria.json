@@ -1,0 +1,167 @@
+{
+  "status": "passed",
+  "e2e": {
+    "PASS": 44,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "criteriaPASS": 20,
+  "criteriaTotal": 20,
+  "matrix": [
+    {
+      "id": "B01",
+      "status": "PASS",
+      "tests": [
+        "B01: rascunho privado, edição própria, visitante e tenant alheio negados; editor lê"
+      ]
+    },
+    {
+      "id": "B02",
+      "status": "PASS",
+      "tests": [
+        "B02: campos obrigatórios ausentes impedem salvar/enviar por UI/API"
+      ]
+    },
+    {
+      "id": "B03",
+      "status": "PASS",
+      "tests": [
+        "B03: API rejeita datas/URL/HTML e IDs de organização forjados"
+      ]
+    },
+    {
+      "id": "B04",
+      "status": "PASS",
+      "tests": [
+        "B04: envio real permanece privado, audita uma vez e retry é idempotente"
+      ]
+    },
+    {
+      "id": "B05",
+      "status": "PASS",
+      "tests": [
+        "B05a: login editorial real, revisão privada e papéis forjados/visitantes negados",
+        "B05b: autorização compatível permite aprovação; inválidas bloqueiam sem snapshot",
+        "B05c: editor bloqueado perde acesso com sessão existente; admin ativo revisa",
+        "B05/B06: todas as decisões continuam privadas e sem apoio/snapshot"
+      ]
+    },
+    {
+      "id": "B06",
+      "status": "PASS",
+      "tests": [
+        "B06a: devolução motivada visível ao dono; terceiro e público não recebem motivo",
+        "B06b: rejeição concorrente, idempotência e conflitos preservam o motivo inicial",
+        "B05/B06: todas as decisões continuam privadas e sem apoio/snapshot"
+      ]
+    },
+    {
+      "id": "B07",
+      "status": "PASS",
+      "tests": [
+        "A07/B07: rota real nega visitante, proprietário, terceiro e papéis forjados",
+        "A07/B07: organização pendente não publica; editor bloqueado perde acesso sem trocar JWT",
+        "B07: autorizações revogadas, expiradas e incompatíveis bloqueiam inclusive com alternativa válida",
+        "B07: publicação explícita pela interface mostra somente o snapshot autorizado ao visitante",
+        "B07: API concorrente é idempotente; outra chave, autor ou versão não republica",
+        "B07: retry revalida autorização original e a consulta pública deixa de expor a atividade",
+        "B07: snapshot permanece a fonte pública; edição é privada (B08)",
+        "B07: versão divergente ou conteúdo alterado após aprovação não gera snapshot"
+      ]
+    },
+    {
+      "id": "B08",
+      "status": "PASS",
+      "tests": [
+        "B07: snapshot permanece a fonte pública; edição é privada (B08)",
+        "B08 RED Chromium: edição pendente não aparece em HTML, metadata, lista ou API; aprovação troca versão"
+      ]
+    },
+    {
+      "id": "B09",
+      "status": "PASS",
+      "tests": [
+        "B09 RED Chromium: editor retira com motivo, visitante perde acesso e API nega republicação",
+        "B09: permissões reais, idempotência e motivo restrito na UI/API"
+      ]
+    },
+    {
+      "id": "B10",
+      "status": "PASS",
+      "tests": [
+        "B10 Chromium: editor adia e cancela; público mostra estado atual e mantém conteúdo aprovado",
+        "B10 Chromium: servidor rejeita visitante e organizações, sem confiar em payload editorial"
+      ]
+    },
+    {
+      "id": "B11",
+      "status": "PASS",
+      "tests": [
+        "B11 Chromium: HTML malicioso é recusado; nome legado escapado nunca executa"
+      ]
+    },
+    {
+      "id": "B12",
+      "status": "PASS",
+      "tests": [
+        "B12 Chromium: publicações retiradas e rascunhos não fabricam agenda vazia"
+      ]
+    },
+    {
+      "id": "C01",
+      "status": "PASS",
+      "tests": [
+        "C01 Chromium: data futura recusada; declaração efetiva fica privada e isolada"
+      ]
+    },
+    {
+      "id": "C02",
+      "status": "PASS",
+      "tests": [
+        "C02–C04 Chromium: declaração permanece declarada; referência parcial privada e referência sensível bloqueada"
+      ]
+    },
+    {
+      "id": "C03",
+      "status": "PASS",
+      "tests": [
+        "C02–C04 Chromium: declaração permanece declarada; referência parcial privada e referência sensível bloqueada"
+      ]
+    },
+    {
+      "id": "C04",
+      "status": "PASS",
+      "tests": [
+        "C02–C04 Chromium: declaração permanece declarada; referência parcial privada e referência sensível bloqueada"
+      ]
+    },
+    {
+      "id": "C05",
+      "status": "PASS",
+      "tests": [
+        "C05 Chromium: anúncio não autoriza relato; registro tem aprovação/publicação separadas e snapshot público próprio"
+      ]
+    },
+    {
+      "id": "C06",
+      "status": "PASS",
+      "tests": [
+        "C06 Chromium: editor revoga autorização do registro, que desaparece; anúncio independente continua público"
+      ]
+    },
+    {
+      "id": "C07",
+      "status": "PASS",
+      "tests": [
+        "C07 Chromium: devolução/retirada são auditadas e metadata continua restrita"
+      ]
+    },
+    {
+      "id": "C08",
+      "status": "PASS",
+      "tests": [
+        "C08 Chromium: divergência privada fica rastreável; público mantém relato com marcador sem consenso"
+      ]
+    }
+  ]
+}

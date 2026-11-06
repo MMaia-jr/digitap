@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 1,
+  "checks": [
+    {
+      "id": "PF-07",
+      "test": "PF-07: GET cadastro PF retorna 200 e formulário próprio",
+      "status": "FAIL",
+      "duration_ms": 1476,
+      "errors": [
+        {
+          "category": "assertion-or-runtime",
+          "lines": [
+            "    at ./tests/e2e/i5-pf.spec.mjs:33:86"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PF-08",
+      "test": "PF-08: cadastro organizacional preservado oferece link Sou pessoa física",
+      "status": "SKIP",
+      "duration_ms": 0,
+      "errors": []
+    }
+  ]
+}

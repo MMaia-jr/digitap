@@ -1,0 +1,137 @@
+{
+  "fingerprints": {
+    "organizacoes": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "contas_acesso": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "atividades": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "registros_realizacao": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "evidencias": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "autorizacoes_publicacao": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "apoios": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "parceiros": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "eventos_editoriais": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "permissions": [
+    {
+      "relname": "apoios",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "atestacoes_representacao",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "atividades",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "autorizacoes_publicacao",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "casos_moderacao",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "coletivos_informais",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "contas_acesso",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "eventos_editoriais",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "evidencias",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "organizacoes",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "parceiros",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "pessoas_fisicas",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "registros_realizacao",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "sujeitos_publicadores",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    },
+    {
+      "relname": "vinculos_publicadores",
+      "relrowsecurity": true,
+      "relacl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "policies": []
+    }
+  ],
+  "definitions": {
+    "public.criar_organizacao_pendente(uuid,text,text)": "9d98341783ac20c9ef5d9f2120cc020e89cd09c13d7e4848572476ae65266317",
+    "public.criar_organizacao_com_sujeito(uuid,text,text)": "0b59c1e34ddef76a414a8376b1e15d2ca1ce9f6ff541a15cc9987ae5655e6ed9",
+    "public.i4_atividade_sujeito()": "b4986265133ec019ac9360912332a779ba91658bcd6d1477ea53fcab2eea3b91"
+  }
+}

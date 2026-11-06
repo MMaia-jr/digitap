@@ -6,10 +6,11 @@ export class FlowError extends Error {
     super(message); this.name = 'FlowError';
   }
 }
-export type AuthAction = 'signup' | 'signin' | 'signout' | 'recover' | 'confirm' | 'reset' | 'organization';
+export type AuthAction = 'signup' | 'signup_pf' | 'signin' | 'signout' | 'recover' | 'confirm' | 'reset' | 'organization';
 interface ProviderResult { user?: VerifiedUser | null; session?: boolean; error?: { status?: number; code?: string } | null }
 export interface AuthGateway {
   signUp(email: string, password: string): Promise<ProviderResult>;
+  signUpPF?(email: string, password: string, name: string): Promise<ProviderResult>;
   signIn(email: string, password: string): Promise<ProviderResult>;
   recover(email: string): Promise<ProviderResult>;
   verify(token: string, type: 'signup' | 'recovery'): Promise<ProviderResult>;
@@ -18,6 +19,7 @@ export interface AuthGateway {
   currentUser(): Promise<VerifiedUser | null>;
   account(userId: string): Promise<AccessAccount | null>;
   registerOrganization(userId: string, name: string, channel?: string): Promise<{ organizacao_id: string }>;
+  registerPerson?(userId: string, name: string): Promise<{ sujeito_id: string }>;
 }
 export interface FlowResult { message: string; next?: string }
 const unavailable = () => new FlowError(503, 'Serviço indisponível. Tente novamente.');
@@ -46,6 +48,18 @@ function token(value: unknown) {
   if (!/^[a-zA-Z0-9_-]{20,512}$/.test(result)) throw new FlowError(422, 'Link inválido ou expirado. Solicite um novo link.');
   return result;
 }
+function personName(value:unknown):string {
+ const name=text(value).trim().normalize('NFC');
+ if(Array.from(name).length<2||Array.from(name).length>160||/[<>\u0000-\u001f\u007f]/.test(name))throw new FlowError(422,'Confira os campos indicados.',{nome_publico:'Use de 2 a 160 caracteres de texto, sem HTML.'});
+ return name;
+}
+function personIntent(user:VerifiedUser){return user.user_metadata?.tipo==='pessoa_fisica';}
+async function completePerson(gateway:AuthGateway,user:VerifiedUser){
+ if(!user.email_confirmed_at)throw new FlowError(403,'Confirme seu e-mail antes de continuar.');
+ if(!gateway.registerPerson)throw unavailable();
+ // Metadata é apenas intenção de cadastro e nome. A RPC não altera papéis existentes.
+ await gateway.registerPerson(user.id,personName(user.user_metadata?.nome_publico));
+}
 function channel(value: unknown):string|undefined {
   if(value===undefined||value===null||value==='')return undefined;
   try{
@@ -58,7 +72,7 @@ function activeAccount(account: AccessAccount | null, user: VerifiedUser) {
   if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa' || account.papel !== 'organizacao' || !account.organizacao_id)) throw new FlowError(403, 'Acesso indisponível para esta conta.');
 }
 function activeLoginAccount(account:AccessAccount|null,user:VerifiedUser){
- if(account&&(account.auth_user_id!==user.id||account.situacao!=='ativa'||!['organizacao','editor','administrador'].includes(account.papel)||(account.papel==='organizacao'&&!account.organizacao_id)))throw new FlowError(403,'Acesso indisponível para esta conta.');
+ if(account&&(account.auth_user_id!==user.id||account.situacao!=='ativa'||!['organizacao','editor','administrador','publicador'].includes(account.papel)||(account.papel==='organizacao'&&!account.organizacao_id)||(account.papel==='publicador'&&account.organizacao_id!==null)))throw new FlowError(403,'Acesso indisponível para esta conta.');
 }
 
 function hasConfirmedIdentity(user: VerifiedUser | null | undefined): user is VerifiedUser {
@@ -77,11 +91,12 @@ async function clearOnFailure(gateway: AuthGateway, operation: () => Promise<Flo
 
 /** Validate before initializing any provider; reused at the HTTP boundary. */
 export function validateAuthInput(action:AuthAction,input:unknown):void {
- const keys:Record<AuthAction,string[]>={signup:['email','password'],signin:['email','password'],recover:['email'],confirm:['token_hash'],reset:['token_hash','password'],signout:[],organization:['nome_publico','canal_publico']};
+ const keys:Record<AuthAction,string[]>={signup:['email','password'],signup_pf:['email','password','nome_publico'],signin:['email','password'],recover:['email'],confirm:['token_hash'],reset:['token_hash','password'],signout:[],organization:['nome_publico','canal_publico']};
  if(!Object.hasOwn(keys,action))throw new FlowError(404,'Página não encontrada.');
  const body=payload(input,keys[action]);
- if(['signup','signin','recover'].includes(action))email(body.email);
- if(['signup','signin','reset'].includes(action))password(body.password);
+ if(['signup','signup_pf','signin','recover'].includes(action))email(body.email);
+ if(['signup','signup_pf','signin','reset'].includes(action))password(body.password);
+ if(action==='signup_pf')personName(body.nome_publico);
  if(['confirm','reset'].includes(action))token(body.token_hash);
  if(action==='organization'){
    channel(body.canal_publico);
@@ -93,6 +108,14 @@ export function validateAuthInput(action:AuthAction,input:unknown):void {
 export async function executeAuth(action: AuthAction, input: unknown, gateway: AuthGateway): Promise<FlowResult> {
   try {
     validateAuthInput(action,input);
+    if(action==='signup_pf'){
+      const body=payload(input,['email','password','nome_publico']);
+      if(!gateway.signUpPF)throw unavailable();
+      const result=await gateway.signUpPF(email(body.email),password(body.password),personName(body.nome_publico));provider(result);
+      if(result.session){const ended=await gateway.logout();provider(ended);if(ended.error)throw unavailable();}
+      if(result.error&&!['user_already_exists','email_exists'].includes(result.error.code??''))throw unavailable();
+      return {message:'Se o cadastro puder ser concluído, você receberá um e-mail de confirmação. Se já tem conta, entre ou recupere o acesso.'};
+    }
     if (action === 'signup') {
       const body=payload(input,['email','password']);
       const result=await gateway.signUp(email(body.email), password(body.password)); provider(result);
@@ -108,6 +131,11 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
           throw new FlowError(401,loginMessage);
         }
         const account=await gateway.account(result.user.id); activeLoginAccount(account,result.user);
+        if(account?.papel==='publicador')return {message:'Acesso confirmado.',next:'/dashboard/pessoa-fisica'};
+        if(!account&&personIntent(result.user)){
+          await completePerson(gateway,result.user);
+          return {message:'Acesso confirmado.',next:'/dashboard/pessoa-fisica'};
+        }
         return {message:'Acesso confirmado.',next:account?account.papel==='organizacao'?'/dashboard':'/admin/atividades':'/dashboard/organizacao'};
       });
     }
@@ -121,6 +149,10 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
       return await clearOnFailure(gateway, async () => {
         const result=await gateway.verify(token(body.token_hash),'signup'); provider(result);
         if (result.error || !hasConfirmedIdentity(result.user) || !result.session) throw new FlowError(422,'Link inválido ou expirado. Solicite um novo cadastro ou entre na sua conta.');
+        if(personIntent(result.user)){
+          await completePerson(gateway,result.user);
+          return {message:'E-mail confirmado. Cadastro pendente de curadoria.',next:'/dashboard/pessoa-fisica'};
+        }
         return {message:'E-mail confirmado.',next:'/dashboard/organizacao'};
       });
     }

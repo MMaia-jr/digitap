@@ -1,0 +1,20 @@
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://127.0.0.1:3215
+- Network:       http://127.0.0.1:3215
+✓ Ready in 824ms
+✓ Running next.config.ts took 132ms
+
+✓ Compiled in 114ms
+✓ Compiled in 40ms
+⨯ TypeError: Cannot read properties of undefined (reading 'endpoint')
+    at AuthForm (src/components/AuthForm.tsx:33:50)
+  31 |    {feedback?.fields?.[name]&&<p id={`${name}-error`} className="error">{feedback.fields[name]}</p>}
+  32 |  </div>;
+> 33 |  return <form method="post" action={config[mode].endpoint} onSubmit={submit} aria-label={config[mode].label} aria-busy={pending}>
+     |                                                  ^
+  34 |    {feedback&&<div ref={summary} tabIndex={-1} role={feedback.error?'alert':'status'} className={feedback.error?'feedback error':'feedback'}>{feedback.message}</div>}
+  35 |    {email&&field('email','E-mail','email')}{password&&field('password',mode==='reset'?'Nova senha':'Senha','password')}{mode==='organization'&&<>{field('nome_publico','Nome público da organização')}{field('canal_publico','Canal pú...
+  36 |    <button type="submit" disabled={pending||!ready}>{pending?'Aguarde…':config[mode].label}</button> {
+  digest: '1130258205'
+}
+[?25h

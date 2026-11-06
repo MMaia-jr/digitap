@@ -1,0 +1,18 @@
+{
+  "unitTarget": {
+    "exit_code": 0,
+    "output": "\n Test Files  2 passed (2)\n      Tests  11 passed (11)\n   Start at  09:12:56\n   Duration  1.92s (environment 72%, import 14%, tests 9%, transform 4%, worker 1%)\n\n"
+  },
+  "unitFull": {
+    "exit_code": 0,
+    "output": "\n Test Files  37 passed (37)\n      Tests  389 passed (389)\n   Start at  09:13:24\n   Duration  6.07s (environment 67%, tests 16%, import 14%, transform 2%, worker 1%)\n\n    Isolate  37 workers spawned · ~1.21s startup each (spawn + environment, per file)\n             at least ~2.87s faster with isolate: false — reuses workers across files instead of one per file\n\n"
+  },
+  "typecheck": {
+    "exit_code": 0,
+    "output": ""
+  },
+  "e2e": {
+    "exit_code": 1,
+    "output": "PF-07: FAIL\nPF-08: SKIP\nPF-09/PF-10/PF-11: SKIP\n{\"status\":\"failed\",\"PASS\":0,\"FAIL\":1,\"SKIP\":2}\n"
+  }
+}

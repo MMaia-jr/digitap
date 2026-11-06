@@ -1,0 +1,250 @@
+TAP version 13
+# Subtest: PF-01: cria publicador sem organização como service_role
+not ok 1 - PF-01: cria publicador sem organização como service_role
+  ---
+  duration_ms: 36.526204
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:19:48
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: PF-02: sujeito é PF pendente, risco médio e curadoria prévia
+not ok 2 - PF-02: sujeito é PF pendente, risco médio e curadoria prévia
+  ---
+  duration_ms: 21.352631
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:22:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:23:11
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-03: filha aponta para sujeito e conta corretos
+not ok 3 - PF-03: filha aponta para sujeito e conta corretos
+  ---
+  duration_ms: 17.027782
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:25:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:26:11
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-04: titular ativo tem somente ler_privado, editar e enviar
+not ok 4 - PF-04: titular ativo tem somente ler_privado, editar e enviar
+  ---
+  duration_ms: 15.363316
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:29:2
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-05: retry preserva IDs, timestamps e nome sem duplicar
+not ok 5 - PF-05: retry preserva IDs, timestamps e nome sem duplicar
+  ---
+  duration_ms: 15.210095
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:32:11
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-06: nome vazio não deixa conta/sujeito/filha/vínculo
+not ok 6 - PF-06: nome vazio não deixa conta/sujeito/filha/vínculo
+  ---
+  duration_ms: 20.253612
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:34:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      Comparison {
+    +   code: '42883'
+    -   code: '22023'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: '22023'
+  actual:
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async waitForActual (node:assert:644:5)
+    async Function.rejects (node:assert:767:25)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:35:43
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:35:43
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-06 rollback tardio: falha no vínculo desfaz as quatro inserções
+not ok 7 - PF-06 rollback tardio: falha no vínculo desfaz as quatro inserções
+  ---
+  duration_ms: 33.299612
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      Comparison {
+    +   code: '42883'
+    -   code: '23514'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: '23514'
+  actual:
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async waitForActual (node:assert:644:5)
+    async Function.rejects (node:assert:767:25)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:41:75
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:41:75
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF segurança: não converte organização/editor, nem dá EXECUTE a clientes
+not ok 8 - PF segurança: não converte organização/editor, nem dá EXECUTE a clientes
+  ---
+  duration_ms: 22.470964
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:44:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      Comparison {
+    +   code: '42883'
+    -   code: '42501'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: '42501'
+  actual:
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async waitForActual (node:assert:644:5)
+    async Function.rejects (node:assert:767:25)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:46:40
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  operator: 'rejects'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:46:40
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: PF-14: CUTOVER mantém organização nullable e papel publicador
+ok 9 - PF-14: CUTOVER mantém organização nullable e papel publicador
+  ---
+  duration_ms: 22.389854
+  type: 'test'
+  ...
+# Subtest: PF-15: cadastro não altera conteúdo, snapshots, hashes, eventos ou registros
+not ok 10 - PF-15: cadastro não altera conteúdo, snapshots, hashes, eventos ou registros
+  ---
+  duration_ms: 40.824715
+  type: 'test'
+  location: '/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:55:1'
+  failureType: 'testCodeFailure'
+  error: 'function public.criar_pf_com_sujeito(unknown, unknown) does not exist'
+  code: '42883'
+  name: 'error'
+  stack: |-
+    /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/node_modules/pg/lib/client.js:694:17
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async call (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:12:49)
+    async file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:66:37
+    async fixture (file:///Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/i5/pf.pg.test.mjs:15:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 1
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 425.360272

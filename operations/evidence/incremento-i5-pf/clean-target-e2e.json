@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "PASS": 3,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "PF-07",
+      "test": "PF-07: GET cadastro PF retorna 200 e formulário próprio",
+      "status": "PASS",
+      "duration_ms": 2216,
+      "errors": []
+    },
+    {
+      "id": "PF-08",
+      "test": "PF-08: cadastro organizacional preservado oferece link Sou pessoa física",
+      "status": "PASS",
+      "duration_ms": 653,
+      "errors": []
+    },
+    {
+      "id": "PF-09/PF-10/PF-11",
+      "test": "PF-09/PF-10/PF-11: confirmação cria PF pendente, login retoma e publicação é negada",
+      "status": "PASS",
+      "duration_ms": 5417,
+      "errors": []
+    }
+  ]
+}

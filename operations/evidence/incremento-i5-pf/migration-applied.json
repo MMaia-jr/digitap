@@ -1,0 +1,5 @@
+{
+  "migration": "supabase/migrations/20261106120940_i5_pf_onboarding.sql",
+  "applied": true,
+  "sha256": "1eeb38945d9b360910308958ea7feb12e09b185c575e55f4b49c98d73940e903"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "PF-08",
+      "test": "PF-08: cadastro organizacional preservado oferece link Sou pessoa física",
+      "status": "FAIL",
+      "duration_ms": 15606,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/i5-pf.spec.mjs:38:77"
+          ]
+        }
+      ]
+    }
+  ]
+}
