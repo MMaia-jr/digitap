@@ -25,13 +25,38 @@
       "model": "unknown",
       "duration_minutes": 0,
       "notes": ""
+    },
+    {
+      "number": 2,
+      "date": "2026-11-06",
+      "user": "D.Morpheus",
+      "focus": "(not provided)",
+      "tasks_completed": [],
+      "tasks_in_progress": [],
+      "tasks_blocked": [],
+      "blockers": [],
+      "decisions": [],
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "cacheCreation": 0,
+        "cacheRead": 0,
+        "total": 0
+      },
+      "cost_usd": null,
+      "cost_label": "estimate",
+      "cost_source": "manual_estimate",
+      "model": "unknown",
+      "duration_minutes": 0,
+      "notes": ""
     }
   ],
   "users": [
     {
       "name": "D.Morpheus",
       "sessions": [
-        1
+        1,
+        2
       ],
       "total_tokens": 0,
       "total_cost_usd": 0
@@ -39,7 +64,7 @@
   ],
   "phases": [],
   "totals": {
-    "sessions": 1,
+    "sessions": 2,
     "tasks_done": 0,
     "tokens": 0,
     "cost_usd": 0,
@@ -54,7 +79,8 @@
         "cost_usd": 0,
         "cost_label": "estimate",
         "sessions": [
-          1
+          1,
+          2
         ]
       }
     },
