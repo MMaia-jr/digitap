@@ -1,81 +1,30 @@
-# My Project — Master Project Plan
+# A Praça — Plano
 
-> **Project:** My Project
-> **Owner:** Your Name
-> **Started:** 2026-01-15
-> **Last Updated:** 2026-01-15
+## O que é
 
----
+Infraestrutura cívica e comunitária para Itaperuna (RJ). Inclui pessoas físicas e coletivos informais, não só organizações. Critério de progresso é humano.
 
-## Product Vision
+## Fases
 
-A brief description of what you're building and why. Replace this with your project's purpose.
+- I1 Fundação: ✅ concluído
+- I2 Autenticação: ✅ concluído
+- I3 Atividades/Editorial/Evidências: ✅ concluído (20/20 cenários, commit 623ee50)
+- I4 Titularidade inclusiva: 🔄 3/4 (EXPAND 27e81fc, BACKFILL 0f27cba, COMPAT 70c7ef9; CUTOVER pendente)
+- I5 Validação humana: ⏳ não iniciado (VH-01, VH-02, VH-03)
+- I6+ Portfólio/Contas/IA/Rede: ⏳ condicional ao I5
 
-**Tech Stack:** Replace with your stack (e.g., Next.js, FastAPI, PostgreSQL)
+## Próximo passo (CUTOVER)
 
----
+Abrir o sistema para PF/coletivo:
 
-## Phase 1: Foundation — `v0.1.0`
+1. atividades.organizacao_id nullable para PF/coletivo
+2. contas_acesso.papel ganha 'publicador'
+3. Snapshot v2: sujeito {id, tipo, nome_publico}
+4. Trigger de coerência organizacao_id ↔ sujeito_id
+5. Release de recuperação inclusivo
 
-> Core setup, base structure, and the first working feature.
+## Decisões pendentes para CUTOVER
 
-| # | Feature | Description |
-|---|---------|-------------|
-| 1.1 | Project setup | Scaffold, config, base structure |
-| 1.2 | Database schema | Core tables and migrations |
-| 1.3 | API endpoints | Basic CRUD operations |
-| 1.4 | Tests | Unit and integration tests |
-
----
-
-## Phase 2: Core Features — `v0.2.0`
-
-> The main functionality that makes the product useful.
-
-| # | Feature | Description |
-|---|---------|-------------|
-| 2.1 | User interface | Main screens and navigation |
-| 2.2 | Core workflow | The primary user flow end to end |
-| 2.3 | Data display | Tables, charts, or content rendering |
-| 2.4 | Error handling | User-friendly error states and recovery |
-
----
-
-## Phase 3: Polish & Ship — `v1.0.0`
-
-> Get it ready for real users.
-
-| # | Feature | Description |
-|---|---------|-------------|
-| 3.1 | Auth system | Login, registration, protected routes |
-| 3.2 | Deploy | Docker, cloud hosting, CI/CD |
-| 3.3 | Documentation | README, setup guide, API docs |
-| 3.4 | Final QA | Full flow testing, bug fixes |
-
----
-
-## Key Decisions
-
-| # | Decision | Rationale | Date |
-|---|----------|-----------|------|
-| 1 | Example: Chose PostgreSQL over MongoDB | Relational data, strong typing, better for our use case | 2026-01-15 |
-
----
-
-## Risk Register
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Scope creep | High | Stick to phase tasks, defer extras to Future table |
-| Example: Third-party API reliability | Medium | Build fallback handling, cache responses |
-
----
-
-## Future / Post-MVP Ideas
-
-> Add ideas here as they come up. Never delete — track everything.
-
-| # | Idea | Priority | Target |
-|---|------|----------|--------|
-| F.1 | Example: Mobile app | Medium | v2.0 |
-| F.2 | Example: Team collaboration features | High | v1.5 |
+- Formato do snapshot v2
+- Regressão B01-C08 com trigger novo
+- Plano de rollback pós-CUTOVER
