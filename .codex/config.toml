@@ -1,0 +1,11 @@
+[features]
+codex_hooks = true
+
+[hooks]
+session_start = "getsitrep session-start"
+# Codex has no native SessionEnd event; Stop is the closest available
+# equivalent (turn-scoped, not a true session close) — see
+# docs/specs/adapter-contract.md.
+stop = "getsitrep session-end"
+# GETSITREP-35: proactive command advisor, fired on tool use mid-session.
+post_tool_use = "getsitrep nudge-check"
