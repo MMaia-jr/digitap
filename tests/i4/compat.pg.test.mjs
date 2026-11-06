@@ -70,7 +70,7 @@ test('CMP-11: rede de segurança preenche apenas fixture criada pela RPC legada'
 }));
 test('CMP-12: wrapper preserva conteúdo, snapshots, hashes, eventos, registros, evidências e apoios existentes', () => fixture(async ({db,call}) => {
   const u=randomUUID(); await db.query('insert into auth.users(id) values($1)',[u]);
-  const org=(await db.query("select public.criar_organizacao_pendente($1,'Organização Fictícia Preservação',null) id",[u])).rows[0].id;
+  const org=(await db.query("select public.criar_organizacao_com_sujeito($1,'Organização Fictícia Preservação',null) id",[u])).rows[0].id;
   const conta=(await db.query('select id from public.contas_acesso where auth_user_id=$1',[u])).rows[0].id;
   const atividade=(await db.query("insert into public.atividades(organizacao_id,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,versao_publicada,numero_versao_publicada,publicada_em,estado_editorial) values($1,$2,'Atividade Fictícia','Descrição fictícia',now(),'Acesso fictício',$3,1,now(),'publicada') returning id",[org,conta,JSON.stringify({tipo:'atividade-publica.v1',titulo:'Snapshot fictício imutável'})])).rows[0].id;
   const registro=(await db.query("insert into public.registros_realizacao(atividade_id,data_realizacao,descricao_factual,origem_informacao,versao_publicada,numero_versao_publicada,publicada_em) values($1,current_date,'Relato fictício','Fixture COMPAT',$2,1,now()) returning id",[atividade,JSON.stringify({tipo:'registro-publico.v1',descricao_factual:'Relato fictício'})])).rows[0].id;

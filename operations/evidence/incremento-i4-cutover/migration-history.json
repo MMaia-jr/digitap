@@ -1,0 +1,19 @@
+{
+  "migration": "supabase/migrations/20261106030921_i4_cutover.sql",
+  "sha256": "c104b4eda9fe30f1903d8ded3a870f8e12c360764873116b0f06d18c3939229f",
+  "trigger_function_unchanged": true,
+  "history": [
+    {
+      "version": "20261106030921"
+    }
+  ],
+  "counts": [
+    {
+      "organizacoes": 0,
+      "contas": 0,
+      "atividades": 0,
+      "sujeitos": 0,
+      "vinculos": 0
+    }
+  ]
+}

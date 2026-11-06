@@ -18,7 +18,7 @@ beforeAll(async()=>{
  for(let i=0;i<3;i++){
   const email=`b01-b04-${randomUUID()}@example.invalid`,password=randomUUID()+'aA1!';
   const created=await admin.auth.admin.createUser({email,password,email_confirm:true});if(created.error||!created.data.user)throw new Error('Fixture Auth falhou.');users.push(created.data.user.id);
-  const registered=await admin.rpc('criar_organizacao_pendente',{p_auth_user_id:users[i],p_nome_publico:'Organização Fictícia B01–B04 '+randomUUID()});if(registered.error)throw new Error('Fixture organização falhou.');orgs.push(registered.data);
+  const registered=await admin.rpc('criar_organizacao_com_sujeito',{p_auth_user_id:users[i],p_nome_publico:'Organização Fictícia B01–B04 '+randomUUID(),p_canal_publico:null});if(registered.error)throw new Error('Fixture organização falhou.');orgs.push(registered.data);
   const client=createClient(local.API_URL,local.PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}});if((await client.auth.signInWithPassword({email,password})).error)throw new Error('Login fixture falhou.');clients.push(client);
  }
  await db.query("update public.contas_acesso set papel='editor' where auth_user_id=$1",[users[2]]);
@@ -32,7 +32,7 @@ afterAll(async()=>{
   const ids=(await db.query('select a.id from public.atividades a join public.contas_acesso c on c.id=a.criada_por_conta_id where c.auth_user_id=any($1::uuid[])',[users])).rows.map(r=>r.id);
   await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);
   await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
-  await db.query('delete from public.contas_acesso where auth_user_id=any($1::uuid[])',[users]);
+  await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))',[users]);await db.query('delete from public.sujeitos_publicadores where organizacao_legada_id=any($1::uuid[])',[orgs]);await db.query('delete from public.contas_acesso where auth_user_id=any($1::uuid[])',[users]);
   await db.query('delete from public.organizacoes where id=any($1::uuid[])',[orgs]);
   for(const client of clients)await client.auth.signOut({scope:'local'});
   for(const id of users)if((await admin.auth.admin.deleteUser(id)).error)throw new Error('Limpeza Auth da fixture falhou.');

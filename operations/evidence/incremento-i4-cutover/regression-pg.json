@@ -1,0 +1,5 @@
+{
+  "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 npm run test:onboarding:db",
+  "exit_code": 0,
+  "output": "\n Test Files  9 passed (9)\n      Tests  206 passed (206)\n   Start at  07:47:26\n   Duration  40.30s (tests 96%, import 3%, transform 1%)\n\n"
+}

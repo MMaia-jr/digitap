@@ -19,7 +19,7 @@ test.beforeAll(async({browser})=>{
  for(let i=0;i<3;i++){
   const f={email:`activity-e2e-${randomUUID()}@example.invalid`,password:randomUUID()+'aA1!'};fixtures.push(f);
   const created=await admin.auth.admin.createUser({email:f.email,password:f.password,email_confirm:true});if(created.error||!created.data.user)throw new Error('Fixture Auth falhou.');f.id=created.data.user.id;
-  const linked=await admin.rpc('criar_organizacao_pendente',{p_auth_user_id:f.id,p_nome_publico:'Organização Fictícia E2E '+randomUUID()});if(linked.error)throw new Error('Fixture de organização falhou.');f.org=linked.data;
+  const linked=await admin.rpc('criar_organizacao_com_sujeito',{p_auth_user_id:f.id,p_nome_publico:'Organização Fictícia E2E '+randomUUID(),p_canal_publico:null});if(linked.error)throw new Error('Fixture de organização falhou.');f.org=linked.data;
   f.context=await browser.newContext({baseURL:origin,timezoneId:i===0?'Asia/Tokyo':'America/Sao_Paulo'});
   await f.context.route('**/*',route=>{const url=new URL(route.request().url());return url.hostname==='127.0.0.1'&&['3215','56151'].includes(url.port)?route.continue():route.abort();});
   f.page=await f.context.newPage();
@@ -38,7 +38,7 @@ test.afterAll(async()=>{
   const users=fixtures.map(f=>f.id).filter(Boolean),orgs=fixtures.map(f=>f.org).filter(Boolean);
   const ids=(await db.query('select a.id from public.atividades a join public.contas_acesso c on c.id=a.criada_por_conta_id where c.auth_user_id=any($1::uuid[])',[users])).rows.map(r=>r.id);
   await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
-  await db.query('delete from public.contas_acesso where auth_user_id=any($1::uuid[])',[users]);await db.query('delete from public.organizacoes where id=any($1::uuid[])',[orgs]);
+  await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))',[users]);await db.query('delete from public.sujeitos_publicadores where organizacao_legada_id=any($1::uuid[])',[orgs]);await db.query('delete from public.contas_acesso where auth_user_id=any($1::uuid[])',[users]);await db.query('delete from public.organizacoes where id=any($1::uuid[])',[orgs]);
   for(const id of users)if((await admin.auth.admin.deleteUser(id)).error)throw new Error('Limpeza fixture falhou.');await db.end();
  }
  const dir=process.env.A_PRACA_EVIDENCE_DIR??'operations/evidence/incremento-3-b01-b04';if(!/^operations\/evidence\/[a-zA-Z0-9-]+$/.test(dir))throw new Error('Diretório inválido.');mkdirSync(dir,{recursive:true});writeFileSync(dir+'/activities-observations.json',JSON.stringify({routes,consoleErrors,cleanup:'Somente fixtures desta execução removidas',editor:'Papel atribuído manualmente em SQL apenas à fixture já autenticada; sem novo fluxo de login editorial.'},null,2)+'\n');

@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "name": "integration",
+      "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 npm run test:onboarding:db",
+      "exit_code": 0,
+      "output": "\n Test Files  9 passed (9)\n      Tests  206 passed (206)\n   Start at  07:47:26\n   Duration  40.30s (tests 96%, import 3%, transform 1%)\n\n"
+    },
+    {
+      "name": "unit",
+      "command": "npm test",
+      "exit_code": 0,
+      "output": "\n Test Files  35 passed (35)\n      Tests  378 passed (378)\n   Start at  08:02:09\n   Duration  6.58s (environment 62%, import 18%, tests 16%, transform 3%, worker 1%)\n\n    Isolate  35 workers spawned · ~1.33s startup each (spawn + environment, per file)\n             at least ~2.91s faster with isolate: false — reuses workers across files instead of one per file\n\n"
+    },
+    {
+      "name": "e2e",
+      "command": "A_PRACA_ALLOW_FIXTURE_CLEANUP=1 A_PRACA_EVIDENCE_DIR=operations/evidence/incremento-i4-cutover npm run test:e2e",
+      "exit_code": 0,
+      "output": "B12 Chromium: PASS\n{\"status\":\"passed\",\"PASS\":41,\"FAIL\":0,\"SKIP\":0}\n"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "exit_code": 0,
+      "output": "\n  Creating an optimized production build ...\n✓ Compiled successfully in 1293ms\n  Running TypeScript ...\n  Finished TypeScript in 3.8s ...\n  Collecting page data using 11 workers ...\n  Generating static pages using 11 workers (0/10) ...\n  Generating static pages using 11 workers (2/10) \r\n  Generating static pages using 11 workers (4/10) \r\n  Generating static pages using 11 workers (7/10) \r\n✓ Generating static pages using 11 workers (10/10) in 244ms\n  Finalizing page optimization ...\n\nRoute (app)\n┌ ○ /\n├ ○ /_not-found\n├ ƒ /admin/atividades\n├ ƒ /api/admin/atividades/[id]/autorizacoes/revogar\n├ ƒ /api/admin/atividades/[id]/programacao\n├ ƒ /api/admin/atividades/[id]/publicar\n├ ƒ /api/admin/atividades/[id]/registro/revisar\n├ ƒ /api/admin/atividades/[id]/retirar\n├ ƒ /api/admin/atividades/[id]/revisar\n├ ƒ /api/atividades\n├ ƒ /api/atividades/[id]\n├ ƒ /api/atividades/[id]/enviar\n├ ƒ /api/atividades/[id]/registro\n├ ƒ /api/atividades/[id]/registro/contestar\n├ ƒ /api/atividades/[id]/registro/enviar\n├ ƒ /api/atividades/[id]/registro/evidencias\n├ ƒ /api/auth/[action]\n├ ƒ /api/organizacoes\n├ ƒ /api/public/atividades\n├ ƒ /api/public/atividades/[id]\n├ ƒ /api/public/atividades/[id]/registro\n├ ƒ /atividade/[id]\n├ ƒ /atividades\n├ ƒ /auth/confirm\n├ ○ /cadastro\n├ ƒ /dashboard\n├ ƒ /dashboard/atividade/[id]\n├ ƒ /dashboard/nova-atividade\n├ ƒ /dashboard/organizacao\n├ ƒ /login\n├ ○ /privacidade\n└ ○ /recuperar-acesso\n\n\nƒ Proxy (Middleware)\n\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand\n\n"
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

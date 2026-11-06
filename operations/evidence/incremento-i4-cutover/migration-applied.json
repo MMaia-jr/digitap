@@ -1,0 +1,104 @@
+{
+  "migration": "supabase/migrations/20261106030921_i4_cutover.sql",
+  "sha256": "c104b4eda9fe30f1903d8ded3a870f8e12c360764873116b0f06d18c3939229f",
+  "applied": true,
+  "results": [
+    {
+      "step": "ROLE",
+      "sql": "alter table public.contas_acesso\n  drop constraint contas_acesso_papel_check,\n  add constraint contas_acesso_papel_check\n    check (papel in ('organizacao','editor','administrador','publicador'));",
+      "verify": "SELECT tc.constraint_name, cc.check_clause FROM information_schema.table_constraints tc JOIN information_schema.check_constraints cc ON cc.constraint_schema=tc.constraint_schema AND cc.constraint_name=tc.constraint_name WHERE tc.table_schema='public' AND tc.table_name='contas_acesso' AND tc.constraint_name IN ('contas_acesso_papel_check','papel_vinculo') ORDER BY tc.constraint_name",
+      "rows": [
+        {
+          "constraint_name": "contas_acesso_papel_check",
+          "check_clause": "(papel = ANY (ARRAY['organizacao'::text, 'editor'::text, 'administrador'::text, 'publicador'::text]))"
+        },
+        {
+          "constraint_name": "papel_vinculo",
+          "check_clause": "((papel <> 'organizacao'::text) OR (organizacao_id IS NOT NULL))"
+        }
+      ]
+    },
+    {
+      "step": "ACCOUNT",
+      "sql": "alter table public.contas_acesso\n  drop constraint papel_vinculo,\n  add constraint papel_vinculo check (\n    (papel <> 'organizacao' or organizacao_id is not null)\n    and (papel <> 'publicador' or organizacao_id is null)\n  );",
+      "verify": "SELECT tc.constraint_name, cc.check_clause FROM information_schema.table_constraints tc JOIN information_schema.check_constraints cc ON cc.constraint_schema=tc.constraint_schema AND cc.constraint_name=tc.constraint_name WHERE tc.table_schema='public' AND tc.table_name='contas_acesso' AND tc.constraint_name IN ('contas_acesso_papel_check','papel_vinculo') ORDER BY tc.constraint_name",
+      "rows": [
+        {
+          "constraint_name": "contas_acesso_papel_check",
+          "check_clause": "(papel = ANY (ARRAY['organizacao'::text, 'editor'::text, 'administrador'::text, 'publicador'::text]))"
+        },
+        {
+          "constraint_name": "papel_vinculo",
+          "check_clause": "(((papel <> 'organizacao'::text) OR (organizacao_id IS NOT NULL)) AND ((papel <> 'publicador'::text) OR (organizacao_id IS NULL)))"
+        }
+      ]
+    },
+    {
+      "step": "NULLABLE",
+      "sql": "alter table public.atividades alter column organizacao_id drop not null;",
+      "verify": "SELECT column_name,is_nullable FROM information_schema.columns WHERE table_schema='public' AND table_name='atividades' AND column_name IN ('organizacao_id','sujeito_id','politica_publicacao') ORDER BY column_name",
+      "rows": [
+        {
+          "column_name": "organizacao_id",
+          "is_nullable": "YES"
+        },
+        {
+          "column_name": "politica_publicacao",
+          "is_nullable": "YES"
+        },
+        {
+          "column_name": "sujeito_id",
+          "is_nullable": "YES"
+        }
+      ]
+    },
+    {
+      "step": "FUNCTION",
+      "sql": "create or replace function public.i4_atividade_sujeito() returns trigger\nlanguage plpgsql security invoker set search_path = pg_catalog\nas $$\ndeclare s public.sujeitos_publicadores%rowtype;\nbegin\n  if tg_op = 'UPDATE' and old.sujeito_id is not null\n    and new.sujeito_id is distinct from old.sujeito_id then\n    raise exception 'Titular da atividade é imutável' using errcode = '23514';\n  end if;\n  -- Escritor organizacional legado só resolve um mapeamento já comprovado.\n  -- Não cria organização/sujeito, não fabrica vínculo, não escolhe outro tenant.\n  if new.sujeito_id is null and new.organizacao_id is not null then\n    select id into new.sujeito_id from public.sujeitos_publicadores\n      where tipo = 'organizacao' and organizacao_legada_id = new.organizacao_id;\n  end if;\n  select * into s from public.sujeitos_publicadores where id = new.sujeito_id for key share;\n  if not found then\n    raise exception 'Atividade exige sujeito existente e reconciliado' using errcode = '23514';\n  end if;\n  if s.tipo = 'organizacao' then\n    if new.organizacao_id is null or new.organizacao_id <> s.organizacao_legada_id then\n      raise exception 'Organização exige ambas as referências coerentes' using errcode = '23514';\n    end if;\n    if new.politica_publicacao is null then new.politica_publicacao := 'i3'; end if;\n    if new.politica_publicacao <> 'i3' then\n      raise exception 'Organização conserva política i3 neste CUTOVER' using errcode = '23514';\n    end if;\n  else\n    if new.organizacao_id is not null then\n      raise exception 'PF/coletivo não admite organizacao_id' using errcode = '23514';\n    end if;\n    if new.politica_publicacao is null then new.politica_publicacao := 'i4'; end if;\n    if new.politica_publicacao <> 'i4' then\n      raise exception 'PF/coletivo exige política i4' using errcode = '23514';\n    end if;\n  end if;\n  return new;\nend\n$$;",
+      "verify": "SELECT pg_get_functiondef('public.i4_atividade_sujeito()'::regprocedure) AS definition",
+      "rows": [
+        {
+          "definition": "CREATE OR REPLACE FUNCTION public.i4_atividade_sujeito()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog'\nAS $function$\ndeclare s public.sujeitos_publicadores%rowtype;\nbegin\n  if tg_op = 'UPDATE' and old.sujeito_id is not null\n    and new.sujeito_id is distinct from old.sujeito_id then\n    raise exception 'Titular da atividade é imutável' using errcode = '23514';\n  end if;\n  -- Escritor organizacional legado só resolve um mapeamento já comprovado.\n  -- Não cria organização/sujeito, não fabrica vínculo, não escolhe outro tenant.\n  if new.sujeito_id is null and new.organizacao_id is not null then\n    select id into new.sujeito_id from public.sujeitos_publicadores\n      where tipo = 'organizacao' and organizacao_legada_id = new.organizacao_id;\n  end if;\n  select * into s from public.sujeitos_publicadores where id = new.sujeito_id for key share;\n  if not found then\n    raise exception 'Atividade exige sujeito existente e reconciliado' using errcode = '23514';\n  end if;\n  if s.tipo = 'organizacao' then\n    if new.organizacao_id is null or new.organizacao_id <> s.organizacao_legada_id then\n      raise exception 'Organização exige ambas as referências coerentes' using errcode = '23514';\n    end if;\n    if new.politica_publicacao is null then new.politica_publicacao := 'i3'; end if;\n    if new.politica_publicacao <> 'i3' then\n      raise exception 'Organização conserva política i3 neste CUTOVER' using errcode = '23514';\n    end if;\n  else\n    if new.organizacao_id is not null then\n      raise exception 'PF/coletivo não admite organizacao_id' using errcode = '23514';\n    end if;\n    if new.politica_publicacao is null then new.politica_publicacao := 'i4'; end if;\n    if new.politica_publicacao <> 'i4' then\n      raise exception 'PF/coletivo exige política i4' using errcode = '23514';\n    end if;\n  end if;\n  return new;\nend\n$function$\n"
+        }
+      ]
+    },
+    {
+      "step": "TRIGGER",
+      "sql": "drop trigger i4_atividade_sujeito on public.atividades;\ncreate trigger i4_atividade_sujeito\n  before insert or update of sujeito_id, organizacao_id, politica_publicacao\n  on public.atividades for each row execute function public.i4_atividade_sujeito();",
+      "verify": "SELECT trigger_name,event_manipulation,action_timing,action_statement FROM information_schema.triggers WHERE event_object_schema='public' AND event_object_table='atividades' AND trigger_name='i4_atividade_sujeito' ORDER BY event_manipulation",
+      "rows": [
+        {
+          "trigger_name": "i4_atividade_sujeito",
+          "event_manipulation": "INSERT",
+          "action_timing": "BEFORE",
+          "action_statement": "EXECUTE FUNCTION i4_atividade_sujeito()"
+        },
+        {
+          "trigger_name": "i4_atividade_sujeito",
+          "event_manipulation": "UPDATE",
+          "action_timing": "BEFORE",
+          "action_statement": "EXECUTE FUNCTION i4_atividade_sujeito()"
+        }
+      ]
+    },
+    {
+      "step": "REQUIRED",
+      "sql": "alter table public.atividades\n  alter column sujeito_id set not null,\n  alter column politica_publicacao set not null;",
+      "verify": "SELECT column_name,is_nullable FROM information_schema.columns WHERE table_schema='public' AND table_name='atividades' AND column_name IN ('organizacao_id','sujeito_id','politica_publicacao') ORDER BY column_name",
+      "rows": [
+        {
+          "column_name": "organizacao_id",
+          "is_nullable": "YES"
+        },
+        {
+          "column_name": "politica_publicacao",
+          "is_nullable": "NO"
+        },
+        {
+          "column_name": "sujeito_id",
+          "is_nullable": "NO"
+        }
+      ]
+    }
+  ]
+}
