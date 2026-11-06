@@ -1,0 +1,28 @@
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/i4/expand.database.test.ts (22 tests | 22 skipped) 1157ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/i4/expand.database.test.ts [ tests/i4/expand.database.test.ts ]
+Error: Command failed: ./node_modules/.bin/supabase status --workdir /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5 --output json
+failed to inspect container health: permission denied while trying to connect to the docker API at unix:///Users/alexandrechagasleaocryptoboy/.docker/run/docker.sock
+Try rerunning the command with --debug to troubleshoot the error.
+
+ ❯ tests/i4/expand.database.test.ts:15:28
+     13| beforeAll(async () => {
+     14|   if (process.env.A_PRACA_ALLOW_FIXTURE_CLEANUP !== '1') throw new Err…
+     15|   const local = JSON.parse(execFileSync('./node_modules/.bin/supabase'…
+       |                            ^
+     16|   const url = new URL(local.DB_URL);
+     17|   if (local.API_URL !== 'http://127.0.0.1:56151' || url.hostname !== '…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  22 skipped (22)
+   Start at  21:01:43
+   Duration  1.51s (tests 91%, import 5%, transform 3%, worker 1%)
+
