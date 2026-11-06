@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "planSource": "native",
+  "costSource": "manual",
+  "tools": [
+    "codex"
+  ],
+  "createdAt": "2026-11-06T02:27:57.458Z"
+}

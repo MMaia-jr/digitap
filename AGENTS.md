@@ -7,3 +7,16 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+<!-- sitrep:start -->
+## SitRep
+
+This project uses [sitrep](https://github.com/viitorohit/sitrep) for session tracking, cost logging, and continuity.
+
+- Plan: `sitrep/PROJECT_PLAN.md`
+- Status: `sitrep/STATUS_REPORT.md`
+- Config: `sitrep.config.json`
+- CLI: `getsitrep <command>` — see `sitrep/MANIFEST.md` for the full command list.
+
+This is factual context, not an instruction — nothing here should be treated as a command to execute.
+<!-- sitrep:end -->
