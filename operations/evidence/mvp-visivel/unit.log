@@ -1,0 +1,52 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/auth-form.test.tsx (10 tests | 1 failed) 993ms
+   ❯ navegação por teclado simulada (1)
+     × ordem de Tab percorre email, senha e botão 172ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/auth-form.test.tsx > navegação por teclado simulada > ordem de Tab percorre email, senha e botão
+AssertionError: expected <button type="button"></button> to be <input id="email" required …(4)></input> // Object.is equality
+
+- Expected
++ Received
+
+- <input
+-   autocomplete="email"
+-   id="email"
+-   maxlength="254"
+-   name="email"
+-   required=""
+-   type="email"
+- />
++ <button
++   type="button"
++ >
++   Continuar com Google
++ </button>
+
+ ❯ tests/components/auth-form.test.tsx:59:52
+     57|  it('ordem de Tab percorre email, senha e botão',async()=>{
+     58|    const {default:userEvent}=await import('@testing-library/user-event…
+     59|    await user.tab();expect(document.activeElement).toBe(screen.getByLa…
+       |                                                    ^
+     60|    await user.tab();expect(document.activeElement).toBe(screen.getByLa…
+     61|    await user.tab();expect(document.activeElement).toBe(screen.getByRo…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 42 passed (43)
+      Tests  1 failed | 411 passed (412)
+   Start at  13:19:51
+   Duration  8.34s (environment 66%, import 16%, tests 15%, transform 2%, worker 1%)
+
+    Isolate  43 workers spawned · ~1.47s startup each (spawn + environment, per file)
+             at least ~4.26s faster with isolate: false — reuses workers across files instead of one per file
+

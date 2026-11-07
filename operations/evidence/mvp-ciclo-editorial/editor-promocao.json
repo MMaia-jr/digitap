@@ -1,0 +1,22 @@
+{
+  "email": "marcosmaiajr@gmail.com",
+  "rows_updated": 1,
+  "papel_anterior": "publicador",
+  "papel_atual": "editor",
+  "perfil_pf_preservado": true,
+  "conta": {
+    "id": "9a5f38bd-acbb-4f19-a194-95e593f659c2",
+    "papel": "editor",
+    "situacao": "ativa",
+    "organizacao_id": null,
+    "sujeito_id": "058b9d38-4562-4351-b7ab-8d14816a1e9f",
+    "nome_publico": "Marcos Antonio Maia Júnior",
+    "estado": "pendente",
+    "modo_publicacao": "curadoria_previa",
+    "escopos": [
+      "ler_privado",
+      "editar",
+      "enviar"
+    ]
+  }
+}

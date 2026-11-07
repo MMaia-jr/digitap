@@ -1,0 +1,540 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/atividades",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/publicar",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/publicar",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/publicar",
+      "status": 400
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/630cb534-84a6-456a-9923-3dba5b61ec27/publicar",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/atividade/630cb534-84a6-456a-9923-3dba5b61ec27",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/dda0aa2c-cd0d-4505-bab1-06e9143e94d2/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/dda0aa2c-cd0d-4505-bab1-06e9143e94d2/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/dda0aa2c-cd0d-4505-bab1-06e9143e94d2/revisar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/dda0aa2c-cd0d-4505-bab1-06e9143e94d2",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/dda0aa2c-cd0d-4505-bab1-06e9143e94d2/publicar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/dda0aa2c-cd0d-4505-bab1-06e9143e94d2/publicar",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/03f6e064-949b-436c-9692-f174c5f21564/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/03f6e064-949b-436c-9692-f174c5f21564/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/03f6e064-949b-436c-9692-f174c5f21564/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/03f6e064-949b-436c-9692-f174c5f21564/publicar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/c3176e80-16e2-4386-9e53-c19cd09fec8f/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/c3176e80-16e2-4386-9e53-c19cd09fec8f/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/c3176e80-16e2-4386-9e53-c19cd09fec8f/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/c3176e80-16e2-4386-9e53-c19cd09fec8f/publicar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/28527d9c-48c2-4957-bd84-7f2aa5280897/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/28527d9c-48c2-4957-bd84-7f2aa5280897/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/28527d9c-48c2-4957-bd84-7f2aa5280897/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/28527d9c-48c2-4957-bd84-7f2aa5280897/publicar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/5e70e9c2-0daf-416b-9cba-574845e4f4fc/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/5e70e9c2-0daf-416b-9cba-574845e4f4fc/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/5e70e9c2-0daf-416b-9cba-574845e4f4fc/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/5e70e9c2-0daf-416b-9cba-574845e4f4fc/publicar",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/edb58eab-b0e3-4c9a-a216-41c58a2a50a8/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/edb58eab-b0e3-4c9a-a216-41c58a2a50a8/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/edb58eab-b0e3-4c9a-a216-41c58a2a50a8/revisar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/admin/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/edb58eab-b0e3-4c9a-a216-41c58a2a50a8/publicar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/edb58eab-b0e3-4c9a-a216-41c58a2a50a8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/atividade/edb58eab-b0e3-4c9a-a216-41c58a2a50a8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/atividade/edb58eab-b0e3-4c9a-a216-41c58a2a50a8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/300069f5-7d89-46ef-845c-c0999cf2ada1/publicar",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/3fd1c0c2-6763-4c4a-8628-748670a79a38/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/3fd1c0c2-6763-4c4a-8628-748670a79a38/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/3fd1c0c2-6763-4c4a-8628-748670a79a38/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/3fd1c0c2-6763-4c4a-8628-748670a79a38/publicar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/3fd1c0c2-6763-4c4a-8628-748670a79a38/publicar",
+      "status": 422
+    },
+    {
+      "method": "GET",
+      "path": "/atividade/3fd1c0c2-6763-4c4a-8628-748670a79a38",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/27700200-33fd-4fb0-a0ec-489ea6d516d3/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/27700200-33fd-4fb0-a0ec-489ea6d516d3/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/27700200-33fd-4fb0-a0ec-489ea6d516d3/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/27700200-33fd-4fb0-a0ec-489ea6d516d3/publicar",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/atividade/27700200-33fd-4fb0-a0ec-489ea6d516d3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard/atividade/27700200-33fd-4fb0-a0ec-489ea6d516d3",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/atividades/9b8836d8-f282-45ba-b640-d674c64396ca/enviar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/9b8836d8-f282-45ba-b640-d674c64396ca/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/9b8836d8-f282-45ba-b640-d674c64396ca/revisar",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/9b8836d8-f282-45ba-b640-d674c64396ca/publicar",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/atividades/9b8836d8-f282-45ba-b640-d674c64396ca/publicar",
+      "status": 409
+    }
+  ],
+  "consoleErrors": [
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    },
+    {
+      "type": "console.error",
+      "category": "HTTP negative"
+    }
+  ],
+  "cleanup": "Somente fixtures próprias desta execução removidas",
+  "role_setup": "Papel editorial explícito em SQL antes de login real pela UI; nenhum papel real/institucional criado."
+}

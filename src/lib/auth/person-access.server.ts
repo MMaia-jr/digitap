@@ -13,7 +13,7 @@ export async function personState(){
     from public.contas_acesso c join public.pessoas_fisicas p on p.conta_id=c.id
     join public.sujeitos_publicadores s on s.id=p.sujeito_id
     join public.vinculos_publicadores v on v.conta_id=c.id and v.sujeito_id=s.id
-    where c.auth_user_id=$1 and c.papel='publicador' and c.situacao='ativa' and c.organizacao_id is null
+    where c.auth_user_id=$1 and c.papel in ('publicador','editor','administrador') and c.situacao='ativa' and c.organizacao_id is null
       and s.tipo='pessoa_fisica' and s.estado in ('pendente','ativo') and s.criado_por_conta_id=c.id
       and v.atual and v.situacao='ativo' and v.papel_vinculo='titular' and 'ler_privado'=any(v.escopos)`,[user.id])).rows[0];
    return person?{kind:'ready' as const,person}:{kind:'forbidden' as const};

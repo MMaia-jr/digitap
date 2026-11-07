@@ -1,0 +1,235 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/visible-home.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/visible-home.test.tsx (4 tests | 4 failed) 157ms
+   × home lista snapshots públicos pelo serviço existente e oferece publicação ao visitante 26ms
+   × home vazia convida a participar sem fabricar atividades 17ms
+   × consulta indisponível não é apresentada como lista vazia 5ms
+   × pessoa autenticada recebe link de publicação para o dashboard PF 108ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/visible-home.test.tsx > home lista snapshots públicos pelo serviço existente e oferece publicação ao visitante
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/components/visible-home.test.tsx:15:22
+     13|   mocks.list.mockResolvedValue([snapshot]);
+     14|   render(await Home());
+     15|   expect(mocks.list).toHaveBeenCalledOnce();
+       |                      ^
+     16|   expect(screen.getByRole('link', { name: snapshot.titulo }).getAttrib…
+     17|   expect(screen.getByText('Pessoa Fictícia')).toBeTruthy();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/components/visible-home.test.tsx > home vazia convida a participar sem fabricar atividades
+TestingLibraryElementError: Unable to find an element with the text: /A Praça está sendo construída/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"eyebrow"[39m
+      [36m>[39m
+        [0mAcesso de organizações[0m
+      [36m</p>[39m
+      [36m<h1>[39m
+        [0mComece com um encontro.[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mA Praça está em preparação para conectar organizações e atividades de Itaperuna e região.[0m
+      [36m</p>[39m
+      [36m<p>[39m
+        [0mNesta etapa, você pode criar seu acesso e cadastrar uma organização para revisão. O cadastro não confirma representação institucional nem parceria.[0m
+      [36m</p>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"actions"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"button"[39m
+          [33mhref[39m=[32m"/cadastro"[39m
+        [36m>[39m
+          [0mCriar meu acesso[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mhref[39m=[32m"/login"[39m
+        [36m>[39m
+          [0mJá tenho conta[0m
+        [36m</a>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/visible-home.test.tsx:22:17
+     20| it('home vazia convida a participar sem fabricar atividades', async ()…
+     21|   mocks.list.mockResolvedValue([]); render(await Home());
+     22|   expect(screen.getByText(/A Praça está sendo construída/)).toBeTruthy…
+       |                 ^
+     23| });
+     24| it('consulta indisponível não é apresentada como lista vazia', async (…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/components/visible-home.test.tsx > consulta indisponível não é apresentada como lista vazia
+TestingLibraryElementError: Unable to find an element with the text: /Não foi possível carregar as atividades/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"eyebrow"[39m
+      [36m>[39m
+        [0mAcesso de organizações[0m
+      [36m</p>[39m
+      [36m<h1>[39m
+        [0mComece com um encontro.[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mA Praça está em preparação para conectar organizações e atividades de Itaperuna e região.[0m
+      [36m</p>[39m
+      [36m<p>[39m
+        [0mNesta etapa, você pode criar seu acesso e cadastrar uma organização para revisão. O cadastro não confirma representação institucional nem parceria.[0m
+      [36m</p>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"actions"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"button"[39m
+          [33mhref[39m=[32m"/cadastro"[39m
+        [36m>[39m
+          [0mCriar meu acesso[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mhref[39m=[32m"/login"[39m
+        [36m>[39m
+          [0mJá tenho conta[0m
+        [36m</a>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/visible-home.test.tsx:26:39
+     24| it('consulta indisponível não é apresentada como lista vazia', async (…
+     25|   mocks.list.mockRejectedValue(new Error('fixture'));
+     26|   render(await Home()); expect(screen.getByText(/Não foi possível carr…
+       |                                       ^
+     27|   expect(screen.queryByText(/A Praça está sendo construída/)).toBeNull…
+     28| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/components/visible-home.test.tsx > pessoa autenticada recebe link de publicação para o dashboard PF
+TestingLibraryElementError: Unable to find an accessible element with the role "link" and name "Quero publicar uma atividade"
+
+Here are the accessible roles:
+
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"eyebrow"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Comece com um encontro.":
+  [36m<h1 />[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "Criar meu acesso":
+  [36m<a[39m
+    [33mclass[39m=[32m"button"[39m
+    [33mhref[39m=[32m"/cadastro"[39m
+  [36m/>[39m
+
+  Name "Já tenho conta":
+  [36m<a[39m
+    [33mhref[39m=[32m"/login"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"eyebrow"[39m
+      [36m>[39m
+        [0mAcesso de organizações[0m
+      [36m</p>[39m
+      [36m<h1>[39m
+        [0mComece com um encontro.[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mA Praça está em preparação para conectar organizações e atividades de Itaperuna e região.[0m
+      [36m</p>[39m
+      [36m<p>[39m
+        [0mNesta etapa, você pode criar seu acesso e cadastrar uma organização para revisão. O cadastro não confirma representação institucional nem parceria.[0m
+      [36m</p>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"actions"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"button"[39m
+          [33mhref[39m=[32m"/cadastro"[39m
+        [36m>[39m
+          [0mCriar meu acesso[0m
+        [36m</a>[39m
+        [36m<a[39m
+          [33mhref[39m=[32m"/login"[39m
+        [36m>[39m
+          [0mJá tenho conta[0m
+        [36m</a>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/visible-home.test.tsx:31:39
+     29| it('pessoa autenticada recebe link de publicação para o dashboard PF',…
+     30|   mocks.list.mockResolvedValue([]); mocks.viewer.mockResolvedValue({ k…
+     31|   render(await Home()); expect(screen.getByRole('link', { name: 'Quero…
+       |                                       ^
+     32| });
+     33|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  13:07:15
+   Duration  2.11s (environment 74%, import 15%, tests 9%, transform 3%)
+

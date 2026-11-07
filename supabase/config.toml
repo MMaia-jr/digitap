@@ -33,7 +33,7 @@ enabled = false
 [auth]
 enabled = true
 site_url = "http://127.0.0.1:3215"
-additional_redirect_urls = ["http://127.0.0.1:3215/auth/confirm"]
+additional_redirect_urls = ["http://127.0.0.1:3215/auth/confirm", "http://127.0.0.1:3215/auth/callback"]
 enable_signup = true
 enable_anonymous_sign_ins = false
 minimum_password_length = 12
@@ -53,3 +53,11 @@ content_path = "./supabase/templates/confirmation.html"
 [auth.email.template.recovery]
 subject = "Recupere seu acesso à Praça"
 content_path = "./supabase/templates/recovery.html"
+
+# O segredo fica no .env local ignorado pelo Git.
+[auth.external.google]
+enabled = true
+client_id = "618523107790-lqf2kphpus7fuinc1to81hkt8m5opcbd.apps.googleusercontent.com"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)"
+redirect_uri = "http://127.0.0.1:56151/auth/v1/callback"
+skip_nonce_check = false

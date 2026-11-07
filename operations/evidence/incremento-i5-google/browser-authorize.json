@@ -1,0 +1,7 @@
+{
+  "http": 302,
+  "provider": "google",
+  "redirect_to": "http://127.0.0.1:3215/auth/callback",
+  "code_challenge_method": "s256",
+  "challenge_length": 43
+}

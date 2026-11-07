@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "PASS": 1,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "CICLO-01",
+      "test": "CICLO-01: PF cria agora, envia, editor aprova e visitante vê na home",
+      "status": "PASS",
+      "duration_ms": 8554,
+      "errors": []
+    },
+    {
+      "id": "CICLO-02",
+      "test": "CICLO-02: admin protegido e rejeição motivada não aparece publicamente",
+      "status": "FAIL",
+      "duration_ms": 17861,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/editorial-cycle.spec.mjs:79:215"
+          ]
+        }
+      ]
+    }
+  ]
+}

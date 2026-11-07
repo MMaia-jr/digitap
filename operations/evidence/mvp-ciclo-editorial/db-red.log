@@ -1,0 +1,154 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts tests/integration/editorial-cycle.database.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/integration/editorial-cycle.database.test.ts (8 tests | 8 failed) 3166ms
+   × envio PF registra autorização explícita de uma versão e é idempotente 38ms
+   × envio sem consentimento ou em nome de outra PF é negado 19ms
+   × editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público 1ms
+   × fila inclui sujeito e data, mas não rascunhos não submetidos 9ms
+   × PF não consegue acessar fila ou executar decisão editorial 7ms
+   × rejeição exige motivo e continua privada 7ms
+   × consentimento revogado impede aprovação/publicação 7ms
+   × falha de publicação reverte aprovação, curadoria e ativação da PF 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > envio PF registra autorização explícita de uma versão e é idempotente
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:62:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > envio sem consentimento ou em nome de outra PF é negado
+AssertionError: expected Error: Acesso negado. { …(2) } to match object { status: 422 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ ActivityError {
++   "status": 403,
+  }
+
+ ❯ tests/integration/editorial-cycle.database.test.ts:68:62
+     66| it('envio sem consentimento ou em nome de outra PF é negado',async()=>{
+     67|  const row=await services[0].create(draft());
+     68|  await expect(services[0].submit(row.id,{versao_esperada:1})).rejects.…
+       |                                                              ^
+     69|  await expect(services[1].submit(row.id,{versao_esperada:1,autoriza_pu…
+     70| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ validateDraft src/lib/activities/domain.ts:33:13
+ ❯ Object.create src/lib/activities/service.server.ts:140:16
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:57:34
+ ❯ tests/integration/editorial-cycle.database.test.ts:72:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > fila inclui sujeito e data, mas não rascunhos não submetidos
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:81:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > PF não consegue acessar fila ou executar decisão editorial
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:85:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > rejeição exige motivo e continua privada
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:89:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > consentimento revogado impede aprovação/publicação
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:94:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  tests/integration/editorial-cycle.database.test.ts > falha de publicação reverte aprovação, curadoria e ativação da PF
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ Object.submit src/lib/activities/service.server.ts:182:15
+ ❯ submitted tests/integration/editorial-cycle.database.test.ts:58:24
+ ❯ tests/integration/editorial-cycle.database.test.ts:99:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  14:56:55
+   Duration  3.77s (tests 90%, import 7%, transform 3%)
+

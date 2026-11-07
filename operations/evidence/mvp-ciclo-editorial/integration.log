@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  11 passed (11)
+      Tests  220 passed (220)
+   Start at  15:15:59
+   Duration  43.73s (tests 96%, import 3%)
+

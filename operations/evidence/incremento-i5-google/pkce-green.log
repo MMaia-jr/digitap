@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/google-auth.test.tsx tests/auth/oauth-callback.test.ts tests/auth/oauth-profile.test.ts tests/auth/oauth-pkce.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  4 passed (4)
+      Tests  17 passed (17)
+   Start at  12:56:35
+   Duration  1.93s (environment 60%, import 18%, tests 16%, transform 4%, worker 1%)
+

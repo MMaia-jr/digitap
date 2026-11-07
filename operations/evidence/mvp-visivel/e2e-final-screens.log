@@ -1,0 +1,7 @@
+
+> a-praca-v1-5@0.1.0 test:e2e
+> PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright-browsers" playwright test --project=chromium tests/e2e/mvp-visivel.spec.mjs
+
+MVP-01: PASS
+MVP-02: PASS
+{"status":"passed","PASS":2,"FAIL":0,"SKIP":0}

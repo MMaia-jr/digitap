@@ -1,0 +1,16 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  47 passed (47)
+      Tests  426 passed (426)
+   Start at  15:18:04
+   Duration  9.43s (environment 68%, tests 15%, import 14%, transform 2%, worker 1%)
+
+    Isolate  47 workers spawned · ~1.46s startup each (spawn + environment, per file)
+             at least ~4.77s faster with isolate: false — reuses workers across files instead of one per file
+

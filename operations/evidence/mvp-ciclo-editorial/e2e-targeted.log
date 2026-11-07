@@ -1,0 +1,7 @@
+
+> a-praca-v1-5@0.1.0 test:e2e
+> PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright-browsers" playwright test --project=chromium tests/e2e/editorial-cycle.spec.mjs
+
+CICLO-01: PASS
+CICLO-02: PASS
+{"status":"passed","PASS":2,"FAIL":0,"SKIP":0}

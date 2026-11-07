@@ -1,0 +1,125 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/google-auth.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/google-auth.test.tsx (5 tests | 1 failed) 1209ms
+   × cliente declara PKCE e compartilha o nome do cookie com o callback servidor 1144ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/google-auth.test.tsx > cliente declara PKCE e compartilha o nome do cookie com o callback servidor
+AssertionError: expected "vi.fn()" to be called with arguments: [ 'http://127.0.0.1:56151', …(2) ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+    "http://127.0.0.1:56151",
+    "sb_publishable_fixture",
+-   ObjectContaining {
+-     "auth": ObjectContaining {
++   {
++     "auth": {
++       "autoRefreshToken": false,
+        "detectSessionInUrl": false,
+-       "flowType": "pkce",
+      },
+-     "cookieOptions": ObjectContaining {
++     "cookieOptions": {
+        "name": "ap-auth",
+        "path": "/",
+        "sameSite": "lax",
++       "secure": false,
+      },
+    },
+  ]
+
+
+Number of calls: 1
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/login"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Entrar"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mContinuar com Google[0m
+        [36m</button>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"email"[39m
+          [36m>[39m
+            [0mE-mail[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33mautocomplete[39m=[32m"email"[39m
+            [33mid[39m=[32m"email"[39m
+            [33mmaxlength[39m=[32m"254"[39m
+            [33mname[39m=[32m"email"[39m
+            [33mrequired[39m=[32m""[39m
+            [33mtype[39m=[32m"email"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mfor[39m=[32m"password"[39m
+          [36m>[39m
+            [0mSenha[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"password-help"[39m
+            [33mautocomplete[39m=[32m"current-password"[39m
+            [33mid[39m=[32m"password"[39m
+            [33mmaxlength[39m=[32m"128"[39m
+            [33mminlength[39m=[32m"12"[39m
+            [33mname[39m=[32m"password"[39m
+            [33mrequired[39m=[32m""[39m
+            [33mtype[39m=[32m"password"[39m
+          [36m/>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"hint"[39m
+            [33mid[39m=[32m"password-help"[39m
+          [36m>[39m
+            [0mUse de 12 a 128 caracteres.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mEntrar[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ tests/components/google-auth.test.tsx:17:44
+
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  12:53:49
+   Duration  3.15s (environment 48%, tests 41%, import 8%, transform 2%)
+

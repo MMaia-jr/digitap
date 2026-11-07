@@ -50,7 +50,7 @@ test('PF-09/PF-10/PF-11: confirmação cria PF pendente, login retoma e publica�
  }
  if(!link)throw new Error('Confirmação PF não recebida no Mailpit local.');
  await page.goto(link);await page.getByRole('button',{name:'Confirmar meu e-mail',exact:true}).click();await expect(page).toHaveURL(origin+'/dashboard/pessoa-fisica');
- await expect(page.getByText('Seu cadastro está pendente de curadoria',{exact:true})).toBeVisible();await expect(page.getByText(name,{exact:true})).toBeVisible();
+ await expect(page.getByText('Seu espaço já está pronto. Prepare sua atividade e envie para revisão.',{exact:true})).toBeVisible();await expect(page.getByText(name,{exact:true})).toBeVisible();
  await expect(page.getByRole('link',{name:'muralitaperuna@gmail.com',exact:true})).toHaveAttribute('href','mailto:muralitaperuna@gmail.com');
  expect(await page.getByRole('button',{name:/Publicar/}).count()).toBe(0);
  const actual=(await db.query("select c.papel,c.organizacao_id,s.tipo,s.estado,s.modo_publicacao,s.risco,v.escopos from public.contas_acesso c join public.pessoas_fisicas p on p.conta_id=c.id join public.sujeitos_publicadores s on s.id=p.sujeito_id join public.vinculos_publicadores v on v.conta_id=c.id and v.sujeito_id=s.id where c.auth_user_id=$1",[user])).rows;
@@ -58,5 +58,5 @@ test('PF-09/PF-10/PF-11: confirmação cria PF pendente, login retoma e publica�
  const denied=await page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{versao_esperada:1,pedido_id:randomUUID()}});expect(denied.status()).toBe(403);
  await page.getByRole('button',{name:'Sair',exact:true}).click();await expect(page).toHaveURL(origin+'/login');
  await page.getByLabel('E-mail',{exact:true}).fill(email);await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/dashboard/pessoa-fisica');
- await expect(page.getByText('Seu cadastro está pendente de curadoria',{exact:true})).toBeVisible();
+ await expect(page.getByText('Seu espaço já está pronto. Prepare sua atividade e envie para revisão.',{exact:true})).toBeVisible();
 });

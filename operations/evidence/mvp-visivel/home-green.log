@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/visible-home.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  13:09:02
+   Duration  1.25s (environment 66%, import 15%, tests 15%, transform 4%)
+

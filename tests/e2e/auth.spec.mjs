@@ -93,7 +93,7 @@ test('A01: cadastro, confirmação, vínculo pendente e sessão SSR',async({brow
   await a.page.goto('/dashboard');await expect(a.page).toHaveURL(origin+'/login');
   await confirm(a,url);
   // Failure between Auth and onboarding is recoverable after a fresh login.
-  await a.page.getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
+  await a.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
   await login(a);await expect(a.page).toHaveURL(origin+'/dashboard/organizacao');
   await link(a);
   const state=await db.query('select c.papel,c.situacao,o.estado_validacao from public.contas_acesso c join public.organizacoes o on o.id=c.organizacao_id where c.auth_user_id=$1',[a.id]);
@@ -116,7 +116,7 @@ test('A02: validação e cadastro duplicado sem enumeração',async()=>{
   note('A02','Next API+SQL','Payload inválido negado; duplicata usa resposta genérica e não duplica usuário.');
 });
 test('A03: login incorreto negado e login válido restaura SSR',async()=>{
-  await a.page.getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
+  await a.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
   await login(a,'SenhaFicticiaErrada123!');await expect(a.page.locator('form [role=alert]')).toContainText('Não foi possível entrar');
   await a.page.goto('/dashboard');await expect(a.page).toHaveURL(origin+'/login');
   await login(a);await expect(a.page).toHaveURL(origin+'/dashboard');
@@ -163,7 +163,8 @@ test('A07: organização pendente não publica nem acessa administração',async
   await a.page.goto('/dashboard');await expect(a.page.getByText('Pendente de revisão',{exact:true})).toBeVisible();
   const invalid=await a.page.request.post('/api/atividades',{headers:{origin},data:{organizacao_id:b.org}});expect(invalid.status()).toBe(400);
   const publish=await a.page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{versao_esperada:1,pedido_id:randomUUID()}});expect(publish.status()).toBe(403);
-  await a.page.goto('/admin');expect((await a.page.locator('body').innerText()).includes(a.name)).toBe(false);
+  // The shared header identifies this authenticated user; the denied page must not expose organizational content.
+  await a.page.goto('/admin');expect((await a.page.getByRole('main').innerText()).includes(a.name)).toBe(false);
   note('A07','UI+Next HTTP+SQL','Rota real de publicação com payload válido nega organização por papel (403); organização segue pendente. Prova complementar em publication.spec.mjs usa atividade real aprovada e testa organização pendente sob editor.');
 });
 test('A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada',async()=>{
@@ -174,7 +175,7 @@ test('A08: suspensão, bloqueio, logout, sessão inválida e expiração control
   await b.page.reload();await expect(b.page.getByRole('heading',{name:'Acesso indisponível',exact:true})).toBeVisible();
   expect((await post(b.page,'/api/organizacoes',{nome_publico:b.name})).status).toBe(403);
   await db.query("update public.contas_acesso set situacao='ativa' where auth_user_id=$1",[b.id]);
-  await b.page.goto('/dashboard');await b.page.getByRole('button',{name:'Sair',exact:true}).click();await expect(b.page).toHaveURL(origin+'/login');
+  await b.page.goto('/dashboard');await b.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(b.page).toHaveURL(origin+'/login');
   await b.page.goto('/dashboard');await expect(b.page).toHaveURL(origin+'/login');
   await b.context.addCookies([{name:'ap-auth',value:'base64-invalido',domain:'127.0.0.1',path:'/',httpOnly:true,sameSite:'Lax'}]);
   await b.page.goto('/dashboard');await expect(b.page).toHaveURL(origin+'/login');await b.context.clearCookies();

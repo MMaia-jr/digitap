@@ -1,0 +1,380 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/editorial-cycle.test.tsx tests/activities/ongoing-date.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/ongoing-date.test.ts (3 tests | 1 failed) 9ms
+   × agora explícito aceita latência curta sem mudar o formato persistido 6ms
+ ❯ tests/components/editorial-cycle.test.tsx (2 tests | 2 failed) 340ms
+   × acontecendo agora preenche data, bloqueia edição e salva com intenção explícita 301ms
+   × desmarcar agora restaura a data escolhida e a edição 38ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/ongoing-date.test.ts > agora explícito aceita latência curta sem mudar o formato persistido
+Error: Pedido inválido.
+ ❯ objectInput src/lib/activities/domain.ts:11:115
+      9| const fields=['titulo','descricao','inicio_previsto','orientacao_acess…
+     10| export function objectInput(input:unknown,allowed:string[]):Record<str…
+     11|  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys…
+       |                                                                                                                   ^
+     12|  return input as Record<string,unknown>;
+     13| }
+ ❯ validateDraft src/lib/activities/domain.ts:33:13
+ ❯ tests/activities/ongoing-date.test.ts:6:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/components/editorial-cycle.test.tsx > acontecendo agora preenche data, bloqueia edição e salva com intenção explícita
+TestingLibraryElementError: Unable to find an accessible element with the role "checkbox" and name "A atividade está acontecendo agora"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Nova atividade":
+  [36m<form[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Nova atividade"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Título":
+  [36m<input[39m
+    [33mid[39m=[32m"titulo"[39m
+    [33mmaxlength[39m=[32m"180"[39m
+    [33mname[39m=[32m"titulo"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"text"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  Name "Descrição":
+  [36m<textarea[39m
+    [33mid[39m=[32m"descricao"[39m
+    [33mmaxlength[39m=[32m"5000"[39m
+    [33mname[39m=[32m"descricao"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mrows[39m=[32m"6"[39m
+  [36m/>[39m
+
+  Name "Orientação de acesso":
+  [36m<textarea[39m
+    [33mid[39m=[32m"orientacao_acesso"[39m
+    [33mmaxlength[39m=[32m"600"[39m
+    [33mname[39m=[32m"orientacao_acesso"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mrows[39m=[32m"3"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Salvar rascunho":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Nova atividade"[39m
+      [33mnovalidate[39m=[32m""[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"titulo"[39m
+        [36m>[39m
+          [0mTítulo[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mid[39m=[32m"titulo"[39m
+          [33mmaxlength[39m=[32m"180"[39m
+          [33mname[39m=[32m"titulo"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"text"[39m
+          [33mvalue[39m=[32m""[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"descricao"[39m
+        [36m>[39m
+          [0mDescrição[0m
+        [36m</label>[39m
+        [36m<textarea[39m
+          [33mid[39m=[32m"descricao"[39m
+          [33mmaxlength[39m=[32m"5000"[39m
+          [33mname[39m=[32m"descricao"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mrows[39m=[32m"6"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"inicio_previsto"[39m
+        [36m>[39m
+          [0mData e horário (America/Sao_Paulo)[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mid[39m=[32m"inicio_previsto"[39m
+          [33mmaxlength[39m=[32m"32"[39m
+          [33mname[39m=[32m"inicio_previsto"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"datetime-local"[39m
+          [33mvalue[39m=[32m""[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"orientacao_acesso"[39m
+        [36m>[39m
+          [0mOrientação de acesso[0m
+        [36m</label>[39m
+        [36m<textarea[39m
+          [33mid[39m=[32m"orientacao_acesso"[39m
+          [33mmaxlength[39m=[32m"600"[39m
+          [33mname[39m=[32m"orientacao_acesso"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mrows[39m=[32m"3"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<p>[39m
+        [0mO rascunho e o envio permanecem privados. Enviar não significa publicar.[0m
+      [36m</p>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSalvar rascunho[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-cycle.test.tsx:9:25
+      7|  const navigate=vi.fn(),fetcher=vi.fn().mockResolvedValue({ok:true,jso…
+      8|  render(<ActivityForm returnTo="/dashboard/pessoa-fisica" onNavigate={…
+      9|  fireEvent.click(screen.getByRole('checkbox',{name:'A atividade está a…
+       |                         ^
+     10|  const date=screen.getByLabelText('Data e horário (America/Sao_Paulo)'…
+     11|  expect(date.readOnly).toBe(true);expect(date.value).not.toBe('');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/components/editorial-cycle.test.tsx > desmarcar agora restaura a data escolhida e a edição
+TestingLibraryElementError: Unable to find an accessible element with the role "checkbox" and name "A atividade está acontecendo agora"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Nova atividade":
+  [36m<form[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Nova atividade"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Título":
+  [36m<input[39m
+    [33mid[39m=[32m"titulo"[39m
+    [33mmaxlength[39m=[32m"180"[39m
+    [33mname[39m=[32m"titulo"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"text"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  Name "Descrição":
+  [36m<textarea[39m
+    [33mid[39m=[32m"descricao"[39m
+    [33mmaxlength[39m=[32m"5000"[39m
+    [33mname[39m=[32m"descricao"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mrows[39m=[32m"6"[39m
+  [36m/>[39m
+
+  Name "Orientação de acesso":
+  [36m<textarea[39m
+    [33mid[39m=[32m"orientacao_acesso"[39m
+    [33mmaxlength[39m=[32m"600"[39m
+    [33mname[39m=[32m"orientacao_acesso"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mrows[39m=[32m"3"[39m
+  [36m/>[39m
+
+  Name "Link oficial (opcional)":
+  [36m<input[39m
+    [33mid[39m=[32m"referencia_oficial"[39m
+    [33mmaxlength[39m=[32m"2048"[39m
+    [33mname[39m=[32m"referencia_oficial"[39m
+    [33mtype[39m=[32m"url"[39m
+    [33mvalue[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Salvar rascunho":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Nova atividade"[39m
+      [33mnovalidate[39m=[32m""[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"titulo"[39m
+        [36m>[39m
+          [0mTítulo[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mid[39m=[32m"titulo"[39m
+          [33mmaxlength[39m=[32m"180"[39m
+          [33mname[39m=[32m"titulo"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"text"[39m
+          [33mvalue[39m=[32m""[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"descricao"[39m
+        [36m>[39m
+          [0mDescrição[0m
+        [36m</label>[39m
+        [36m<textarea[39m
+          [33mid[39m=[32m"descricao"[39m
+          [33mmaxlength[39m=[32m"5000"[39m
+          [33mname[39m=[32m"descricao"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mrows[39m=[32m"6"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"inicio_previsto"[39m
+        [36m>[39m
+          [0mData e horário (America/Sao_Paulo)[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mid[39m=[32m"inicio_previsto"[39m
+          [33mmaxlength[39m=[32m"32"[39m
+          [33mname[39m=[32m"inicio_previsto"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"datetime-local"[39m
+          [33mvalue[39m=[32m""[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"orientacao_acesso"[39m
+        [36m>[39m
+          [0mOrientação de acesso[0m
+        [36m</label>[39m
+        [36m<textarea[39m
+          [33mid[39m=[32m"orientacao_acesso"[39m
+          [33mmaxlength[39m=[32m"600"[39m
+          [33mname[39m=[32m"orientacao_acesso"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mrows[39m=[32m"3"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"referencia_oficial"[39m
+        [36m>[39m
+          [0mLink oficial (opcional)[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mid[39m=[32m"referencia_oficial"[39m
+          [33mmaxlength[39m=[32m"2048"[39m
+          [33mname[39m=[32m"referencia_oficial"[39m
+          [33mtype[39m=[32m"url"[39m
+          [33mvalue[39m=[32m""[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<p>[39m
+        [0mO rascunho e o envio permanecem privados. Enviar não significa publicar.[0m
+      [36m</p>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSalvar rascunho[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-cycle.test.tsx:21:24
+     19|  render(<ActivityForm/>);const date=screen.getByLabelText('Data e horá…
+     20|  fireEvent.change(date,{target:{value:'2030-04-12T15:30'}});
+     21|  const checkbox=screen.getByRole('checkbox',{name:'A atividade está ac…
+       |                        ^
+     22|  expect(date.readOnly).toBe(false);expect(date.value).toBe('2030-04-12…
+     23| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  3 failed | 2 passed (5)
+   Start at  14:54:21
+   Duration  2.16s (environment 66%, tests 18%, import 13%, transform 3%, worker 1%)
+

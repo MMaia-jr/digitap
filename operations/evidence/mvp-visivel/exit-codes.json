@@ -1,0 +1,20 @@
+{
+  "home_red": 1,
+  "home_green": 0,
+  "form_red": 1,
+  "ui_green": 0,
+  "pf_db_red_corrected": 1,
+  "pf_db_green": 0,
+  "unit_initial_google_tab_failure": 1,
+  "unit_final": 0,
+  "integration": 0,
+  "e2e_targeted": 0,
+  "e2e_full": 0,
+  "e2e_final_screens": 0,
+  "build": 0,
+  "lint": 0,
+  "typecheck": 0,
+  "typecheck_after_build": 0,
+  "i3_criteria": 0,
+  "diff_check": 0
+}

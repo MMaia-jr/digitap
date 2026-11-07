@@ -30,6 +30,8 @@ function setup(options:{user?:typeof user|null;account?:Record<string,unknown>|n
  const row={id,...draft,inicio_previsto:options.date??draft.inicio_previsto,estado_editorial:options.state??'rascunho',versao_submetida:options.version??1};
  const query=vi.fn(async(text:string,values?:unknown[])=>{
   void values;
+  if(text.includes('from public.pessoas_fisicas'))return {rows:[]};
+  if(text.includes("select justificativa_restrita from public.eventos_editoriais"))return {rows:[]};
   if(text.includes('from public.contas_acesso'))return {rows:a?[a]:[]};
   if(text.includes('from public.organizacoes'))return {rows:[{estado_validacao:options.suspended?'suspensa':'pendente'}]};
   if(text.includes('from public.atividades'))return {rows:options.other?[]:[row]};

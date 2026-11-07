@@ -1,0 +1,73 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts tests/integration/pf-activities.database.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/integration/pf-activities.database.test.ts (6 tests | 4 failed) 2412ms
+   × PF pendente cria rascunho com sujeito próprio e sem publicação 24ms
+   × listagem PF é isolada por sujeito e autor 5ms
+   × PF não ganha acesso editorial ou publicação automática 4ms
+   × escopos reais do vínculo são revalidados para cada operação 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/pf-activities.database.test.ts > PF pendente cria rascunho com sujeito próprio e sem publicação
+Error: Acesso negado.
+ ❯ run src/lib/activities/service.server.ts:37:101
+     35|     return operation(sql,actor);
+     36|    });
+     37|   }catch(error){if(error instanceof ActivityError)throw error;if(error…
+       |                                                                                                     ^
+     38|  }
+     39|  async function load(sql:Sql,actor:Actor,id:string,write=false){
+ ❯ tests/integration/pf-activities.database.test.ts:47:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/integration/pf-activities.database.test.ts > listagem PF é isolada por sujeito e autor
+Error: Acesso negado.
+ ❯ run src/lib/activities/service.server.ts:37:101
+     35|     return operation(sql,actor);
+     36|    });
+     37|   }catch(error){if(error instanceof ActivityError)throw error;if(error…
+       |                                                                                                     ^
+     38|  }
+     39|  async function load(sql:Sql,actor:Actor,id:string,write=false){
+ ❯ tests/integration/pf-activities.database.test.ts:51:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/integration/pf-activities.database.test.ts > PF não ganha acesso editorial ou publicação automática
+Error: Acesso negado.
+ ❯ run src/lib/activities/service.server.ts:37:101
+     35|     return operation(sql,actor);
+     36|    });
+     37|   }catch(error){if(error instanceof ActivityError)throw error;if(error…
+       |                                                                                                     ^
+     38|  }
+     39|  async function load(sql:Sql,actor:Actor,id:string,write=false){
+ ❯ tests/integration/pf-activities.database.test.ts:60:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/integration/pf-activities.database.test.ts > escopos reais do vínculo são revalidados para cada operação
+error: Versão material de vínculo imutável
+ ❯ node_modules/pg/lib/client.js:694:17
+ ❯ tests/integration/pf-activities.database.test.ts:73:3
+     71| it('escopos reais do vínculo são revalidados para cada operação', asyn…
+     72|   const old = (await db.query('select id,escopos from public.vinculos_…
+     73|   await db.query("update public.vinculos_publicadores set escopos=arra…
+       |   ^
+     74|   try { await expect(services[0].create(draft())).rejects.toMatchObjec…
+     75|   finally { await db.query('update public.vinculos_publicadores set es…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed (6)
+   Start at  13:11:19
+   Duration  2.99s (tests 88%, import 8%, transform 4%)
+

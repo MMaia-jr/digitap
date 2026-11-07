@@ -1,0 +1,183 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/editorial-queue.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/editorial-queue.test.tsx (4 tests | 2 failed) 196ms
+   × lista somente a fila do serviço com sujeito, data e ações editoriais 44ms
+   × aprovação usa endpoint protegido e atualiza fila 137ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/editorial-queue.test.tsx > lista somente a fila do serviço com sujeito, data e ações editoriais
+TestingLibraryElementError: Unable to find an element with the text: Pessoa Fictícia. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<h1>[39m
+        [0mRevisão editorial[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mAtividades submetidas ou aprovadas. Publicar exige uma ação explícita separada.[0m
+      [36m</p>[39m
+      [36m<ul>[39m
+        [36m<li>[39m
+          [36m<a[39m
+            [33mhref[39m=[32m"/dashboard/atividade/30000000-0000-4000-8000-000000000001"[39m
+          [36m>[39m
+            [0mOficina Fictícia[0m
+          [36m</a>[39m
+          [0m — [0m
+          [0mEnviada[0m
+        [36m</li>[39m
+      [36m</ul>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/sair"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Sair"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mSair[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-queue.test.tsx:14:38
+     12| afterEach(()=>{cleanup();vi.unstubAllGlobals();});
+     13| it('lista somente a fila do serviço com sujeito, data e ações editoria…
+     14|  render(await Queue());expect(screen.getByText('Pessoa Fictícia')).toB…
+       |                                      ^
+     15|  expect(screen.getByRole('button',{name:'Aprovar Publicação',exact:tru…
+     16|  expect(screen.getByRole('button',{name:'Rejeitar',exact:true})).toBeT…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/components/editorial-queue.test.tsx > aprovação usa endpoint protegido e atualiza fila
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Aprovar Publicação"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Revisão editorial":
+  [36m<h1 />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "":
+  [36m<ul />[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "Oficina Fictícia":
+  [36m<a[39m
+    [33mhref[39m=[32m"/dashboard/atividade/30000000-0000-4000-8000-000000000001"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  form:
+
+  Name "Sair":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/sair"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Sair"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Sair":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<h1>[39m
+        [0mRevisão editorial[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mAtividades submetidas ou aprovadas. Publicar exige uma ação explícita separada.[0m
+      [36m</p>[39m
+      [36m<ul>[39m
+        [36m<li>[39m
+          [36m<a[39m
+            [33mhref[39m=[32m"/dashboard/atividade/30000000-0000-4000-8000-000000000001"[39m
+          [36m>[39m
+            [0mOficina Fictícia[0m
+          [36m</a>[39m
+          [0m — [0m
+          [0mEnviada[0m
+        [36m</li>[39m
+      [36m</ul>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/sair"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Sair"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mSair[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-queue.test.tsx:21:47
+     19| it('aprovação usa endpoint protegido e atualiza fila',async()=>{
+     20|  const fetcher=vi.fn().mockResolvedValue({ok:true,json:async()=>({mess…
+     21|  render(await Queue());fireEvent.click(screen.getByRole('button',{name…
+       |                                               ^
+     22|  await waitFor(()=>expect(mocks.refresh).toHaveBeenCalledOnce());
+     23|  expect(fetcher.mock.calls[0][0]).toBe('/api/admin/atividades/'+row.id…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  15:01:43
+   Duration  1.36s (environment 59%, import 19%, tests 17%, transform 5%)
+

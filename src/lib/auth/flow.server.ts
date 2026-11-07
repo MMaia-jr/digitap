@@ -6,7 +6,7 @@ export class FlowError extends Error {
     super(message); this.name = 'FlowError';
   }
 }
-export type AuthAction = 'signup' | 'signup_pf' | 'signin' | 'signout' | 'recover' | 'confirm' | 'reset' | 'organization';
+export type AuthAction = 'complete_pf' | 'signup' | 'signup_pf' | 'signin' | 'signout' | 'recover' | 'confirm' | 'reset' | 'organization';
 interface ProviderResult { user?: VerifiedUser | null; session?: boolean; error?: { status?: number; code?: string } | null }
 export interface AuthGateway {
   signUp(email: string, password: string): Promise<ProviderResult>;
@@ -91,12 +91,12 @@ async function clearOnFailure(gateway: AuthGateway, operation: () => Promise<Flo
 
 /** Validate before initializing any provider; reused at the HTTP boundary. */
 export function validateAuthInput(action:AuthAction,input:unknown):void {
- const keys:Record<AuthAction,string[]>={signup:['email','password'],signup_pf:['email','password','nome_publico'],signin:['email','password'],recover:['email'],confirm:['token_hash'],reset:['token_hash','password'],signout:[],organization:['nome_publico','canal_publico']};
+ const keys:Record<AuthAction,string[]>={complete_pf:['nome_publico'],signup:['email','password'],signup_pf:['email','password','nome_publico'],signin:['email','password'],recover:['email'],confirm:['token_hash'],reset:['token_hash','password'],signout:[],organization:['nome_publico','canal_publico']};
  if(!Object.hasOwn(keys,action))throw new FlowError(404,'Página não encontrada.');
  const body=payload(input,keys[action]);
  if(['signup','signup_pf','signin','recover'].includes(action))email(body.email);
  if(['signup','signup_pf','signin','reset'].includes(action))password(body.password);
- if(action==='signup_pf')personName(body.nome_publico);
+ if(action==='signup_pf'||action==='complete_pf')personName(body.nome_publico);
  if(['confirm','reset'].includes(action))token(body.token_hash);
  if(action==='organization'){
    channel(body.canal_publico);
@@ -108,6 +108,18 @@ export function validateAuthInput(action:AuthAction,input:unknown):void {
 export async function executeAuth(action: AuthAction, input: unknown, gateway: AuthGateway): Promise<FlowResult> {
   try {
     validateAuthInput(action,input);
+    if(action==='complete_pf'){
+      const body=payload(input,['nome_publico']);
+      const name=personName(body.nome_publico);
+      const user=await gateway.currentUser();
+      if(!user?.id)throw new FlowError(401,'Autenticação necessária.');
+      if(!user.email_confirmed_at)throw new FlowError(403,'Confirme seu e-mail antes de continuar.');
+      const account=await gateway.account(user.id);activeLoginAccount(account,user);
+      if(account&&account.papel!=='publicador')throw new FlowError(403,'Acesso indisponível para esta conta.');
+      if(!gateway.registerPerson)throw unavailable();
+      await gateway.registerPerson(user.id,name);
+      return {message:'Cadastro pendente de curadoria.',next:'/dashboard/pessoa-fisica'};
+    }
     if(action==='signup_pf'){
       const body=payload(input,['email','password','nome_publico']);
       if(!gateway.signUpPF)throw unavailable();

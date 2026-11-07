@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/editorial-cycle.test.tsx tests/activities/ongoing-date.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  14:59:43
+   Duration  2.12s (environment 71%, import 13%, tests 11%, transform 4%, worker 1%)
+

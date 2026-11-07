@@ -1,0 +1,615 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/components/google-auth.test.tsx tests/auth/oauth-callback.test.ts tests/auth/oauth-profile.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/auth/oauth-callback.test.ts (0 test)
+ ❯ tests/auth/oauth-profile.test.ts (3 tests | 3 failed) 19ms
+   × completar perfil usa identidade autenticada e nome informado na RPC 7ms
+   × nome inválido não chama RPC 8ms
+   × visitante não completa PF 2ms
+ ❯ tests/components/google-auth.test.tsx (4 tests | 4 failed) 210ms
+   × Google disponível em signin e clique inicia OAuth sem enviar formulário 151ms
+   × Google disponível em signup e clique inicia OAuth sem enviar formulário 18ms
+   × Google disponível em signup_pf e clique inicia OAuth sem enviar formulário 23ms
+   × falha OAuth é acessível e não expõe detalhes do provedor 16ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/oauth-callback.test.ts [ tests/auth/oauth-callback.test.ts ]
+Error: Cannot find module '/src/app/auth/callback/route' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/auth/oauth-callback.test.ts
+ ❯ tests/auth/oauth-callback.test.ts:8:1
+      6| vi.mock('../../src/lib/auth/gateway.server', () => ({ createGateway: (…
+      7| vi.mock('../../src/lib/auth/person-access.server', () => ({ personStat…
+      8| import { GET } from '../../src/app/auth/callback/route';
+       | ^
+      9| const origin = 'http://127.0.0.1:3215';
+     10| const user = { id: 'fixture-user', email_confirmed_at: '2026-11-06' };
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/auth/oauth-profile.test.ts > completar perfil usa identidade autenticada e nome informado na RPC
+FlowError: Página não encontrada.
+ ❯ validateAuthInput src/lib/auth/flow.server.ts:95:39
+
+ ❯ Module.executeAuth src/lib/auth/flow.server.ts:110:5
+ ❯ tests/auth/oauth-profile.test.ts:8:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/auth/oauth-profile.test.ts > nome inválido não chama RPC
+AssertionError: expected FlowError: Página não encontrada. { …(2) } to match object { status: 422 }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ FlowError {
++   "status": 404,
+  }
+
+ ❯ tests/auth/oauth-profile.test.ts:13:116
+     11| it('nome inválido não chama RPC', async () => {
+     12|   const g = gateway();
+     13|   await expect(executeAuth('complete_pf' as AuthAction, { nome_publico…
+       |                                                                                                                    ^
+     14|   expect(g.registerPerson).not.toHaveBeenCalled();
+     15| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/auth/oauth-profile.test.ts > visitante não completa PF
+AssertionError: expected FlowError: Página não encontrada. { …(2) } to match object { status: 401 }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 401,
++ FlowError {
++   "status": 404,
+  }
+
+ ❯ tests/auth/oauth-profile.test.ts:18:123
+     16| it('visitante não completa PF', async () => {
+     17|   const g = gateway(); g.currentUser.mockResolvedValue(null);
+     18|   await expect(executeAuth('complete_pf' as AuthAction, { nome_publico…
+       |                                                                                                                           ^
+     19|   expect(g.registerPerson).not.toHaveBeenCalled();
+     20| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/components/google-auth.test.tsx > Google disponível em signin e clique inicia OAuth sem enviar formulário
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Continuar com Google"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Entrar":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/login"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Entrar"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "E-mail":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"email"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mname[39m=[32m"email"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+    [33mid[39m=[32m"password-help"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Entrar":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maction[39m=[32m"/api/auth/login"[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Entrar"[39m
+      [33mmethod[39m=[32m"post"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"email"[39m
+        [36m>[39m
+          [0mE-mail[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mautocomplete[39m=[32m"email"[39m
+          [33mid[39m=[32m"email"[39m
+          [33mmaxlength[39m=[32m"254"[39m
+          [33mname[39m=[32m"email"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"email"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"password"[39m
+        [36m>[39m
+          [0mSenha[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"password-help"[39m
+          [33mautocomplete[39m=[32m"current-password"[39m
+          [33mid[39m=[32m"password"[39m
+          [33mmaxlength[39m=[32m"128"[39m
+          [33mminlength[39m=[32m"12"[39m
+          [33mname[39m=[32m"password"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"password"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"hint"[39m
+          [33mid[39m=[32m"password-help"[39m
+        [36m>[39m
+          [0mUse de 12 a 128 caracteres.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mEntrar[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/google-auth.test.tsx:15:25
+     13|   oauth.mockResolvedValue({ error: null });
+     14|   render(<AuthForm mode={mode} />);
+     15|   const button = screen.getByRole('button', { name: 'Continuar com Goo…
+       |                         ^
+     16|   expect(button.getAttribute('type')).toBe('button');
+     17|   fireEvent.click(button);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/components/google-auth.test.tsx > Google disponível em signup e clique inicia OAuth sem enviar formulário
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Continuar com Google"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Criar acesso":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/cadastro"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Criar acesso"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "E-mail":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"email"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mname[39m=[32m"email"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+    [33mid[39m=[32m"password-help"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Criar acesso":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maction[39m=[32m"/api/auth/cadastro"[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Criar acesso"[39m
+      [33mmethod[39m=[32m"post"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"email"[39m
+        [36m>[39m
+          [0mE-mail[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mautocomplete[39m=[32m"email"[39m
+          [33mid[39m=[32m"email"[39m
+          [33mmaxlength[39m=[32m"254"[39m
+          [33mname[39m=[32m"email"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"email"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"password"[39m
+        [36m>[39m
+          [0mSenha[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"password-help"[39m
+          [33mautocomplete[39m=[32m"new-password"[39m
+          [33mid[39m=[32m"password"[39m
+          [33mmaxlength[39m=[32m"128"[39m
+          [33mminlength[39m=[32m"12"[39m
+          [33mname[39m=[32m"password"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"password"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"hint"[39m
+          [33mid[39m=[32m"password-help"[39m
+        [36m>[39m
+          [0mUse de 12 a 128 caracteres.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mCriar acesso[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/google-auth.test.tsx:15:25
+     13|   oauth.mockResolvedValue({ error: null });
+     14|   render(<AuthForm mode={mode} />);
+     15|   const button = screen.getByRole('button', { name: 'Continuar com Goo…
+       |                         ^
+     16|   expect(button.getAttribute('type')).toBe('button');
+     17|   fireEvent.click(button);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  tests/components/google-auth.test.tsx > Google disponível em signup_pf e clique inicia OAuth sem enviar formulário
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Continuar com Google"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Criar acesso como pessoa física":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/cadastro-pf"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Criar acesso como pessoa física"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "E-mail":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"email"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mname[39m=[32m"email"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+  [36m/>[39m
+
+  Name "Nome público":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"nickname"[39m
+    [33mid[39m=[32m"nome_publico"[39m
+    [33mmaxlength[39m=[32m"160"[39m
+    [33mminlength[39m=[32m"2"[39m
+    [33mname[39m=[32m"nome_publico"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"text"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+    [33mid[39m=[32m"password-help"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Criar acesso como pessoa física":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maction[39m=[32m"/api/auth/cadastro-pf"[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Criar acesso como pessoa física"[39m
+      [33mmethod[39m=[32m"post"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"email"[39m
+        [36m>[39m
+          [0mE-mail[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mautocomplete[39m=[32m"email"[39m
+          [33mid[39m=[32m"email"[39m
+          [33mmaxlength[39m=[32m"254"[39m
+          [33mname[39m=[32m"email"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"email"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"password"[39m
+        [36m>[39m
+          [0mSenha[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"password-help"[39m
+          [33mautocomplete[39m=[32m"new-password"[39m
+          [33mid[39m=[32m"password"[39m
+          [33mmaxlength[39m=[32m"128"[39m
+          [33mminlength[39m=[32m"12"[39m
+          [33mname[39m=[32m"password"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"password"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"hint"[39m
+          [33mid[39m=[32m"password-help"[39m
+        [36m>[39m
+          [0mUse de 12 a 128 caracteres.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"nome_publico"[39m
+        [36m>[39m
+          [0mNome público[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mautocomplete[39m=[32m"nickname"[39m
+          [33mid[39m=[32m"nome_publico"[39m
+          [33mmaxlength[39m=[32m"160"[39m
+          [33mminlength[39m=[32m"2"[39m
+          [33mname[39m=[32m"nome_publico"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"text"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"hint"[39m
+      [36m>[39m
+        [0mEscolha como quer ser identificado. Não informe CPF ou documentos. O cadastro fica pendente de curadoria.[0m
+      [36m</p>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mCriar acesso como pessoa física[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/google-auth.test.tsx:15:25
+     13|   oauth.mockResolvedValue({ error: null });
+     14|   render(<AuthForm mode={mode} />);
+     15|   const button = screen.getByRole('button', { name: 'Continuar com Goo…
+       |                         ^
+     16|   expect(button.getAttribute('type')).toBe('button');
+     17|   fireEvent.click(button);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  tests/components/google-auth.test.tsx > falha OAuth é acessível e não expõe detalhes do provedor
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Continuar com Google"
+
+Here are the accessible roles:
+
+  form:
+
+  Name "Entrar":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/login"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Entrar"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "E-mail":
+  [36m<input[39m
+    [33mautocomplete[39m=[32m"email"[39m
+    [33mid[39m=[32m"email"[39m
+    [33mmaxlength[39m=[32m"254"[39m
+    [33mname[39m=[32m"email"[39m
+    [33mrequired[39m=[32m""[39m
+    [33mtype[39m=[32m"email"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+    [33mid[39m=[32m"password-help"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Entrar":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<form[39m
+      [33maction[39m=[32m"/api/auth/login"[39m
+      [33maria-busy[39m=[32m"false"[39m
+      [33maria-label[39m=[32m"Entrar"[39m
+      [33mmethod[39m=[32m"post"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"email"[39m
+        [36m>[39m
+          [0mE-mail[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33mautocomplete[39m=[32m"email"[39m
+          [33mid[39m=[32m"email"[39m
+          [33mmaxlength[39m=[32m"254"[39m
+          [33mname[39m=[32m"email"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"email"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mfor[39m=[32m"password"[39m
+        [36m>[39m
+          [0mSenha[0m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"password-help"[39m
+          [33mautocomplete[39m=[32m"current-password"[39m
+          [33mid[39m=[32m"password"[39m
+          [33mmaxlength[39m=[32m"128"[39m
+          [33mminlength[39m=[32m"12"[39m
+          [33mname[39m=[32m"password"[39m
+          [33mrequired[39m=[32m""[39m
+          [33mtype[39m=[32m"password"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"hint"[39m
+          [33mid[39m=[32m"password-help"[39m
+        [36m>[39m
+          [0mUse de 12 a 128 caracteres.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<button[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mEntrar[0m
+      [36m</button>[39m
+    [36m</form>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/google-auth.test.tsx:26:26
+     24|   oauth.mockResolvedValue({ error: new Error('detalhe privado') });
+     25|   render(<AuthForm mode="signin" />);
+     26|   fireEvent.click(screen.getByRole('button', { name: 'Continuar com Go…
+       |                          ^
+     27|   expect((await screen.findByRole('alert')).textContent).toContain('Nã…
+     28|   expect(document.body.textContent).not.toContain('detalhe privado');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  7 failed (7)
+   Start at  12:35:48
+   Duration  2.02s (environment 68%, import 15%, tests 12%, transform 4%, worker 1%)
+

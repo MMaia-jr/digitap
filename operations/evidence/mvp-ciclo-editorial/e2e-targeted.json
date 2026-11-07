@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "PASS": 2,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "CICLO-01",
+      "test": "CICLO-01: PF cria agora, envia, editor aprova e visitante vê na home",
+      "status": "PASS",
+      "duration_ms": 4725,
+      "errors": []
+    },
+    {
+      "id": "CICLO-02",
+      "test": "CICLO-02: admin protegido e rejeição motivada não aparece publicamente",
+      "status": "PASS",
+      "duration_ms": 8291,
+      "errors": []
+    }
+  ]
+}

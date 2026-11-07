@@ -6,7 +6,7 @@ export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida
 export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
-const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial'];
+const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora'];
 export function objectInput(input:unknown,allowed:string[]):Record<string,unknown>{
  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!allowed.includes(k)))throw new ActivityError(400,'Pedido inválido.');
  return input as Record<string,unknown>;
@@ -32,7 +32,10 @@ function start(value:unknown,now:Date){
 export function validateDraft(input:unknown,now=new Date()):DraftInput{
  const body=objectInput(input,fields);
  const titulo=text(body.titulo,'titulo',3,180),descricao=text(body.descricao,'descricao',10,5000),orientacao_acesso=text(body.orientacao_acesso,'orientacao_acesso',3,600);
- const inicio_previsto=start(body.inicio_previsto,now);let referencia_oficial:string|null=null;
+ if(body.acontecendo_agora!==undefined&&typeof body.acontecendo_agora!=='boolean')throw new ActivityError(422,'Informe se a atividade está acontecendo agora.');
+ const inicio_previsto=start(body.inicio_previsto,body.acontecendo_agora===true?new Date(now.getTime()-300000):now);
+ if(body.acontecendo_agora===true&&Date.parse(inicio_previsto)>now.getTime()+60000)throw new ActivityError(422,'O horário informado deve ser o horário atual.');
+ let referencia_oficial:string|null=null;
  if(body.referencia_oficial!==undefined&&body.referencia_oficial!==null&&body.referencia_oficial!==''){
   if(typeof body.referencia_oficial!=='string'||body.referencia_oficial.length>2048||/[\u0000-\u0020]/.test(body.referencia_oficial.trim()))return invalid('referencia_oficial','Informe uma URL http/https válida, sem credenciais.');
   try{const url=new URL(body.referencia_oficial.trim());if(!['http:','https:'].includes(url.protocol)||url.username||url.password||!url.hostname)throw new Error();referencia_oficial=url.href;}catch{return invalid('referencia_oficial','Informe uma URL http/https válida, sem credenciais.');}

@@ -1,0 +1,365 @@
+{
+  "status": "passed",
+  "PASS": 51,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "B01",
+      "test": "B01: rascunho privado, edição própria, visitante e tenant alheio negados; editor lê",
+      "status": "PASS",
+      "duration_ms": 4318,
+      "errors": []
+    },
+    {
+      "id": "B02",
+      "test": "B02: campos obrigatórios ausentes impedem salvar/enviar por UI/API",
+      "status": "PASS",
+      "duration_ms": 475,
+      "errors": []
+    },
+    {
+      "id": "B03",
+      "test": "B03: API rejeita datas/URL/HTML e IDs de organização forjados",
+      "status": "PASS",
+      "duration_ms": 68,
+      "errors": []
+    },
+    {
+      "id": "B04",
+      "test": "B04: envio real permanece privado, audita uma vez e retry é idempotente",
+      "status": "PASS",
+      "duration_ms": 2485,
+      "errors": []
+    },
+    {
+      "id": "A01",
+      "test": "A01: cadastro, confirmação, vínculo pendente e sessão SSR",
+      "status": "PASS",
+      "duration_ms": 5502,
+      "errors": []
+    },
+    {
+      "id": "A02",
+      "test": "A02: validação e cadastro duplicado sem enumeração",
+      "status": "PASS",
+      "duration_ms": 97,
+      "errors": []
+    },
+    {
+      "id": "A03",
+      "test": "A03: login incorreto negado e login válido restaura SSR",
+      "status": "PASS",
+      "duration_ms": 1629,
+      "errors": []
+    },
+    {
+      "id": "A04",
+      "test": "A04: recuperação, token expirado e replay negados",
+      "status": "PASS",
+      "duration_ms": 2389,
+      "errors": []
+    },
+    {
+      "id": "A05",
+      "test": "A05: duas organizações isoladas e vínculo concorrente idempotente",
+      "status": "PASS",
+      "duration_ms": 2094,
+      "errors": []
+    },
+    {
+      "id": "A06",
+      "test": "A06: cliente não promove papel",
+      "status": "PASS",
+      "duration_ms": 29,
+      "errors": []
+    },
+    {
+      "id": "A07",
+      "test": "A07: organização pendente não publica nem acessa administração",
+      "status": "PASS",
+      "duration_ms": 1517,
+      "errors": []
+    },
+    {
+      "id": "A08",
+      "test": "A08: suspensão, bloqueio, logout, sessão inválida e expiração controlada",
+      "status": "PASS",
+      "duration_ms": 3863,
+      "errors": []
+    },
+    {
+      "id": "A09",
+      "test": "A09: visitante não acessa área restrita/editorial",
+      "status": "PASS",
+      "duration_ms": 710,
+      "errors": []
+    },
+    {
+      "id": "CICLO-01",
+      "test": "CICLO-01: PF cria agora, envia, editor aprova e visitante vê na home",
+      "status": "PASS",
+      "duration_ms": 4829,
+      "errors": []
+    },
+    {
+      "id": "CICLO-02",
+      "test": "CICLO-02: admin protegido e rejeição motivada não aparece publicamente",
+      "status": "PASS",
+      "duration_ms": 3459,
+      "errors": []
+    },
+    {
+      "id": "GG-01",
+      "test": "GG-01: governança pública retorna 200 e identifica editor e canal",
+      "status": "PASS",
+      "duration_ms": 403,
+      "errors": []
+    },
+    {
+      "id": "GG-02",
+      "test": "GG-02: footer da home oferece link Governança",
+      "status": "PASS",
+      "duration_ms": 405,
+      "errors": []
+    },
+    {
+      "id": "GG-03",
+      "test": "GG-03: footer oferece canal de contestação por e-mail",
+      "status": "PASS",
+      "duration_ms": 391,
+      "errors": []
+    },
+    {
+      "id": "CMP-07/CMP-08",
+      "test": "CMP-07/CMP-08: POST mantém contrato e cria sujeito/vínculo sem drift",
+      "status": "PASS",
+      "duration_ms": 2497,
+      "errors": []
+    },
+    {
+      "id": "PF-07",
+      "test": "PF-07: GET cadastro PF retorna 200 e formulário próprio",
+      "status": "PASS",
+      "duration_ms": 395,
+      "errors": []
+    },
+    {
+      "id": "PF-08",
+      "test": "PF-08: cadastro organizacional preservado oferece link Sou pessoa física",
+      "status": "PASS",
+      "duration_ms": 372,
+      "errors": []
+    },
+    {
+      "id": "PF-09/PF-10/PF-11",
+      "test": "PF-09/PF-10/PF-11: confirmação cria PF pendente, login retoma e publicação é negada",
+      "status": "PASS",
+      "duration_ms": 2138,
+      "errors": []
+    },
+    {
+      "id": "MVP-01",
+      "test": "MVP-01: home pública tem agenda e convite para publicar",
+      "status": "PASS",
+      "duration_ms": 513,
+      "errors": []
+    },
+    {
+      "id": "MVP-02",
+      "test": "MVP-02: PF entra, cria rascunho, vê no painel e sai sem publicar",
+      "status": "PASS",
+      "duration_ms": 2070,
+      "errors": []
+    },
+    {
+      "id": "A07/B07",
+      "test": "A07/B07: rota real nega visitante, proprietário, terceiro e papéis forjados",
+      "status": "PASS",
+      "duration_ms": 2334,
+      "errors": []
+    },
+    {
+      "id": "A07/B07",
+      "test": "A07/B07: organização pendente não publica; editor bloqueado perde acesso sem trocar JWT",
+      "status": "PASS",
+      "duration_ms": 910,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: autorizações revogadas, expiradas e incompatíveis bloqueiam inclusive com alternativa válida",
+      "status": "PASS",
+      "duration_ms": 861,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: publicação explícita pela interface mostra somente o snapshot autorizado ao visitante",
+      "status": "PASS",
+      "duration_ms": 2492,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: API concorrente é idempotente; outra chave, autor ou versão não republica",
+      "status": "PASS",
+      "duration_ms": 589,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: retry revalida autorização original e a consulta pública deixa de expor a atividade",
+      "status": "PASS",
+      "duration_ms": 965,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: snapshot permanece a fonte pública; edição é privada (B08)",
+      "status": "PASS",
+      "duration_ms": 1377,
+      "errors": []
+    },
+    {
+      "id": "B07",
+      "test": "B07: versão divergente ou conteúdo alterado após aprovação não gera snapshot",
+      "status": "PASS",
+      "duration_ms": 459,
+      "errors": []
+    },
+    {
+      "id": "C05 Chromium",
+      "test": "C05 Chromium: anúncio não autoriza relato; registro tem aprovação/publicação separadas e snapshot público próprio",
+      "status": "PASS",
+      "duration_ms": 8607,
+      "errors": []
+    },
+    {
+      "id": "C06 Chromium",
+      "test": "C06 Chromium: editor revoga autorização do registro, que desaparece; anúncio independente continua público",
+      "status": "PASS",
+      "duration_ms": 3362,
+      "errors": []
+    },
+    {
+      "id": "C07 Chromium",
+      "test": "C07 Chromium: devolução/retirada são auditadas e metadata continua restrita",
+      "status": "PASS",
+      "duration_ms": 2086,
+      "errors": []
+    },
+    {
+      "id": "C08 Chromium",
+      "test": "C08 Chromium: divergência privada fica rastreável; público mantém relato com marcador sem consenso",
+      "status": "PASS",
+      "duration_ms": 3422,
+      "errors": []
+    },
+    {
+      "id": "C01 Chromium",
+      "test": "C01 Chromium: data futura recusada; declaração efetiva fica privada e isolada",
+      "status": "PASS",
+      "duration_ms": 2065,
+      "errors": []
+    },
+    {
+      "id": "C02–C04 Chromium",
+      "test": "C02–C04 Chromium: declaração permanece declarada; referência parcial privada e referência sensível bloqueada",
+      "status": "PASS",
+      "duration_ms": 2470,
+      "errors": []
+    },
+    {
+      "id": "B05a",
+      "test": "B05a: login editorial real, revisão privada e papéis forjados/visitantes negados",
+      "status": "PASS",
+      "duration_ms": 1926,
+      "errors": []
+    },
+    {
+      "id": "B05b",
+      "test": "B05b: autorização compatível permite aprovação; inválidas bloqueiam sem snapshot",
+      "status": "PASS",
+      "duration_ms": 1217,
+      "errors": []
+    },
+    {
+      "id": "B06a",
+      "test": "B06a: devolução motivada visível ao dono; terceiro e público não recebem motivo",
+      "status": "PASS",
+      "duration_ms": 2112,
+      "errors": []
+    },
+    {
+      "id": "B06b",
+      "test": "B06b: rejeição concorrente, idempotência e conflitos preservam o motivo inicial",
+      "status": "PASS",
+      "duration_ms": 706,
+      "errors": []
+    },
+    {
+      "id": "B05c",
+      "test": "B05c: editor bloqueado perde acesso com sessão existente; admin ativo revisa",
+      "status": "PASS",
+      "duration_ms": 1132,
+      "errors": []
+    },
+    {
+      "id": "B05/B06",
+      "test": "B05/B06: todas as decisões continuam privadas e sem apoio/snapshot",
+      "status": "PASS",
+      "duration_ms": 1712,
+      "errors": []
+    },
+    {
+      "id": "B08 RED Chromium",
+      "test": "B08 RED Chromium: edição pendente não aparece em HTML, metadata, lista ou API; aprovação troca versão",
+      "status": "PASS",
+      "duration_ms": 3813,
+      "errors": []
+    },
+    {
+      "id": "B09 RED Chromium",
+      "test": "B09 RED Chromium: editor retira com motivo, visitante perde acesso e API nega republicação",
+      "status": "PASS",
+      "duration_ms": 2895,
+      "errors": []
+    },
+    {
+      "id": "B09",
+      "test": "B09: permissões reais, idempotência e motivo restrito na UI/API",
+      "status": "PASS",
+      "duration_ms": 1929,
+      "errors": []
+    },
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: editor adia e cancela; público mostra estado atual e mantém conteúdo aprovado",
+      "status": "PASS",
+      "duration_ms": 4914,
+      "errors": []
+    },
+    {
+      "id": "B10 Chromium",
+      "test": "B10 Chromium: servidor rejeita visitante e organizações, sem confiar em payload editorial",
+      "status": "PASS",
+      "duration_ms": 898,
+      "errors": []
+    },
+    {
+      "id": "B11 Chromium",
+      "test": "B11 Chromium: HTML malicioso é recusado; nome legado escapado nunca executa",
+      "status": "PASS",
+      "duration_ms": 1344,
+      "errors": []
+    },
+    {
+      "id": "B12 Chromium",
+      "test": "B12 Chromium: publicações retiradas e rascunhos não fabricam agenda vazia",
+      "status": "PASS",
+      "duration_ms": 766,
+      "errors": []
+    }
+  ]
+}

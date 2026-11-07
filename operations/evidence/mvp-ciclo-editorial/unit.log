@@ -1,0 +1,61 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/activities.test.ts (51 tests | 3 failed) 179ms
+   ❯ B01–B04 — serviço com ports simulados, sem alegação de SQL real (19)
+     × B01: editor explícito lê detalhe mas não cria ou envia 17ms
+     × B01: administrador explícito lê detalhe mas não cria ou envia 3ms
+     × B03/B04: revalida data persistida antes de enviar 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: editor explícito lê detalhe mas não cria ou envia
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B01: administrador explícito lê detalhe mas não cria ou envia
+AssertionError: expected Error: Serviço indisponível. Tente novame… { …(2) } to match object { status: 403 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:52:267
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/activities/activities.test.ts > B01–B04 — serviço com ports simulados, sem alegação de SQL real > B03/B04: revalida data persistida antes de enviar
+AssertionError: expected Error: Serviço indisponível. Tente novame… { …(2) } to match object { status: 422 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ ActivityError {
++   "status": 503,
+  }
+
+ ❯ tests/activities/activities.test.ts:58:166
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed | 45 passed (46)
+      Tests  3 failed | 419 passed (422)
+   Start at  15:03:51
+   Duration  9.68s (environment 69%, tests 15%, import 13%, transform 1%, worker 1%)
+
+    Isolate  46 workers spawned · ~1.62s startup each (spawn + environment, per file)
+             at least ~5.17s faster with isolate: false — reuses workers across files instead of one per file
+
