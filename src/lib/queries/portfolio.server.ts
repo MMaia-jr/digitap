@@ -27,7 +27,7 @@ export async function portfolioEvidence(activities:PublicActivity[]){
 }
 export async function publicPortfolio(id:string){const profile=await publicProfile(id);const [evidence,grouping]=await Promise.all([portfolioEvidence(profile.activities),withTransaction(async sql=>{
  const ids=profile.activities.map(a=>a.id);
- const links=(await sql.query<{id:string;projeto_id:string|null}>('select id,projeto_id from public.atividades where sujeito_id=$1 and id=any($2::uuid[])',[profile.subject.id,ids])).rows;
+ const links=(await sql.query<{id:string;projeto_id:string|null}>('select a.id,a.projeto_id from public.atividades a where (a.sujeito_id=$1 or exists(select 1 from public.projetos p where p.id=a.projeto_id and p.sujeito_id=$1)) and a.id=any($2::uuid[])',[profile.subject.id,ids])).rows;
  const projectByActivity=new Map(links.map(link=>[link.id,link.projeto_id]));
  const projectIds=links.flatMap(a=>a.projeto_id?[a.projeto_id]:[]);
  // Visitors see only projects containing activities that passed public snapshot checks.

@@ -10,6 +10,7 @@ export async function managedProfile(id?:string){
   if(!subjectId)throw new Error('Acesso indisponível.');
   const subject=await ownedProfile(sql,user.id,subjectId);if(!subject)throw new Error('Acesso indisponível.');
   const projects=(await sql.query<Project>('select id,sujeito_id,titulo,descricao,ano from public.projetos where sujeito_id=$1 order by ano desc,criado_em desc',[subject.id])).rows;
-  return {subject,projects};
+  const availableProjects=subject.tipo==='pessoa_fisica'?(await sql.query<Project>(`select p.id,p.sujeito_id,p.titulo,p.descricao,p.ano from public.projetos p join public.vinculos_colaboracao v on v.projeto_id=p.id join public.sujeitos_publicadores s on s.id=p.sujeito_id where v.sujeito_id=$1 and v.status='ativo' and s.estado in ('pendente','ativo') order by p.ano desc,p.titulo`,[subject.id])).rows:projects;
+  return {subject,projects,availableProjects};
  });
 }

@@ -79,3 +79,22 @@ body{padding-top:var(--app-header-clearance)}
 .project-description { max-width: 850px; margin: 1.2rem 0 1.7rem; line-height: 1.8; }
 .ungrouped-heading { margin-top: 2.2rem; }
 @media print { .public-project { background: white; padding: 12px; border-radius: 8px; } .project-heading { break-after: avoid; } }
+
+.collaboration-hero { display:flex; align-items:center; gap:1.5rem; padding:2rem; border-radius:24px; background:linear-gradient(125deg,#e8efd9,#f8f6de); border:1px solid #c2d2af; margin:1.5rem 0 2rem; }
+.collaboration-hero h1 { margin:.4rem 0; font-size:clamp(1.8rem,4vw,2.7rem); }
+.collaboration-search { display:flex; gap:1rem; align-items:end; max-width:850px; }
+.collaboration-search .field { flex:1; margin-bottom:0; }
+.collaboration-search button { margin-bottom:0; }
+.collaboration-people,.collaboration-members,.collaboration-invitations,.collaboration-submissions { list-style:none; padding:0; display:grid; gap:1rem; }
+.collaboration-people>li,.collaboration-members>li,.collaboration-invitations>li,.collaboration-submissions>li { border:1px solid #ccdac0; border-radius:20px; padding:1.5rem; background:#f7f9f0; }
+.collaboration-people>li,.collaboration-members>li { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; }
+.collaboration-person,.project-coordination { display:flex; align-items:center; gap:1rem; }
+.collaboration-person h3 { margin:0 0 .4rem; }
+.collaboration-person p,.project-coordination p { margin:.3rem 0; }
+.collaboration-avatar { flex-shrink:0; display:grid; place-items:center; width:48px; height:48px; background:#e4eccf; color:#285541; border-radius:16px; font-weight:800; font-size:1.2rem; }
+.invite-form { display:flex; gap:1rem; align-items:end; flex-wrap:wrap; }
+.invite-form .field { margin-bottom:0; }
+.project-coordination { padding:1.3rem; border-radius:16px; background:#eaf0df; margin:1rem 0; color:#285541; }
+.collaboration-invitations { grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); }
+.collaboration-page .publisher-bio { white-space:pre-wrap; }
+@media(max-width:640px) { .collaboration-hero { padding:1.2rem; align-items:start; } .collaboration-search { flex-direction:column; align-items:stretch; } .invite-form { width:100%; align-items:stretch; flex-direction:column; } .collaboration-members>li form { width:100%; } }

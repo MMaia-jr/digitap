@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "PASS": 3,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "COLAB-01",
+      "test": "COLAB-01: convite, aceite, proposta, rejeição/reenvio, aprovação, publicação e remoção",
+      "status": "PASS",
+      "duration_ms": 38884,
+      "errors": []
+    },
+    {
+      "id": "PORT-01",
+      "test": "PORT-01: portfólio público reúne atividades e relatos aprovados; gestão PF/organização e impressão",
+      "status": "PASS",
+      "duration_ms": 19218,
+      "errors": []
+    },
+    {
+      "id": "PORT-02",
+      "test": "PORT-02: coletivo usa bio institucional e projetos com vínculo próprio",
+      "status": "PASS",
+      "duration_ms": 5919,
+      "errors": []
+    }
+  ]
+}

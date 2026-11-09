@@ -1,0 +1,16 @@
+{
+  "pendingBlocked": true,
+  "outsiderDenied": true,
+  "authorPreserved": true,
+  "unsentDraftPrivate": true,
+  "coordinationRequired": true,
+  "rejectionAndResubmission": true,
+  "editorialPublication": true,
+  "bothPortfolios": true,
+  "refusalAndRemovalBlockCreation": true,
+  "rls": {
+    "relrowsecurity": true,
+    "anon_select": false,
+    "user_update": false
+  }
+}

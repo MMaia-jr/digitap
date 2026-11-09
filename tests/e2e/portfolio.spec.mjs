@@ -49,6 +49,7 @@ test.afterAll(async()=>{
   await db.query('delete from public.registros_realizacao where id=any($1::uuid[])',[records]);
   await db.query('delete from public.casos_moderacao where sujeito_id=$1',[person.subject]);
   await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
+  await db.query('delete from public.vinculos_colaboracao where sujeito_id=$1 or projeto_id in (select id from public.projetos where sujeito_id=$1)',[person.subject]);
   await db.query('delete from public.projetos where sujeito_id=$1',[person.subject]);
   await db.query('delete from public.vinculos_publicadores where sujeito_id=$1',[person.subject]);
   await db.query('delete from public.pessoas_fisicas where sujeito_id=$1',[person.subject]);await db.query('delete from public.coletivos_informais where sujeito_id=$1',[person.subject]);

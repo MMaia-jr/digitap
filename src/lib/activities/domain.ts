@@ -3,7 +3,7 @@ export class ActivityError extends Error {
 }
 export interface DraftInput {projeto_id?:string|null;titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
 export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada'|'retirada';
-export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
+export interface PrivateActivity extends DraftInput {criado_por_sujeito_id?:string;projeto_aprovacao?:'pendente'|'aprovada'|'rejeitada'|null;projeto_versao_aprovada?:number|null;projeto_parecer?:string|null;id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
 const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','projeto_id'];

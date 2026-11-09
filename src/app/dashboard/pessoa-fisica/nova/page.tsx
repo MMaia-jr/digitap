@@ -8,7 +8,7 @@ export default async function NewPersonActivity() {
   const state = await personState();
   if (state.kind === 'login') redirect('/login');
   if (state.kind !== 'ready') return <section className="card"><h1>Acesso indisponível</h1><p>Não foi possível habilitar seu rascunho agora.</p></section>;
-  const {projects}=await managedProfile(state.person.sujeito_id);
+  const {availableProjects:projects}=await managedProfile(state.person.sujeito_id);
   return <section className="card">
     <Link href="/dashboard/pessoa-fisica">Voltar às minhas atividades</Link>
     <h1>Criar atividade</h1>
