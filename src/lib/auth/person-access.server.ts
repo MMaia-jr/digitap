@@ -9,7 +9,7 @@ export async function personState(){
   if(!user?.id)return {kind:'login' as const};
   if(!user.email_confirmed_at)return {kind:'forbidden' as const};
   return await withTransaction(async sql=>{
-   const person=(await sql.query<{nome_publico:string;estado:string}>(`select s.nome_publico,s.estado
+   const person=(await sql.query<{sujeito_id:string;nome_publico:string;estado:string}>(`select s.id as sujeito_id,s.nome_publico,s.estado
     from public.contas_acesso c join public.pessoas_fisicas p on p.conta_id=c.id
     join public.sujeitos_publicadores s on s.id=p.sujeito_id
     join public.vinculos_publicadores v on v.conta_id=c.id and v.sujeito_id=s.id

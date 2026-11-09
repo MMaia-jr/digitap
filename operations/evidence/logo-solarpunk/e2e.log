@@ -1,0 +1,12 @@
+
+> a-praca-v1-5@0.1.0 test:e2e
+> PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright-browsers" playwright test --project=chromium tests/e2e/design-navigation.spec.mjs
+
+DESIGN-01: PASS
+{"status":"passed","PASS":1,"FAIL":0,"SKIP":0}
+
+> a-praca-v1-5@0.1.0 test:e2e
+> PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright-browsers" playwright test --project=chromium tests/e2e/design-navigation.spec.mjs
+
+DESIGN-01: PASS
+{"status":"passed","PASS":1,"FAIL":0,"SKIP":0}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
+ <title>DigItap — folha-circuito e toque</title>
+ <defs>
+  <linearGradient id="neon" x1="14" y1="18" x2="81" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#10B981"/><stop offset=".52" stop-color="#06B6D4"/><stop offset="1" stop-color="#FBBF24"/></linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="0" stdDeviation="1.7" flood-color="#10B981" flood-opacity=".55"/></filter>
+ </defs>
+ <rect width="96" height="96" rx="24" fill="#081E20"/>
+ <path d="M28 8H68L88 28V68L68 88H28L8 68V28L28 8Z" stroke="url(#neon)" stroke-opacity=".3"/>
+ <g stroke="url(#neon)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+  <path d="M25 60V36L47 16H73V40L53 60H25Z" fill="url(#neon)" fill-opacity=".09"/>
+  <path d="M25 60 61 28M39 47V33H49M48 38H62V29M27 40H18V29M54 18V9M65 49H79V39"/>
+  <path d="m48 48 30 13-13 5-5 13-12-31Z" fill="#081E20"/><path d="m65 66 11 11M76 25l5-5"/>
+ </g>
+ <g fill="url(#neon)"><circle cx="18" cy="27" r="3"/><circle cx="54" cy="9" r="3"/><circle cx="80" cy="37" r="3"/><circle cx="61" cy="28" r="3.2"/></g>
+</svg>

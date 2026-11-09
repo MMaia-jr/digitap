@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "PASS": 1,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "DESIGN-01",
+      "test": "DESIGN-01: card da Home abre atividade e atividade abre perfil público",
+      "status": "PASS",
+      "duration_ms": 11455,
+      "errors": []
+    }
+  ]
+}
