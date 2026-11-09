@@ -15,6 +15,7 @@ import {requireVersionAuthorization as requireAuthorization,approvalForVersion,p
 import {validateContestation,contestRecord,privateContestations} from './contestation.server';
 import {validateRevocation,revokeAuthorization} from './revocation.server';
 import {validateRecordTransition} from './record-workflow';
+import {validateRealization} from './realization';
 import {transitionRecord,recordContent,recordHash} from './records.server';
 const columns='id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida,numero_versao_publicada,estado_programacao';
 const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada','retirada')";
@@ -26,13 +27,13 @@ function identifier(value:string){if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9
 async function verifiedUser(){return createGateway(await userClient(),adminClient,()=>{}).currentUser();}
 export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser|null>;transaction?:Transaction;now?:()=>Date}={}){
  const verifyUser=deps.verifyUser??verifiedUser,transaction=deps.transaction??withTransaction,now=deps.now??(()=>new Date());
- async function run<T>(mode:'organizacao'|'leitura'|'editorial'|'criar_rascunho'|'listar_rascunhos'|'enviar_rascunho',operation:(sql:Sql,actor:Actor)=>Promise<T>):Promise<T>{
+ async function run<T>(mode:'organizacao'|'leitura'|'editorial'|'criar_rascunho'|'listar_rascunhos'|'enviar_rascunho'|'registro_leitura'|'registro_escrita'|'registro_envio',operation:(sql:Sql,actor:Actor)=>Promise<T>):Promise<T>{
   try{
    const user=await verifyUser();if(!user?.id)throw new ActivityError(401,'Autenticação necessária.');if(!user.email_confirmed_at)throw new ActivityError(403,'Confirme seu e-mail.');
    return await transaction(async sql=>{
     const actor=(await sql.query<Actor>('select id,auth_user_id,organizacao_id,papel,situacao from public.contas_acesso where auth_user_id=$1 for share',[user.id])).rows[0];
-    // PF access is limited to draft creation/listing. Other operations retain I3 authorization.
-    if(actor&&(actor.papel==='publicador'||(['editor','administrador'].includes(actor.papel)&&actor.organizacao_id===null))&&(mode==='criar_rascunho'||mode==='listar_rascunhos'||mode==='enviar_rascunho')){
+    // PF operations always require the person's own subject, account and active scope.
+    if(actor&&(actor.papel==='publicador'||(['editor','administrador'].includes(actor.papel)&&actor.organizacao_id===null))&&(mode==='criar_rascunho'||mode==='listar_rascunhos'||mode==='enviar_rascunho'||mode==='registro_leitura'||mode==='registro_escrita'||mode==='registro_envio')){
       if(actor.auth_user_id!==user.id||actor.situacao!=='ativa'||actor.organizacao_id!==null)throw new ActivityError(403,'Acesso indisponível para esta conta.');
       const subject=(await sql.query<{id:string}>(`select s.id from public.pessoas_fisicas p
         join public.sujeitos_publicadores s on s.id=p.sujeito_id
@@ -41,7 +42,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
           and s.organizacao_legada_id is null and s.estado in ('pendente','ativo')
           and v.atual and v.situacao='ativo' and v.papel_vinculo='titular'
           and $2=any(v.escopos) and ($2='ler_privado' or s.risco<>'alto')
-        for share of p,s,v`,[actor.id,mode==='criar_rascunho'?'editar':mode==='enviar_rascunho'?'enviar':'ler_privado'])).rows[0];
+        for share of p,s,v`,[actor.id,['criar_rascunho','registro_escrita'].includes(mode)?'editar':['enviar_rascunho','registro_envio'].includes(mode)?'enviar':'ler_privado'])).rows[0];
       if(!subject)throw new ActivityError(403,'Vínculo de pessoa física indisponível.');
       return operation(sql,{...actor,sujeito_id:subject.id});
     }
@@ -92,16 +93,71 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     return {...published,repetida:false};
  }
  return {
+  async realizationActivity(id:string){return run('registro_leitura',async(sql,actor)=>{
+   const activity=await load(sql,actor,id);
+   if(activity.estado_editorial!=='publicada')throw new ActivityError(409,'Somente atividades publicadas podem receber este relato.');
+   const record=(await sql.query<{estado_editorial:string}>('select estado_editorial from public.registros_realizacao where atividade_id=$1',[activity.id])).rows[0];
+   return {...activity,registro_estado:record?.estado_editorial??null};
+  });},
+  async registerRealization(id:string,input:unknown){
+   const command=validateRealization(input);
+   return run('registro_escrita',async(sql,actor)=>{
+    const activity=await load(sql,actor,id,true);
+    if(!actor.sujeito_id)throw new ActivityError(403,'Este formulário exige um cadastro de pessoa física.');
+    if(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime())throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');
+    const existing=(await sql.query<{id:string}>('select id from public.registros_realizacao where atividade_id=$1',[activity.id])).rows[0];
+    const metadata=JSON.stringify({tipo:'realizacao-envio.v1',...command});
+    if(existing){
+     const event=(await sql.query<{justificativa_restrita:string;executada_por_conta_id:string}>("select justificativa_restrita,executada_por_conta_id from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='realizacao_enviada'",[existing.id])).rows;
+     if(event.length===1&&event[0].justificativa_restrita===metadata&&event[0].executada_por_conta_id===actor.id)return {id:existing.id,repetida:true};
+     throw new ActivityError(409,'Já existe um registro para esta atividade.');
+    }
+    const timestamp=now(),iso=timestamp.toISOString();
+    const localDay=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(timestamp);
+    const nested=createActivityService({verifyUser,transaction:async operation=>operation(sql),now:()=>timestamp});
+    // Participants and registration date live in the existing, hash-bound origin field.
+    const record=await nested.createRecord(id,{pedido_id:command.pedido_id,versao_esperada:command.versao_esperada,data_realizacao:localDay,descricao_factual:command.relato,origem_informacao:JSON.stringify({tipo:'realizacao-pf.v1',participantes:command.participantes,registrado_em:iso})});
+    if(command.url)await nested.addEvidence(id,{pedido_id:randomUUID(),tipo_fonte:'Foto ou vídeo informado pelo titular',url_publica:command.url,afirmacao_sustentada:command.relato.slice(0,1400),consultada_em:iso});
+    await sql.query("insert into public.autorizacoes_publicacao(objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em) values('registro',$1,ARRAY['registro_realizacao','registro:versao:1'],'titular',$2,clock_timestamp())",[record.id,JSON.stringify({tipo:'consentimento-realizacao.v1',conta_id:actor.id,pedido_id:command.pedido_id,relato_e_referencias:true})]);
+    const row=(await sql.query('select id,atividade_id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao from public.registros_realizacao where id=$1',[record.id])).rows[0];
+    const evidence=(await sql.query('select * from public.evidencias where registro_id=$1 order by id',[record.id])).rows;
+    await nested.recordTransition(id,{pedido_id:randomUUID(),acao:'enviar',estado_esperado:'rascunho',conteudo_esperado:recordHash(recordContent(row,evidence))});
+    await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('registro',$1,'realizacao_enviada',$2,'rascunho','enviada',$3)",[record.id,actor.id,metadata]);
+    return {id:record.id,repetida:false};
+   });
+  },
+  async realizationQueue(){return run('editorial',async sql=>{
+   const rows=(await sql.query<{atividade_id:string;titulo:string;nome_publicador:string}>(`select r.atividade_id,a.titulo,s.nome_publico as nome_publicador from public.registros_realizacao r join public.atividades a on a.id=r.atividade_id join public.sujeitos_publicadores s on s.id=a.sujeito_id where r.estado_editorial in ('enviada','em_revisao') and r.origem_informacao like '{"tipo":"realizacao-pf.v1",%' order by r.id limit 100`)).rows;
+   const nested=createActivityService({verifyUser,transaction:async operation=>operation(sql),now});
+   return Promise.all(rows.map(async row=>({...row,...await nested.getRecord(row.atividade_id)})));
+  });},
+  async decideRealization(id:string,input:unknown){
+   const body=objectInput(input,['acao','conteudo_esperado','evidencias_aprovadas','motivo']);
+   if(!['aprovar','rejeitar'].includes(String(body.acao)))throw new ActivityError(422,'Decisão inválida.');
+   return run('editorial',async(sql)=>{
+    const nested=createActivityService({verifyUser,transaction:async operation=>operation(sql),now});
+    const record=await nested.getRecord(id);
+    if(!['enviada','em_revisao'].includes(record.estado_editorial))throw new ActivityError(409,'O registro já recebeu uma decisão. Recarregue.');
+    const base={conteudo_esperado:body.conteudo_esperado};
+    if(body.acao==='rejeitar')return nested.recordTransition(id,{...base,pedido_id:randomUUID(),acao:'rejeitar',estado_esperado:record.estado_editorial,motivo:body.motivo});
+    const authorization=(await sql.query<{id:string}>("select id from public.autorizacoes_publicacao where objeto_tipo='registro' and objeto_id=$1 and situacao='vigente' and revogada_em is null order by autorizada_em desc,id limit 1",[record.id])).rows[0];
+    if(!authorization)throw new ActivityError(422,'Autorização do titular indisponível.');
+    if(record.estado_editorial==='enviada')await nested.recordTransition(id,{...base,pedido_id:randomUUID(),acao:'iniciar',estado_esperado:'enviada'});
+    await nested.recordTransition(id,{...base,pedido_id:randomUUID(),acao:'aprovar',estado_esperado:'em_revisao',autorizacao_id:authorization.id,evidencias_aprovadas:body.evidencias_aprovadas});
+    return nested.recordTransition(id,{...base,pedido_id:randomUUID(),acao:'publicar',estado_esperado:'aprovada'});
+   });
+  },
   async contestRecord(id:string,input:unknown){const command=validateContestation(input,now());return run('leitura',async(sql,actor)=>{await load(sql,actor,id,true);return contestRecord(sql,actor.id,id,command);});},
   async revokeAuthorization(id:string,input:unknown){const command=validateRevocation(input);return run('editorial',async(sql,actor)=>{await load(sql,actor,id,true);return revokeAuthorization(sql,actor.id,id,command);});},
   async recordTransition(id:string,input:unknown){
    const command=validateRecordTransition(input);
-   return run(command.acao==='enviar'?'organizacao':'editorial',async(sql,actor)=>{await load(sql,actor,id,true);return transitionRecord(sql,actor.id,id,command,now());});
+   return run(command.acao==='enviar'?'registro_envio':'editorial',async(sql,actor)=>{const activity=await load(sql,actor,id,true);if(actor.sujeito_id&&(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime()))throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');return transitionRecord(sql,actor.id,id,command,now());});
   },
   async addEvidence(id:string,input:unknown){
    const command=validateEvidence(input,now()),metadata=JSON.stringify({tipo:'evidencia.v1',...command});
-   return run('organizacao',async(sql,actor)=>{
+   return run('registro_escrita',async(sql,actor)=>{
     const activity=await load(sql,actor,id,true);
+    if(actor.sujeito_id&&(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime()))throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');
     const record=(await sql.query<{id:string;estado_editorial:string}>("select id,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
     if(!record)throw new ActivityError(404,'Registro não encontrado.');if(record.estado_editorial!=='rascunho')throw new ActivityError(409,'Registro não permite novas referências neste estado.');
     const history=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='evidencia_referenciada'",[record.id])).rows;
@@ -114,8 +170,9 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   },
   async createRecord(id:string,input:unknown){
    const command=validateRecord(input,now()),metadata=JSON.stringify({tipo:'registro-criacao.v1',...command});
-   return run('organizacao',async(sql,actor)=>{
+   return run('registro_escrita',async(sql,actor)=>{
     const activity=await load(sql,actor,id,true);
+    if(actor.sujeito_id&&(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime()))throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');
     if(activity.versao_submetida!==command.versao_esperada)throw new ActivityError(409,'A versão mudou. Recarregue antes de registrar.');
     const existing=(await sql.query("select id,atividade_id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
     if(existing){
@@ -160,7 +217,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    });
   },
   async list(){return run('listar_rascunhos',async(sql,actor)=>{
-    if(actor.sujeito_id)return (await sql.query<Row>(`select ${columns},(select justificativa_restrita::jsonb->>'motivo' from public.eventos_editoriais e where e.objeto_tipo='atividade' and e.objeto_id=atividades.id and e.acao in ('atividade_revisao_rejeitada','atividade_revisao_devolvida') order by e.ocorrida_em desc,e.id desc limit 1) as motivo_editorial from public.atividades where sujeito_id=$1 and organizacao_id is null and criada_por_conta_id=$2 and estado_editorial in ${privateStates} order by criada_em desc limit 100`,[actor.sujeito_id,actor.id])).rows.map(dto);
+    if(actor.sujeito_id)return (await sql.query<Row>(`select ${columns},(select estado_editorial from public.registros_realizacao r where r.atividade_id=atividades.id) as registro_estado,(select justificativa_restrita::jsonb->>'motivo' from public.eventos_editoriais e where e.objeto_tipo='atividade' and e.objeto_id=atividades.id and e.acao in ('atividade_revisao_rejeitada','atividade_revisao_devolvida') order by e.ocorrida_em desc,e.id desc limit 1) as motivo_editorial from public.atividades where sujeito_id=$1 and organizacao_id is null and criada_por_conta_id=$2 and estado_editorial in ${privateStates} order by criada_em desc limit 100`,[actor.sujeito_id,actor.id])).rows.map(dto);
     return (await sql.query<Row>(`select ${columns} from public.atividades where organizacao_id=$1 and estado_editorial in ${privateStates} order by criada_em desc limit 100`,[actor.organizacao_id])).rows.map(dto);
   });},
   async reviewQueue(){return run('editorial',async sql=>(await sql.query<Row&{nome_publicador:string}>(`select ${columns},(select nome_publico from public.sujeitos_publicadores where id=atividades.sujeito_id) as nome_publicador from public.atividades where estado_editorial in ('enviada','em_revisao','aprovada') order by criada_em limit 100`)).rows.map(row=>({...dto(row),nome_publicador:row.nome_publicador})));},
@@ -280,11 +337,13 @@ export const activities=createActivityService();
 export async function activityResponse(operation:()=>Promise<unknown>){
  try{return Response.json(await operation(),{headers:privateHeaders});}catch(error){return Response.json({message:error instanceof ActivityError?error.message:'Serviço indisponível. Tente novamente.'},{status:error instanceof ActivityError?error.status:503,headers:privateHeaders});}
 }
-export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence'|'recordSend'|'recordReview'|'revokeAuthorization'|'contestRecord'|'editorialDecision',id?:string){
+export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence'|'recordSend'|'recordReview'|'revokeAuthorization'|'contestRecord'|'editorialDecision'|'registerRealization'|'decideRealization',id?:string){
  // Route exports limit methods. Normalize PATCH only for reuse of the existing
  // JSON/origin/payload boundary; the original method is still PATCH over HTTP.
  return handleMutation(request.method==='PATCH'?new Request(request,{method:'POST'}):request,appOrigin(),async input=>{
   try{
+   if(action==='registerRealization'){const registro=await activities.registerRealization(id!,input);return {message:'Evidência registrada e enviada para revisão editorial.',registro,next:'/dashboard/pessoa-fisica?registro=enviado'};}
+   if(action==='decideRealization'){const registro=await activities.decideRealization(id!,input);return {message:'Decisão sobre o relato registrada.',registro,next:'/admin/atividades'};}
    if(action==='editorialDecision'){const atividade=await activities.editorialDecision(id!,input);return {message:atividade.estado_editorial==='publicada'?'Atividade aprovada e publicada.':'Atividade rejeitada.',atividade,next:'/admin/atividades'};}
    if(action==='contestRecord'){const contestacao=await activities.contestRecord(id!,input);return {message:'Divergência registrada, sem conclusão consensual.',contestacao,next:'/dashboard/atividade/'+id};}
    if(action==='revokeAuthorization'){const revogacao=await activities.revokeAuthorization(id!,input);return {message:'Autorização revogada.',revogacao,next:'/dashboard/atividade/'+id};}

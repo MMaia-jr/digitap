@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "PASS": 0,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "EVID-01",
+      "test": "EVID-01: publicar atividade → registrar relato PF → revisão editorial → evidência pública",
+      "status": "FAIL",
+      "duration_ms": 22701,
+      "errors": [
+        {
+          "category": "timeout",
+          "lines": [
+            "    at ./tests/e2e/realization.spec.mjs:61:129"
+          ]
+        }
+      ]
+    }
+  ]
+}

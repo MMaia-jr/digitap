@@ -1,4 +1,5 @@
 import 'server-only';
+import {activePersonPublisher} from './editorial-pf.server';
 import {createHash} from 'node:crypto';
 import type {Sql} from '../database.server';
 import {ActivityError,validateRecord,validateEvidence} from './domain';
@@ -41,7 +42,12 @@ export async function transitionRecord(sql:Sql,author:string,activityId:string,c
   const approval=await recordApproval(sql,row.id);await requireRecordAuthorization(sql,row.id,approval.autorizacao_id);
   if(approval.conteudo_esperado!==hash)throw new ActivityError(409,'Conteúdo não corresponde à aprovação.');
   const organization=(await sql.query<{estado_validacao:string}>('select o.estado_validacao from public.organizacoes o join public.atividades a on a.organizacao_id=o.id where a.id=$1 for share of o',[activityId])).rows[0];
-  if(organization?.estado_validacao!=='validada')throw new ActivityError(422,'Organização não está validada.');
+  if(organization){if(organization.estado_validacao!=='validada')throw new ActivityError(422,'Organização não está validada.');}
+  else{
+   const activity=(await sql.query<{sujeito_id:string}>("select sujeito_id from public.atividades where id=$1 and organizacao_id is null and politica_publicacao='i4' and estado_editorial='publicada' for share",[activityId])).rows[0];
+   if(!activity?.sujeito_id)throw new ActivityError(422,'Titular indisponível para publicação.');
+   await activePersonPublisher(sql,activity.sujeito_id);
+  }
   snapshot={tipo:'registro-publico.v1',versao:1,...content,evidencias:content.evidencias.filter(e=>(approval.evidencias_aprovadas as string[]).includes(e.id)),publicada_em:now.toISOString()};
   if(previous){const meta=JSON.parse(previous.justificativa_restrita);if(recordHash(parseRecordSnapshot(row.versao_publicada))!==meta.snapshot_sha256)throw new ActivityError(409,'Snapshot inconsistente.');}
  }

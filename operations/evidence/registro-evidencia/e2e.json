@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "PASS": 1,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "EVID-01",
+      "test": "EVID-01: publicar atividade → registrar relato PF → revisão editorial → evidência pública",
+      "status": "PASS",
+      "duration_ms": 16315,
+      "errors": []
+    }
+  ]
+}
