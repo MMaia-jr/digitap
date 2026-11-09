@@ -1,12 +1,12 @@
 export class ActivityError extends Error {
   constructor(public readonly status:number,message:string,public readonly fields?:Record<string,string>){super(message);}
 }
-export interface DraftInput {titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
+export interface DraftInput {projeto_id?:string|null;titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
 export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada'|'retirada';
 export interface PrivateActivity extends DraftInput {id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
-const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora'];
+const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','projeto_id'];
 export function objectInput(input:unknown,allowed:string[]):Record<string,unknown>{
  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!allowed.includes(k)))throw new ActivityError(400,'Pedido inválido.');
  return input as Record<string,unknown>;
@@ -40,7 +40,8 @@ export function validateDraft(input:unknown,now=new Date()):DraftInput{
   if(typeof body.referencia_oficial!=='string'||body.referencia_oficial.length>2048||/[\u0000-\u0020]/.test(body.referencia_oficial.trim()))return invalid('referencia_oficial','Informe uma URL http/https válida, sem credenciais.');
   try{const url=new URL(body.referencia_oficial.trim());if(!['http:','https:'].includes(url.protocol)||url.username||url.password||!url.hostname)throw new Error();referencia_oficial=url.href;}catch{return invalid('referencia_oficial','Informe uma URL http/https válida, sem credenciais.');}
  }
- return {titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial};
+ if(body.projeto_id!==undefined&&body.projeto_id!==null&&body.projeto_id!==''&&(typeof body.projeto_id!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.projeto_id)))return invalid('projeto_id','Selecione um projeto válido.');
+ return {titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,...(body.projeto_id!==undefined?{projeto_id:body.projeto_id?String(body.projeto_id):null}:{})};
 }
 export function validateVersion(value:unknown):number{
  if(typeof value!=='number'||!Number.isInteger(value)||value<1||value>2147483646)throw new ActivityError(422,'Informe a versão esperada válida.');return value;

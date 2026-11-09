@@ -1,4 +1,6 @@
 import 'server-only';
+import {withTransaction} from '../database.server';
+import type {Project} from './projects.server';
 import type {PublicActivity} from '../activities/publication';
 import {ActivityError} from '../activities/domain';
 import {realizationDetails} from '../activities/realization';
@@ -23,5 +25,13 @@ export async function portfolioEvidence(activities:PublicActivity[]){
  const counted=items.filter(item=>item.details&&item.record.estado_apuracao!=='contestado');
  return {items,unavailable,participations:counted.length?counted.reduce((sum,item)=>sum+item.details!.participantes,0):null};
 }
-export async function publicPortfolio(id:string){const profile=await publicProfile(id);return {...profile,evidence:await portfolioEvidence(profile.activities)};}
+export async function publicPortfolio(id:string){const profile=await publicProfile(id);const [evidence,grouping]=await Promise.all([portfolioEvidence(profile.activities),withTransaction(async sql=>{
+ const ids=profile.activities.map(a=>a.id);
+ const links=(await sql.query<{id:string;projeto_id:string|null}>('select id,projeto_id from public.atividades where sujeito_id=$1 and id=any($2::uuid[])',[profile.subject.id,ids])).rows;
+ const projectByActivity=new Map(links.map(link=>[link.id,link.projeto_id]));
+ const projectIds=links.flatMap(a=>a.projeto_id?[a.projeto_id]:[]);
+ // Visitors see only projects containing activities that passed public snapshot checks.
+ const projects=(await sql.query<Project>(`select id,sujeito_id,titulo,descricao,ano from public.projetos where sujeito_id=$1 and ($3::boolean or id=any($2::uuid[])) order by ano desc,criado_em desc`,[profile.subject.id,projectIds,profile.canEdit])).rows;
+ return {projects:projects.map(project=>({...project,activities:profile.activities.filter(a=>projectByActivity.get(a.id)===project.id)})),ungrouped:profile.activities.filter(a=>!projectByActivity.get(a.id))};
+})]);return {...profile,evidence,...grouping};}
 export type Portfolio=Awaited<ReturnType<typeof publicPortfolio>>;

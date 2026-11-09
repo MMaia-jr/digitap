@@ -61,3 +61,21 @@ body{padding-top:var(--app-header-clearance)}
 }
 
 .portfolio-source-url{display:inline-block;max-width:100%;overflow-wrap:anywhere;font-size:.65rem;margin-top:5px;color:#60765b}
+
+/* Institutional roots: projects frame the actions that share a purpose. */
+.bio-editor form { max-width: 850px; }
+.publisher-bio,.project-description,.managed-projects p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.project-create { margin: 1.4rem 0; }
+.project-create summary { width: fit-content; cursor: pointer; }
+.project-create form { margin-top: 1.2rem; max-width: 720px; }
+.managed-projects { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); gap: 1rem; }
+.managed-projects li { border: 1px solid #bed1b0; border-radius: 20px; padding: 1.5rem; background: #f5f7e9; }
+.managed-projects h3 { margin: .8rem 0; }
+.project-year { display: inline-flex; align-items: center; padding: .4rem .85rem; border-radius: 999px; background: #e6efc9; color: #244f38; font-weight: 800; font-size: .9rem; }
+.public-projects { display: grid; gap: 2rem; }
+.public-project { padding: clamp(1rem,3vw,2.3rem); border: 1px solid #bdd0ae; border-top: 5px solid #55815a; border-radius: 24px; background: linear-gradient(135deg,#f2f5e5,#fffdf4); }
+.project-heading { display: flex; gap: 1.2rem; align-items: center; }
+.project-heading h3 { font-size: clamp(1.4rem,3vw,2rem); margin: .25rem 0; color: #244f38; }
+.project-description { max-width: 850px; margin: 1.2rem 0 1.7rem; line-height: 1.8; }
+.ungrouped-heading { margin-top: 2.2rem; }
+@media print { .public-project { background: white; padding: 12px; border-radius: 8px; } .project-heading { break-after: avoid; } }

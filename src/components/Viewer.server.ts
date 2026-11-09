@@ -4,7 +4,7 @@ import { userClient } from '../lib/supabase/server';
 import { adminClient } from '../lib/supabase/admin.server';
 import { createGateway } from '../lib/auth/gateway.server';
 import { personState } from '../lib/auth/person-access.server';
-import { organizationState } from '../lib/auth/dashboard.server';
+import { organizationState,institutionalState } from '../lib/auth/dashboard.server';
 
 type Viewer = { kind: 'visitor' } | { kind: 'unavailable' } | { kind: 'ready'; name: string; dashboard: string; editorial?: boolean };
 export const getViewer = cache(async (): Promise<Viewer> => {
@@ -18,7 +18,7 @@ export const getViewer = cache(async (): Promise<Viewer> => {
     if (account?.papel === 'publicador'||(editorial&&account?.organizacao_id===null)) {
       const state = await personState();
       if(state.kind==='ready')return {kind:'ready',name:state.person.nome_publico,dashboard:'/dashboard/pessoa-fisica',editorial};
-      if(!editorial)return {kind:'unavailable'};
+      if(!editorial){const institution=await institutionalState();if(institution.kind==='ready')return {kind:'ready',name:institution.organization.nome_publico,dashboard:'/dashboard'};return {kind:'unavailable'};}
     }
     if (account?.papel === 'organizacao') {
       const state = await organizationState();

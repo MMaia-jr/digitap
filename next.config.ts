@@ -3,7 +3,7 @@ const config:NextConfig={
  poweredByHeader:false,
  logging:{incomingRequests:false,fetches:{fullUrl:false}},
  async headers(){return [{source:'/:path*',headers:[
-   {key:'Referrer-Policy',value:'no-referrer'},
+   {key:'Referrer-Policy',value:'same-origin'},
    {key:'X-Content-Type-Options',value:'nosniff'},
    {key:'X-Frame-Options',value:'DENY'},
    {key:'Cache-Control',value:'private, no-store, max-age=0'},

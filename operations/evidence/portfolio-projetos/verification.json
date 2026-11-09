@@ -1,0 +1,62 @@
+{
+  "build": "passed",
+  "e2e": {
+    "status": "passed",
+    "PASS": 2,
+    "FAIL": 0,
+    "SKIP": 0,
+    "checks": [
+      {
+        "id": "PORT-01",
+        "test": "PORT-01: portfólio público reúne atividades e relatos aprovados; gestão PF/organização e impressão",
+        "status": "PASS",
+        "duration_ms": 15235,
+        "errors": []
+      },
+      {
+        "id": "PORT-02",
+        "test": "PORT-02: coletivo usa bio institucional e projetos com vínculo próprio",
+        "status": "PASS",
+        "duration_ms": 5648,
+        "errors": []
+      }
+    ]
+  },
+  "unit": {
+    "passed": 424,
+    "failed": 5,
+    "baselineFailuresMatch": true,
+    "failures": [
+      {
+        "file": "editorial-queue.test.tsx",
+        "test": "lista somente a fila do serviço com sujeito, data e ações editoriais"
+      },
+      {
+        "file": "editorial-queue.test.tsx",
+        "test": "aprovação usa endpoint protegido e atualiza fila"
+      },
+      {
+        "file": "editorial-queue.test.tsx",
+        "test": "rejeição envia o motivo digitado, sem aprovar ou publicar"
+      },
+      {
+        "file": "public-safety.test.tsx",
+        "test": "B11: nome público legado com HTML é escapado na lista e detalhe"
+      },
+      {
+        "file": "visible-home.test.tsx",
+        "test": "home vazia convida a participar sem fabricar atividades"
+      }
+    ]
+  },
+  "lint": {
+    "changedFiles": "passed",
+    "repository": "existing react-hooks/purity error in unchanged realization page (Date.now during render)"
+  },
+  "migration": {
+    "file": "20261109145628_projetos_bio_portfolio.sql",
+    "applied": "local Supabase only",
+    "securityAdvisors": "No issues found"
+  },
+  "screenshots": "Real browser, local fictional fixtures; desktop and mobile; fixtures cleaned after tests"
+}
