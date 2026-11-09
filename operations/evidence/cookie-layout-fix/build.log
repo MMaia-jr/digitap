@@ -1,0 +1,70 @@
+
+> a-praca-v1-5@0.1.0 build
+> NEXT_TELEMETRY_DISABLED=1 next build
+
+▲ Next.js 16.4.5 (Turbopack)
+- Environments: .env.local, .env
+✓ Running next.config.ts took 114ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1525ms
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/12) ...
+  Generating static pages using 11 workers (3/12) 
+  Generating static pages using 11 workers (6/12) 
+  Generating static pages using 11 workers (9/12) 
+✓ Generating static pages using 11 workers (12/12) in 299ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin/atividades
+├ ƒ /api/admin/atividades/[id]/autorizacoes/revogar
+├ ƒ /api/admin/atividades/[id]/decidir
+├ ƒ /api/admin/atividades/[id]/programacao
+├ ƒ /api/admin/atividades/[id]/publicar
+├ ƒ /api/admin/atividades/[id]/registro/revisar
+├ ƒ /api/admin/atividades/[id]/relato
+├ ƒ /api/admin/atividades/[id]/retirar
+├ ƒ /api/admin/atividades/[id]/revisar
+├ ƒ /api/atividades
+├ ƒ /api/atividades/[id]
+├ ƒ /api/atividades/[id]/enviar
+├ ƒ /api/atividades/[id]/realizacao
+├ ƒ /api/atividades/[id]/registro
+├ ƒ /api/atividades/[id]/registro/contestar
+├ ƒ /api/atividades/[id]/registro/enviar
+├ ƒ /api/atividades/[id]/registro/evidencias
+├ ƒ /api/auth/[action]
+├ ƒ /api/organizacoes
+├ ƒ /api/public/atividades
+├ ƒ /api/public/atividades/[id]
+├ ƒ /api/public/atividades/[id]/registro
+├ ƒ /atividade/[id]
+├ ƒ /atividades
+├ ƒ /auth/callback
+├ ƒ /auth/confirm
+├ ƒ /cadastro
+├ ƒ /cadastro/pessoa-fisica
+├ ƒ /cadastro/pessoa-fisica/completar
+├ ƒ /dashboard
+├ ƒ /dashboard/atividade/[id]
+├ ƒ /dashboard/nova-atividade
+├ ƒ /dashboard/organizacao
+├ ƒ /dashboard/pessoa-fisica
+├ ƒ /dashboard/pessoa-fisica/atividade/[id]/evidencia
+├ ƒ /dashboard/pessoa-fisica/nova
+├ ƒ /governanca
+├ ƒ /login
+├ ƒ /perfil/[id]
+├ ƒ /privacidade
+└ ƒ /recuperar-acesso
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+

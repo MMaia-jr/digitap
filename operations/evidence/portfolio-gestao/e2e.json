@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "PASS": 1,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "PORT-01",
+      "test": "PORT-01: portfólio público reúne atividades e relatos aprovados; gestão PF/organização e impressão",
+      "status": "PASS",
+      "duration_ms": 14949,
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://127.0.0.1:3215
+- Network:       http://127.0.0.1:3215
+- Environments: .env.local, .env
+✓ Ready in 604ms
+✓ Running next.config.ts took 44ms
+
+ │ POST http://127.0.0.1:56151/auth/v1/token?grant_type=pass.. 200 in 95ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ GET http://127.0.0.1:56151/rest/v1/contas_acesso?select=auth_use.. 200 in 27ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 18ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 18ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/rest/v1/contas_acesso?select=auth_use.. 200 in 7ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 1ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 2ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 12ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/rest/v1/contas_acesso?select=auth_use.. 200 in 13ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 1ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 8ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ GET http://127.0.0.1:56151/rest/v1/contas_acesso?select=auth_use.. 200 in 8ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ GET http://127.0.0.1:56151/auth/v1/user 200 in 1ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ │ POST http://127.0.0.1:56151/auth/v1/logout?scope=local 204 in 18ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at ignore-listed frames
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at ignore-listed frames
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at async proxy (src/proxy.ts:18:4)
+  16 |      },
+  17 |    }});
+> 18 |    await client.auth.getUser();
+     |    ^
+  19 |  }catch{/* Pages perform the authoritative checks and show safe unavailability. */}
+  20 |  return response;
+  21 | }
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at ignore-listed frames
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at ignore-listed frames
+@supabase/ssr: could not base64url-decode chunked cookie value, treating as absent. Cookie chunks may have been written partially across responses. Error: Invalid UTF-8 sequence
+    at async Object.currentUser (src/lib/auth/gateway.server.ts:20:26)
+    at async (src/components/Viewer.server.ts:13:18)
+  18 |     async logout(){try{return {error:(await user.auth.signOut({scope:'local'})).error};}finally{clearCookies();}},
+  19 |     async currentUser(){
+> 20 |       const {data,error}=await user.auth.getUser();
+     |                          ^
+  21 |       if(error){if([400,401,403].includes(error.status??0))return null;throw new FlowError(503,'Serviço indisponível. Tente novamente.');}
+  22 |       return data.user;
+  23 |     },
+[?25h

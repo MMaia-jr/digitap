@@ -8,7 +8,13 @@ export async function userClient(){
   return createServerClient(url,key,{
     cookieOptions:{...authCookieOptions,name:'ap-auth'},
     cookies:{getAll:()=>store.getAll(),setAll(values){
-      for(const {name,value,options} of values){store.set(name,value,{...options,...authCookieOptions});}
+      try{
+        for(const {name,value,options} of values){store.set(name,value,{...options,...authCookieOptions});}
+      }catch(error){
+        // Server Components can read cookies but cannot write them. The proxy
+        // refreshes the session on the request and persists it on the response.
+        if(!(error instanceof Error)||!error.message.startsWith('Cookies can only be modified in a Server Action or Route Handler.'))throw error;
+      }
     }},
   });
 }

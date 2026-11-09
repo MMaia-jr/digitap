@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "PASS": 1,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "COOKIE-01",
+      "test": "COOKIE-01: Home renova sessão antes do layout; navegação e logout sem erro de cookies",
+      "status": "PASS",
+      "duration_ms": 3938,
+      "errors": []
+    }
+  ]
+}

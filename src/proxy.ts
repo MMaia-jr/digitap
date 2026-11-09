@@ -19,4 +19,5 @@ export async function proxy(request:NextRequest){
  }catch{/* Pages perform the authoritative checks and show safe unavailability. */}
  return response;
 }
-export const config={matcher:['/dashboard/:path*','/admin/:path*']};
+// Public pages also render AppHeader, which reads the authenticated viewer.
+export const config={matcher:['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)']};
