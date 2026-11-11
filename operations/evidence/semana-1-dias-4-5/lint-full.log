@@ -1,0 +1,20 @@
+
+> a-praca-v1-5@0.1.0 lint
+> eslint .
+
+
+/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/src/app/dashboard/pessoa-fisica/atividade/[id]/evidencia/page.tsx
+  13:794  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/src/app/dashboard/pessoa-fisica/atividade/[id]/evidencia/page.tsx:13:794
+  11 |   return <section className="card"><h1>Registro indisponível</h1><p>Confira se esta atividade é sua e já está publicada.</p><Link href="/dashboard/pessoa-fisica">Voltar para minhas atividades</Link></section>;
+  12 |  }
+> 13 |  return <section className="realization-shell"><Link className="text-link" href="/dashboard/pessoa-fisica">← Minhas atividades</Link><div className="realization-heading"><span className="realization-icon" aria-hidden="true"><CommunityIcon name="leaf"/></span><p className="eyebrow">Memória do que fizemos juntos</p><h1>Registrar que aconteceu</h1><p className="realization-title">{activity.titulo}</p><p>Um encontro deixa histórias. Conte a sua e ajude a Praça a guardar essa memória.</p></div><div className="realization-glass">{activity.registro_estado?<><h2>✓ Evidência registrada</h2><p>Já existe um relato para esta atividade. A divulgação depende da revisão editorial.</p><Link href="/dashboard/pessoa-fisica">Voltar para minhas atividades</Link></>:Date.parse(activity.inicio_previsto)>Date.now()?<><h2>O encontro ainda está por vir</h2><p>Volte depois do início da atividade para contar o que aconteceu.</p></>:<><div className="realization-notice"><strong>Primeiro o relato, depois a revisão.</strong><p>Seu envio fica privado até aprovação editorial. Um relato não é uma verificação independente nem gera pontuação de reputação.</p></div><RealizationForm id={activity.id} version={activity.versao_submetida}/></>}</div></section>;
+     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^^^^^^^^^^ Cannot call impure function
+  14 | }
+  15 |  react-hooks/purity
+
+✖ 1 problem (1 error, 0 warnings)
+

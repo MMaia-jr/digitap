@@ -1,0 +1,555 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/editorial-queue.test.tsx (5 tests | 3 failed) 452ms
+   × lista somente a fila do serviço com sujeito, data e ações editoriais 71ms
+   × aprovação usa endpoint protegido e atualiza fila 319ms
+   × rejeição envia o motivo digitado, sem aprovar ou publicar 12ms
+ ❯ tests/components/visible-home.test.tsx (4 tests | 1 failed) 677ms
+   × home vazia convida a participar sem fabricar atividades 59ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/editorial-queue.test.tsx > lista somente a fila do serviço com sujeito, data e ações editoriais
+TestingLibraryElementError: Unable to find an element with the text: Pessoa Fictícia. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<h1>[39m
+        [0mAcesso editorial indisponível[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mEsta área exige uma conta editorial ativa e autorizada.[0m
+      [36m</p>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/sair"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Sair"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mSair[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-queue.test.tsx:14:38
+     12| afterEach(()=>{cleanup();vi.unstubAllGlobals();});
+     13| it('lista somente a fila do serviço com sujeito, data e ações editoria…
+     14|  render(await Queue());expect(screen.getByText('Pessoa Fictícia')).toB…
+       |                                      ^
+     15|  expect(screen.getByRole('button',{name:'Aprovar Publicação'})).toBeTr…
+     16|  expect(screen.getByRole('button',{name:'Rejeitar'})).toBeTruthy();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/components/editorial-queue.test.tsx > aprovação usa endpoint protegido e atualiza fila
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Aprovar Publicação"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Acesso editorial indisponível":
+  [36m<h1 />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  --------------------------------------------------
+  form:
+
+  Name "Sair":
+  [36m<form[39m
+    [33maction[39m=[32m"/api/auth/sair"[39m
+    [33maria-busy[39m=[32m"false"[39m
+    [33maria-label[39m=[32m"Sair"[39m
+    [33mmethod[39m=[32m"post"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Sair":
+  [36m<button[39m
+    [33mtype[39m=[32m"submit"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<h1>[39m
+        [0mAcesso editorial indisponível[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mEsta área exige uma conta editorial ativa e autorizada.[0m
+      [36m</p>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/sair"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Sair"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mSair[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-queue.test.tsx:21:47
+     19| it('aprovação usa endpoint protegido e atualiza fila',async()=>{
+     20|  const fetcher=vi.fn().mockResolvedValue({ok:true,json:async()=>({mess…
+     21|  render(await Queue());fireEvent.click(screen.getByRole('button',{name…
+       |                                               ^
+     22|  await waitFor(()=>expect(mocks.refresh).toHaveBeenCalledOnce());
+     23|  expect(fetcher.mock.calls[0][0]).toBe('/api/admin/atividades/'+row.id…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/components/editorial-queue.test.tsx > rejeição envia o motivo digitado, sem aprovar ou publicar
+TestingLibraryElementError: Unable to find a label with the text of: Motivo da rejeição
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33mclass[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<h1>[39m
+        [0mAcesso editorial indisponível[0m
+      [36m</h1>[39m
+      [36m<p>[39m
+        [0mEsta área exige uma conta editorial ativa e autorizada.[0m
+      [36m</p>[39m
+      [36m<form[39m
+        [33maction[39m=[32m"/api/auth/sair"[39m
+        [33maria-busy[39m=[32m"false"[39m
+        [33maria-label[39m=[32m"Sair"[39m
+        [33mmethod[39m=[32m"post"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mtype[39m=[32m"submit"[39m
+        [36m>[39m
+          [0mSair[0m
+        [36m</button>[39m
+      [36m</form>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getAllByLabelText node_modules/@testing-library/dom/dist/queries/label-text.js:111:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/editorial-queue.test.tsx:38:48
+     36| it('rejeição envia o motivo digitado, sem aprovar ou publicar',async()…
+     37|  const fetcher=vi.fn().mockResolvedValue({ok:true,json:async()=>({mess…
+     38|  render(await Queue());fireEvent.change(screen.getByLabelText('Motivo …
+       |                                                ^
+     39|  fireEvent.click(screen.getByRole('button',{name:'Rejeitar'}));await w…
+     40|  expect(JSON.parse(fetcher.mock.calls[0][1].body)).toMatchObject({acao…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/components/visible-home.test.tsx > home vazia convida a participar sem fabricar atividades
+TestingLibraryElementError: Unable to find an element with the text: /A Praça está sendo construída/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"home-feed"[39m
+    [36m>[39m
+      [36m<section[39m
+        [33mclass[39m=[32m"community-hero"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"hero-copy"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"hero-location"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"live-dot"[39m
+            [36m/>[39m
+            [0mFeito de gente. Feito aqui.[0m
+          [36m</p>[39m
+          [36m<h1>[39m
+            [0mA vida acontece[0m
+            [36m<br />[39m
+            [0mquando a gente[0m
+            [36m<br />[39m
+            [36m<em>[39m
+              [0mse encontra.[0m
+            [36m</em>[39m
+          [36m</h1>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"hero-description"[39m
+          [36m>[39m
+            [0mUma oficina, uma conversa, uma ideia em comum. Descubra o que está nascendo em Itaperuna e região — e faça parte.[0m
+          [36m</p>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"hero-actions"[39m
+          [36m>[39m
+            [36m<a[39m
+              [33mclass[39m=[32m"button button-lime"[39m
+              [33mhref[39m=[32m"#atividades-publicas"[39m
+            [36m>[39m
+              [0mExplorar atividades[0m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"community-icon "[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mfocusable[39m=[32m"false"[39m
+                [33mheight[39m=[32m"22"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"1.7"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"22"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M4 12h16m-6-6 6 6-6 6"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</a>[39m
+            [36m<a[39m
+              [33mclass[39m=[32m"hero-publish"[39m
+              [33mhref[39m=[32m"/login"[39m
+            [36m>[39m
+              [0mQuero publicar uma atividade[0m
+            [36m</a>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"hero-garden"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"garden-sun"[39m
+          [36m/>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"garden-orbit"[39m
+          [36m/>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"garden-ground"[39m
+          [36m/>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"garden-tree"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mviewBox[39m=[32m"0 0 300 330"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M150 315V105m0 110-61-58m61 15 57-59"[39m
+              [33mstroke[39m=[32m"#d8e9af"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"9"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"103"[39m
+              [33mcy[39m=[32m"101"[39m
+              [33mfill[39m=[32m"#87aa77"[39m
+              [33mrx[39m=[32m"67"[39m
+              [33mry[39m=[32m"87"[39m
+              [33mtransform[39m=[32m"rotate(-28 103 101)"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"199"[39m
+              [33mcy[39m=[32m"81"[39m
+              [33mfill[39m=[32m"#c8dda0"[39m
+              [33mrx[39m=[32m"61"[39m
+              [33mry[39m=[32m"75"[39m
+              [33mtransform[39m=[32m"rotate(27 199 81)"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"67"[39m
+              [33mcy[39m=[32m"178"[39m
+              [33mfill[39m=[32m"#d7ab75"[39m
+              [33mrx[39m=[32m"46"[39m
+              [33mry[39m=[32m"61"[39m
+              [33mtransform[39m=[32m"rotate(-43 67 178)"[39m
+            [36m/>[39m
+            [36m<ellipse[39m
+              [33mcx[39m=[32m"220"[39m
+              [33mcy[39m=[32m"172"[39m
+              [33mfill[39m=[32m"#5f8b6b"[39m
+              [33mrx[39m=[32m"54"[39m
+              [33mry[39m=[32m"65"[39m
+              [33mtransform[39m=[32m"rotate(41 220 172)"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"garden-note"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"community-icon "[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mfocusable[39m=[32m"false"[39m
+              [33mheight[39m=[32m"22"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"1.7"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"22"[39m
+            [36m>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"9"[39m
+                [33mcy[39m=[32m"8"[39m
+                [33mr[39m=[32m"3"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 21v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span>[39m
+              [0mBoas ideias crescem[0m
+              [36m<br />[39m
+              [36m<strong>[39m
+                [0mquando encontram gente.[0m
+              [36m</strong>[39m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"garden-coordinate"[39m
+          [36m>[39m
+            [0mITAPERUNA · RJ[0m
+          [36m</span>[39m
+        [36m</div>[39m
+      [36m</section>[39m
+      [36m<section[39m
+        [33maria-labelledby[39m=[32m"atividades-publicas"[39m
+        [33mclass[39m=[32m"discovery"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"section-heading"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"eyebrow"[39m
+            [36m>[39m
+              [0mPerto de você[0m
+            [36m</p>[39m
+            [36m<h2[39m
+              [33mid[39m=[32m"atividades-publicas"[39m
+            [36m>[39m
+              [0mEncontre seu próximo encontro.[0m
+            [36m</h2>[39m
+          [36m</div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"feed-label"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"community-icon "[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mfocusable[39m=[32m"false"[39m
+              [33mheight[39m=[32m"22"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"1.7"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"22"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M20 3C8 2 3 8 5 14c2 6 12 7 15-11Z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M4 21 15 10"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0mAtividades na Praça[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"empty-state"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"empty-illustration"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"empty-halo"[39m
+            [36m/>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"community-icon "[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mfocusable[39m=[32m"false"[39m
+              [33mheight[39m=[32m"22"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"1.7"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"22"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M20 3C8 2 3 8 5 14c2 6 12 7 15-11Z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M4 21 15 10"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"empty-spark spark-one"[39m
+            [36m/>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"empty-spark spark-two"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"eyebrow"[39m
+          [36m>[39m
+            [0mToda praça começa com um encontro[0m
+          [36m</p>[39m
+          [36m<h3>[39m
+            [0mA Praça está esperando a primeira atividade[0m
+          [36m</h3>[39m
+          [36m<p>[39m
+            [0mPode ser uma roda de conversa, uma oficina ou uma ação no bairro. Que tal começar algo bom?[0m
+          [36m</p>[39m
+          [36m<a[39m
+            [33mclass[39m=[32m"button button-outline"[39m
+            [33mhref[39m=[32m"/login"[39m
+          [36m>[39m
+            [0mQuero criar uma atividade[0m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"community-icon "[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mfocusable[39m=[32m"false"[39m
+              [33mheight[39m=[32m"22"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"1.7"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"22"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M4 12h16m-6-6 6 6-6 6"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</a>[39m
+        [36m</div>[39m
+      [36m</section>[39m
+      [36m<aside[39m
+        [33mclass[39m=[32m"community-invitation"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"invitation-icon"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"community-icon "[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mfocusable[39m=[32m"false"[39m
+            [33mheight[39m=[32m"22"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.7"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"22"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"9"[39m
+              [33mcy[39m=[32m"8"[39m
+              [33mr[39m=[32m"3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M3 21v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<h2>[39m
+            [0mTem uma ideia que merece companhia?[0m
+          [36m</h2>[39m
+          [36m<p>[39m
+            [0mA Praça também é sua. Compartilhe uma atividade e aproxime quem pode fazer parte.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"button"[39m
+          [33mhref[39m=[32m"/login"[39m
+        [36m>[39m
+          [0mVamos criar um encontro[0m
+          [36m<svg[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"community-icon "[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mfocusable[39m=[32m"false"[39m
+            [33mheight[39m=[32m"22"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.7"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"22"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M4 12h16m-6-6 6 6-6 6"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</a>[39m
+      [36m</aside>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/components/visible-home.test.tsx:22:17
+     20| it('home vazia convida a participar sem fabricar atividades', async ()…
+     21|   mocks.list.mockResolvedValue([]); render(await Home());
+     22|   expect(screen.getByText(/A Praça está sendo construída/)).toBeTruthy…
+       |                 ^
+     23| });
+     24| it('consulta indisponível não é apresentada como lista vazia', async (…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed | 50 passed (52)
+      Tests  4 failed | 490 passed (494)
+   Start at  19:46:22
+   Duration  8.04s (environment 62%, tests 19%, import 16%, transform 2%, worker 1%)
+
+    Isolate  52 workers spawned · ~1.12s startup each (spawn + environment, per file)
+             at least ~4.19s faster with isolate: false — reuses workers across files instead of one per file
+

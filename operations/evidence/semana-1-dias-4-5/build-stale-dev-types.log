@@ -1,0 +1,16 @@
+
+> a-praca-v1-5@0.1.0 build
+> NEXT_TELEMETRY_DISABLED=1 next build
+
+▲ Next.js 16.4.5 (Turbopack)
+- Environments: .env.local, .env
+✓ Running next.config.ts took 61ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1504ms
+  Running TypeScript ...
+.next/dev/types/validator.ts(381,39): error TS2307: Cannot find module '../../../src/app/participacao-check-local/page.js' or its corresponding type declarations.
+.next/dev/types/validator.ts(389,69): error TS2344: Type '__InvalidParamMatchingKeys' does not satisfy the constraint 'never'.
+  Type 'string' is not assignable to type 'never'.
+Failed to type check.
+

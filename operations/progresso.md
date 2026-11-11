@@ -1,3 +1,13 @@
+# Semana 1, dias 4–5 — apoio e intenção implementados (11/11/2026)
+
+Incremento autorizado pelo proponente após o fechamento técnico do Dia 3. TDD: 28 RED com stubs antes da implementação → 38 testes específicos GREEN. Módulo de apoio/intenção, consentimento opcional para nome público (decisão humana explícita), WhatsApp privado, unicidade por atividade/perfil e contadores por organizador. Migration aditiva preparada com RLS, sem aplicar em banco local ou Cloud. Sem comparecimento, faltosos ou reputação.
+
+Verificação: build e typecheck PASS; lint do incremento PASS; `npm test` completo **490 PASS / 4 FAIL / 0 SKIP** (somente débitos conhecidos), lint geral com o único erro conhecido de `Date.now()`. Chromium: sete cenários PASS (quatro de UI com API simulada e três negativas HTTP reais). Docker indisponível: oito testes PostgreSQL preparados, **NOT RUN**; E2E completo também **NOT RUN**. A entrega não constitui prova nova de RLS/persistência real ou de validação humana I5. Liberação Cloud exige revisão/aplicação da migration no projeto correto.
+
+[Relatório, decisão de privacidade, RED/GREEN e limites](evidence/semana-1-dias-4-5/REPORT.md).
+
+---
+
 # Semana 1, dia 3 — verificações restantes concluídas (11/11/2026)
 
 Base `eeec4ce`: `npm run build` **exit 0**, `npm run typecheck` **exit 0**, `npm run lint` **exit 1** (somente débito conhecido `Date.now()`/`react-hooks/purity`). `npm test` completo, **sem bail**, **exit 1: 452 PASS / 4 FAIL / 0 SKIP**, 49 arquivos (47 PASS / 2 FAIL). B11 PASS; sem falha P0 adicional. Falhas restantes: três em `editorial-queue` e uma em `visible-home`, explicitamente autorizadas pelo proponente como débitos a registrar, sem correção nesta rodada.

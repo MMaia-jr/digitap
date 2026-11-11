@@ -1,0 +1,352 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/activities/participation.test.ts tests/components/participation.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/participation.test.ts (24 tests | 24 failed) 28ms
+   ❯ apoio e intenção com identidade verificada (24)
+     × registra apoio simbólico com identidade derivada da sessão 6ms
+     × intenção sem WhatsApp nem consentimento usa padrões privados 1ms
+     × intenção aceita telefone opcional, grupo e autorização explícita 1ms
+     × visitante não registra apoio ou intenção 6ms
+     × identidade não confirmada não grava 1ms
+     × duplicidade UNIQUE vira conflito sem trocar apoio por intenção 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"outro"} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":0} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":1.5} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":21} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","whatsapp":"javascript:alert(1)"} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","mostrar_nome":"true"} 1ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","whatsapp":"+5522999999999"} 2ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","mostrar_nome":true} 0ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","sujeito_id":"outro"} 0ms
+     × rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","auth_user_id":"outro"} 0ms
+     × atividade inválida não chega ao repositório 0ms
+     × atividade fechada/retirada não vira confirmação 0ms
+     × organizador recebe apenas contadores, sem nomes nem contatos 0ms
+     × terceiro não obtém contadores privados de outro organizador 0ms
+     × visitante não acessa dashboard de contadores 0ms
+     × resumo público e resposta própria não vazam campos privados 0ms
+     × visitante consulta prova social autorizada, sem consultar confirmação individual 0ms
+     × erros internos são genéricos 1ms
+ ❯ tests/components/participation.test.tsx (4 tests | 4 failed) 3036ms
+   × mostra contadores e apenas nomes autorizados retornados pelo endpoint 1023ms
+   × visitante recebe link de login e não envia confirmação 1004ms
+   × apoio envia somente tipo, sem contato ou identidade 1006ms
+   × consentimento de nome público começa desmarcado e WhatsApp é opcional 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 28 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > registra apoio simbólico com identidade derivada da sessão
+Error: Ainda não implementado
+ ❯ Object.confirm src/lib/participation/service.ts:12:92
+     10|  void deps;
+     11|  return {
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+       |                                                                                            ^
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+ ❯ tests/activities/participation.test.ts:10:108
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > intenção sem WhatsApp nem consentimento usa padrões privados
+Error: Ainda não implementado
+ ❯ Object.confirm src/lib/participation/service.ts:12:92
+     10|  void deps;
+     11|  return {
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+       |                                                                                            ^
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+ ❯ tests/activities/participation.test.ts:11:110
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > intenção aceita telefone opcional, grupo e autorização explícita
+Error: Ainda não implementado
+ ❯ Object.confirm src/lib/participation/service.ts:12:92
+     10|  void deps;
+     11|  return {
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+       |                                                                                            ^
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+ ❯ tests/activities/participation.test.ts:12:114
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > visitante não registra apoio ou intenção
+AssertionError: expected Error: Ainda não implementado to match object { status: 401 }
+
+- Expected
++ Received
+
+- {
+-   "status": 401,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:13:159
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > identidade não confirmada não grava
+AssertionError: expected Error: Ainda não implementado to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:14:127
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > duplicidade UNIQUE vira conflito sem trocar apoio por intenção
+AssertionError: expected Error: Ainda não implementado to match object { status: 409 }
+
+- Expected
++ Received
+
+- {
+-   "status": 409,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:15:231
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"outro"}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":0}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":1.5}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","acompanhantes":21}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","whatsapp":"javascript:alert(1)"}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"intencao","mostrar_nome":"true"}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","whatsapp":"+5522999999999"}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","mostrar_nome":true}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","sujeito_id":"outro"}
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > rejeita entrada inválida ou identidade forjada: {"tipo":"apoio","auth_user_id":"outro"}
+AssertionError: expected Error: Ainda não implementado to match object { status: 422 }
+
+- Expected
++ Received
+
+- {
+-   "status": 422,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:16:488
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > atividade inválida não chega ao repositório
+AssertionError: expected Error: Ainda não implementado to match object { status: 404 }
+
+- Expected
++ Received
+
+- {
+-   "status": 404,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:17:138
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > atividade fechada/retirada não vira confirmação
+AssertionError: expected Error: Ainda não implementado to match object { status: 409 }
+
+- Expected
++ Received
+
+- {
+-   "status": 409,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:18:187
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > organizador recebe apenas contadores, sem nomes nem contatos
+Error: Ainda não implementado
+ ❯ Object.organizerCounts src/lib/participation/service.ts:13:78
+     11|  return {
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+       |                                                                              ^
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+     15|  };
+ ❯ tests/activities/participation.test.ts:19:225
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > terceiro não obtém contadores privados de outro organizador
+AssertionError: expected Error: Ainda não implementado to match object { status: 403 }
+
+- Expected
++ Received
+
+- {
+-   "status": 403,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:20:190
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > visitante não acessa dashboard de contadores
+AssertionError: expected Error: Ainda não implementado to match object { status: 401 }
+
+- Expected
++ Received
+
+- {
+-   "status": 401,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:21:125
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > resumo público e resposta própria não vazam campos privados
+Error: Ainda não implementado
+ ❯ Object.state src/lib/participation/service.ts:14:68
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+       |                                                                    ^
+     15|  };
+     16| }
+ ❯ tests/activities/participation.test.ts:22:259
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > visitante consulta prova social autorizada, sem consultar confirmação individual
+Error: Ainda não implementado
+ ❯ Object.state src/lib/participation/service.ts:14:68
+     12|   async confirm(id:string,input:unknown):Promise<OwnConfirmation>{void…
+     13|   async organizerCounts(id:string):Promise<ConfirmationCounts>{void id…
+     14|   async state(id:string):Promise<ParticipationState>{void id;throw new…
+       |                                                                    ^
+     15|  };
+     16| }
+ ❯ tests/activities/participation.test.ts:23:146
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/28]⎯
+
+ FAIL  tests/activities/participation.test.ts > apoio e intenção com identidade verificada > erros internos são genéricos
+AssertionError: expected Error: Ainda não implementado to match object { status: 503, …(1) }
+
+- Expected
++ Received
+
+- {
+-   "message": "Serviço indisponível. Tente novamente.",
+-   "status": 503,
++ Error {
++   "message": "Ainda não implementado",
+  }
+
+ ❯ tests/activities/participation.test.ts:24:180
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/28]⎯
+
+ FAIL  tests/components/participation.test.tsx > mostra contadores e apenas nomes autorizados retornados pelo endpoint
+TestingLibraryElementError: Unable to find an element with the text: Nome autorizado. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/components/participation.test.tsx:9:163
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/28]⎯
+
+ FAIL  tests/components/participation.test.tsx > visitante recebe link de login e não envia confirmação
+TestingLibraryElementError: Unable to find role="link" and name `/Entre para apoiar/`
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/components/participation.test.tsx:10:160
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/28]⎯
+
+ FAIL  tests/components/participation.test.tsx > apoio envia somente tipo, sem contato ou identidade
+TestingLibraryElementError: Unable to find role="button" and name "Apoiar"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/components/participation.test.tsx:11:165
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/28]⎯
+
+ FAIL  tests/components/participation.test.tsx > consentimento de nome público começa desmarcado e WhatsApp é opcional
+Error: The property "showModal" is not defined on the object.
+ ❯ tests/components/participation.test.tsx:13:13
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/28]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  28 failed (28)
+   Start at  19:23:56
+   Duration  4.01s (tests 79%, environment 17%, import 3%, transform 1%)
+

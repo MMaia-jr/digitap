@@ -1,0 +1,66 @@
+{
+  "checked_at": "2026-11-11T22:45:59.735Z",
+  "scope": "UI manual walkthrough automated in Chromium. GET/POST UI data mocked; negative HTTP checks real. No DB, Auth login or production access.",
+  "checks": [
+    {
+      "scenario": "visitor",
+      "result": "PASS",
+      "backend": "mocked",
+      "requests": []
+    },
+    {
+      "scenario": "support",
+      "result": "PASS",
+      "backend": "mocked",
+      "requests": [
+        {
+          "tipo": "apoio"
+        }
+      ]
+    },
+    {
+      "scenario": "intention-private",
+      "result": "PASS",
+      "backend": "mocked",
+      "requests": [
+        {
+          "tipo": "intencao",
+          "whatsapp": "+5522999999999",
+          "acompanhantes": 3,
+          "mostrar_nome": false
+        }
+      ]
+    },
+    {
+      "scenario": "intention-public",
+      "result": "PASS",
+      "backend": "mocked",
+      "requests": [
+        {
+          "tipo": "intencao",
+          "whatsapp": "",
+          "acompanhantes": 3,
+          "mostrar_nome": true
+        }
+      ]
+    },
+    {
+      "scenario": "real anonymous POST",
+      "status": 401,
+      "result": "PASS",
+      "backend": "real local HTTP, no DB"
+    },
+    {
+      "scenario": "real cross-origin POST",
+      "status": 403,
+      "result": "PASS",
+      "backend": "real local HTTP, no DB"
+    },
+    {
+      "scenario": "real anonymous organizer GET",
+      "status": 401,
+      "result": "PASS",
+      "backend": "real local HTTP, no DB"
+    }
+  ]
+}

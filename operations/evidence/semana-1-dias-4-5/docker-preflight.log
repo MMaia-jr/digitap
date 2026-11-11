@@ -1,0 +1,4 @@
+Command: docker ps --format '{{.Names}}\t{{.Ports}}'
+Exit code: 1
+Cannot connect to the Docker daemon at unix:///Users/alexandrechagasleaocryptoboy/.docker/run/docker.sock. Is the docker daemon running?
+Nenhum container iniciado, nenhuma alteração de Docker, banco ou serviço remoto.

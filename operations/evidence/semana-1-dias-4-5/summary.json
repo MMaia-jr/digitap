@@ -1,0 +1,52 @@
+{
+  "base_commit": "25cad7f",
+  "docker_available": false,
+  "migration": "20261111222337_confirmacoes_apoio_intencao.sql",
+  "migration_applied": false,
+  "privacy_decision": "Nomes públicos somente com consentimento opcional explícito; WhatsApp sempre privado",
+  "red": {
+    "exit_code": 1,
+    "FAIL": 28
+  },
+  "green": {
+    "exit_code": 0,
+    "PASS": 38,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "unit_full": {
+    "exit_code": 1,
+    "PASS": 490,
+    "FAIL": 4,
+    "SKIP": 0,
+    "files": 52
+  },
+  "build": {
+    "exit_code": 0
+  },
+  "typecheck": {
+    "exit_code": 0
+  },
+  "lint_touched": {
+    "exit_code": 0
+  },
+  "lint_full": {
+    "exit_code": 1,
+    "errors": 1,
+    "note": "preexisting Date.now()/react-hooks/purity"
+  },
+  "browser": {
+    "PASS": 7,
+    "FAIL": 0,
+    "ui_mocked_api": 4,
+    "real_negative_http_no_db": 3
+  },
+  "database_integration": {
+    "status": "NOT RUN",
+    "prepared_tests": 8
+  },
+  "full_e2e": {
+    "status": "NOT RUN"
+  },
+  "production_access": false
+}

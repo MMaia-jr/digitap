@@ -7,6 +7,7 @@ Infraestrutura cívica para atividades e trajetórias comunitárias de Itaperuna
 - Cadastro de pessoa física e de organização, confirmação por e-mail, login e recuperação de senha.
 - Criação e edição de atividades, envio para curadoria e consulta pública das versões publicadas.
 - Registro de realização, evidências e revisão editorial, com distinção entre declaração do responsável e comprovação independente.
+- Apoio simbólico e intenção de presença implementados no repositório, com WhatsApp privado, nomes apenas por consentimento opcional e contadores no dashboard. **A migration deste módulo ainda não foi aplicada; integração e liberação Cloud pendentes.**
 - Perfil e portfólio público, com exportação em PDF pela impressão do navegador (“Salvar como PDF”). O PDF é uma cópia do momento da exportação, não um certificado.
 
 O serviço está em **beta público na web**. O estado de **Enable Signup no Supabase Cloud ainda não foi confirmado nesta revisão**; não há evidência para classificá-lo como beta fechado. Se `disable_signup=false`, a classificação operacional deve ser **beta aberto para cadastro**, ainda que a publicação continue sujeita à curadoria. Página de cadastro visível não comprova que novas contas são aceitas. Não alteramos essa configuração.
@@ -58,7 +59,7 @@ Contato: **muralitaperuna@gmail.com**. Compromisso operacional de resposta em at
 
 O portfólio/PDF foi implementado antes do I5, divergindo da sequência prevista em [02 — Escopo e MVP](docs/02-escopo-e-mvp.md). Esta reconciliação registra a exceção para apresentar atividades e evidências existentes durante o beta, sem tratar a entrega como aprovação retroativa do I5. Condições: somente conteúdo autorizado/publicado, sem certificação independente, possibilidade de contestação e sem avançar novos módulos por esse precedente. Veja [checkpoint e pendências](operations/progresso.md).
 
-Os documentos 00–07 e relatórios antigos continuam como histórico das decisões. Trechos que dizem “nenhum deploy” ou “somente local” não descrevem mais o estado operacional; a nota de reconciliação prevalece para esse estado, sem reescrever os gates humanos. Apoio, verificação de comparecimento, parceiros, prestação de contas financeira, capacidades, PoWth e painel de impacto ficam fora deste trabalho.
+Os documentos 00–07 e relatórios antigos continuam como histórico das decisões. Trechos que dizem “nenhum deploy” ou “somente local” não descrevem mais o estado operacional; a nota de reconciliação prevalece para esse estado, sem reescrever os gates humanos. O proponente autorizou posteriormente o incremento de apoio/intenção (Semana 1, dias 4–5). Verificação de comparecimento, parceiros, prestação de contas financeira, capacidades, PoWth e painel de impacto continuam fora do escopo. [Implementação e limites da verificação](operations/evidence/semana-1-dias-4-5/REPORT.md).
 
 ## Risco operacional: backup e restore ainda não comprovados
 

@@ -1,0 +1,3 @@
+import {ActivityParticipation} from '../../components/ActivityParticipation';
+import {ConfirmationCounts} from '../../components/ConfirmationCounts';
+export default function LocalCheck(){return <section className="card"><h1>Ensaio local de participação</h1><ActivityParticipation activityId="10000000-0000-4000-8000-000000000001"/><h2>Contadores do organizador</h2><ConfirmationCounts activityId="10000000-0000-4000-8000-000000000001"/></section>;}

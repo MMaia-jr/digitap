@@ -1,0 +1,50 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/activities/participation.test.ts tests/components/participation.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/activities/participation.test.ts (0 test)
+ ❯ tests/components/participation.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/activities/participation.test.ts [ tests/activities/participation.test.ts ]
+Error: Cannot find module '/src/lib/participation/service' imported from /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/activities/participation.test.ts
+ ❯ tests/activities/participation.test.ts:3:1
+      1| import {describe,it,expect,vi} from 'vitest';
+      2| vi.mock('server-only',()=>({}));
+      3| import {createParticipationService,type ParticipationRepository} from …
+       | ^
+      4| const id='10000000-0000-4000-8000-000000000001';
+      5| function setup(user: {id:string;email_confirmed_at?:string}|null={id:'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/components/participation.test.tsx [ tests/components/participation.test.tsx ]
+Error: Failed to resolve import "../../src/components/ActivityParticipation" from "tests/components/participation.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/components/participation.test.tsx:4:36
+  2  |  import { afterEach, expect, it, vi } from "vitest";
+  3  |  import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+  4  |  import { ActivityParticipation } from "../../src/components/ActivityParticipation";
+     |                                         ^
+  5  |  var _jsxFileName = "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/components/participation.test.tsx";
+  6  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+ ❯ TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/node.js:8803:39
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/node.js:8800:14
+ ❯ resolveId node_modules/vite/dist/node/chunks/node.js:26594:18
+ ❯ node_modules/vite/dist/node/chunks/node.js:26693:23
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/node.js:26666:4
+ ❯ EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/node.js:8582:14
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/node.js:20155:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  no tests
+   Start at  19:23:25
+   Duration  925ms (environment 99%, worker 1%)
+

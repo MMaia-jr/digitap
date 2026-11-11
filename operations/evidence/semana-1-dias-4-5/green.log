@@ -1,0 +1,13 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/activities/participation.test.ts tests/components/participation.test.tsx tests/auth/participation-runtime.test.ts
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+
+ Test Files  3 passed (3)
+      Tests  38 passed (38)
+   Start at  19:30:07
+   Duration  2.00s (environment 61%, tests 16%, import 14%, transform 8%, worker 1%)
+

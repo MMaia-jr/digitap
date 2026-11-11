@@ -1,0 +1,25 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run tests/activities/participation.test.ts tests/components/participation.test.tsx
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/participation.test.tsx (4 tests | 1 failed) 200ms
+   × consentimento de nome público começa desmarcado e WhatsApp é opcional 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/participation.test.tsx > consentimento de nome público começa desmarcado e WhatsApp é opcional
+Error: The property "showModal" is not defined on the object.
+ ❯ tests/components/participation.test.tsx:13:13
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 27 passed (28)
+   Start at  19:27:33
+   Duration  1.20s (environment 61%, tests 20%, import 13%, transform 5%, worker 1%)
+
