@@ -20,9 +20,17 @@ it('B11: nome público legado com HTML é escapado na lista e detalhe',async()=>
  const name='<img src=x onerror="window.xss=1">';
  const activity=parseSnapshot({tipo:'atividade-publica.v1',id,versao:1,...draft,organizacao:{id:org,nome_publico:name},estado_programacao:'programada',publicada_em:'2026-01-01T12:00:00Z'});
  list.mockResolvedValue([activity]);get.mockResolvedValue(activity);
- for(const element of [await PublicList(),await PublicDetail({params:Promise.resolve({id})})]){
+ for(const [element,selector,count] of [
+  [await PublicList(),'li > p:first-of-type',1],
+  [await PublicDetail({params:Promise.resolve({id})}),'.detail-byline a, .organizer-panel strong',2],
+ ] as const){
   const doc=new DOMParser().parseFromString(renderToStaticMarkup(element),'text/html');
-  expect(doc.querySelector('img,script,svg,iframe,[onerror],[onload]')).toBeNull();expect(doc.body.textContent).toContain(name);
+  const names=Array.from(doc.querySelectorAll(selector));
+  expect(names).toHaveLength(count);
+  for(const node of names){
+   expect(node.textContent).toBe(name);
+   expect(node.querySelector('img,script,svg,iframe,[onerror],[onload]')).toBeNull();
+  }
  }
 });
 it('B12: lista vazia apresenta estado vazio sem inventar atividade/link',async()=>{
