@@ -19,6 +19,6 @@ export function localConfig(){
     const parsed=new URL(url);
     if(parsed.protocol!=='https:'||! /^[a-z0-9-]+\.supabase\.co$/.test(parsed.hostname)||parsed.username||parsed.password||parsed.port||parsed.search||parsed.hash||parsed.pathname!=='/'||! [parsed.origin,`${parsed.origin}/`].includes(url))throw new Error('URL de produção inválida.');
   }else if(url!=='http://127.0.0.1:56151')throw new Error('URL local inválida.');
-  if(!key||!key.startsWith('sb_publishable_'))throw new Error('Chave pública do Supabase inválida.');
+  if(!key||key.trim().length<20)throw new Error('Chave pública do Supabase inválida.');
   return {url,key};
 }

@@ -10,6 +10,16 @@ function configure(mode: 'production' | 'development', url: string) {
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'sb_publishable_fixture');
 }
 describe('configuração por ambiente', () => {
+  it.each(['sb_publishable_fixture', 'eyJ_fixture_legacy_key', 'opaque_fixture_key20'])('aceita chave opaca com tamanho mínimo: %s', key => {
+    configure('production', 'https://project.supabase.co');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', key);
+    expect(localConfig().key).toBe(key);
+  });
+  it.each([undefined, '', ' '.repeat(25), 'a'.repeat(19), 'sb_publishable_', 'eyJ'])('rejeita chave ausente ou curta: %s', key => {
+    configure('production', 'https://project.supabase.co');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', key);
+    expect(() => localConfig()).toThrow('Chave pública do Supabase inválida.');
+  });
   it('aceita o endpoint local em desenvolvimento', () => {
     configure('development', 'http://127.0.0.1:56151');
     expect(localConfig().url).toBe('http://127.0.0.1:56151');

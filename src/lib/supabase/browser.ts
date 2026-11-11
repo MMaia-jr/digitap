@@ -5,7 +5,7 @@ import { createBrowserClient } from '@supabase/ssr';
 export function browserClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (url !== 'http://127.0.0.1:56151' || !key?.startsWith('sb_publishable_')) {
+  if (url !== 'http://127.0.0.1:56151' || !key || key.trim().length < 20) {
     throw new Error('Supabase local não configurado.');
   }
   return createBrowserClient(url, key, {
