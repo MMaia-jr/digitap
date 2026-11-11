@@ -1,0 +1,1150 @@
+{
+  "note": "Unique assertion results across two partial runs; failed status retained; not a complete run. Counts must not be added to focused results.",
+  "counts": {
+    "passed": 224,
+    "failed": 2,
+    "pending": 2
+  },
+  "cases": [
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "envio PF registra autorização explícita de uma versão e é idempotente",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "envio sem consentimento ou em nome de outra PF é negado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "fila inclui sujeito e data, mas não rascunhos não submetidos",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "PF não consegue acessar fila ou executar decisão editorial",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "rejeição exige motivo e continua privada",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "consentimento revogado impede aprovação/publicação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/editorial-cycle.database.test.ts",
+      "test": "falha de publicação reverte aprovação, curadoria e ativação da PF",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/onboarding.database.test.ts",
+      "test": "RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/onboarding.database.test.ts",
+      "test": "RPC não pode ser executada por authenticated com identidade de outro usuário",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/onboarding.database.test.ts",
+      "test": "RPC não pode ser executada por anon e não aceita mudança de papel de conta existente",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/onboarding.database.test.ts",
+      "test": "falha no segundo insert reverte organização (sem órfã)",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "rascunho não pode receber confirmação nem expor resumo público",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "cancelamento fecha novas confirmações e retirada oculta resumo",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/participation.database.test.ts",
+      "test": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "A07/B07 real: anônimo, organizações e privilégios de metadata/payload não publicam",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "A07/B07 real: organização pendente bloqueia publicação mesmo por editor",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: estado confiável bloqueia editor e administrador ativos podem publicar",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização revogada bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização expirada bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização prazo vencido bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização revogação inconsistente bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização futura bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização objeto alheio bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização tipo incompatível bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização escopo bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização versão bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização sem versão bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: autorização sem comprovante bloqueia, sem substituição por outra válida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: ausência de autorização bloqueia sem snapshot",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: versão divergente, aprovação sem hash ou conteúdo alterado são recusados",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: snapshot autorizado é persistido com número, timestamp e evento, sem apoios",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: seis repetições concorrentes geram uma publicação e um evento",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: pedidos concorrentes distintos não republicam",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: FK inválida no evento reverte todos os campos da publicação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: retry revalida autorização e organização e público falha fechado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: leituras públicas ignoram colunas privadas e campos extras do JSON",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: rascunho, enviada e aprovada não são públicos; edição publicada preserva snapshot anterior (B08)",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/publication.database.test.ts",
+      "test": "B07 real: revogação concorrente confirmada impede publicação que esperava lock",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05 RED PostgreSQL: autorização do anúncio não aprova registro posterior",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação cria snapshot separado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização outro_objeto não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização sem_escopo não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização expirada não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização revogada não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização futura não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: autorização sem_prova não permite aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: transições recusam visitante/organização, estado/hash/atributos forjados e referência de outro registro",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C05: publicação concorrente é idempotente; retry revalida autorização, hash e estado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C06 RED PostgreSQL: revogar autorização do registro oculta somente a publicação abrangida",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C06 RED PostgreSQL: revogar autorização do anúncio fecha apoios e oculta publicação sem apagar snapshot",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C06: revogação concorrente gera um evento; permissões e vínculo são revalidados",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C06: falha de auditoria reverte revogação e fechamento de apoios",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C06: publicação concorrente à revogação não fica visível após confirmação da revogação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: todas as transições do registro geram evento restrito com autor/data/estados",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de enviar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de iniciar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de aprovar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de publicar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de retirar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de devolver reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C07: falha na auditoria de rejeitar reverte estado, snapshot e aprovação de referências",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C08 RED PostgreSQL: contestação mantém relato/snapshot e divergência rastreável, sem afirmar consenso",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C08: proprietário/editor podem registrar divergências distintas; outro tenant/visitante são negados",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C08: falha na auditoria reverte estado contestado e não grava divergência",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/record-editorial.database.test.ts",
+      "test": "C08: contestação durante revisão bloqueia aprovação sem apagar relato e autoria",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: visitante, proprietário e organização alheia não revisam; metadata não eleva papel",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: editor/admin ativos iniciam e bloqueio é relido sem renovar JWT",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: não aprova rascunho/enviada sem revisão e detecta versão antiga",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização ausente impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização revogada impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização expirada impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização prazo vencido impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização revogada com status inconsistente impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização autorização futura impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização outro objeto impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização outro tipo impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização outro escopo impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização genérica sem versão impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização outra versão impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização sem papel autorizante impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: autorização sem comprovação impede aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: aprovação autorizada audita versão sem snapshot, publicação ou apoio",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B06 real: devolver exige motivo e só dono/editor o consultam",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B06 real: rejeitar exige motivo e só dono/editor o consultam",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: 6 aprovações com a mesma chave geram um evento e retries",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: retry após revogar autorização é negado, sem duplicar aprovação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05/B06 real: decisões concorrentes diferentes conflitam e não sobrescrevem",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B06 real: reuso da chave com outro motivo/autor conflita e preserva o primeiro",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05/B06 real: falha FK na auditoria de iniciar reverte a transição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05/B06 real: falha FK na auditoria de aprovar reverte a transição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05/B06 real: falha FK na auditoria de devolver reverte a transição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05/B06 real: falha FK na auditoria de rejeitar reverte a transição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/review.database.test.ts",
+      "test": "B05 real: revogação concorrente confirmada impede aprovação que esperava lock",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08 RED real: edição cria versão pendente, mantém público anterior e aprovação substitui atomicamente",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B09 RED real: retirada fecha apoios, oculta, audita motivo e bloqueia republicação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08: isolamento, visitante, estado bloqueado e conflito não alteram snapshot",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08: novas versões exigem nova autorização, preservam anterior em devolução/rejeição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08: aprovação concorrente da revisão é idempotente e guarda snapshot anterior no histórico",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08/B09: falha na auditoria de edit reverte operação inteira",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08/B09: falha na auditoria de approval reverte operação inteira",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B08/B09: falha na auditoria de withdraw reverte operação inteira",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B09: visitante, organizações e editor bloqueado não retiram; payload forjado rejeitado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B09: retirada concorrente é idempotente; motivo só para proprietário/editor, sem ressurreição",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/revisions.database.test.ts",
+      "test": "B09: retirar durante revisão oculta snapshot anterior e bloqueia aprovação concorrente",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem",
+      "status": "failed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B10 PostgreSQL: adiada preserva snapshot, fecha apoios e audita autor/data",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B10 PostgreSQL: cancelada preserva snapshot, fecha apoios e audita autor/data",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B10 PostgreSQL: concorrência, retries e cancelamento após adiamento não ressuscitam programação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B10 PostgreSQL: negativas sem evento para organização, visitante, editor bloqueado e retirada",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B10 PostgreSQL: erro de auditoria reverte estado e fechamento de apoios",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/scheduling.database.test.ts",
+      "test": "B11 PostgreSQL: HTML é rejeitado antes de criar/editar/auditar e snapshot permanece íntegro",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 organizacoes existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 contas_acesso existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 atividades existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 registros_realizacao existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 evidencias existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 autorizacoes_publicacao existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 apoios existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 parceiros existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 eventos_editoriais existe com RLS e sem grants aos clientes",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/organizacoes nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/contas_acesso nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/atividades nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/registros_realizacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/evidencias nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/apoios nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/parceiros nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 RLS continua negando leitura mesmo se SELECT for concedido por engano (rollback)",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 Auth real e papel do banco prevalecem sobre metadata administrativa forjada",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 bloqueio e mudança de papel são efetivos sem renovar o JWT",
+      "status": "passed"
+    },
+    {
+      "file": "tests/security/database.test.ts",
+      "test": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 tentativas públicas não alteraram os registros fictícios",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B01 real: rascunho tem proprietário do servidor e não tem snapshot/apoio público",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B01 real: edição própria, outro tenant negado e conflito de versão",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B01 real: conta bloqueada não consulta/escreve e pode ser restaurada só pelo setup",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B02 real: campos obrigatórios ausentes não criam atividade",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B03 real: URL/HTML/data inválidos negados sem persistência",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B03/B04 real: envio revalida conteúdo persistido e não produz evento inválido",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B04 real: envio e auditoria confirmados juntos; retry sem evento duplicado",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B04 real: 6 envios concorrentes geram uma transição e um evento",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B04 real: falha PostgreSQL no INSERT de auditoria reverte UPDATE de envio",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B01/B04 real: duas edições concorrentes da versão 1 não sobrescrevem silenciosamente",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/activities.database.test.ts",
+      "test": "B01 real: nove tabelas continuam RLS/grants fechados; REST autenticado não lê atividade",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "PF pendente cria rascunho com sujeito próprio e sem publicação",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "listagem PF é isolada por sujeito e autor",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "payload não escolhe sujeito nem autor",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "PF não ganha acesso editorial ou publicação automática",
+      "status": "failed"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "conta bloqueada não cria nem lista rascunhos",
+      "status": "pending"
+    },
+    {
+      "file": "tests/integration/pf-activities.database.test.ts",
+      "test": "escopos reais do vínculo são revalidados para cada operação",
+      "status": "pending"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C01 PostgreSQL: futura negada, data efetiva privada persiste com auditoria atômica",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C01 PostgreSQL: proprietário, tenant alheio, visitante, papel editorial e versões são verificados",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C01 PostgreSQL: seis retries concorrentes geram um registro e um evento; outro pedido conflita",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C01 PostgreSQL: falha de auditoria reverte inserção do relato",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C02 PostgreSQL: só declaração permanece declarada, privada e sem corroboração automática",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C03 PostgreSQL: referência parcial permanece não aprovada e não corrobora o relato total; retry é único",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C03 PostgreSQL: falha de auditoria da referência reverte evidência",
+      "status": "passed"
+    },
+    {
+      "file": "tests/integration/records.database.test.ts",
+      "test": "C04 PostgreSQL: fontes impróprias/sensíveis são rejeitadas sem evidências ou eventos novos",
+      "status": "passed"
+    }
+  ]
+}

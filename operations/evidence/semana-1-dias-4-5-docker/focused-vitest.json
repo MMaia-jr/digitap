@@ -1,0 +1,129 @@
+{
+  "numTotalTestSuites": 1,
+  "numPassedTestSuites": 1,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 8,
+  "numPassedTests": 8,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794438291812,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "status": "passed",
+          "title": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "duration": 118.06048899999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "status": "passed",
+          "title": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "duration": 183.06755199999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "status": "passed",
+          "title": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "duration": 110.64606099999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "status": "passed",
+          "title": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "duration": 145.90847799999983,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "status": "passed",
+          "title": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "duration": 107.62137400000029,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rascunho não pode receber confirmação nem expor resumo público",
+          "status": "passed",
+          "title": "rascunho não pode receber confirmação nem expor resumo público",
+          "duration": 27.027579999999944,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "status": "passed",
+          "title": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "duration": 104.37160700000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "status": "passed",
+          "title": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "duration": 113.44777500000009,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438294821,
+      "endTime": 1794438295731.4478,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/participation.database.test.ts"
+    }
+  ],
+  "evidence_redaction": "Credentials redacted; failure dumps omitted beyond first line and test stack locations to avoid publishing existing local records."
+}

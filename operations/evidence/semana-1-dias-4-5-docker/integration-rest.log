@@ -1,0 +1,5 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts --bail=1 --testNamePattern=^(?!.*B12 PostgreSQL: sem publicações elegíveis).* --reporter=json --outputFile=/tmp/digitap-local-13350-integration-rest.json
+
+JSON report written to /tmp/digitap-local-13350-integration-rest.json

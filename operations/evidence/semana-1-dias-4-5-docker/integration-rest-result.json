@@ -1,0 +1,12 @@
+{
+  "command": "npm run test:onboarding:db -- --bail=1 --testNamePattern=^(?!.*B12 PostgreSQL: sem publicações elegíveis).* --reporter=json --outputFile=/tmp/digitap-local-13350-integration-rest.json",
+  "started_at": "2026-11-11T23:07:49.830Z",
+  "finished_at": "2026-11-11T23:08:36.431Z",
+  "exit_code": 1,
+  "signal": null,
+  "counts": {
+    "PASS": 224,
+    "FAIL": 1,
+    "SKIP": 3
+  }
+}

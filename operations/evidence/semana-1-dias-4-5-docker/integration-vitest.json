@@ -1,0 +1,1430 @@
+{
+  "numTotalTestSuites": 12,
+  "numPassedTestSuites": 11,
+  "numFailedTestSuites": 1,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 118,
+  "numPassedTests": 111,
+  "numFailedTests": 1,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794438321022,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [],
+      "startTime": 1794438321022,
+      "endTime": 1794438321022,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/activities.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "envio PF registra autorização explícita de uma versão e é idempotente",
+          "status": "passed",
+          "title": "envio PF registra autorização explícita de uma versão e é idempotente",
+          "duration": 80.24819500000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "envio sem consentimento ou em nome de outra PF é negado",
+          "status": "passed",
+          "title": "envio sem consentimento ou em nome de outra PF é negado",
+          "duration": 22.86230499999965,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público",
+          "status": "passed",
+          "title": "editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público",
+          "duration": 100.27336700000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "fila inclui sujeito e data, mas não rascunhos não submetidos",
+          "status": "passed",
+          "title": "fila inclui sujeito e data, mas não rascunhos não submetidos",
+          "duration": 30.87585500000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "PF não consegue acessar fila ou executar decisão editorial",
+          "status": "passed",
+          "title": "PF não consegue acessar fila ou executar decisão editorial",
+          "duration": 25.09319400000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejeição exige motivo e continua privada",
+          "status": "passed",
+          "title": "rejeição exige motivo e continua privada",
+          "duration": 48.47378600000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "consentimento revogado impede aprovação/publicação",
+          "status": "passed",
+          "title": "consentimento revogado impede aprovação/publicação",
+          "duration": 25.97122599999966,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "falha de publicação reverte aprovação, curadoria e ativação da PF",
+          "status": "passed",
+          "title": "falha de publicação reverte aprovação, curadoria e ativação da PF",
+          "duration": 57.085297999999966,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438335865,
+      "endTime": 1794438336256.0852,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/editorial-cycle.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional",
+          "status": "passed",
+          "title": "RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional",
+          "duration": 48.580375000000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC não pode ser executada por authenticated com identidade de outro usuário",
+          "status": "passed",
+          "title": "RPC não pode ser executada por authenticated com identidade de outro usuário",
+          "duration": 32.55160000000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC não pode ser executada por anon e não aceita mudança de papel de conta existente",
+          "status": "passed",
+          "title": "RPC não pode ser executada por anon e não aceita mudança de papel de conta existente",
+          "duration": 1580.55138,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "falha no segundo insert reverte organização (sem órfã)",
+          "status": "passed",
+          "title": "falha no segundo insert reverte organização (sem órfã)",
+          "duration": 10.03162599999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438352203,
+      "endTime": 1794438353875.0317,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/onboarding.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "status": "passed",
+          "title": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "duration": 225.3336830000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "status": "passed",
+          "title": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "duration": 177.79342600000018,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "status": "passed",
+          "title": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "duration": 66.09707899999967,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "status": "passed",
+          "title": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "duration": 93.20486699999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "status": "passed",
+          "title": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "duration": 65.02343500000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rascunho não pode receber confirmação nem expor resumo público",
+          "status": "passed",
+          "title": "rascunho não pode receber confirmação nem expor resumo público",
+          "duration": 17.59756900000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "status": "passed",
+          "title": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "duration": 55.29298000000017,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "status": "passed",
+          "title": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "duration": 64.48516400000017,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438349381,
+      "endTime": 1794438350146.485,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/participation.database.test.ts"
+    },
+    {
+      "assertionResults": [],
+      "startTime": 1794438321022,
+      "endTime": 1794438321022,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/pf-activities.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "A07/B07 real: anônimo, organizações e privilégios de metadata/payload não publicam",
+          "status": "passed",
+          "title": "A07/B07 real: anônimo, organizações e privilégios de metadata/payload não publicam",
+          "duration": 106.30182100000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "A07/B07 real: organização pendente bloqueia publicação mesmo por editor",
+          "status": "passed",
+          "title": "A07/B07 real: organização pendente bloqueia publicação mesmo por editor",
+          "duration": 73.3330460000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: estado confiável bloqueia editor e administrador ativos podem publicar",
+          "status": "passed",
+          "title": "B07 real: estado confiável bloqueia editor e administrador ativos podem publicar",
+          "duration": 82.67770500000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização revogada bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização revogada bloqueia, sem substituição por outra válida",
+          "duration": 81.24774699999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização expirada bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização expirada bloqueia, sem substituição por outra válida",
+          "duration": 83.28416400000015,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização prazo vencido bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização prazo vencido bloqueia, sem substituição por outra válida",
+          "duration": 93.88009299999976,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização revogação inconsistente bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização revogação inconsistente bloqueia, sem substituição por outra válida",
+          "duration": 81.20747600000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização futura bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização futura bloqueia, sem substituição por outra válida",
+          "duration": 82.66448599999967,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização objeto alheio bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização objeto alheio bloqueia, sem substituição por outra válida",
+          "duration": 80.3884680000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização tipo incompatível bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização tipo incompatível bloqueia, sem substituição por outra válida",
+          "duration": 78.86877199999981,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização escopo bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização escopo bloqueia, sem substituição por outra válida",
+          "duration": 79.64173500000015,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização versão bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização versão bloqueia, sem substituição por outra válida",
+          "duration": 81.05410400000028,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização sem versão bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização sem versão bloqueia, sem substituição por outra válida",
+          "duration": 84.07921100000021,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização sem comprovante bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização sem comprovante bloqueia, sem substituição por outra válida",
+          "duration": 80.45846600000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: ausência de autorização bloqueia sem snapshot",
+          "status": "passed",
+          "title": "B07 real: ausência de autorização bloqueia sem snapshot",
+          "duration": 63.83626400000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: versão divergente, aprovação sem hash ou conteúdo alterado são recusados",
+          "status": "passed",
+          "title": "B07 real: versão divergente, aprovação sem hash ou conteúdo alterado são recusados",
+          "duration": 202.15091900000016,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: snapshot autorizado é persistido com número, timestamp e evento, sem apoios",
+          "status": "passed",
+          "title": "B07 real: snapshot autorizado é persistido com número, timestamp e evento, sem apoios",
+          "duration": 74.35320300000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: seis repetições concorrentes geram uma publicação e um evento",
+          "status": "passed",
+          "title": "B07 real: seis repetições concorrentes geram uma publicação e um evento",
+          "duration": 146.1593380000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: pedidos concorrentes distintos não republicam",
+          "status": "passed",
+          "title": "B07 real: pedidos concorrentes distintos não republicam",
+          "duration": 76.34488899999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: FK inválida no evento reverte todos os campos da publicação",
+          "status": "passed",
+          "title": "B07 real: FK inválida no evento reverte todos os campos da publicação",
+          "duration": 70.58618200000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: retry revalida autorização e organização e público falha fechado",
+          "status": "passed",
+          "title": "B07 real: retry revalida autorização e organização e público falha fechado",
+          "duration": 173.37148399999933,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: leituras públicas ignoram colunas privadas e campos extras do JSON",
+          "status": "passed",
+          "title": "B07 real: leituras públicas ignoram colunas privadas e campos extras do JSON",
+          "duration": 126.89028299999973,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: rascunho, enviada e aprovada não são públicos; edição publicada preserva snapshot anterior (B08)",
+          "status": "passed",
+          "title": "B07 real: rascunho, enviada e aprovada não são públicos; edição publicada preserva snapshot anterior (B08)",
+          "duration": 129.11643699999968,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: revogação concorrente confirmada impede publicação que esperava lock",
+          "status": "passed",
+          "title": "B07 real: revogação concorrente confirmada impede publicação que esperava lock",
+          "duration": 87.56023399999958,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438331365,
+      "endTime": 1794438333686.5603,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/publication.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "C05 RED PostgreSQL: autorização do anúncio não aprova registro posterior",
+          "status": "passed",
+          "title": "C05 RED PostgreSQL: autorização do anúncio não aprova registro posterior",
+          "duration": 305.93474100000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação cria snapshot separado",
+          "status": "passed",
+          "title": "C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação cria snapshot separado",
+          "duration": 229.86223299999983,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico",
+          "status": "passed",
+          "title": "C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico",
+          "duration": 252.18151800000032,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização outro_objeto não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização outro_objeto não permite aprovação",
+          "duration": 121.3199340000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização sem_escopo não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização sem_escopo não permite aprovação",
+          "duration": 117.75347300000021,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização expirada não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização expirada não permite aprovação",
+          "duration": 112.15831900000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização revogada não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização revogada não permite aprovação",
+          "duration": 111.56608800000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização futura não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização futura não permite aprovação",
+          "duration": 111.26764899999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização sem_prova não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização sem_prova não permite aprovação",
+          "duration": 118.57010700000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: transições recusam visitante/organização, estado/hash/atributos forjados e referência de outro registro",
+          "status": "passed",
+          "title": "C05: transições recusam visitante/organização, estado/hash/atributos forjados e referência de outro registro",
+          "duration": 164.56514500000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: publicação concorrente é idempotente; retry revalida autorização, hash e estado",
+          "status": "passed",
+          "title": "C05: publicação concorrente é idempotente; retry revalida autorização, hash e estado",
+          "duration": 359.73178800000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06 RED PostgreSQL: revogar autorização do registro oculta somente a publicação abrangida",
+          "status": "passed",
+          "title": "C06 RED PostgreSQL: revogar autorização do registro oculta somente a publicação abrangida",
+          "duration": 503.4269379999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06 RED PostgreSQL: revogar autorização do anúncio fecha apoios e oculta publicação sem apagar snapshot",
+          "status": "passed",
+          "title": "C06 RED PostgreSQL: revogar autorização do anúncio fecha apoios e oculta publicação sem apagar snapshot",
+          "duration": 112.81212899999991,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: revogação concorrente gera um evento; permissões e vínculo são revalidados",
+          "status": "passed",
+          "title": "C06: revogação concorrente gera um evento; permissões e vínculo são revalidados",
+          "duration": 197.52450899999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: falha de auditoria reverte revogação e fechamento de apoios",
+          "status": "passed",
+          "title": "C06: falha de auditoria reverte revogação e fechamento de apoios",
+          "duration": 104.94379000000026,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: publicação concorrente à revogação não fica visível após confirmação da revogação",
+          "status": "passed",
+          "title": "C06: publicação concorrente à revogação não fica visível após confirmação da revogação",
+          "duration": 229.46957500000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: todas as transições do registro geram evento restrito com autor/data/estados",
+          "status": "passed",
+          "title": "C07: todas as transições do registro geram evento restrito com autor/data/estados",
+          "duration": 356.2109700000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de enviar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de enviar reverte estado, snapshot e aprovação de referências",
+          "duration": 62.78777799999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de iniciar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de iniciar reverte estado, snapshot e aprovação de referências",
+          "duration": 82.16931399999976,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de aprovar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de aprovar reverte estado, snapshot e aprovação de referências",
+          "duration": 123.46495400000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de publicar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de publicar reverte estado, snapshot e aprovação de referências",
+          "duration": 205.54393299999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de retirar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de retirar reverte estado, snapshot e aprovação de referências",
+          "duration": 166.2141929999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de devolver reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de devolver reverte estado, snapshot e aprovação de referências",
+          "duration": 89.5492519999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de rejeitar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de rejeitar reverte estado, snapshot e aprovação de referências",
+          "duration": 83.65513100000044,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08 RED PostgreSQL: contestação mantém relato/snapshot e divergência rastreável, sem afirmar consenso",
+          "status": "passed",
+          "title": "C08 RED PostgreSQL: contestação mantém relato/snapshot e divergência rastreável, sem afirmar consenso",
+          "duration": 321.5501919999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: proprietário/editor podem registrar divergências distintas; outro tenant/visitante são negados",
+          "status": "passed",
+          "title": "C08: proprietário/editor podem registrar divergências distintas; outro tenant/visitante são negados",
+          "duration": 183.67482999999993,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: falha na auditoria reverte estado contestado e não grava divergência",
+          "status": "passed",
+          "title": "C08: falha na auditoria reverte estado contestado e não grava divergência",
+          "duration": 94.45420399999966,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: contestação durante revisão bloqueia aprovação sem apagar relato e autoria",
+          "status": "passed",
+          "title": "C08: contestação durante revisão bloqueia aprovação sem apagar relato e autoria",
+          "duration": 150.8311189999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438323554,
+      "endTime": 1794438328628.831,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/record-editorial.database.test.ts"
+    },
+    {
+      "assertionResults": [],
+      "startTime": 1794438321022,
+      "endTime": 1794438321022,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/records.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: visitante, proprietário e organização alheia não revisam; metadata não eleva papel",
+          "status": "passed",
+          "title": "B05 real: visitante, proprietário e organização alheia não revisam; metadata não eleva papel",
+          "duration": 68.35610399999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: editor/admin ativos iniciam e bloqueio é relido sem renovar JWT",
+          "status": "passed",
+          "title": "B05 real: editor/admin ativos iniciam e bloqueio é relido sem renovar JWT",
+          "duration": 116.53037499999982,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: não aprova rascunho/enviada sem revisão e detecta versão antiga",
+          "status": "passed",
+          "title": "B05 real: não aprova rascunho/enviada sem revisão e detecta versão antiga",
+          "duration": 46.92844400000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização ausente impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização ausente impede aprovação",
+          "duration": 66.58140599999979,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização revogada impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização revogada impede aprovação",
+          "duration": 85.79996500000016,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização expirada impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização expirada impede aprovação",
+          "duration": 67.78807099999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização prazo vencido impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização prazo vencido impede aprovação",
+          "duration": 62.09912799999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização revogada com status inconsistente impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização revogada com status inconsistente impede aprovação",
+          "duration": 62.27448499999991,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização autorização futura impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização autorização futura impede aprovação",
+          "duration": 60.657492999999704,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro objeto impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro objeto impede aprovação",
+          "duration": 62.88888300000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro tipo impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro tipo impede aprovação",
+          "duration": 63.81677899999977,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro escopo impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro escopo impede aprovação",
+          "duration": 62.77576900000031,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização genérica sem versão impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização genérica sem versão impede aprovação",
+          "duration": 63.641043999999965,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outra versão impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outra versão impede aprovação",
+          "duration": 64.38929600000029,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização sem papel autorizante impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização sem papel autorizante impede aprovação",
+          "duration": 63.265636000000086,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização sem comprovação impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização sem comprovação impede aprovação",
+          "duration": 59.798707999999806,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: aprovação autorizada audita versão sem snapshot, publicação ou apoio",
+          "status": "passed",
+          "title": "B05 real: aprovação autorizada audita versão sem snapshot, publicação ou apoio",
+          "duration": 66.46789799999988,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: devolver exige motivo e só dono/editor o consultam",
+          "status": "passed",
+          "title": "B06 real: devolver exige motivo e só dono/editor o consultam",
+          "duration": 76.74602499999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: rejeitar exige motivo e só dono/editor o consultam",
+          "status": "passed",
+          "title": "B06 real: rejeitar exige motivo e só dono/editor o consultam",
+          "duration": 98.66595400000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: 6 aprovações com a mesma chave geram um evento e retries",
+          "status": "passed",
+          "title": "B05 real: 6 aprovações com a mesma chave geram um evento e retries",
+          "duration": 121.17348999999967,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: retry após revogar autorização é negado, sem duplicar aprovação",
+          "status": "passed",
+          "title": "B05 real: retry após revogar autorização é negado, sem duplicar aprovação",
+          "duration": 89.92603800000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: decisões concorrentes diferentes conflitam e não sobrescrevem",
+          "status": "passed",
+          "title": "B05/B06 real: decisões concorrentes diferentes conflitam e não sobrescrevem",
+          "duration": 120.11815500000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: reuso da chave com outro motivo/autor conflita e preserva o primeiro",
+          "status": "passed",
+          "title": "B06 real: reuso da chave com outro motivo/autor conflita e preserva o primeiro",
+          "duration": 155.58373400000073,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de iniciar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de iniciar reverte a transição",
+          "duration": 101.7830240000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de aprovar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de aprovar reverte a transição",
+          "duration": 127.3816710000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de devolver reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de devolver reverte a transição",
+          "duration": 118.54720399999951,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de rejeitar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de rejeitar reverte a transição",
+          "duration": 90.87090100000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: revogação concorrente confirmada impede aprovação que esperava lock",
+          "status": "passed",
+          "title": "B05 real: revogação concorrente confirmada impede aprovação que esperava lock",
+          "duration": 141.22355599999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438343601,
+      "endTime": 1794438345989.2236,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/review.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B08 RED real: edição cria versão pendente, mantém público anterior e aprovação substitui atomicamente",
+          "status": "passed",
+          "title": "B08 RED real: edição cria versão pendente, mantém público anterior e aprovação substitui atomicamente",
+          "duration": 200.2909749999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09 RED real: retirada fecha apoios, oculta, audita motivo e bloqueia republicação",
+          "status": "passed",
+          "title": "B09 RED real: retirada fecha apoios, oculta, audita motivo e bloqueia republicação",
+          "duration": 118.39270699999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: isolamento, visitante, estado bloqueado e conflito não alteram snapshot",
+          "status": "passed",
+          "title": "B08: isolamento, visitante, estado bloqueado e conflito não alteram snapshot",
+          "duration": 128.5443769999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: novas versões exigem nova autorização, preservam anterior em devolução/rejeição",
+          "status": "passed",
+          "title": "B08: novas versões exigem nova autorização, preservam anterior em devolução/rejeição",
+          "duration": 412.15658399999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: aprovação concorrente da revisão é idempotente e guarda snapshot anterior no histórico",
+          "status": "passed",
+          "title": "B08: aprovação concorrente da revisão é idempotente e guarda snapshot anterior no histórico",
+          "duration": 186.9453450000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de edit reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de edit reverte operação inteira",
+          "duration": 103.99143400000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de approval reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de approval reverte operação inteira",
+          "duration": 171.3980630000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de withdraw reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de withdraw reverte operação inteira",
+          "duration": 131.35834699999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: visitante, organizações e editor bloqueado não retiram; payload forjado rejeitado",
+          "status": "passed",
+          "title": "B09: visitante, organizações e editor bloqueado não retiram; payload forjado rejeitado",
+          "duration": 165.3555580000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: retirada concorrente é idempotente; motivo só para proprietário/editor, sem ressurreição",
+          "status": "passed",
+          "title": "B09: retirada concorrente é idempotente; motivo só para proprietário/editor, sem ressurreição",
+          "duration": 265.29321600000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: retirar durante revisão oculta snapshot anterior e bloqueia aprovação concorrente",
+          "status": "passed",
+          "title": "B09: retirar durante revisão oculta snapshot anterior e bloqueia aprovação concorrente",
+          "duration": 201.1943970000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438338920,
+      "endTime": 1794438341005.1943,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/revisions.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem",
+          "status": "failed",
+          "title": "B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem",
+          "duration": 31.072434999999587,
+          "failureMessages": [
+            "AssertionError: expected [ { …(11) } ] to deeply equal []\n    at /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/scheduling.database.test.ts:38:35"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: adiada preserva snapshot, fecha apoios e audita autor/data",
+          "status": "pending",
+          "title": "B10 PostgreSQL: adiada preserva snapshot, fecha apoios e audita autor/data",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: cancelada preserva snapshot, fecha apoios e audita autor/data",
+          "status": "pending",
+          "title": "B10 PostgreSQL: cancelada preserva snapshot, fecha apoios e audita autor/data",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: concorrência, retries e cancelamento após adiamento não ressuscitam programação",
+          "status": "pending",
+          "title": "B10 PostgreSQL: concorrência, retries e cancelamento após adiamento não ressuscitam programação",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: negativas sem evento para organização, visitante, editor bloqueado e retirada",
+          "status": "pending",
+          "title": "B10 PostgreSQL: negativas sem evento para organização, visitante, editor bloqueado e retirada",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: erro de auditoria reverte estado e fechamento de apoios",
+          "status": "pending",
+          "title": "B10 PostgreSQL: erro de auditoria reverte estado e fechamento de apoios",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B11 PostgreSQL: HTML é rejeitado antes de criar/editar/auditar e snapshot permanece íntegro",
+          "status": "pending",
+          "title": "B11 PostgreSQL: HTML é rejeitado antes de criar/editar/auditar e snapshot permanece íntegro",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438356279,
+      "endTime": 1794438356310.0725,
+      "status": "failed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/scheduling.database.test.ts"
+    },
+    {
+      "assertionResults": [],
+      "startTime": 1794438321022,
+      "endTime": 1794438321022,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/security/database.test.ts"
+    }
+  ],
+  "evidence_redaction": "Credentials redacted; failure dumps omitted beyond first line and test stack locations to avoid publishing existing local records."
+}

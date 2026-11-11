@@ -1,0 +1,5 @@
+Target: local stack (127.0.0.1:56152)
+Applying migration 20261111222337_confirmacoes_apoio_intencao.sql...
+{"upToDate":false,"dryRun":false,"migrations":["20261111222337_confirmacoes_apoio_intencao.sql"],"seeds":[],"roles":[],"message":"Finished supabase db push.","target":{"kind":"local","host":"127.0.0.1","port":56152}}
+A new version of Supabase CLI is available: v3.1.0 (currently installed v3.0.0)
+We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli

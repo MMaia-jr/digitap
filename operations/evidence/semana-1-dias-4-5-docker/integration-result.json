@@ -1,0 +1,12 @@
+{
+  "command": "npm run test:onboarding:db -- --bail=1 --reporter=json --outputFile=/tmp/digitap-local-13187-integration.json",
+  "started_at": "2026-11-11T23:05:20.364Z",
+  "finished_at": "2026-11-11T23:05:56.431Z",
+  "exit_code": 1,
+  "signal": null,
+  "counts": {
+    "PASS": 111,
+    "FAIL": 1,
+    "SKIP": 6
+  }
+}

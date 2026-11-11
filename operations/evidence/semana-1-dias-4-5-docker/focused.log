@@ -1,0 +1,5 @@
+
+> a-praca-v1-5@0.1.0 test:onboarding:db
+> vitest run --config vitest.database.config.ts tests/integration/participation.database.test.ts --bail=1 --reporter=json --outputFile=/tmp/digitap-local-13146-focused.json
+
+JSON report written to /tmp/digitap-local-13146-focused.json

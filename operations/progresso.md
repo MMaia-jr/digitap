@@ -1,3 +1,15 @@
+# Retomada com Docker — confirmações validadas no banco local; regressão interrompida (11/11/2026)
+
+Migration `20261111222337` aplicada somente no stack local, após dry-run e prova de isolamento/SMTP local. **Oito testes reais de confirmações PASS**, cobrindo UNIQUE concorrente, RLS, consentimento, agregados, visitante e titular adicional da mesma organização. Fixtures do novo módulo removidas; RLS habilitado. Nenhum acesso ou mudança Cloud.
+
+Regressão maior: primeira tentativa **111 PASS / 1 FAIL / 6 SKIP**, falha B12/P1 por premissa de listagem global vazia. Sem excluir dados nem corrigir teste, continuação com filtro somente desse caso já registrado: **224 PASS / 1 FAIL / 3 SKIP**. União por teste sem duplicidade: **224 PASS / 2 FAIL / 2 SKIP**, não resultado de uma execução integral bem-sucedida.
+
+**STOP P0:** `tests/integration/pf-activities.database.test.ts:62` espera 403 ao ler atividade alheia, recebe 404. A leitura foi negada; não se demonstrou vazamento. A implementação filtra o sujeito/autor e devolve “Atividade não encontrada”; expectativa antiga precisa de revisão humana antes de ajustar. Nenhum código de produção ou teste existente foi corrigido. Quatro E2E específicos preparados, **NOT RUN** por parada P0; build/lint/typecheck/advisors não executados depois da parada.
+
+[Relatório e evidências](evidence/semana-1-dias-4-5-docker/REPORT.md).
+
+---
+
 # Semana 1, dias 4–5 — apoio e intenção implementados (11/11/2026)
 
 Incremento autorizado pelo proponente após o fechamento técnico do Dia 3. TDD: 28 RED com stubs antes da implementação → 38 testes específicos GREEN. Módulo de apoio/intenção, consentimento opcional para nome público (decisão humana explícita), WhatsApp privado, unicidade por atividade/perfil e contadores por organizador. Migration aditiva preparada com RLS, sem aplicar em banco local ou Cloud. Sem comparecimento, faltosos ou reputação.

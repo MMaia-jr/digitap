@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-11-11T23:13:00.200Z",
+  "target": "127.0.0.1:56152",
+  "migration_applied": true,
+  "confirmacoes_rows_remaining": 0,
+  "new_module_fixture_users_remaining": 0,
+  "rls_enabled": true,
+  "application_tests_after_p0_stop": false,
+  "cloud_access": false
+}

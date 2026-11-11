@@ -1,3 +1,5 @@
+> **Atualização posterior com Docker:** migration aplicada apenas localmente e oito testes PostgreSQL do módulo aprovados. A regressão maior parou em uma divergência 403/404 de teste P0 existente; E2E ainda não executado. Veja [retomada e resultados atuais](../semana-1-dias-4-5-docker/REPORT.md). As limitações abaixo descrevem a primeira execução, antes do Docker estar disponível.
+
 # Semana 1, dias 4–5 — apoio e intenção
 
 Execução local em 11/11/2026. Base: `25cad7f`. Os dias indicam checkpoints de trabalho, não dias de calendário transcorridos. Nenhuma consulta ou mudança no ambiente de produção.

@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-11-11T23:02:56.770Z",
+  "target": "a-praca-v1-5 local",
+  "api": "http://127.0.0.1:56151",
+  "db_host": "127.0.0.1",
+  "db_port": "56152",
+  "listeners": {
+    "56151": "127.0.0.1",
+    "56152": "127.0.0.1",
+    "56154": "127.0.0.1"
+  },
+  "positive_connections": 3,
+  "negative_probes": 36,
+  "negative_accepted": 0,
+  "smtp_host": "supabase_inbucket_a-praca-v1-5",
+  "applied_migrations": [
+    "20261103221114",
+    "20261103230507",
+    "20261106003448",
+    "20261106014443",
+    "20261106030921",
+    "20261106120940",
+    "20261109145628",
+    "20261109200957"
+  ],
+  "pending_migrations": [
+    "20261111222337_confirmacoes_apoio_intencao.sql"
+  ],
+  "confirmacoes_exists": false,
+  "cloud_access": false
+}

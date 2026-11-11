@@ -1,0 +1,2817 @@
+{
+  "numTotalTestSuites": 13,
+  "numPassedTestSuites": 12,
+  "numFailedTestSuites": 1,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 228,
+  "numPassedTests": 224,
+  "numFailedTests": 1,
+  "numPendingTests": 1,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794438470638,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 organizacoes existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "organizacoes existe com RLS e sem grants aos clientes",
+          "duration": 12.505022000000281,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 contas_acesso existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "contas_acesso existe com RLS e sem grants aos clientes",
+          "duration": 7.356622999999672,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 atividades existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "atividades existe com RLS e sem grants aos clientes",
+          "duration": 7.704603000000134,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 registros_realizacao existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "registros_realizacao existe com RLS e sem grants aos clientes",
+          "duration": 7.223473000000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 evidencias existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "evidencias existe com RLS e sem grants aos clientes",
+          "duration": 7.254038999999921,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 autorizacoes_publicacao existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "autorizacoes_publicacao existe com RLS e sem grants aos clientes",
+          "duration": 7.280537000000095,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 apoios existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "apoios existe com RLS e sem grants aos clientes",
+          "duration": 8.158690000000206,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 parceiros existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "parceiros existe com RLS e sem grants aos clientes",
+          "duration": 6.889867999999751,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 eventos_editoriais existe com RLS e sem grants aos clientes",
+          "status": "passed",
+          "title": "eventos_editoriais existe com RLS e sem grants aos clientes",
+          "duration": 7.129338000000189,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/organizacoes nega acesso direto",
+          "duration": 6.189459999999599,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.66529300000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.808965000000171,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.201622000000043,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/contas_acesso nega acesso direto",
+          "duration": 5.724993000000268,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/contas_acesso nega acesso direto",
+          "duration": 6.226846999999907,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/contas_acesso nega acesso direto",
+          "duration": 7.3916659999999865,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/contas_acesso nega acesso direto",
+          "duration": 5.995138999999654,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/atividades nega acesso direto",
+          "duration": 5.973523000000114,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/atividades nega acesso direto",
+          "duration": 6.444327000000158,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/atividades nega acesso direto",
+          "duration": 5.6931650000001355,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/atividades nega acesso direto",
+          "duration": 5.380963999999949,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 5.947008000000096,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 6.131578999999874,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 5.543263999999908,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 5.380981999999676,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/evidencias nega acesso direto",
+          "duration": 5.970687999999882,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/evidencias nega acesso direto",
+          "duration": 5.5228149999998095,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/evidencias nega acesso direto",
+          "duration": 6.0071829999997135,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/evidencias nega acesso direto",
+          "duration": 5.538755999999921,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.732477000000017,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.635717000000113,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.676586999999927,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.230539000000135,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/apoios nega acesso direto",
+          "duration": 5.858904000000166,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/apoios nega acesso direto",
+          "duration": 5.8791009999999915,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/apoios nega acesso direto",
+          "duration": 4.884242000000086,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/apoios nega acesso direto",
+          "duration": 5.228671000000304,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/parceiros nega acesso direto",
+          "duration": 3.7263060000000223,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/parceiros nega acesso direto",
+          "duration": 5.268318000000363,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/parceiros nega acesso direto",
+          "duration": 5.304485000000113,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/parceiros nega acesso direto",
+          "duration": 5.363277999999809,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: GET /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "anon: GET /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 5.001287999999931,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: POST /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "anon: POST /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 5.336977999999817,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "anon: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 5.537642000000233,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 anon: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "anon: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 4.960547999999562,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/organizacoes nega acesso direto",
+          "duration": 31.814734000000044,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.931219999999939,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.089852999999948,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/organizacoes nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/organizacoes nega acesso direto",
+          "duration": 5.5677819999996245,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/contas_acesso nega acesso direto",
+          "duration": 6.072264999999788,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/contas_acesso nega acesso direto",
+          "duration": 5.624272000000019,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/contas_acesso nega acesso direto",
+          "duration": 5.343124999999873,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/contas_acesso nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/contas_acesso nega acesso direto",
+          "duration": 5.022541999999703,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/atividades nega acesso direto",
+          "duration": 4.954347999999754,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/atividades nega acesso direto",
+          "duration": 5.384537000000364,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/atividades nega acesso direto",
+          "duration": 4.825261999999839,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/atividades nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/atividades nega acesso direto",
+          "duration": 4.389564000000064,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 4.018571999999949,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 4.709986000000299,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 4.84140699999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/registros_realizacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/registros_realizacao nega acesso direto",
+          "duration": 5.365346999999929,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/evidencias nega acesso direto",
+          "duration": 4.198509000000286,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/evidencias nega acesso direto",
+          "duration": 5.615930999999819,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/evidencias nega acesso direto",
+          "duration": 5.593568000000232,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/evidencias nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/evidencias nega acesso direto",
+          "duration": 5.680883999999878,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.440526999999747,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.291244000000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.381861999999728,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/autorizacoes_publicacao nega acesso direto",
+          "duration": 5.387764000000061,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/apoios nega acesso direto",
+          "duration": 5.709162000000106,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/apoios nega acesso direto",
+          "duration": 5.3898650000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/apoios nega acesso direto",
+          "duration": 5.402998000000025,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/apoios nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/apoios nega acesso direto",
+          "duration": 5.27940099999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/parceiros nega acesso direto",
+          "duration": 5.304306999999881,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/parceiros nega acesso direto",
+          "duration": 5.185382000000118,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/parceiros nega acesso direto",
+          "duration": 5.446190999999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/parceiros nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/parceiros nega acesso direto",
+          "duration": 5.081196999999975,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: GET /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: GET /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 5.229476000000432,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: POST /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: POST /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 5.201872999999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: PATCH /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 4.991950999999972,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 authenticated: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+          "status": "passed",
+          "title": "authenticated: DELETE /rest/v1/eventos_editoriais nega acesso direto",
+          "duration": 4.586027999999715,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 RLS continua negando leitura mesmo se SELECT for concedido por engano (rollback)",
+          "status": "passed",
+          "title": "RLS continua negando leitura mesmo se SELECT for concedido por engano (rollback)",
+          "duration": 6.988884999999755,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 Auth real e papel do banco prevalecem sobre metadata administrativa forjada",
+          "status": "passed",
+          "title": "Auth real e papel do banco prevalecem sobre metadata administrativa forjada",
+          "duration": 43.36193599999979,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 bloqueio e mudança de papel são efetivos sem renovar o JWT",
+          "status": "passed",
+          "title": "bloqueio e mudança de papel são efetivos sem renovar o JWT",
+          "duration": 26.14238000000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02"
+          ],
+          "fullName": "segurança real no Supabase isolado — subconjunto G01/G02/G03/H02 tentativas públicas não alteraram os registros fictícios",
+          "status": "passed",
+          "title": "tentativas públicas não alteraram os registros fictícios",
+          "duration": 1.4238789999999426,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438513619,
+      "endTime": 1794438514187.4238,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/security/database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B01 real: rascunho tem proprietário do servidor e não tem snapshot/apoio público",
+          "status": "passed",
+          "title": "B01 real: rascunho tem proprietário do servidor e não tem snapshot/apoio público",
+          "duration": 150.62471500000038,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B01 real: edição própria, outro tenant negado e conflito de versão",
+          "status": "passed",
+          "title": "B01 real: edição própria, outro tenant negado e conflito de versão",
+          "duration": 57.176478000000316,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B01 real: conta bloqueada não consulta/escreve e pode ser restaurada só pelo setup",
+          "status": "passed",
+          "title": "B01 real: conta bloqueada não consulta/escreve e pode ser restaurada só pelo setup",
+          "duration": 41.18746300000021,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B02 real: campos obrigatórios ausentes não criam atividade",
+          "status": "passed",
+          "title": "B02 real: campos obrigatórios ausentes não criam atividade",
+          "duration": 27.86013399999956,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B03 real: URL/HTML/data inválidos negados sem persistência",
+          "status": "passed",
+          "title": "B03 real: URL/HTML/data inválidos negados sem persistência",
+          "duration": 0.9600639999998748,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B03/B04 real: envio revalida conteúdo persistido e não produz evento inválido",
+          "status": "passed",
+          "title": "B03/B04 real: envio revalida conteúdo persistido e não produz evento inválido",
+          "duration": 32.6504659999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B04 real: envio e auditoria confirmados juntos; retry sem evento duplicado",
+          "status": "passed",
+          "title": "B04 real: envio e auditoria confirmados juntos; retry sem evento duplicado",
+          "duration": 55.64364599999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B04 real: 6 envios concorrentes geram uma transição e um evento",
+          "status": "passed",
+          "title": "B04 real: 6 envios concorrentes geram uma transição e um evento",
+          "duration": 63.639432999999826,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B04 real: falha PostgreSQL no INSERT de auditoria reverte UPDATE de envio",
+          "status": "passed",
+          "title": "B04 real: falha PostgreSQL no INSERT de auditoria reverte UPDATE de envio",
+          "duration": 38.26704299999983,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B01/B04 real: duas edições concorrentes da versão 1 não sobrescrevem silenciosamente",
+          "status": "passed",
+          "title": "B01/B04 real: duas edições concorrentes da versão 1 não sobrescrevem silenciosamente",
+          "duration": 46.441601999999875,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B01 real: nove tabelas continuam RLS/grants fechados; REST autenticado não lê atividade",
+          "status": "passed",
+          "title": "B01 real: nove tabelas continuam RLS/grants fechados; REST autenticado não lê atividade",
+          "duration": 103.98739100000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438510809,
+      "endTime": 1794438511427.9873,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/activities.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "envio PF registra autorização explícita de uma versão e é idempotente",
+          "status": "passed",
+          "title": "envio PF registra autorização explícita de uma versão e é idempotente",
+          "duration": 56.438870999999835,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "envio sem consentimento ou em nome de outra PF é negado",
+          "status": "passed",
+          "title": "envio sem consentimento ou em nome de outra PF é negado",
+          "duration": 24.68958900000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público",
+          "status": "passed",
+          "title": "editor aprova/publica PF agora, faz curadoria e produz snapshot v2 público",
+          "duration": 90.59119899999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "fila inclui sujeito e data, mas não rascunhos não submetidos",
+          "status": "passed",
+          "title": "fila inclui sujeito e data, mas não rascunhos não submetidos",
+          "duration": 30.011177999999745,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "PF não consegue acessar fila ou executar decisão editorial",
+          "status": "passed",
+          "title": "PF não consegue acessar fila ou executar decisão editorial",
+          "duration": 25.492145000000164,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejeição exige motivo e continua privada",
+          "status": "passed",
+          "title": "rejeição exige motivo e continua privada",
+          "duration": 53.0705939999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "consentimento revogado impede aprovação/publicação",
+          "status": "passed",
+          "title": "consentimento revogado impede aprovação/publicação",
+          "duration": 25.477591000000302,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "falha de publicação reverte aprovação, curadoria e ativação da PF",
+          "status": "passed",
+          "title": "falha de publicação reverte aprovação, curadoria e ativação da PF",
+          "duration": 57.190653999999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438488836,
+      "endTime": 1794438489199.1907,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/editorial-cycle.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional",
+          "status": "passed",
+          "title": "RPC idempotente concorrente cria exatamente uma organização pendente e uma conta organizacional",
+          "duration": 31.811568999999963,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC não pode ser executada por authenticated com identidade de outro usuário",
+          "status": "passed",
+          "title": "RPC não pode ser executada por authenticated com identidade de outro usuário",
+          "duration": 33.382881,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RPC não pode ser executada por anon e não aceita mudança de papel de conta existente",
+          "status": "passed",
+          "title": "RPC não pode ser executada por anon e não aceita mudança de papel de conta existente",
+          "duration": 1367.638326,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "falha no segundo insert reverte organização (sem órfã)",
+          "status": "passed",
+          "title": "falha no segundo insert reverte organização (sem órfã)",
+          "duration": 10.861656000000039,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438503344,
+      "endTime": 1794438504787.8616,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/onboarding.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "status": "passed",
+          "title": "UNIQUE impede duas escolhas e concorrência deixa exatamente uma linha",
+          "duration": 138.60830699999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "status": "passed",
+          "title": "RLS entrega só a própria linha; organizador não recebe participantes ou WhatsApp",
+          "duration": 253.814711,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "status": "passed",
+          "title": "consentimento começa privado e só libera nome, nunca telefone ou grupo",
+          "duration": 64.06127500000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "status": "passed",
+          "title": "outro titular do mesmo perfil organizacional não lê o contato de quem registrou",
+          "duration": 91.14510599999994,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "status": "passed",
+          "title": "anon/authenticated não invocam RPC privilegiada nem inserem identidade forjada",
+          "duration": 67.8439940000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rascunho não pode receber confirmação nem expor resumo público",
+          "status": "passed",
+          "title": "rascunho não pode receber confirmação nem expor resumo público",
+          "duration": 16.710875000000215,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "status": "passed",
+          "title": "cancelamento fecha novas confirmações e retirada oculta resumo",
+          "duration": 56.81662800000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "status": "passed",
+          "title": "constraints recusam contato inválido, grupo inválido e apoio com nome público",
+          "duration": 66.60108200000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438500644,
+      "endTime": 1794438501400.601,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/participation.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "PF pendente cria rascunho com sujeito próprio e sem publicação",
+          "status": "passed",
+          "title": "PF pendente cria rascunho com sujeito próprio e sem publicação",
+          "duration": 28.877553000000034,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "listagem PF é isolada por sujeito e autor",
+          "status": "passed",
+          "title": "listagem PF é isolada por sujeito e autor",
+          "duration": 40.44312899999977,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "payload não escolhe sujeito nem autor",
+          "status": "passed",
+          "title": "payload não escolhe sujeito nem autor",
+          "duration": 1.2806820000000698,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "PF não ganha acesso editorial ou publicação automática",
+          "status": "failed",
+          "title": "PF não ganha acesso editorial ou publicação automática",
+          "duration": 25.613828999999896,
+          "failureMessages": [
+            "Error: expected Error: Atividade não encontrada. { …(2) } to match object { status: 403 }\n    at /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/pf-activities.database.test.ts:62:44"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "conta bloqueada não cria nem lista rascunhos",
+          "status": "pending",
+          "title": "conta bloqueada não cria nem lista rascunhos",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "escopos reais do vínculo são revalidados para cada operação",
+          "status": "pending",
+          "title": "escopos reais do vínculo são revalidados para cada operação",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438516254,
+      "endTime": 1794438516350.6138,
+      "status": "failed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/pf-activities.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "A07/B07 real: anônimo, organizações e privilégios de metadata/payload não publicam",
+          "status": "passed",
+          "title": "A07/B07 real: anônimo, organizações e privilégios de metadata/payload não publicam",
+          "duration": 103.00357399999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "A07/B07 real: organização pendente bloqueia publicação mesmo por editor",
+          "status": "passed",
+          "title": "A07/B07 real: organização pendente bloqueia publicação mesmo por editor",
+          "duration": 70.5983040000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: estado confiável bloqueia editor e administrador ativos podem publicar",
+          "status": "passed",
+          "title": "B07 real: estado confiável bloqueia editor e administrador ativos podem publicar",
+          "duration": 79.05167299999994,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização revogada bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização revogada bloqueia, sem substituição por outra válida",
+          "duration": 79.87964399999964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização expirada bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização expirada bloqueia, sem substituição por outra válida",
+          "duration": 82.38529899999958,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização prazo vencido bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização prazo vencido bloqueia, sem substituição por outra válida",
+          "duration": 81.99010300000009,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização revogação inconsistente bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização revogação inconsistente bloqueia, sem substituição por outra válida",
+          "duration": 82.11930600000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização futura bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização futura bloqueia, sem substituição por outra válida",
+          "duration": 83.8054159999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização objeto alheio bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização objeto alheio bloqueia, sem substituição por outra válida",
+          "duration": 79.46794399999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização tipo incompatível bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização tipo incompatível bloqueia, sem substituição por outra válida",
+          "duration": 86.22281900000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização escopo bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização escopo bloqueia, sem substituição por outra válida",
+          "duration": 77.50562600000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização versão bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização versão bloqueia, sem substituição por outra válida",
+          "duration": 78.0642670000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização sem versão bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização sem versão bloqueia, sem substituição por outra válida",
+          "duration": 83.71146099999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: autorização sem comprovante bloqueia, sem substituição por outra válida",
+          "status": "passed",
+          "title": "B07 real: autorização sem comprovante bloqueia, sem substituição por outra válida",
+          "duration": 96.33966899999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: ausência de autorização bloqueia sem snapshot",
+          "status": "passed",
+          "title": "B07 real: ausência de autorização bloqueia sem snapshot",
+          "duration": 68.13507600000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: versão divergente, aprovação sem hash ou conteúdo alterado são recusados",
+          "status": "passed",
+          "title": "B07 real: versão divergente, aprovação sem hash ou conteúdo alterado são recusados",
+          "duration": 237.4471639999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: snapshot autorizado é persistido com número, timestamp e evento, sem apoios",
+          "status": "passed",
+          "title": "B07 real: snapshot autorizado é persistido com número, timestamp e evento, sem apoios",
+          "duration": 131.4715299999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: seis repetições concorrentes geram uma publicação e um evento",
+          "status": "passed",
+          "title": "B07 real: seis repetições concorrentes geram uma publicação e um evento",
+          "duration": 199.27631299999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: pedidos concorrentes distintos não republicam",
+          "status": "passed",
+          "title": "B07 real: pedidos concorrentes distintos não republicam",
+          "duration": 135.7883240000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: FK inválida no evento reverte todos os campos da publicação",
+          "status": "passed",
+          "title": "B07 real: FK inválida no evento reverte todos os campos da publicação",
+          "duration": 117.27644800000053,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: retry revalida autorização e organização e público falha fechado",
+          "status": "passed",
+          "title": "B07 real: retry revalida autorização e organização e público falha fechado",
+          "duration": 295.55798799999957,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: leituras públicas ignoram colunas privadas e campos extras do JSON",
+          "status": "passed",
+          "title": "B07 real: leituras públicas ignoram colunas privadas e campos extras do JSON",
+          "duration": 132.0270899999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: rascunho, enviada e aprovada não são públicos; edição publicada preserva snapshot anterior (B08)",
+          "status": "passed",
+          "title": "B07 real: rascunho, enviada e aprovada não são públicos; edição publicada preserva snapshot anterior (B08)",
+          "duration": 176.423401,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B07 real: revogação concorrente confirmada impede publicação que esperava lock",
+          "status": "passed",
+          "title": "B07 real: revogação concorrente confirmada impede publicação que esperava lock",
+          "duration": 83.98730700000033,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438483723,
+      "endTime": 1794438486465.9873,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/publication.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "C05 RED PostgreSQL: autorização do anúncio não aprova registro posterior",
+          "status": "passed",
+          "title": "C05 RED PostgreSQL: autorização do anúncio não aprova registro posterior",
+          "duration": 185.41153699999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação cria snapshot separado",
+          "status": "passed",
+          "title": "C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação cria snapshot separado",
+          "duration": 173.22981900000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico",
+          "status": "passed",
+          "title": "C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico",
+          "duration": 258.24340600000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização outro_objeto não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização outro_objeto não permite aprovação",
+          "duration": 112.5386480000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização sem_escopo não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização sem_escopo não permite aprovação",
+          "duration": 112.03791200000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização expirada não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização expirada não permite aprovação",
+          "duration": 111.38631299999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização revogada não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização revogada não permite aprovação",
+          "duration": 111.46693600000026,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização futura não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização futura não permite aprovação",
+          "duration": 113.90447300000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: autorização sem_prova não permite aprovação",
+          "status": "passed",
+          "title": "C05: autorização sem_prova não permite aprovação",
+          "duration": 137.28765300000032,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: transições recusam visitante/organização, estado/hash/atributos forjados e referência de outro registro",
+          "status": "passed",
+          "title": "C05: transições recusam visitante/organização, estado/hash/atributos forjados e referência de outro registro",
+          "duration": 164.08254199999965,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C05: publicação concorrente é idempotente; retry revalida autorização, hash e estado",
+          "status": "passed",
+          "title": "C05: publicação concorrente é idempotente; retry revalida autorização, hash e estado",
+          "duration": 240.13556300000027,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06 RED PostgreSQL: revogar autorização do registro oculta somente a publicação abrangida",
+          "status": "passed",
+          "title": "C06 RED PostgreSQL: revogar autorização do registro oculta somente a publicação abrangida",
+          "duration": 307.69638499999974,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06 RED PostgreSQL: revogar autorização do anúncio fecha apoios e oculta publicação sem apagar snapshot",
+          "status": "passed",
+          "title": "C06 RED PostgreSQL: revogar autorização do anúncio fecha apoios e oculta publicação sem apagar snapshot",
+          "duration": 107.09013099999993,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: revogação concorrente gera um evento; permissões e vínculo são revalidados",
+          "status": "passed",
+          "title": "C06: revogação concorrente gera um evento; permissões e vínculo são revalidados",
+          "duration": 225.78126599999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: falha de auditoria reverte revogação e fechamento de apoios",
+          "status": "passed",
+          "title": "C06: falha de auditoria reverte revogação e fechamento de apoios",
+          "duration": 109.65582100000029,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C06: publicação concorrente à revogação não fica visível após confirmação da revogação",
+          "status": "passed",
+          "title": "C06: publicação concorrente à revogação não fica visível após confirmação da revogação",
+          "duration": 229.96673399999963,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: todas as transições do registro geram evento restrito com autor/data/estados",
+          "status": "passed",
+          "title": "C07: todas as transições do registro geram evento restrito com autor/data/estados",
+          "duration": 434.0599179999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de enviar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de enviar reverte estado, snapshot e aprovação de referências",
+          "duration": 59.63803300000018,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de iniciar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de iniciar reverte estado, snapshot e aprovação de referências",
+          "duration": 82.48777500000051,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de aprovar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de aprovar reverte estado, snapshot e aprovação de referências",
+          "duration": 109.09312000000045,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de publicar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de publicar reverte estado, snapshot e aprovação de referências",
+          "duration": 147.4865890000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de retirar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de retirar reverte estado, snapshot e aprovação de referências",
+          "duration": 168.44256700000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de devolver reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de devolver reverte estado, snapshot e aprovação de referências",
+          "duration": 87.81350800000018,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C07: falha na auditoria de rejeitar reverte estado, snapshot e aprovação de referências",
+          "status": "passed",
+          "title": "C07: falha na auditoria de rejeitar reverte estado, snapshot e aprovação de referências",
+          "duration": 141.55211800000052,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08 RED PostgreSQL: contestação mantém relato/snapshot e divergência rastreável, sem afirmar consenso",
+          "status": "passed",
+          "title": "C08 RED PostgreSQL: contestação mantém relato/snapshot e divergência rastreável, sem afirmar consenso",
+          "duration": 382.055394,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: proprietário/editor podem registrar divergências distintas; outro tenant/visitante são negados",
+          "status": "passed",
+          "title": "C08: proprietário/editor podem registrar divergências distintas; outro tenant/visitante são negados",
+          "duration": 217.03306499999962,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: falha na auditoria reverte estado contestado e não grava divergência",
+          "status": "passed",
+          "title": "C08: falha na auditoria reverte estado contestado e não grava divergência",
+          "duration": 66.02911800000038,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C08: contestação durante revisão bloqueia aprovação sem apagar relato e autoria",
+          "status": "passed",
+          "title": "C08: contestação durante revisão bloqueia aprovação sem apagar relato e autoria",
+          "duration": 168.81378099999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438476501,
+      "endTime": 1794438481267.8137,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/record-editorial.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "C01 PostgreSQL: futura negada, data efetiva privada persiste com auditoria atômica",
+          "status": "passed",
+          "title": "C01 PostgreSQL: futura negada, data efetiva privada persiste com auditoria atômica",
+          "duration": 120.93631400000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C01 PostgreSQL: proprietário, tenant alheio, visitante, papel editorial e versões são verificados",
+          "status": "passed",
+          "title": "C01 PostgreSQL: proprietário, tenant alheio, visitante, papel editorial e versões são verificados",
+          "duration": 122.59208399999989,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C01 PostgreSQL: seis retries concorrentes geram um registro e um evento; outro pedido conflita",
+          "status": "passed",
+          "title": "C01 PostgreSQL: seis retries concorrentes geram um registro e um evento; outro pedido conflita",
+          "duration": 89.78393899999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C01 PostgreSQL: falha de auditoria reverte inserção do relato",
+          "status": "passed",
+          "title": "C01 PostgreSQL: falha de auditoria reverte inserção do relato",
+          "duration": 47.292067000000316,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C02 PostgreSQL: só declaração permanece declarada, privada e sem corroboração automática",
+          "status": "passed",
+          "title": "C02 PostgreSQL: só declaração permanece declarada, privada e sem corroboração automática",
+          "duration": 30.358834000000115,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C03 PostgreSQL: referência parcial permanece não aprovada e não corrobora o relato total; retry é único",
+          "status": "passed",
+          "title": "C03 PostgreSQL: referência parcial permanece não aprovada e não corrobora o relato total; retry é único",
+          "duration": 181.07379300000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C03 PostgreSQL: falha de auditoria da referência reverte evidência",
+          "status": "passed",
+          "title": "C03 PostgreSQL: falha de auditoria da referência reverte evidência",
+          "duration": 75.70587400000022,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "C04 PostgreSQL: fontes impróprias/sensíveis são rejeitadas sem evidências ou eventos novos",
+          "status": "passed",
+          "title": "C04 PostgreSQL: fontes impróprias/sensíveis são rejeitadas sem evidências ou eventos novos",
+          "duration": 55.55731000000014,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438507476,
+      "endTime": 1794438508200.5574,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/records.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: visitante, proprietário e organização alheia não revisam; metadata não eleva papel",
+          "status": "passed",
+          "title": "B05 real: visitante, proprietário e organização alheia não revisam; metadata não eleva papel",
+          "duration": 67.83645399999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: editor/admin ativos iniciam e bloqueio é relido sem renovar JWT",
+          "status": "passed",
+          "title": "B05 real: editor/admin ativos iniciam e bloqueio é relido sem renovar JWT",
+          "duration": 131.94976599999973,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: não aprova rascunho/enviada sem revisão e detecta versão antiga",
+          "status": "passed",
+          "title": "B05 real: não aprova rascunho/enviada sem revisão e detecta versão antiga",
+          "duration": 52.33368100000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização ausente impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização ausente impede aprovação",
+          "duration": 71.00671000000011,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização revogada impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização revogada impede aprovação",
+          "duration": 66.06843100000015,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização expirada impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização expirada impede aprovação",
+          "duration": 74.20347399999991,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização prazo vencido impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização prazo vencido impede aprovação",
+          "duration": 65.55495800000017,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização revogada com status inconsistente impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização revogada com status inconsistente impede aprovação",
+          "duration": 61.71165999999994,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização autorização futura impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização autorização futura impede aprovação",
+          "duration": 64.03593000000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro objeto impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro objeto impede aprovação",
+          "duration": 62.66300200000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro tipo impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro tipo impede aprovação",
+          "duration": 67.09105599999975,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outro escopo impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outro escopo impede aprovação",
+          "duration": 67.90023200000041,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização genérica sem versão impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização genérica sem versão impede aprovação",
+          "duration": 62.22424900000033,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização outra versão impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização outra versão impede aprovação",
+          "duration": 63.049385999999686,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização sem papel autorizante impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização sem papel autorizante impede aprovação",
+          "duration": 69.11741099999972,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: autorização sem comprovação impede aprovação",
+          "status": "passed",
+          "title": "B05 real: autorização sem comprovação impede aprovação",
+          "duration": 67.73406000000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: aprovação autorizada audita versão sem snapshot, publicação ou apoio",
+          "status": "passed",
+          "title": "B05 real: aprovação autorizada audita versão sem snapshot, publicação ou apoio",
+          "duration": 68.1384979999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: devolver exige motivo e só dono/editor o consultam",
+          "status": "passed",
+          "title": "B06 real: devolver exige motivo e só dono/editor o consultam",
+          "duration": 69.75096799999983,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: rejeitar exige motivo e só dono/editor o consultam",
+          "status": "passed",
+          "title": "B06 real: rejeitar exige motivo e só dono/editor o consultam",
+          "duration": 73.27100900000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: 6 aprovações com a mesma chave geram um evento e retries",
+          "status": "passed",
+          "title": "B05 real: 6 aprovações com a mesma chave geram um evento e retries",
+          "duration": 87.70390899999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: retry após revogar autorização é negado, sem duplicar aprovação",
+          "status": "passed",
+          "title": "B05 real: retry após revogar autorização é negado, sem duplicar aprovação",
+          "duration": 65.33192599999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: decisões concorrentes diferentes conflitam e não sobrescrevem",
+          "status": "passed",
+          "title": "B05/B06 real: decisões concorrentes diferentes conflitam e não sobrescrevem",
+          "duration": 55.37453100000039,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B06 real: reuso da chave com outro motivo/autor conflita e preserva o primeiro",
+          "status": "passed",
+          "title": "B06 real: reuso da chave com outro motivo/autor conflita e preserva o primeiro",
+          "duration": 74.79154199999994,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de iniciar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de iniciar reverte a transição",
+          "duration": 50.23938199999975,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de aprovar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de aprovar reverte a transição",
+          "duration": 64.63623000000052,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de devolver reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de devolver reverte a transição",
+          "duration": 48.16236200000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05/B06 real: falha FK na auditoria de rejeitar reverte a transição",
+          "status": "passed",
+          "title": "B05/B06 real: falha FK na auditoria de rejeitar reverte a transição",
+          "duration": 73.85825899999963,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B05 real: revogação concorrente confirmada impede aprovação que esperava lock",
+          "status": "passed",
+          "title": "B05 real: revogação concorrente confirmada impede aprovação que esperava lock",
+          "duration": 100.84403300000031,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438496033,
+      "endTime": 1794438497980.844,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/review.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B08 RED real: edição cria versão pendente, mantém público anterior e aprovação substitui atomicamente",
+          "status": "passed",
+          "title": "B08 RED real: edição cria versão pendente, mantém público anterior e aprovação substitui atomicamente",
+          "duration": 195.76692600000024,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09 RED real: retirada fecha apoios, oculta, audita motivo e bloqueia republicação",
+          "status": "passed",
+          "title": "B09 RED real: retirada fecha apoios, oculta, audita motivo e bloqueia republicação",
+          "duration": 127.00664099999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: isolamento, visitante, estado bloqueado e conflito não alteram snapshot",
+          "status": "passed",
+          "title": "B08: isolamento, visitante, estado bloqueado e conflito não alteram snapshot",
+          "duration": 128.79628000000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: novas versões exigem nova autorização, preservam anterior em devolução/rejeição",
+          "status": "passed",
+          "title": "B08: novas versões exigem nova autorização, preservam anterior em devolução/rejeição",
+          "duration": 410.8993479999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08: aprovação concorrente da revisão é idempotente e guarda snapshot anterior no histórico",
+          "status": "passed",
+          "title": "B08: aprovação concorrente da revisão é idempotente e guarda snapshot anterior no histórico",
+          "duration": 183.54332599999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de edit reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de edit reverte operação inteira",
+          "duration": 109.82258199999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de approval reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de approval reverte operação inteira",
+          "duration": 184.72771599999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B08/B09: falha na auditoria de withdraw reverte operação inteira",
+          "status": "passed",
+          "title": "B08/B09: falha na auditoria de withdraw reverte operação inteira",
+          "duration": 103.09214199999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: visitante, organizações e editor bloqueado não retiram; payload forjado rejeitado",
+          "status": "passed",
+          "title": "B09: visitante, organizações e editor bloqueado não retiram; payload forjado rejeitado",
+          "duration": 104.39022000000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: retirada concorrente é idempotente; motivo só para proprietário/editor, sem ressurreição",
+          "status": "passed",
+          "title": "B09: retirada concorrente é idempotente; motivo só para proprietário/editor, sem ressurreição",
+          "duration": 171.89576700000043,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B09: retirar durante revisão oculta snapshot anterior e bloqueia aprovação concorrente",
+          "status": "passed",
+          "title": "B09: retirar durante revisão oculta snapshot anterior e bloqueia aprovação concorrente",
+          "duration": 150.52201500000047,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438491589,
+      "endTime": 1794438493460.522,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/revisions.database.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem",
+          "status": "skipped",
+          "title": "B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: adiada preserva snapshot, fecha apoios e audita autor/data",
+          "status": "passed",
+          "title": "B10 PostgreSQL: adiada preserva snapshot, fecha apoios e audita autor/data",
+          "duration": 136.23867199999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: cancelada preserva snapshot, fecha apoios e audita autor/data",
+          "status": "passed",
+          "title": "B10 PostgreSQL: cancelada preserva snapshot, fecha apoios e audita autor/data",
+          "duration": 114.39084299999968,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: concorrência, retries e cancelamento após adiamento não ressuscitam programação",
+          "status": "passed",
+          "title": "B10 PostgreSQL: concorrência, retries e cancelamento após adiamento não ressuscitam programação",
+          "duration": 185.12555999999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: negativas sem evento para organização, visitante, editor bloqueado e retirada",
+          "status": "passed",
+          "title": "B10 PostgreSQL: negativas sem evento para organização, visitante, editor bloqueado e retirada",
+          "duration": 127.45991499999991,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B10 PostgreSQL: erro de auditoria reverte estado e fechamento de apoios",
+          "status": "passed",
+          "title": "B10 PostgreSQL: erro de auditoria reverte estado e fechamento de apoios",
+          "duration": 100.73379999999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "B11 PostgreSQL: HTML é rejeitado antes de criar/editar/auditar e snapshot permanece íntegro",
+          "status": "passed",
+          "title": "B11 PostgreSQL: HTML é rejeitado antes de criar/editar/auditar e snapshot permanece íntegro",
+          "duration": 91.08691899999985,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794438473287,
+      "endTime": 1794438474042.087,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/tests/integration/scheduling.database.test.ts"
+    }
+  ],
+  "evidence_redaction": "Credentials redacted; failure dumps omitted beyond first line and test stack locations to avoid publishing existing local records."
+}

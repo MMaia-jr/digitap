@@ -7,7 +7,7 @@ Infraestrutura cívica para atividades e trajetórias comunitárias de Itaperuna
 - Cadastro de pessoa física e de organização, confirmação por e-mail, login e recuperação de senha.
 - Criação e edição de atividades, envio para curadoria e consulta pública das versões publicadas.
 - Registro de realização, evidências e revisão editorial, com distinção entre declaração do responsável e comprovação independente.
-- Apoio simbólico e intenção de presença implementados no repositório, com WhatsApp privado, nomes apenas por consentimento opcional e contadores no dashboard. **A migration deste módulo ainda não foi aplicada; integração e liberação Cloud pendentes.**
+- Apoio simbólico e intenção de presença implementados no repositório, com WhatsApp privado, nomes apenas por consentimento opcional e contadores no dashboard. **Migration aplicada e oito testes do módulo aprovados no PostgreSQL local. E2E e liberação Cloud pendentes; a regressão maior parou numa divergência 403/404 de teste de acesso.** [Retomada com Docker](operations/evidence/semana-1-dias-4-5-docker/REPORT.md).
 - Perfil e portfólio público, com exportação em PDF pela impressão do navegador (“Salvar como PDF”). O PDF é uma cópia do momento da exportação, não um certificado.
 
 O serviço está em **beta público na web**. O estado de **Enable Signup no Supabase Cloud ainda não foi confirmado nesta revisão**; não há evidência para classificá-lo como beta fechado. Se `disable_signup=false`, a classificação operacional deve ser **beta aberto para cadastro**, ainda que a publicação continue sujeita à curadoria. Página de cadastro visível não comprova que novas contas são aceitas. Não alteramos essa configuração.
