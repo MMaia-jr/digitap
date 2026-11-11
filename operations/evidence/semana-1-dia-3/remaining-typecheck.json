@@ -1,0 +1,9 @@
+{
+  "command": "npm run typecheck",
+  "started_at": "2026-11-11T22:16:20.997Z",
+  "finished_at": "2026-11-11T22:16:23.064Z",
+  "exit_code": 0,
+  "signal": null,
+  "stdout": "remaining-typecheck.stdout.log",
+  "stderr": "remaining-typecheck.stderr.log"
+}

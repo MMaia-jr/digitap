@@ -1,0 +1,22 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5
+
+ ❯ tests/components/editorial-queue.test.tsx (5 tests | 3 failed) 398ms
+   × lista somente a fila do serviço com sujeito, data e ações editoriais 59ms
+   × aprovação usa endpoint protegido e atualiza fila 289ms
+   × rejeição envia o motivo digitado, sem aprovar ou publicar 12ms
+ ❯ tests/components/visible-home.test.tsx (4 tests | 1 failed) 552ms
+   × home vazia convida a participar sem fabricar atividades 48ms
+
+ Test Files  2 failed | 47 passed (49)
+      Tests  4 failed | 452 passed (456)
+   Start at  19:16:28
+   Duration  6.25s (environment 63%, tests 19%, import 17%, transform 1%, worker 1%)
+
+    Isolate  49 workers spawned · ~975ms startup each (spawn + environment, per file)
+             at least ~3.37s faster with isolate: false — reuses workers across files instead of one per file
+

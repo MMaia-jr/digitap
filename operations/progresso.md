@@ -1,3 +1,11 @@
+# Semana 1, dia 3 — verificações restantes concluídas (11/11/2026)
+
+Base `eeec4ce`: `npm run build` **exit 0**, `npm run typecheck` **exit 0**, `npm run lint` **exit 1** (somente débito conhecido `Date.now()`/`react-hooks/purity`). `npm test` completo, **sem bail**, **exit 1: 452 PASS / 4 FAIL / 0 SKIP**, 49 arquivos (47 PASS / 2 FAIL). B11 PASS; sem falha P0 adicional. Falhas restantes: três em `editorial-queue` e uma em `visible-home`, explicitamente autorizadas pelo proponente como débitos a registrar, sem correção nesta rodada.
+
+[Outputs completos, exit codes e fechamento](evidence/semana-1-dia-3/CLOSURE.md). Este checkpoint substitui a parada histórica abaixo quanto às quatro verificações restantes. Não constitui aceite completo do núcleo: integração PostgreSQL, E2E, isolamento RLS PF/Organização e backup/restore continuam sem nova verificação. Nenhuma mudança de produção aplicada.
+
+---
+
 # Semana 1, dia 3 — STOP por falha P0 (11/11/2026)
 
 Rodada estritamente local, base `c1264c1`. Unitários interrompidos com bail: **6 PASS / 2 FAIL / 5 SKIP**, em dois arquivos; outros 47 arquivos não executados. P0 B11 falhou ao encontrar SVG onde o teste esperava ausência de elementos; isso não demonstra XSS, mas impede aceite do gate. Primeira falha não P0: expectativa de texto antigo da Home. Nenhuma correção aplicada.

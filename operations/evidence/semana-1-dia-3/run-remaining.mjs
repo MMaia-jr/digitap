@@ -1,0 +1,22 @@
+import {spawn} from 'node:child_process';
+import {writeFileSync} from 'node:fs';
+const dir='operations/evidence/semana-1-dia-3';
+const task=process.argv[2];
+const args={build:['run','build'],lint:['run','lint'],typecheck:['run','typecheck'],unit:['test']}[task];
+if(!args)throw new Error('Verificação inválida');
+const started_at=new Date().toISOString();
+const child=spawn('npm',args,{stdio:['ignore','pipe','pipe']});
+let stdout='',stderr='';
+child.stdout.on('data',chunk=>stdout+=chunk);
+child.stderr.on('data',chunk=>stderr+=chunk);
+child.on('error',error=>{stderr+=String(error);});
+child.on('close',(code,signal)=>{
+ const output=stdout+'\n'+stderr;
+ writeFileSync(`${dir}/remaining-${task}.stdout.log`,stdout);
+ writeFileSync(`${dir}/remaining-${task}.stderr.log`,stderr);
+ const result={command:['npm',...args].join(' '),started_at,finished_at:new Date().toISOString(),exit_code:code,signal,stdout:`remaining-${task}.stdout.log`,stderr:`remaining-${task}.stderr.log`};
+ writeFileSync(`${dir}/remaining-${task}.json`,JSON.stringify(result,null,2)+'\n');
+ console.log(JSON.stringify(result));
+ console.log(output.split('\n').filter(line=>task==='unit'?/Test Files|Tests |^ FAIL /.test(line):task==='build'?/Compiled|Finished TypeScript|Generating static pages|Error|error|Failed/.test(line):true).join('\n'));
+ process.exitCode=code??1;
+});

@@ -1,0 +1,9 @@
+{
+  "command": "npm run build",
+  "started_at": "2026-11-11T22:16:02.613Z",
+  "finished_at": "2026-11-11T22:16:08.141Z",
+  "exit_code": 0,
+  "signal": null,
+  "stdout": "remaining-build.stdout.log",
+  "stderr": "remaining-build.stderr.log"
+}

@@ -1,0 +1,9 @@
+{
+  "command": "npm run lint",
+  "started_at": "2026-11-11T22:16:11.694Z",
+  "finished_at": "2026-11-11T22:16:18.431Z",
+  "exit_code": 1,
+  "signal": null,
+  "stdout": "remaining-lint.stdout.log",
+  "stderr": "remaining-lint.stderr.log"
+}

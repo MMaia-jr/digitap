@@ -1,3 +1,5 @@
+> **Atualização posterior:** a investigação confirmou falso positivo no B11 e o teste foi corrigido no commit `eeec4ce`. As quatro verificações restantes foram executadas sem bail no `npm test`; veja [fechamento](CLOSURE.md) e [totais atuais](closure-summary.json). Os resultados de interrupção abaixo são históricos e não devem ser somados aos totais da nova execução.
+
 # Semana 1 — dia 3: rodada interrompida por P0
 
 Base: `c1264c1eef5d2d8fa5f0b36cca5a4b00d7434ef0`. Execução local em 11/11/2026. Nenhum acesso a produção por curl, fetch ou integração. Nenhuma mudança de aplicação, banco, migrations ou RLS.

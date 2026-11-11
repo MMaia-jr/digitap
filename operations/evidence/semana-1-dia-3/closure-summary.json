@@ -1,0 +1,72 @@
+{
+  "base_commit": "eeec4ce1ee6b97f86f06d69b42a5a7bd2e9ab472",
+  "status": "REMAINING_CHECKS_COMPLETED_WITH_KNOWN_DEBTS",
+  "runs": {
+    "build": {
+      "command": "npm run build",
+      "started_at": "2026-11-11T22:16:02.613Z",
+      "finished_at": "2026-11-11T22:16:08.141Z",
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "remaining-build.stdout.log",
+      "stderr": "remaining-build.stderr.log"
+    },
+    "lint": {
+      "command": "npm run lint",
+      "started_at": "2026-11-11T22:16:11.694Z",
+      "finished_at": "2026-11-11T22:16:18.431Z",
+      "exit_code": 1,
+      "signal": null,
+      "stdout": "remaining-lint.stdout.log",
+      "stderr": "remaining-lint.stderr.log"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "started_at": "2026-11-11T22:16:20.997Z",
+      "finished_at": "2026-11-11T22:16:23.064Z",
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "remaining-typecheck.stdout.log",
+      "stderr": "remaining-typecheck.stderr.log"
+    },
+    "unit": {
+      "command": "npm test",
+      "started_at": "2026-11-11T22:16:27.729Z",
+      "finished_at": "2026-11-11T22:16:34.649Z",
+      "exit_code": 1,
+      "signal": null,
+      "stdout": "remaining-unit.stdout.log",
+      "stderr": "remaining-unit.stderr.log"
+    }
+  },
+  "unit_counts": {
+    "PASS": 452,
+    "FAIL": 4,
+    "SKIP": 0,
+    "total": 456,
+    "files_pass": 47,
+    "files_fail": 2,
+    "files_total": 49
+  },
+  "lint_counts": {
+    "errors": 1,
+    "warnings": 0
+  },
+  "known_failures": [
+    "editorial-queue: lista somente a fila do serviço com sujeito, data e ações editoriais",
+    "editorial-queue: aprovação usa endpoint protegido e atualiza fila",
+    "editorial-queue: rejeição envia o motivo digitado, sem aprovar ou publicar",
+    "visible-home: home vazia convida a participar sem fabricar atividades",
+    "lint: react-hooks/purity por Date.now() em src/app/dashboard/pessoa-fisica/atividade/[id]/evidencia/page.tsx:13:794"
+  ],
+  "new_p0_failure": false,
+  "b11": "PASS in complete unit suite",
+  "scope": "four remaining checks only; no production code changes; no production access",
+  "still_not_verified": [
+    "PostgreSQL integration",
+    "complete E2E",
+    "PF/Organization RLS with two real local accounts",
+    "draft leakage against real local DB",
+    "Cloud backup/restore"
+  ]
+}
