@@ -2,6 +2,7 @@ import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createAccessDependencies } from './supabase-access.server';
 import { FlowError, type AuthGateway } from './flow.server';
+import { appOrigin } from '../supabase/config.server';
 
 export function createGateway(user: SupabaseClient, admin: () => SupabaseClient, clearCookies: () => void): AuthGateway {
   const result=(response: {data: {user?: unknown;session?: unknown};error: unknown}) => ({
@@ -12,7 +13,10 @@ export function createGateway(user: SupabaseClient, admin: () => SupabaseClient,
     async signUp(email,password){return result(await user.auth.signUp({email,password}));},
     async signUpPF(email,password,name){return result(await user.auth.signUp({email,password,options:{data:{tipo:'pessoa_fisica',nome_publico:name}}}));},
     async signIn(email,password){return result(await user.auth.signInWithPassword({email,password}));},
-    async recover(email){return {error:(await user.auth.resetPasswordForEmail(email)).error};},
+    async recover(email){
+      const origin=process.env.NODE_ENV==='production'?'https://www.digitap.com.br':appOrigin();
+      return {error:(await user.auth.resetPasswordForEmail(email,{redirectTo:`${origin}/auth/confirm`})).error};
+    },
     async verify(token_hash,type){return result(await user.auth.verifyOtp({token_hash,type}));},
     async changePassword(password){return result(await user.auth.updateUser({password}));},
     async logout(){try{return {error:(await user.auth.signOut({scope:'local'})).error};}finally{clearCookies();}},
