@@ -1,0 +1,63 @@
+{
+  "surface": "detail",
+  "payload": "<img src=x onerror=\"window.xss=1\">",
+  "broad_selector": "img,script,svg,iframe,[onerror],[onload]",
+  "first_match": "<svg class=\"art-sprig\" viewBox=\"0 0 120 160\" fill=\"none\"><path d=\"M54 150C73 105 42 70 68 15\" stroke=\"currentColor\" stroke-width=\"3\"></path><path d=\"M62 39C29 43 24 14 29 5C54 6 69 19 62 39ZM57 78C86 76 104 57 101 39C79 40 59 53 57 78ZM57 111C25 113 13 88 15 75C42 76 58 92 57 111Z\" fill=\"currentColor\"></path></svg>",
+  "svg_count": 6,
+  "control_svg_count": 6,
+  "svg_identical_to_benign_control": true,
+  "first_svg_matches_activity_artwork": true,
+  "svg_elements": [
+    {
+      "class": "art-sprig",
+      "parent": "activity-art art-tone-0 art-large",
+      "markup": "<svg class=\"art-sprig\" viewBox=\"0 0 120 160\" fill=\"none\"><path d=\"M54 150C73 105 42 70 68 15\" stroke=\"currentColor\" stroke-width=\"3\"></path><path d=\"M62 39C29 43 24 14 29 5C54 6 69 19 62 39ZM57 78C86 76 104 57 101 39C79 40 59 53 57 78ZM57 111C25 113 13 88 15 75C42 76 58 92 57 111Z\" fill=\"currentColor\"></path></svg>"
+    },
+    {
+      "class": "community-icon ",
+      "parent": "note-icon",
+      "markup": "<svg class=\"community-icon \" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z\"></path><circle cx=\"12\" cy=\"10\" r=\"2.5\"></circle></svg>"
+    },
+    {
+      "class": "community-icon ",
+      "parent": "organizer-panel",
+      "markup": "<svg class=\"community-icon \" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M4 12h16m-6-6 6 6-6 6\"></path></svg>"
+    },
+    {
+      "class": "community-icon ",
+      "parent": "plan-icon",
+      "markup": "<svg class=\"community-icon \" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"3\"></rect><path d=\"M7 3v4m10-4v4M3 11h18m-13 5h2m4 0h2\"></path></svg>"
+    },
+    {
+      "class": "community-icon ",
+      "parent": "plan-icon",
+      "markup": "<svg class=\"community-icon \" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"9\" cy=\"8\" r=\"3\"></circle><path d=\"M3 21v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5\"></path></svg>"
+    },
+    {
+      "class": "community-icon ",
+      "parent": "button participate-button",
+      "markup": "<svg class=\"community-icon \" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M20 3C8 2 3 8 5 14c2 6 12 7 15-11Z\"></path><path d=\"M4 21 15 10\"></path></svg>"
+    }
+  ],
+  "dangerous_non_svg_elements": 0,
+  "name_nodes": [
+    {
+      "selector": ".detail-byline a, .organizer-panel strong",
+      "text": "<img src=x onerror=\"window.xss=1\">",
+      "inner_html": "&lt;img src=x onerror=\"window.xss=1\"&gt;",
+      "child_node_types": [
+        3
+      ],
+      "dangerous_descendants": 0
+    },
+    {
+      "selector": ".detail-byline a, .organizer-panel strong",
+      "text": "<img src=x onerror=\"window.xss=1\">",
+      "inner_html": "&lt;img src=x onerror=\"window.xss=1\"&gt;",
+      "child_node_types": [
+        3
+      ],
+      "dangerous_descendants": 0
+    }
+  ]
+}

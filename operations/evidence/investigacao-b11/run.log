@@ -1,0 +1,5 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run --config operations/evidence/investigacao-b11/vitest.config.mjs --reporter=json --outputFile=operations/evidence/investigacao-b11/results.json
+
+JSON report written to /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/operations/evidence/investigacao-b11/results.json

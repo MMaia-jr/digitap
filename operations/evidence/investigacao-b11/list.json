@@ -1,0 +1,23 @@
+{
+  "surface": "list",
+  "payload": "<img src=x onerror=\"window.xss=1\">",
+  "broad_selector": "img,script,svg,iframe,[onerror],[onload]",
+  "first_match": null,
+  "svg_count": 0,
+  "control_svg_count": 0,
+  "svg_identical_to_benign_control": true,
+  "first_svg_matches_activity_artwork": null,
+  "svg_elements": [],
+  "dangerous_non_svg_elements": 0,
+  "name_nodes": [
+    {
+      "selector": "li > p:first-of-type",
+      "text": "<img src=x onerror=\"window.xss=1\">",
+      "inner_html": "&lt;img src=x onerror=\"window.xss=1\"&gt;",
+      "child_node_types": [
+        3
+      ],
+      "dangerous_descendants": 0
+    }
+  ]
+}
