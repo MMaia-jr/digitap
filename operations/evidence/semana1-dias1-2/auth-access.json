@@ -1,0 +1,15 @@
+{
+  "checked_on": "2026-11-11",
+  "project": "nlvgfrblxckrpflpdemj",
+  "enable_signup": "not_verified",
+  "configuration_changed": false,
+  "accounts_created": false,
+  "evidence": [
+    "Supabase MCP get_publishable_keys: You do not have permission to perform this action",
+    "Local .env.local points to 127.0.0.1; no production credential used",
+    "Public signup page scripts did not provide a project public key for settings query",
+    "Operator asked for dashboard Enable Signup value or production publishable key; response pending"
+  ],
+  "classification": "Public website; signup openness unconfirmed. Do not claim closed beta.",
+  "next_check": "Read disable_signup from GET /auth/v1/settings with the correct project public key, or confirm Enable Signup in dashboard; no account creation required"
+}

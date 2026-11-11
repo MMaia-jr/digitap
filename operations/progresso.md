@@ -1,6 +1,6 @@
 # DigItap — checkpoint operacional: Semana 1, dias 1–2
 
-Data: 11/11/2026. Esta nota substitui o estado operacional do checkpoint antigo, preservado abaixo como histórico. Dois checkpoints de trabalho serão registrados nesta execução; não representam dois dias de calendário transcorridos.
+Data: 11/11/2026. Esta nota substitui o estado operacional do checkpoint antigo, preservado abaixo como histórico. Dois checkpoints de trabalho registrados nesta execução; não representam dois dias de calendário transcorridos.
 
 ## Estado de produção e limites da verificação
 
@@ -19,7 +19,18 @@ Justificativa operacional desta reconciliação: permitir apresentar a trajetór
 
 README reconciliado; privacidade revisada; páginas `/termos` e `/contestacao` criadas; footer global com contato, responsável e links. Linguagem de beta, sem presumir governança institucional formal. Política registra dados, finalidades, consentimento para exposição pública, legítimo interesse limitado à agregação, fornecedores nos EUA, direitos e limitações de retenção. Não foi implementado mecanismo novo de coleta de consentimento.
 
-Validação: primeiro `npm run build` PASS (inclui `/privacidade`, `/termos` e `/contestacao`). Typecheck/lint e inspeção HTTP serão registrados no segundo checkpoint. Código de negócio, banco, migrations, RLS e configuração Auth não alterados.
+Validação: primeiro `npm run build` PASS (inclui `/privacidade`, `/termos` e `/contestacao`). Typecheck/lint e inspeção HTTP registrados no segundo checkpoint abaixo. Código de negócio, banco, migrations, RLS e configuração Auth não alterados.
+
+## Dia 2 — consistência e verificação
+
+- Primeiro checkpoint: commit `17b2737`, enviado a `origin/main`.
+- Documento 02 recebeu nota atual de exceção ao escopo do portfólio; texto histórico preservado. Governança alinhada ao procedimento de resposta privada e eventual divulgação de decisão sem dados pessoais.
+- Segundo `npm run build`: PASS. `npm run typecheck`: PASS. Lint das cinco páginas/layout tocados: PASS; revisão React: páginas informativas renderizadas no servidor, headings e links sem nova dependência ou estado cliente.
+- Navegador Chromium contra build local em loopback: **10 verificações PASS**, em larguras 390/1280, nas rotas privacidade, termos, contestação, governança e login; status 200, acesso sem login, links de footer e contato corretos, sem overflow horizontal. [Evidência](evidence/semana1-dias1-2/pages.json). Não é teste de entrega de e-mail nem do ciclo completo cadastro → portfólio em produção.
+- `npm test`: **451 PASS / 5 FAIL**, em 49 arquivos (456 testes). As cinco falhas são as mesmas já identificadas antes deste trabalho: três em `editorial-queue`, uma em `public-safety` e uma em `visible-home`. Não foram alterados esses componentes/testes.
+- `npm run lint` geral: FAIL em `src/app/dashboard/pessoa-fisica/atividade/[id]/evidencia/page.tsx:13`, regra `react-hooks/purity` por `Date.now()` durante renderização; arquivo idêntico à base `a8c2e45`. Mantido fora do escopo de documentação/controles.
+- Enable Signup: **NÃO VERIFICADO**. O MCP retornou falta de permissão ao consultar as chaves públicas do projeto informado. A inspeção dos scripts públicos do cadastro não forneceu chave para `GET /auth/v1/settings`; nenhuma conta foi criada para testar. Solicitado ao proponente o estado do campo ou a chave pública correta; sem resposta registrada neste checkpoint. [Limites da checagem](evidence/semana1-dias1-2/auth-access.json). Quando houver evidência de `disable_signup=false`, atualizar README para “beta aberto para cadastro”. Não classificar como beta fechado enquanto isso.
+- Nenhuma alteração de banco, migrations, RLS, credenciais ou configuração Auth. Nenhuma funcionalidade de apoio, parceiro ou prestação de contas adicionada.
 
 ## Pendências antes da ampliação
 

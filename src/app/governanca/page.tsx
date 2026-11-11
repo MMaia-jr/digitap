@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = { title: 'Governança provisória' };
 
@@ -16,11 +17,11 @@ export default function Governance() {
 
       <h2>Como contestar</h2>
       <p>Envie um e-mail para <a href="mailto:muralitaperuna@gmail.com">muralitaperuna@gmail.com</a> com a descrição da decisão ou situação que deseja contestar e as evidências disponíveis.</p>
-      <p>A contestação será respondida em até 30 dias. A resposta será pública, sem expor dados pessoais.</p>
+      <p>A contestação será respondida por e-mail em até 30 dias, respeitando prazos legais menores. Quando uma decisão de interesse público for divulgada, ela não deve expor dados pessoais do solicitante. Consulte o <Link href="/contestacao">procedimento de contestação e reavaliação</Link>.</p>
 
       <h2>Compromisso de atualização</h2>
       <p>Quando a associação for formalizada, esta página será atualizada para identificar quem assume a governança e quais regras passam a valer.</p>
-      <p>Última atualização: <time dateTime="2026-11-06">06/11/2026</time>.</p>
+      <p>Última atualização: <time dateTime="2026-11-11">11/11/2026</time>.</p>
     </article>
   );
 }

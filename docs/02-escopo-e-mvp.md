@@ -1,4 +1,10 @@
-# Nota de revisão vigente — 04/11/2026
+# Reconciliação operacional — 11/11/2026
+
+O app está em produção na Vercel + Supabase Cloud, conforme informado pelo proponente. O portfólio público com exportação pela impressão em PDF já foi implementado antes da validação I5, contrariando a sequência prevista abaixo. Esta nota registra a exceção, sem presumir aprovação histórica ou conclusão de VH-01–VH-03.
+
+Justificativa e condições atuais: apresentação dos registros existentes no beta; somente conteúdo autorizado/publicado, sem certificação independente, com contestação acessível e indicação de que PDF é cópia estática. A exceção não libera outros módulos I6+ nem representa decisão de lançamento. Consulte [checkpoint operacional](../operations/progresso.md) para estado atual, limites da verificação e pendências. A nota de 04/11 e o corpo abaixo são preservados como histórico de escopo.
+
+# Nota de revisão — 04/11/2026 (histórico)
 
 **Fonte preservada:** `02-—-ESCOPO-E-MVP-Projeto-A-Praça.txt` (Project Files). **Natureza:** atualização de escopo e leitura, com seções exploratórias antigas preservadas para rastreabilidade. **Não é** autorização de publicação, DDL, migração, alteração de RLS/código, consulta ao Git local ou constituição institucional. I3 concluído em 05/11/2026 (commit 623ee50, 20/20 cenários B+C PASS); I4 especificado, não implementado; I5 não iniciado.
 

@@ -1,0 +1,76 @@
+{
+  "checked_at": "2026-11-11T21:37:48.604Z",
+  "environment": "build local de produção em loopback; sem login, banco ou envio de e-mail",
+  "results": [
+    {
+      "path": "/privacidade",
+      "width": 390,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/termos",
+      "width": 390,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/contestacao",
+      "width": 390,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/governanca",
+      "width": 390,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/login",
+      "width": 390,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/privacidade",
+      "width": 1280,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/termos",
+      "width": 1280,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/contestacao",
+      "width": 1280,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/governanca",
+      "width": 1280,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    },
+    {
+      "path": "/login",
+      "width": 1280,
+      "status": 200,
+      "footer": true,
+      "no_horizontal_overflow": true
+    }
+  ]
+}
