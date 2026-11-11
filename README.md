@@ -1,57 +1,61 @@
-# A Praça — MVP v1.5
+# DigItap — A Praça
 
-Software em desenvolvimento local, sem adoção, organização real ou parceria confirmada. Licença definitiva pendente. Nenhum deploy ou recurso remoto criado.
+Infraestrutura cívica para atividades e trajetórias comunitárias de Itaperuna e região. O app está em produção em **https://www.digitap.com.br**, hospedado na **Vercel**, com banco, Auth e arquivos no **Supabase Cloud**. O envio de e-mails de acesso usa **Resend**. Deploy, domínio, banco migrado e e-mail funcional foram informados pelo proponente; isso não equivale a uma auditoria completa do ambiente.
 
-O incremento 2 implementa cadastro de acesso com confirmação de e-mail, login, logout, recuperação, redefinição de senha e cadastro de organização pendente. A interface e a lógica foram verificadas com portas simuladas e com HTTP real no Next.js; **o fluxo completo no Supabase permanece não verificado**, pois o bloqueio de portas Docker continua.
+## O que existe hoje
 
-## Executar somente a interface local
+- Cadastro de pessoa física e de organização, confirmação por e-mail, login e recuperação de senha.
+- Criação e edição de atividades, envio para curadoria e consulta pública das versões publicadas.
+- Registro de realização, evidências e revisão editorial, com distinção entre declaração do responsável e comprovação independente.
+- Perfil e portfólio público, com exportação em PDF pela impressão do navegador (“Salvar como PDF”). O PDF é uma cópia do momento da exportação, não um certificado.
 
-Node usado: 22.23.2. Versões fixadas no package-lock.json. A cadeia de testes exige Node ^22.22.2, ^24.15.0 ou >=26.
+O serviço está em **beta público na web**. O estado de **Enable Signup no Supabase Cloud ainda não foi confirmado nesta revisão**; não há evidência para classificá-lo como beta fechado. Se `disable_signup=false`, a classificação operacional deve ser **beta aberto para cadastro**, ainda que a publicação continue sujeita à curadoria. Página de cadastro visível não comprova que novas contas são aceitas. Não alteramos essa configuração.
+
+Não há validação humana I5 concluída documentada: VH-01 (compreensão), VH-02 (uso acompanhado e consequência) e VH-03 (deliberação) continuam gates para ampliação e decisão de lançamento. Publicar o software não demonstra adoção ou utilidade comunitária. Não há parceria institucional confirmada.
+
+## Rodar localmente
+
+Requer Node `^22.22.2`, `^24.15.0` ou `>=26`, npm e, para os fluxos reais, um Supabase local isolado.
 
 ```sh
-npm ci --cache ./.npm-cache
+npm ci
+cp .env.example .env.local
+# Substitua os placeholders por credenciais exclusivamente locais.
 npm run dev
 ```
 
-A interface fica em http://127.0.0.1:3215. Não use organizações ou pessoas reais. Sem `.env.local` válida e sem o Supabase isolado, operações válidas de Auth retornam 503; campos inválidos continuam sendo validados no servidor. Páginas restritas não exibem dados quando o acesso não pode ser verificado. JavaScript é necessário para o envio interativo dos formulários; o fallback usa POST e nunca envia senha na URL.
+A interface abre em http://127.0.0.1:3215. `.env.local` deve conter `APP_ORIGIN=http://127.0.0.1:3215`, `NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:56151`, chave pública, `SUPABASE_SECRET_KEY` e `SUPABASE_DB_URL` do banco local na porta 56152. Não copie chaves de produção e não versione segredos. Sem serviços e credenciais válidos, operações dependentes de Auth/banco podem retornar indisponibilidade.
 
-**Não iniciar o Supabase agora.** `npm run local:start` continua bloqueado. A CLI 3.0.0 não comprovou bind a loopback; nenhuma configuração global foi alterada para contornar isso. O volume de A Praça está preservado, sem containers ativos. `.env.example` contém apenas placeholders; nenhum segredo real foi configurado neste incremento.
+**Limitação ainda presente no código:** `npm run local:start` está bloqueado por `scripts/start-local.mjs`, devido à verificação de isolamento das portas. Não é um comando funcional de inicialização automática. Para preparar a stack, use o procedimento de isolamento em [autenticação local](operations/autenticacao-local.md) e os registros posteriores em [progresso](operations/progresso.md). Comprove os bindings antes de usar; não aplique migrations no Cloud como parte do setup local. A interface pode ser iniciada separadamente pelo comando acima.
 
-## Verificações
+Em produção, configure `APP_ORIGIN=https://www.digitap.com.br`, URL HTTPS do projeto Supabase e as credenciais de servidor nos ambientes da Vercel. Variáveis `NEXT_PUBLIC_*` são públicas. A configuração local não deve ser reutilizada em produção.
+
+## Verificar e contribuir
 
 ```sh
 npm test
 npm run typecheck
 npm run lint
 npm run build
-node scripts/check-public-artifacts.mjs
 ```
 
-- `npm test`: 125 testes de unidade/componentes; inclui 24 regressões do incremento 1. Provider, cookies e banco são simulados nesses testes.
-- `scripts/http-smoke.mjs`: 14 verificações HTTP contra o Next.js de produção local, com Supabase parado e sem credenciais. Exige servir o build em 127.0.0.1:3215. Não prova login ou envio de e-mail reais.
-- `npm run test:db`: suíte real de segurança do incremento 1, **não reexecutada** neste incremento.
-- `npm run test:onboarding:db`: suíte real de segurança + 4 testes preparados de RPC/idempotência/rollback. **NOT RUN**; exige isolamento comprovado e aplicação local da nova migração.
+Integração e E2E usam comandos próprios (`test:onboarding:db`, `test:e2e`) e exigem serviços locais isolados e fixtures autorizadas. Não execute esses testes contra produção.
 
-A nova migração foi apenas preparada. Não executar contra um remoto. Primeiro resolver o isolamento de portas; depois seguir operations/autenticacao-local.md.
+A governança é provisória, sob responsabilidade operacional de **Marcos Antonio Maia Júnior**. Propostas de mudança devem descrever problema, escopo, impacto nos dados e validação; envie uma issue/PR no repositório ou escreva para **muralitaperuna@gmail.com**. Use dados fictícios nos testes. A revisão técnica não substitui a decisão humana sobre escopo, exposição de dados, infraestrutura ou lançamento. Não há CNPJ, estatuto aprovado ou assembleia constituída registrados nesta revisão.
 
-## Entregas e limites
+A orientação de licenciamento é **AGPLv3 para código** e **CC BY-SA 4.0 para documentos do projeto**. Isso não licencia automaticamente conteúdos de usuários. A consolidação dos arquivos formais de licença e da titularidade das contribuições permanece pendente.
 
-[Relatório do incremento 2](operations/incremento-2.md), [arquivos modificados](operations/arquivos-incremento-2.txt), [comandos](operations/command-log-incremento-2.md), [contratos](specs/contratos-api.md) e [matriz dos 74 cenários](specs/matriz-testes-v1.5.md).
+## Privacidade, termos e contestação
 
-O cadastro é de duas etapas: Auth confirmado primeiro, organização pendente depois. Falha no segundo passo não apaga identidade nem exige recadastro; a pessoa pode entrar e repetir o vínculo. A RPC mantém uma conta por identidade, serializa tentativas concorrentes e não altera nome/papel em retries. Essas garantias transacionais precisam ser confirmadas no banco real.
+- [Política de privacidade](https://www.digitap.com.br/privacidade)
+- [Termos de uso](https://www.digitap.com.br/termos)
+- [Como contestar ou pedir correção](https://www.digitap.com.br/contestacao)
+- [Governança provisória](https://www.digitap.com.br/governanca)
 
-Não foram implementados envio de atividades, apoio, selos, painel de movimento, bootstrap editorial ou administração de contas. A interface deste recorte usa CSS local para limitar dependências; Next.js e Supabase permanecem como stack principal.
+Contato: **muralitaperuna@gmail.com**. Compromisso operacional de resposta em até 30 dias, respeitando prazos legais menores. A infraestrutura envolve fornecedores nos EUA; região efetiva, instrumentos de transferência internacional e retenção precisam de registro antes da ampliação do beta.
 
-Auditoria executada: dependências de execução com zero avisos; cadeia de desenvolvimento com 16 entradas moderadas relacionadas a minimatch/ESLint. Há incompatibilidades entre as versões mais recentes de TypeScript/ESLint e os plugins; TypeScript 6.0.3 e ESLint 9.39.5 foram fixados para lint/build funcionarem. O npm indica ESLint 9 fora de suporte. A dívida de atualização está documentada; nenhuma correção forçada foi aplicada.
+## Decisões e histórico
 
-## Complementação da Etapa B — 04/11/2026
+O portfólio/PDF foi implementado antes do I5, divergindo da sequência prevista em [02 — Escopo e MVP](docs/02-escopo-e-mvp.md). Esta reconciliação registra a exceção para apresentar atividades e evidências existentes durante o beta, sem tratar a entrega como aprovação retroativa do I5. Condições: somente conteúdo autorizado/publicado, sem certificação independente, possibilidade de contestação e sem avançar novos módulos por esse precedente. Veja [checkpoint e pendências](operations/progresso.md).
 
-Foram corrigidas lacunas de logout em falha de inicialização, sessão parcial após login/confirmação malsucedidos, identidade vazia e repetição do vínculo já existente. O formulário agora bloqueia dois submits no mesmo instante, sem substituir a garantia de unicidade do banco.
-
-A suíte disponível passou com **125 testes** (100 anteriores + 25 novas regressões/controles), além de lint, typecheck e build. **89 testes reais de banco/Auth e o fluxo em navegador permanecem NOT RUN**. Nenhuma operação Docker, instalação ou migração foi executada nesta etapa.
-
-O incremento 2 permanece com aceite **PENDENTE**. Veja [progresso atual](operations/progresso.md), [relatório da Etapa B](operations/etapa-b-incremento-2.md) e [evidências RED/GREEN](operations/evidence/etapa-b-20261104/). Não avançar ao incremento 3.
-
-## Validação posterior — incremento 2C
-
-Os estados históricos acima foram superados: A01–A09 passaram em Chromium contra Next/Supabase locais, com expiração temporal controlada nas fixtures; 129 testes unitários/componentes e lint/typecheck/build aprovados. Integração anterior 89 PASS preservada. Consulte [relatório e limites](operations/incremento-2c.md). Sem autorização de produção ou avanço ao incremento 3.
+Os documentos 00–07 e relatórios antigos continuam como histórico das decisões. Trechos que dizem “nenhum deploy” ou “somente local” não descrevem mais o estado operacional; a nota de reconciliação prevalece para esse estado, sem reescrever os gates humanos. Apoio, verificação de comparecimento, parceiros, prestação de contas financeira, capacidades, PoWth e painel de impacto ficam fora deste trabalho.
