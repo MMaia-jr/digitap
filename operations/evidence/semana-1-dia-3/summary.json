@@ -1,0 +1,60 @@
+{
+  "base_commit": "c1264c1eef5d2d8fa5f0b36cca5a4b00d7434ef0",
+  "checked_at": "2026-11-11T21:43:42.780320+00:00",
+  "scope": "local only; no production curl/fetch/API queries",
+  "status": "STOPPED_ON_P0_FAILURE",
+  "stop_reason": "B11 P0 according to specs/matriz-testes-v1.5.md:28 failed in tests/components/public-safety.test.tsx:25",
+  "runs": [
+    {
+      "report": "unit.json",
+      "exit_code": 1,
+      "counts_from_assertion_results": {
+        "PASS": 1,
+        "FAIL": 1,
+        "SKIP": 2
+      },
+      "failures": [
+        {
+          "file": "tests/components/visible-home.test.tsx",
+          "test": "home vazia convida a participar sem fabricar atividades",
+          "message": "TestingLibraryElementError: Unable to find an element with the text: /A Praça está sendo construída/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."
+        }
+      ]
+    },
+    {
+      "report": "p0-public-safety.json",
+      "exit_code": 1,
+      "counts_from_assertion_results": {
+        "PASS": 5,
+        "FAIL": 1,
+        "SKIP": 3
+      },
+      "failures": [
+        {
+          "file": "tests/components/public-safety.test.tsx",
+          "test": "B11: nome público legado com HTML é escapado na lista e detalhe",
+          "message": "AssertionError: expected SVGSVGElement{ …(1) } to be null"
+        }
+      ]
+    }
+  ],
+  "combined_assertion_counts": {
+    "PASS": 6,
+    "FAIL": 2,
+    "SKIP": 5
+  },
+  "skip_note": "pending assertions are reported as SKIP due to bail; 47 additional discovered files were not executed and are not counted as passing/skipped tests. Vitest top-level numPendingTests=0 disagrees with assertionResults, which is the basis for these counts.",
+  "remaining_commands": {
+    "npm run test:onboarding:db": "NOT RUN: stop on P0",
+    "npm run test:e2e": "NOT RUN: stop on P0",
+    "npm run build": "NOT RUN: stop on P0",
+    "npm run lint": "NOT RUN: stop on P0",
+    "npm run typecheck": "NOT RUN: stop on P0"
+  },
+  "local_database": "BLOCKED: Docker daemon unavailable",
+  "rls_two_users": "NOT RUN: no accounts created, no DB writes",
+  "draft_home_leak_check": "NOT RUN against real DB/browser; no conclusion on isolation",
+  "cloud_backup": "NOT VERIFIED: local-only restriction, no evidence of plan/frequency/retention/restore",
+  "application_changes": false,
+  "database_changes": false
+}

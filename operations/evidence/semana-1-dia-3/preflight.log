@@ -1,0 +1,5 @@
+Command: docker ps --format {{.Names}}\t{{.Ports}}
+Sandbox attempt: permission denied while trying to connect to the docker API.
+Retry with approved escalation: exit 1
+Cannot connect to the Docker daemon at unix:///Users/alexandrechagasleaocryptoboy/.docker/run/docker.sock. Is the docker daemon running?
+No Docker service started or reconfigured.

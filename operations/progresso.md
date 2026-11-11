@@ -1,3 +1,11 @@
+# Semana 1, dia 3 — STOP por falha P0 (11/11/2026)
+
+Rodada estritamente local, base `c1264c1`. Unitários interrompidos com bail: **6 PASS / 2 FAIL / 5 SKIP**, em dois arquivos; outros 47 arquivos não executados. P0 B11 falhou ao encontrar SVG onde o teste esperava ausência de elementos; isso não demonstra XSS, mas impede aceite do gate. Primeira falha não P0: expectativa de texto antigo da Home. Nenhuma correção aplicada.
+
+Após a falha P0, integração, E2E, build, lint, typecheck e testes com contas PF/Organização **NOT RUN**. Docker local também indisponível; nenhuma conta criada ou operação remota executada. Backup/restore Cloud sem comprovação de frequência/retenção; risco registrado no README. [Relatório completo e comandos](evidence/semana-1-dia-3/REPORT.md) · [Totais estruturados](evidence/semana-1-dia-3/summary.json).
+
+---
+
 # DigItap — checkpoint operacional: Semana 1, dias 1–2
 
 Data: 11/11/2026. Esta nota substitui o estado operacional do checkpoint antigo, preservado abaixo como histórico. Dois checkpoints de trabalho registrados nesta execução; não representam dois dias de calendário transcorridos.

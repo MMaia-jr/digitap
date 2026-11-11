@@ -1,0 +1,5 @@
+
+> a-praca-v1-5@0.1.0 test
+> vitest run --bail=1 --no-file-parallelism --reporter=json --outputFile=operations/evidence/semana-1-dia-3/unit.json
+
+JSON report written to /Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5/operations/evidence/semana-1-dia-3/unit.json
