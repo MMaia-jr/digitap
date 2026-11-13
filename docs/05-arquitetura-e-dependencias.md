@@ -1,3 +1,90 @@
+# Nota de incorporação das investigações — 13/11/2026
+
+Por autorização humana explícita do proponente, foram incorporadas cópias
+integrais de [INV-OSS-01](investigacoes/INV-OSS-01-reutilizacao-digitap.md) e
+[INV-ECO-01](investigacoes/INV-ECO-01-governanca-sustentabilidade-digitap.md),
+provenientes de `~/Downloads/`, com os originais preservados.
+O [índice das investigações](investigacoes/README.md) registra procedência,
+datas, hashes SHA-256 e autoria não confirmada.
+
+As fontes passam a estar disponíveis para consulta no repositório.
+Esta incorporação documental não aprova suas recomendações nem revalida
+suas fontes externas. A decisão humana abaixo permanece com seus limites.
+A nota de ausência na consulta inicial é preservada como registro histórico
+daquela consulta; a pendência de disponibilidade local foi atendida por esta
+incorporação, sem que isso comprove autoria ou adoção das recomendações.
+
+---
+
+# Decisão humana de engenharia — 13/11/2026
+
+**Autoria:** proponente humano do DigItap / A Praça, por instrução
+explícita na sessão de continuidade de 13/11/2026.
+**Alcance:** método de avaliação das próximas decisões de engenharia
+e de suas implicações para o produto.
+
+## Decisão e fundamentos
+
+INV-OSS-01 e INV-ECO-01 são referências obrigatórias de consulta,
+não autorização para implementar tudo o que foi pesquisado.
+
+Aplicar a sequência do [Marco Zero](Marco_Zero_2026-11-03.md),
+seção 8: **ADOPT → MAP → COMPOSE → EXTEND → BUILD**.
+
+Antes de construir uma capacidade, registrar:
+- a necessidade concreta;
+- a implementação existente;
+- as soluções pesquisadas reutilizáveis;
+- o custo, a manutenção, a segurança e os riscos;
+- o menor incremento verificável.
+
+## Aplicação e limites
+
+- **P0 e I3:** consolidar e reutilizar a infraestrutura atual.
+- **I4:** avaliar a aplicação dos aprendizados de governança,
+  atestação, representação, revogação e confiança contextual,
+  condicionada à disponibilidade das fontes e às decisões D1–D4.
+- **I5:** realizar validação humana VH-01, VH-02 e VH-03.
+- **I6+:** expansão somente após deliberação humana posterior a I5.
+  Não antecipar portfólio, IA, rede ou novos sistemas de governança.
+  Implementações anteriores não autorizam novas expansões.
+
+Não criar pontuação universal de reputação. Não presumir adoção,
+receita, instituição constituída ou demanda validada.
+
+Esta decisão estabelece um método de avaliação; não autoriza
+implementação, alteração de banco ou infraestrutura, nem implantação.
+
+Referências existentes:
+[escopo e ressalva sobre o portfólio já implementado](02-escopo-e-mvp.md),
+[modelo de domínio e decisões D1–D4](digitap/01-modelo-de-dominio.md) e
+[critérios de progresso e validação humana](07-criterios-de-progresso.md).
+
+## Fontes ainda pendentes
+
+Os registros de INV-OSS-01 e INV-ECO-01 não foram localizados nas
+buscas realizadas no repositório e no Google Drive conectado.
+Seus identificadores foram informados pelo proponente.
+
+As investigações ainda precisam ser incorporadas como fontes
+consultáveis, com localização, autoria, data e versão identificadas.
+Este registro não comprova sua consulta nem atribui conclusões
+a documentos não encontrados. A consulta obrigatória permanece
+pendente enquanto as fontes não estiverem disponíveis.
+
+A ausência temporária dessas investigações não bloqueia correções
+P0 previamente autorizadas. A consulta sistemática deve orientar
+novas decisões de arquitetura e capacidades.
+
+## Preservação do histórico
+
+O conteúdo anterior segue integralmente abaixo, com suas datas,
+ressalvas e afirmações históricas. Esta decisão registra somente
+o método acima; não atualiza o inventário técnico nem comprova
+execução, validação humana ou constituição institucional.
+
+---
+
 # Nota de revisão vigente — 04/11/2026
 
 **Fonte preservada:** `📘-05-—-ARQUITETURA-E-DEPENDÊNCIAS-Projeto-A-Praça.txt` (Project Files). **Natureza:** atualização de escopo e leitura, com seções exploratórias antigas preservadas para rastreabilidade. **Não é** autorização de publicação, DDL, migração, alteração de RLS/código, consulta ao Git local ou constituição institucional. I3 concluído em 05/11/2026 (commit 623ee50, 20/20 cenários B+C PASS); I4 especificado, não implementado; I5 não iniciado.
