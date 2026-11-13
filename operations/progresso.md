@@ -1,3 +1,19 @@
+# Reconciliação do estado local — 13/11/2026
+
+[CÓDIGO] Base inventariada: `fda9da280d8c2902cd172f7490b752ba3e485d66`; HEAD técnico antes desta nota: `b57d600`. Esta nota atualiza a leitura corrente; o conteúdo anterior abaixo é preservado como snapshot histórico e não comprova o estado de produção. Referências de produto: [Norte aprovado](../docs/digitap/00-norte-do-produto.md) e [modelo de domínio](../docs/digitap/01-modelo-de-dominio.md).
+
+- [CÓDIGO] I4 possui migrations `20261106003448_i4_expand.sql`, `20261106014443_i4_compat.sql` e `20261106030921_i4_cutover.sql` em `supabase/migrations/`; serviços Auth/atividades e regras de sujeitos, PF, coletivos e representação existem. As afirmações anteriores de “I4 apenas especificado” são históricas. Isso não demonstra implantação, aplicação atual dessas migrations ou funcionamento integral de todos os percursos.
+- [CÓDIGO] Projetos, colaboração e portfólio existem no schema e nos serviços `src/lib/queries/`; `/perfil/[id]` reúne conteúdo público e o PDF usa impressão do navegador. Implementação não comprova I5 cumprido nem certificação dos fatos.
+- [CÓDIGO] P0 local foi registrado no commit `b57d600`: PostgreSQL mantém `SUPABASE_DB_URL`, exige endpoint independente autorizado em produção e TLS com certificado verificado; cookies usam Secure em produção. A descrição anterior de conexão exclusivamente local foi superada no código. [Revalidação](evidence/saneamento-git/validation.json): 81 PASS, 0 FAIL, 0 SKIP; testes específicos, TypeScript e build com exit 0. [Histórico RED/GREEN](evidence/af-p0-parte-1/REPORT.md) preservado; não se declara P0 implantado ou liberado para deploy.
+- [CONTRATO] [REL-01](../specs/REL-01-registro-relacoes.md) define o contrato futuro; o motor não existe. Seus testes intencionalmente RED, por ausência de implementação, serão preservados no ramo local `wip/rel-01-contract-red`, fora de `main`, sem merge. O estado de apuração factual de realização existente não é a comprovação relacional futura.
+- [PENDENTE] A direção aprovada é reutilizar Supabase Storage; upload privado não foi comprovado no núcleo atual, que registra referências por URL. A referência privada não protege o arquivo externo.
+- [INFORMADO] Implantação pública, hospedagem Cloud e funcionamento de e-mail foram relatados pelo proponente; não foram verificados remotamente neste saneamento.
+- [PENDENTE] Cloud, DNS, cadeia/certificado e handshake TLS, RLS/grants efetivos, configuração Auth, entrega de e-mail, backups e release exigem validação autorizada própria. Mocks/build não comprovam essas condições. VH-01/VH-02/VH-03, governança operacional e obrigações de privacidade não são considerados concluídos por existência de código.
+
+[CÓDIGO] [Manifesto inicial e hashes](evidence/saneamento-git/initial-state.json) e [relatório de revalidação](evidence/saneamento-git/REPORT.md) registram a proveniência local. Os originais brutos RED/GREEN ficam preservados localmente e ignorados; somente resumos sanitizados são versionados. A regressão geral posterior ao isolamento será informada na entrega, sem antecipar resultado nesta nota.
+
+---
+
 # DigItap — reconciliação documental, Escopo A
 
 ## Base e critérios
