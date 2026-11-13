@@ -2,7 +2,7 @@ import 'server-only';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { localConfig } from './config.server';
-export const authCookieOptions={httpOnly:true,secure:false,sameSite:'lax' as const,path:'/'};
+export const authCookieOptions={httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'lax' as const,path:'/'};
 export async function userClient(){
   const store=await cookies();const {url,key}=localConfig();
   return createServerClient(url,key,{

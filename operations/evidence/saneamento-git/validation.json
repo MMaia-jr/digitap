@@ -1,0 +1,62 @@
+{
+  "scope": "Saneamento: revalidação local P0 antes do commit de segurança",
+  "checks": [
+    {
+      "command": "npm test -- tests/auth/database-config.test.ts tests/auth/database-hardening.test.ts tests/auth/secure-cookies.test.ts tests/auth/cookies.test.ts tests/auth/server-cookies.test.ts tests/auth/oauth-pkce.test.ts --reporter=json --outputFile=operations/evidence/saneamento-git/p0.raw.json",
+      "exitCode": 0,
+      "numTotalTests": 81,
+      "numPassedTests": 81,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    {
+      "command": "npm run typecheck -- --incremental false",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "historicalResults": {
+    "af-p0-02": {
+      "numTotalTests": 55,
+      "numPassedTests": 49,
+      "numFailedTests": 6,
+      "numPendingTests": 0
+    },
+    "p0-green": {
+      "numTotalTests": 81,
+      "numPassedTests": 81,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "rel01-red": {
+      "numTotalTests": 14,
+      "numPassedTests": 0,
+      "numFailedTests": 14,
+      "numPendingTests": 0
+    }
+  },
+  "rawArtifactSha256": {
+    "operations/evidence/af-p0-02/vitest.json": "b13b2c9c1b53d85e4c2530af0bef48ac2c260713bc0e875a080176a5eec94ceb",
+    "operations/evidence/af-p0-02/vitest.log": "1b14488dfe5094ad3da7c0d43fa6a01c7cced202cd73fa9ef9679615446ea6a8",
+    "operations/evidence/af-p0-parte-1/cookies-red.json": "1e3ed85c2e2628325eb5b297b6c02905e1ea4c4612efa5b61d98caa033a7ac78",
+    "operations/evidence/af-p0-parte-1/cookies-red.log": "34d141963ed856c74cb953c0b27036a8808197b1251c3881755505379c752033",
+    "operations/evidence/af-p0-parte-1/green.json": "2227e1c0c7de212c6388c4064c15a7d7e6746fbd5f4d3d5ff1aed693284a61f3",
+    "operations/evidence/af-p0-parte-1/green.log": "17279430e795d86a9d224b9a2b3f18b54e876bac937e6f41cb858e467d8a3d7a",
+    "operations/evidence/af-p0-parte-1/hardening-red.json": "5cac5359a24a8f98230f0de17425f7de1e3f11b7dc98fa74740412f7fa6cecb5",
+    "operations/evidence/af-p0-parte-1/hardening-red.log": "4ac5b691c98ee5b594f2108cd36863ddcb956d7a9c2dc6bc1bb306671a8e3036",
+    "operations/evidence/af-p0-parte-1/postgres-red.json": "397514342d962cb7297bdb8f0ecfb292579e4fb8644312f88fccb3a23c4a5378",
+    "operations/evidence/af-p0-parte-1/postgres-red.log": "1afd2eca0dfd8dc6d7a3ad4bb047d0815c47d85065e04a3e542b551550e37a4b",
+    "operations/evidence/af-p0-parte-1/typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "operations/evidence/rel-01/vitest.json": "44efb9c9725c954792da5a584ac9db7f3ee573c9c4a1197e9177ea4f79ca685e",
+    "operations/evidence/rel-01/vitest.log": "35238a8c844657a546d18dbf73351bf83f907e9197a2892c9dbcdc13c8341580",
+    "operations/evidence/saneamento-git/build.log": "aa5d5b03c77a48bae256b30ce99d1d8d9a6b3c593b4d89ed5f58564b54c37ee3",
+    "operations/evidence/saneamento-git/p0.log": "ae2ee649803db31c280607587c7764954a013c836ee9fadf5a564ba18ba72a85",
+    "operations/evidence/saneamento-git/p0.raw.json": "c4cd5745516cf1955de7989a3b203fd4bc4ae2139b6f1550027e27f579069b13",
+    "operations/evidence/saneamento-git/typecheck.log": "1c44813d314f0ac8ddf4908149e627bd473814d85ca7fa226af8fc8c1f6e3aae"
+  },
+  "generalRegression": "Será executada após isolamento REL-01; resultado final será apresentado na entrega.",
+  "remoteValidation": false
+}
