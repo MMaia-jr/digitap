@@ -49,3 +49,14 @@ operations/evidence/incremento-3-c05-c08/*.log
 operations/evidence/incremento-3-c05-c08/*-observations.json
 sitrep/.sitrep-active-session
 sitrep/.sitrep-nudge-state.json
+
+# Saneamento: metadados locais e originais brutos preservados, não publicados.
+.DS_Store
+operations/evidence/af-p0-02/*.log
+operations/evidence/af-p0-02/*.json
+operations/evidence/af-p0-parte-1/*.log
+operations/evidence/af-p0-parte-1/*.json
+operations/evidence/rel-01/*.log
+operations/evidence/rel-01/*.json
+operations/evidence/saneamento-git/*.log
+operations/evidence/saneamento-git/*.raw.json
