@@ -2,13 +2,13 @@
 import {afterEach,beforeEach,expect,it,vi} from 'vitest';
 import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
 vi.mock('server-only',()=>({}));
-const mocks=vi.hoisted(()=>({queue:vi.fn(),refresh:vi.fn(),redirect:vi.fn()}));
-vi.mock('../../src/lib/activities/service.server',()=>({activities:{reviewQueue:mocks.queue}}));
+const mocks=vi.hoisted(()=>({queue:vi.fn(),realizations:vi.fn(),refresh:vi.fn(),redirect:vi.fn()}));
+vi.mock('../../src/lib/activities/service.server',()=>({activities:{reviewQueue:mocks.queue,realizationQueue:mocks.realizations}}));
 vi.mock('next/navigation',()=>({useRouter:()=>({refresh:mocks.refresh}),redirect:mocks.redirect}));
 import Queue from '../../src/app/admin/atividades/page';
 import {ActivityError} from '../../src/lib/activities/domain';
 const row={id:'30000000-0000-4000-8000-000000000001',titulo:'Oficina Fictícia',nome_publicador:'Pessoa Fictícia',descricao:'Descrição factual fictícia.',inicio_previsto:'2030-04-12T18:30:00Z',orientacao_acesso:'Acesso gratuito.',referencia_oficial:null,estado_editorial:'enviada',versao_submetida:1};
-beforeEach(()=>{vi.clearAllMocks();mocks.queue.mockResolvedValue([row]);mocks.redirect.mockImplementation(()=>{throw new Error('REDIRECT_LOGIN');});});
+beforeEach(()=>{vi.clearAllMocks();mocks.queue.mockResolvedValue([row]);mocks.realizations.mockResolvedValue([]);mocks.redirect.mockImplementation(()=>{throw new Error('REDIRECT_LOGIN');});});
 afterEach(()=>{cleanup();vi.unstubAllGlobals();});
 it('lista somente a fila do serviço com sujeito, data e ações editoriais',async()=>{
  render(await Queue());expect(screen.getByText('Pessoa Fictícia')).toBeTruthy();
