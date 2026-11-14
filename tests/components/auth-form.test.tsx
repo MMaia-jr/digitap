@@ -61,3 +61,9 @@ describe('navegação por teclado simulada',()=>{
    await user.tab();expect(document.activeElement).toBe(screen.getByRole('button',{name:'Entrar'}));
  });
 });
+
+it('MVP: login pode navegar à conclusão PF e não a destinos arbitrários',async()=>{
+ const navigate=vi.fn();vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>({message:'Acesso confirmado.',next:'/cadastro/pessoa-fisica/completar'})}));
+ render(<AuthForm mode="signin" onNavigate={navigate}/>);fireEvent.submit(screen.getByRole('button',{name:'Entrar'}).closest('form')!);
+ await waitFor(()=>expect(navigate).toHaveBeenCalledWith('/cadastro/pessoa-fisica/completar'));
+});

@@ -16,5 +16,10 @@ test('GG-02: footer da home oferece link Governança', async ({ page }) => {
 
 test('GG-03: footer oferece canal de contestação por e-mail', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Contestar', exact: true })).toHaveAttribute('href', 'mailto:muralitaperuna@gmail.com');
+  const footer=page.getByRole('contentinfo');
+  await expect(footer.getByRole('link',{name:'Como contestar',exact:true})).toHaveAttribute('href','/contestacao');
+  const contact=footer.getByRole('link',{name:'muralitaperuna@gmail.com',exact:true});
+  await expect(contact).toBeVisible();
+  await expect(contact.locator('..')).toContainText('Contestar publicação ou solicitar correção:');
+  await expect(contact).toHaveAttribute('href','mailto:muralitaperuna@gmail.com');
 });

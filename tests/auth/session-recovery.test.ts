@@ -60,10 +60,10 @@ describe('Etapa B — regressões de sessão e retomada com provider/banco simul
     await expect(executeAuth('confirm', { token_hash: 'a'.repeat(64) }, g)).rejects.toMatchObject({ status: 422 });
     expect(g.logout).toHaveBeenCalledOnce();
   });
-  it('confirmação bem-sucedida mantém a sessão para onboarding', async () => {
+  it('confirmação bem-sucedida encerra sessão transitória e encaminha ao login', async () => {
     const g = fixture();
-    expect(await executeAuth('confirm', { token_hash: 'a'.repeat(64) }, g)).toMatchObject({ next: '/dashboard/organizacao' });
-    expect(g.logout).not.toHaveBeenCalled();
+    expect(await executeAuth('confirm', { token_hash: 'a'.repeat(64) }, g)).toMatchObject({ next: '/login' });
+    expect(g.logout).toHaveBeenCalledOnce();
   });
   it('login bem-sucedido mantém a sessão própria ativa', async () => {
     const g = fixture(); g.account.mockResolvedValue(account);

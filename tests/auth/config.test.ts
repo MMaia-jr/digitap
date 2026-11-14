@@ -51,3 +51,28 @@ describe('configuração por ambiente', () => {
     expect(() => appOrigin()).toThrow();
   });
 });
+
+import { handleMutation } from '../../src/lib/auth/http.server';
+describe('PROD-11 — proveniência e formato do deployment',()=>{
+ const host='digitap-fixture-team.vercel.app';
+ async function status(origin:string){
+  const response=await handleMutation(new Request(origin+'/api/auth/login',{method:'POST',headers:{origin,host:new URL(origin).host,'content-type':'application/json'},body:'{}'}),appOrigin(),vi.fn().mockResolvedValue({message:'Ok'}));
+  return response.status;
+ }
+ it.each(['production','preview'])('habilita o hostname exato no ambiente Vercel %s',async mode=>{
+  configure('production','https://fixture.supabase.co');vi.stubEnv('VERCEL','1');vi.stubEnv('VERCEL_ENV',mode);vi.stubEnv('VERCEL_URL',host);
+  expect(appOrigin()).toBe('https://apraca.example');expect(await status('https://'+host)).toBe(200);
+ });
+ it.each([undefined,'',' '+host,host+' ', 'https://'+host,host+':443',host+'/',host+'?x=1',host+'#x','user@'+host,host+'.evil.example','*.vercel.app','-bad.vercel.app','bad..vercel.app','bad_name.vercel.app','vercel.app','a'.repeat(64)+'.vercel.app','bad%2ehost.vercel.app'])('ignora VERCEL_URL ausente ou malformada: %s',async value=>{
+  configure('production','https://fixture.supabase.co');vi.stubEnv('VERCEL','1');vi.stubEnv('VERCEL_ENV','production');vi.stubEnv('VERCEL_URL',value);
+  expect(await status('https://'+host)).toBe(403);expect(await status(appOrigin())).toBe(200);
+ });
+ it.each([[undefined,'production'],['0','production'],['1',undefined],['1','development']])('exige contexto Vercel: %s / %s',async(vercel,mode)=>{
+  configure('production','https://fixture.supabase.co');vi.stubEnv('VERCEL',vercel);vi.stubEnv('VERCEL_ENV',mode);vi.stubEnv('VERCEL_URL',host);
+  expect(await status('https://'+host)).toBe(403);expect(await status(appOrigin())).toBe(200);
+ });
+ it('preserva desenvolvimento mesmo com variáveis Vercel presentes',async()=>{
+  configure('development','http://127.0.0.1:56151');vi.stubEnv('VERCEL','1');vi.stubEnv('VERCEL_ENV','production');vi.stubEnv('VERCEL_URL',host);
+  expect(await status(appOrigin())).toBe(200);expect(await status('https://'+host)).toBe(403);
+ });
+});

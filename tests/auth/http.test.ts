@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { handleMutation } from '../../src/lib/auth/http.server';
 import { FlowError } from '../../src/lib/auth/flow.server';
 vi.mock('server-only', () => ({}));
@@ -41,5 +41,43 @@ describe('origem do host',()=>{
  it('recusa Host incompatível mesmo com Origin local',async()=>{
    const run=vi.fn();const response=await handleMutation(request('{}',{host:'externo.invalid'}),origin,run);
    expect(response.status).toBe(403);expect(run).not.toHaveBeenCalled();
+ });
+});
+
+const canonical='https://canonical.example';
+const deploymentHost='digitap-fixture-team.vercel.app';
+const deploymentOrigin=`https://${deploymentHost}`;
+afterEach(()=>vi.unstubAllEnvs());
+describe('PROD-11 — origens exatas e CSRF',()=>{
+ beforeEach(()=>{
+  vi.stubEnv('NODE_ENV','production');vi.stubEnv('APP_ORIGIN',canonical);
+  vi.stubEnv('VERCEL','1');vi.stubEnv('VERCEL_ENV','production');vi.stubEnv('VERCEL_URL',deploymentHost);
+ });
+ function req(value:string|undefined,host:string|undefined,extra:Record<string,string>={}){
+  return new Request(deploymentOrigin+'/api/auth/login',{method:'POST',headers:{'content-type':'application/json',...(value===undefined?{}:{origin:value}),...(host===undefined?{}:{host}),...extra},body:'{}'});
+ }
+ it.each([[canonical,'canonical.example'],[deploymentOrigin,deploymentHost]])('autoriza origem e host correspondentes: %s',async(value,host)=>{
+  const run=vi.fn().mockResolvedValue({message:'Ok'});
+  expect((await handleMutation(req(value,host),canonical,run)).status).toBe(200);expect(run).toHaveBeenCalledOnce();
+ });
+ it.each([
+  ['https://other-team.vercel.app','other-team.vercel.app',{}],
+  [deploymentOrigin+'.evil.example',deploymentHost+'.evil.example',{}],
+  ['https://user@'+deploymentHost,deploymentHost,{}],
+  [deploymentOrigin+'/path',deploymentHost,{}],[deploymentOrigin+':443',deploymentHost,{}],
+  [undefined,deploymentHost,{}],['null',deploymentHost,{}],
+  [deploymentOrigin,'evil.example',{}],
+  [deploymentOrigin,'evil.example',{'x-forwarded-host':deploymentHost}],
+  [deploymentOrigin,deploymentHost,{'sec-fetch-site':'cross-site'}],
+  [canonical,deploymentHost,{}],[deploymentOrigin,'canonical.example',{}],
+ ] as const)('rejeita origem/host incompatíveis: %s / %s',async(value,host,extra)=>{
+  const run=vi.fn();const response=await handleMutation(req(value,host,extra),canonical,run);
+  expect(response.status).toBe(403);expect(run).not.toHaveBeenCalled();
+  expect(await response.json()).toEqual({message:'Origem não permitida.'});
+  expect(response.headers.get('cache-control')).toBe('private, no-store, max-age=0');
+  expect(response.headers.get('pragma')).toBe('no-cache');expect(response.headers.get('referrer-policy')).toBe('no-referrer');
+ });
+ it('não amplia a origem explicitamente passada por outro consumidor',async()=>{
+  const run=vi.fn();expect((await handleMutation(req(deploymentOrigin,deploymentHost),'https://other.example',run)).status).toBe(403);expect(run).not.toHaveBeenCalled();
  });
 });

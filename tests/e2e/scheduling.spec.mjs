@@ -59,7 +59,7 @@ test('B10 Chromium: editor adia e cancela; público mostra estado atual e manté
   for(const [state,label] of [['adiada','Adiada'],['cancelada','Cancelada']]){
    await editor.goto('/dashboard/atividade/'+id);await editor.getByLabel('Novo estado',{exact:true}).selectOption({label});await editor.getByLabel('Motivo da alteração',{exact:true}).fill('MOTIVO_RESTRITO_FICTICIO_PROGRAMACAO');const response=editor.waitForResponse(r=>r.url().endsWith('/api/admin/atividades/'+id+'/programacao')&&r.request().method()==='POST');await editor.getByRole('button',{name:'Alterar programação',exact:true}).click();expect((await response).status()).toBe(200);await editor.waitForLoadState('networkidle');
    if(state==='adiada')await expect(editor.getByRole('form',{name:'Alteração da programação'})).toBeVisible();else await expect(editor.getByRole('form',{name:'Alteração da programação'})).toHaveCount(0);
-   await v.page.goto('/atividade/'+id);await expect(v.page.locator('dd').filter({hasText:new RegExp('^'+state+'$')})).toBeVisible();expect(await v.page.content()).not.toContain('MOTIVO_RESTRITO_FICTICIO_PROGRAMACAO');
+   await v.page.goto('/atividade/'+id);await expect(v.page.locator('.event-plan .programming-label').filter({hasText:new RegExp('^'+state+'$')})).toBeVisible();expect(await v.page.content()).not.toContain('MOTIVO_RESTRITO_FICTICIO_PROGRAMACAO');
    const current=(await (await v.page.request.get('/api/public/atividades/'+id)).json()).atividade;expect(current).toEqual({...before,estado_programacao:state});expect((await (await v.page.request.get('/api/public/atividades')).json()).atividades.find(a=>a.id===id)).toEqual(current);
   }
   expect((await db.query('select versao_publicada,apoios_abertos from public.atividades where id=$1',[id])).rows[0]).toEqual({versao_publicada:before,apoios_abertos:false});
@@ -76,16 +76,40 @@ test('B11 Chromium: HTML malicioso é recusado; nome legado escapado nunca execu
    const body={titulo:'Título fictício válido',descricao:'Descrição fictícia válida.',inicio_previsto:new Date(Date.now()+86400000*3).toISOString(),orientacao_acesso:'Entrada fictícia.',versao_esperada:1,...patch};
    expect((await mutation(owner,'/api/atividades/'+id,body,'PATCH')).status).toBe(422);
   }
+  const trustedSvg={};
+  for(const path of ['/atividades','/atividade/'+id]){await v.page.goto(path);trustedSvg[path==='/atividades'?'list':'detail']=await v.page.locator('main svg').evaluateAll(nodes=>nodes.map(node=>node.outerHTML));}
   const name='<img src=x onerror="window.__praca_xss=1">';await db.query('update public.organizacoes set nome_publico=$2 where id=$1',[fixtures[0].org,name]);
   // O snapshot legado é criado só pela publicação normal, depois da mudança de nome.
   const next=await published();
-  for(const path of ['/atividades','/atividade/'+next.id]){await v.page.goto(path);await expect(v.page.getByText(name,{exact:path==='/atividades'})).toBeVisible();expect(await v.page.locator('main img,main svg,main iframe,main [onerror],main [onload]').count()).toBe(0);expect(await v.page.evaluate(()=>window.__praca_xss)).toBeUndefined();}
+  for(const path of ['/atividades','/atividade/'+next.id]){
+   await v.page.goto(path);
+   if(path==='/atividades')await expect(v.page.getByRole('main').getByText(name,{exact:true})).toBeVisible();
+   else{await expect(v.page.locator('.detail-byline').getByRole('link',{name,exact:true})).toBeVisible();await expect(v.page.locator('.organizer-panel strong')).toHaveText(name);await expect(v.page.locator('.detail-byline script,.organizer-panel script')).toHaveCount(0);}
+   await expect(v.page.locator('main img,main iframe,main [onerror],main [onload],main [srcdoc],main a[href^="javascript:"]')).toHaveCount(0);
+   expect(await v.page.locator('main svg').evaluateAll(nodes=>nodes.map(node=>node.outerHTML))).toEqual(trustedSvg[path==='/atividades'?'list':'detail']);
+   expect(await v.page.evaluate(()=>window.__praca_xss)).toBeUndefined();
+  }
   expect(dialogs).toBe(0);
  }finally{await db.query('update public.organizacoes set nome_publico=$2 where id=$1',[fixtures[0].org,'Organização Fictícia Publicação Restaurada']);await v.context.close();}
 });
-test('B12 Chromium: publicações retiradas e rascunhos não fabricam agenda vazia',async({browser})=>{
- // Somente objetos próprios criados neste arquivo são retirados; dados alheios não são tocados.
- for(const id of ids){const row=(await db.query('select estado_editorial from public.atividades where id=$1',[id])).rows[0];if(row&&row.estado_editorial!=='retirada')expect((await mutation(fixtures[2].page,'/api/admin/atividades/'+id+'/retirar',{...publishCommand(),motivo:'Retirada fictícia para verificar estado vazio.'})).status).toBe(200);}
- const draft=await fixtures[0].page.evaluate(async()=>{const r=await fetch('/api/atividades',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titulo:'RASCUNHO_RESTRITO_B12',descricao:'Descrição fictícia privada B12.',inicio_previsto:new Date(Date.now()+86400000*3).toISOString(),orientacao_acesso:'Entrada fictícia.'})});return (await r.json()).atividade;});ids.push(draft.id);
- const v=await visitor(browser);try{const response=await v.page.request.get('/api/public/atividades');expect(response.status()).toBe(200);expect((await response.json()).atividades).toEqual([]);await v.page.goto('/atividades');await expect(v.page.getByText('Nenhuma atividade publicada disponível.',{exact:true})).toBeVisible();expect(await v.page.locator('main a[href^="/atividade/"]').count()).toBe(0);expect(await v.page.content()).not.toContain('RASCUNHO_RESTRITO_B12');expect((await v.page.request.get('/api/public/atividades/'+draft.id)).status()).toBe(404);}finally{await v.context.close();}
+test('B12 Chromium: rascunhos e retiradas não aparecem; publicações válidas alheias permanecem',async({browser})=>{
+ const v=await visitor(browser);
+ try{
+  const list=async()=>{const response=await v.page.request.get('/api/public/atividades');expect(response.status()).toBe(200);return (await response.json()).atividades;};
+  const ownBefore=[...ids];
+  const baseline=(await list()).filter(activity=>!ownBefore.includes(activity.id));
+  // Withdraw only objects created by this file. Other local data remain untouched.
+  for(const id of ownBefore){const row=(await db.query('select estado_editorial from public.atividades where id=$1',[id])).rows[0];if(row&&row.estado_editorial!=='retirada')expect((await mutation(fixtures[2].page,'/api/admin/atividades/'+id+'/retirar',{...publishCommand(),motivo:'Retirada fictícia para verificar visibilidade.'})).status).toBe(200);}
+  expect(await list()).toEqual(baseline);
+  for(const id of ownBefore)expect((await v.page.request.get('/api/public/atividades/'+id)).status()).toBe(404);
+  const draft=await fixtures[0].page.evaluate(async()=>{const r=await fetch('/api/atividades',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titulo:'RASCUNHO_RESTRITO_B12',descricao:'Descrição fictícia privada B12.',inicio_previsto:new Date(Date.now()+86400000*3).toISOString(),orientacao_acesso:'Entrada fictícia.'})});return (await r.json()).atividade;});ids.push(draft.id);
+  expect(await list()).toEqual(baseline);
+  await v.page.goto('/atividades');expect(await v.page.getByRole('main').locator('a[href^="/atividade/"]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')).sort())).toEqual(baseline.map(activity=>'/atividade/'+activity.id).sort());
+  expect(await v.page.getByRole('main').textContent()).not.toContain('RASCUNHO_RESTRITO_B12');expect((await v.page.request.get('/api/public/atividades/'+draft.id)).status()).toBe(404);
+  // Positive control through the normal approval/publication flow.
+  const eligible=await published();const expected=(await v.page.request.get('/api/public/atividades/'+eligible.id));expect(expected.status()).toBe(200);const snapshot=(await expected.json()).atividade;
+  const visible=await list();expect(visible.map(activity=>activity.id).sort()).toEqual([...baseline.map(activity=>activity.id),eligible.id].sort());expect(visible.find(activity=>activity.id===eligible.id)).toEqual(snapshot);
+  for(const id of [...ownBefore,draft.id])expect(visible.some(activity=>activity.id===id)).toBe(false);
+  await v.page.goto('/atividades');await expect(v.page.getByRole('link',{name:snapshot.titulo,exact:true})).toHaveAttribute('href','/atividade/'+eligible.id);
+ }finally{await v.context.close();}
 });

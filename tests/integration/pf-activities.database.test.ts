@@ -32,6 +32,7 @@ afterAll(async () => {
   if (db && users.length) {
     await db.query('begin');
     try {
+      await db.query('delete from public.eventos_editoriais where executada_por_conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))', [users]);
       await db.query('delete from public.atividades where criada_por_conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))', [users]);
       await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))', [users]);
       await db.query('delete from public.pessoas_fisicas where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))', [users]);
@@ -59,7 +60,8 @@ it('payload não escolhe sujeito nem autor', async () => {
 it('PF não ganha acesso editorial ou publicação automática', async () => {
   const created = await services[0].create(draft());
   await expect(services[0].publish(created.id, { pedido_id: randomUUID(), versao_esperada: 1 })).rejects.toMatchObject({ status: 403 });
-  await expect(services[1].get(created.id)).rejects.toMatchObject({ status: 403 });
+  await expect(services[1].get(created.id)).rejects.toMatchObject({ status: 404, message: 'Atividade não encontrada.' });
+  expect((await services[1].list()).map(row=>row.id)).not.toContain(created.id);
 });
 it('conta bloqueada não cria nem lista rascunhos', async () => {
   await db.query("update public.contas_acesso set situacao='bloqueada' where auth_user_id=$1", [users[0]]);
@@ -81,4 +83,18 @@ it('escopos reais do vínculo são revalidados para cada operação', async () =
   await version(['ler_privado']);
   try { await expect(services[0].create(draft())).rejects.toMatchObject({ status: 403 }); await expect(services[0].list()).resolves.toBeInstanceOf(Array); }
   finally { await version(old.escopos); }
+});
+
+it('MVP: concluir perfil repetidamente e em paralelo preserva uma conta, PF e vínculo',async()=>{
+ const history=async()=> (await db.query(`select v.id,v.versao,v.atual,v.situacao,v.papel_vinculo,v.escopos from public.vinculos_publicadores v join public.contas_acesso c on c.id=v.conta_id where c.auth_user_id=$1 and v.sujeito_id=$2 order by v.versao`,[users[0],subjects[0]])).rows;
+ const before=await history();
+ const retry=await Promise.all(Array.from({length:4},()=>admin.rpc('criar_pf_com_sujeito',{p_auth_user_id:users[0],p_nome_publico:'Nome de repetição fictício'})));
+ for(const result of retry){expect(result.error).toBeNull();expect(result.data).toBe(subjects[0]);}
+ const counts=await db.query(`select (select count(*)::int from public.contas_acesso where auth_user_id=$1) contas,
+ (select count(*)::int from public.pessoas_fisicas p join public.contas_acesso c on c.id=p.conta_id where c.auth_user_id=$1) pessoas,
+ (select count(*)::int from public.vinculos_publicadores v join public.contas_acesso c on c.id=v.conta_id where c.auth_user_id=$1 and v.sujeito_id=$2 and v.atual) vinculos_atuais,
+ (select count(*)::int from public.vinculos_publicadores v join public.contas_acesso c on c.id=v.conta_id where c.auth_user_id=$1 and v.sujeito_id=$2 and v.atual and v.situacao='ativo' and v.papel_vinculo='titular') titulares_vigentes`,[users[0],subjects[0]]);
+ expect(counts.rows).toEqual([{contas:1,pessoas:1,vinculos_atuais:1,titulares_vigentes:1}]);
+ expect(await history()).toEqual(before);
+ expect((await db.query('select nome_publico from public.sujeitos_publicadores where id=$1',[subjects[0]])).rows[0].nome_publico).toBe('Pessoa Fictícia MVP 0');
 });

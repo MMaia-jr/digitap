@@ -16,7 +16,7 @@ test('CMP-07/CMP-08: POST mantém contrato e cria sujeito/vínculo sem drift', a
     const created=await admin.auth.admin.createUser({email,password,email_confirm:true});
     if(created.error)throw new Error('Fixture Auth falhou.'); user=created.data.user.id;
     await page.goto('/login'); await page.getByLabel('E-mail',{exact:true}).fill(email); await page.getByLabel('Senha',{exact:true}).fill(password);
-    await page.getByRole('button',{name:'Entrar',exact:true}).click(); await expect(page).toHaveURL(/\/dashboard\/organizacao$/);
+    await page.getByRole('button',{name:'Entrar',exact:true}).click(); await expect(page).toHaveURL(/\/cadastro\/pessoa-fisica\/completar$/);
     const post=()=>page.evaluate(async nome=>{
       const r=await fetch('/api/organizacoes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome_publico:nome})});
       return {status:r.status,body:await r.json()};

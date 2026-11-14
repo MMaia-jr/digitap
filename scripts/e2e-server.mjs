@@ -2,7 +2,7 @@ import { execFileSync,spawn } from 'node:child_process';
 import { mkdirSync,appendFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 const root=process.cwd();
-if(root!=='/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5')throw new Error('Diretório não autorizado.');
+if(!['/Users/alexandrechagasleaocryptoboy/projects/a-praca-v1-5','/private/tmp/digitap-recovery-prod-db-01'].includes(root))throw new Error('Diretório não autorizado.');
 const local=JSON.parse(execFileSync('./node_modules/.bin/supabase',['status','--workdir',root,'--output','json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
 if(local.API_URL!=='http://127.0.0.1:56151'||!local.SECRET_KEY?.startsWith('sb_secret_')||!local.PUBLISHABLE_KEY?.startsWith('sb_publishable_'))throw new Error('Stack local incompatível.');
 if(new URL(local.DB_URL).hostname!=='127.0.0.1'||new URL(local.DB_URL).port!=='56152')throw new Error('Banco fora do escopo.');

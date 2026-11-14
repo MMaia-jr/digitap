@@ -21,18 +21,19 @@ it('PF signup adia criação de conta/sujeito até e-mail confirmado',async()=>{
 it.each(['','<script>nome</script>'])('PF signup recusa nome inválido %j antes de Auth',async nome_publico=>{
  const g=fixture();await expect(executeAuth('signup_pf' as AuthAction,{...input,nome_publico},g)).rejects.toMatchObject({status:422});expect(g.signUpPF).not.toHaveBeenCalled();
 });
-it('PF-09 confirmação deriva identidade do OTP e cria PF pendente',async()=>{
- const g=fixture();expect(await executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});
- expect(g.registerPerson).toHaveBeenCalledWith(id,'Pessoa Fictícia');expect(g.registerOrganization).not.toHaveBeenCalled();
+it('PF-09 confirmação valida OTP sem antecipar perfil',async()=>{
+ const g=fixture();expect(await executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/login'});
+ expect(g.registerPerson).not.toHaveBeenCalled();expect(g.registerOrganization).not.toHaveBeenCalled();
 });
 it('confirmação sem e-mail confirmado não cria PF',async()=>{
  const g=fixture();g.verify.mockResolvedValue({user:{...user,email_confirmed_at:''},session:true});
  await expect(executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).rejects.toMatchObject({status:422});expect(g.registerPerson).not.toHaveBeenCalled();expect(g.logout).toHaveBeenCalledOnce();
 });
-it('falha na RPC após OTP limpa sessão; login confirmado retoma onboarding',async()=>{
+it('falha na RPC de conclusão pode ser repetida sem recriar identidade Auth',async()=>{
  const g=fixture();g.registerPerson.mockRejectedValueOnce(new Error('Falha fictícia RPC'));
- await expect(executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).rejects.toMatchObject({status:503});expect(g.logout).toHaveBeenCalledOnce();
- expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});expect(g.registerPerson).toHaveBeenCalledTimes(2);
+ await expect(executeAuth('complete_pf',{nome_publico:input.nome_publico},g)).rejects.toMatchObject({status:503});
+ expect(await executeAuth('complete_pf',{nome_publico:input.nome_publico},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});
+ expect(g.registerPerson).toHaveBeenCalledTimes(2);expect(g.signUpPF).not.toHaveBeenCalled();
 });
 it('PF login com conta publicador própria não vai para organização/editorial',async()=>{
  const g=fixture();g.account.mockResolvedValue({auth_user_id:id,papel:'publicador',situacao:'ativa',organizacao_id:null} as never);
@@ -49,7 +50,26 @@ it('gateway PF usa metadata somente como intenção e RPC service-only',async()=
  const signUp=vi.fn().mockResolvedValue({data:{},error:null}),rpc=vi.fn().mockResolvedValue({data:id,error:null});
  const gateway=createGateway({auth:{signUp}} as never,()=>({rpc}) as never,()=>{});
  expect(gateway.signUpPF).toBeTypeOf('function');await gateway.signUpPF!(input.email,input.password,input.nome_publico);
- expect(signUp).toHaveBeenCalledWith({email:input.email,password:input.password,options:{data:{tipo:'pessoa_fisica',nome_publico:input.nome_publico}}});
+ expect(signUp).toHaveBeenCalledWith({email:input.email,password:input.password,options:{emailRedirectTo:'http://127.0.0.1:3215/auth/confirm',data:{tipo:'pessoa_fisica',nome_publico:input.nome_publico}}});
  await gateway.registerPerson!(id,input.nome_publico);
  expect(rpc).toHaveBeenCalledWith('criar_pf_com_sujeito',{p_auth_user_id:id,p_nome_publico:input.nome_publico});
+});
+
+it('MVP: cadastro PF novo pede somente e-mail/senha e nunca cria perfil',async()=>{
+ const g=fixture();await executeAuth('signup_pf',{email:input.email,password:input.password},g);
+ expect(g.signUpPF).toHaveBeenCalledWith(input.email,input.password);
+ expect(g.registerPerson).not.toHaveBeenCalled();
+});
+it('MVP: confirmação encerra sessão transitória e exige login sem criar PF',async()=>{
+ const g=fixture();expect(await executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/login'});
+ expect(g.logout).toHaveBeenCalledOnce();expect(g.registerPerson).not.toHaveBeenCalled();
+});
+it.each([undefined,{tipo:'pessoa_fisica'},{tipo:'organizacao'},{papel:'administrador'}])('MVP: conta sem perfil usa o mesmo destino, independentemente de metadata %j',async metadata=>{
+ const g=fixture();g.signIn.mockResolvedValue({user:{id,email_confirmed_at:user.email_confirmed_at,user_metadata:metadata} as unknown as typeof user,session:true});
+ expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/cadastro/pessoa-fisica/completar'});
+ expect(g.registerPerson).not.toHaveBeenCalled();expect(g.registerOrganization).not.toHaveBeenCalled();expect(g.logout).not.toHaveBeenCalled();
+});
+it('MVP: perfil só é criado por conclusão explícita após identidade confirmada',async()=>{
+ const g=fixture();expect(await executeAuth('complete_pf',{nome_publico:input.nome_publico},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});
+ expect(g.registerPerson).toHaveBeenCalledWith(id,input.nome_publico);
 });

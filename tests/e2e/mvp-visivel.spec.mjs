@@ -28,7 +28,9 @@ test.afterAll(async()=>{
 });
 test('MVP-01: home pública tem agenda e convite para publicar',async({page})=>{
   expect((await page.goto('/')).status()).toBe(200);
-  await expect(page.getByRole('heading',{name:'Atividades na Praça',exact:true})).toBeVisible();
+  const discovery=page.getByRole('region',{name:'Encontre seu próximo encontro.',exact:true});
+  await expect(discovery.getByRole('heading',{name:'Encontre seu próximo encontro.',level:2,exact:true})).toBeVisible();
+  await expect(discovery.getByText('Atividades na Praça',{exact:true})).toBeVisible();
   await expect(page.getByRole('link',{name:'Quero publicar uma atividade',exact:true})).toHaveAttribute('href','/login');
   await expect(page.getByRole('banner').getByRole('link',{name:'Entrar',exact:true})).toBeVisible();
   await page.screenshot({path:'operations/evidence/mvp-visivel/home.png',fullPage:true});

@@ -56,6 +56,16 @@ async function rejected() {
   expect(mocks.Pool).not.toHaveBeenCalled(); expect(mocks.connect).not.toHaveBeenCalled();
 }
 describe('P0 — CA opcional PostgreSQL', () => {
+  it('aceita Transaction pooler com usuário qualificado e consultas sem nome', async () => {
+    vi.stubEnv('SUPABASE_DB_URL', 'postgresql://postgres.fixture-project:fixture-password@aws-0-fixture.pooler.supabase.com:6543/postgres');
+    vi.stubEnv('SUPABASE_DB_ALLOWED_ENDPOINT', 'postgresql://aws-0-fixture.pooler.supabase.com:6543/postgres');
+    await transact();
+    expect(mocks.Pool).toHaveBeenCalledWith(expect.objectContaining({ ssl: { rejectUnauthorized: true } }));
+    expect(mocks.query.mock.calls.map(([sql]) => sql)).toEqual(['begin', "set local statement_timeout='5s'", "set local lock_timeout='3s'", 'commit']);
+    expect(mocks.query.mock.calls.every(([sql]) => typeof sql === 'string')).toBe(true);
+    expect(mocks.connect).toHaveBeenCalledOnce();
+    expect(mocks.release).toHaveBeenCalledExactlyOnceWith(false);
+  });
   it('sem CA explícita preserva verificação TLS e max:4', async () => {
     await transact();
     expect(mocks.Pool).toHaveBeenCalledWith(expect.objectContaining({ max: 4, ssl: { rejectUnauthorized: true } }));
