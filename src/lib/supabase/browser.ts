@@ -9,7 +9,7 @@ export function browserClient() {
     throw new Error('Supabase local não configurado.');
   }
   return createBrowserClient(url, key, {
-    cookieOptions: { name: 'ap-auth', path: '/', sameSite: 'lax', secure: false },
+    cookieOptions: { name: 'ap-auth', path: '/', sameSite: 'lax', secure: process.env.NODE_ENV === 'production' },
     auth: { flowType: 'pkce', detectSessionInUrl: false, autoRefreshToken: false },
   });
 }

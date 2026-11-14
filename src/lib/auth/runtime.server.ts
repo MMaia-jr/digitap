@@ -9,8 +9,7 @@ export async function mutation(action:AuthAction,request:Request){
   let origin: string;
   try {
     origin = appOrigin();
-  } catch (error) {
-    if(action==='signup'||action==='signup_pf')console.error('ERRO REAL NO CADASTRO:',error);
+  } catch {
     return Response.json({message:'Serviço indisponível. Tente novamente.'},{status:503,headers:privateHeaders});
   }
   return handleMutation(request,origin,async input=>{
@@ -24,10 +23,7 @@ export async function mutation(action:AuthAction,request:Request){
       }
     };
     try {
-      const client=await userClient().catch(error=>{
-        if(action==='signup'||action==='signup_pf')console.error('ERRO REAL NO CADASTRO:',error);
-        throw error;
-      });
+      const client=await userClient();
       const gateway=createGateway(client,adminClient,clearOnce);
       return await executeAuth(action,input,gateway);
     } finally {
