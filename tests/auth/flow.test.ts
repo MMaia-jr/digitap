@@ -36,8 +36,8 @@ describe('A01–A09: fluxo com provider simulado, não integração real', () =>
     const g=setup(); g.signIn.mockResolvedValue({error:{code:'invalid_credentials',status:400,message:input.password}} as never);
     await expect(run('signin',input,g)).rejects.toMatchObject({status:401,message:'Não foi possível entrar. Confira seus dados e a confirmação de e-mail.'});
   });
-  it('A01: sessão confirmada sem vínculo conduz ao cadastro de organização', async () => {
-    expect(await run('signin', input)).toMatchObject({ next:'/dashboard/organizacao' });
+  it('A01: sessão confirmada sem perfil conduz à conclusão PF', async () => {
+    expect(await run('signin', input)).toMatchObject({ next:'/cadastro/pessoa-fisica/completar' });
   });
   it('login com conta própria ativa conduz à área restrita', async () => {
     const g=setup();g.account.mockResolvedValue(account as never);
@@ -74,7 +74,8 @@ describe('A01–A09: fluxo com provider simulado, não integração real', () =>
     await expect(run('confirm',{token_hash:'a'.repeat(64)},g)).rejects.toMatchObject({status:422});expect(g.registerOrganization).not.toHaveBeenCalled();
   });
   it('A04: confirmação aceita somente OTP de signup', async () => {
-    const g=setup();expect(await run('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/dashboard/organizacao'});
+    const g=setup();expect(await run('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/login'});
+    expect(g.logout).toHaveBeenCalledOnce();
     expect(g.verify).toHaveBeenCalledWith('a'.repeat(64),'signup');
   });
   it('A04: redefine senha somente após OTP de recovery, e encerra sessão', async () => {

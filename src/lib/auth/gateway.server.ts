@@ -2,20 +2,24 @@ import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createAccessDependencies } from './supabase-access.server';
 import { FlowError, type AuthGateway } from './flow.server';
-import { appOrigin } from '../supabase/config.server';
+import { appOrigin, mutationOrigins } from '../supabase/config.server';
 
-export function createGateway(user: SupabaseClient, admin: () => SupabaseClient, clearCookies: () => void): AuthGateway {
+export function createGateway(user: SupabaseClient, admin: () => SupabaseClient, clearCookies: () => void, redirectOrigin?: string): AuthGateway {
   const result=(response: {data: {user?: unknown;session?: unknown};error: unknown}) => ({
     user: response.data?.user as Awaited<ReturnType<AuthGateway['currentUser']>>,
     session: Boolean(response.data?.session), error: response.error as {status?:number;code?:string}|null,
   });
+  const confirmationUrl=()=>{
+    const canonical=appOrigin();
+    if(redirectOrigin!==undefined&&!mutationOrigins(canonical).includes(redirectOrigin))throw new FlowError(403,'Origem não permitida.');
+    return `${redirectOrigin??canonical}/auth/confirm`;
+  };
   return {
-    async signUp(email,password){return result(await user.auth.signUp({email,password}));},
-    async signUpPF(email,password,name){return result(await user.auth.signUp({email,password,options:{data:{tipo:'pessoa_fisica',nome_publico:name}}}));},
+    async signUp(email,password){return result(await user.auth.signUp({email,password,options:{emailRedirectTo:confirmationUrl()}}));},
+    async signUpPF(email,password,name){return result(await user.auth.signUp({email,password,options:{emailRedirectTo:confirmationUrl(),data:{tipo:'pessoa_fisica',...(name!==undefined?{nome_publico:name}:{})}}}));},
     async signIn(email,password){return result(await user.auth.signInWithPassword({email,password}));},
     async recover(email){
-      const origin=process.env.NODE_ENV==='production'?'https://www.digitap.com.br':appOrigin();
-      return {error:(await user.auth.resetPasswordForEmail(email,{redirectTo:`${origin}/auth/confirm`})).error};
+      return {error:(await user.auth.resetPasswordForEmail(email,{redirectTo:confirmationUrl()})).error};
     },
     async verify(token_hash,type){return result(await user.auth.verifyOtp({token_hash,type}));},
     async changePassword(password){return result(await user.auth.updateUser({password}));},

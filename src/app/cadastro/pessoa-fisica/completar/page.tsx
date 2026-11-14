@@ -19,7 +19,7 @@ export default async function CompletePersonProfile() {
     <section className="card">
       <h1>Complete seu perfil de pessoa física</h1>
       <p>Escolha como quer ser identificado publicamente. Não informe CPF ou documentos.</p>
-      <p>Seu cadastro ficará pendente de curadoria. A entrada com Google não libera publicação automática.</p>
+      <p>Seu cadastro ficará pendente de curadoria. Concluir seu perfil não libera publicação automática.</p>
       <AuthForm mode="complete_pf" />
       <AuthForm mode="signout" />
     </section>

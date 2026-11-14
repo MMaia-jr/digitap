@@ -24,7 +24,7 @@ export async function mutation(action:AuthAction,request:Request){
     };
     try {
       const client=await userClient();
-      const gateway=createGateway(client,adminClient,clearOnce);
+      const gateway=createGateway(client,adminClient,clearOnce,request.headers.get('origin')??origin);
       return await executeAuth(action,input,gateway);
     } finally {
       // Only after origin and payload validation; never clear on a cross-site POST.

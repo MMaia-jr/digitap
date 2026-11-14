@@ -8,7 +8,7 @@ const config={
  signup:{endpoint:'/api/auth/cadastro',label:'Criar acesso'},signin:{endpoint:'/api/auth/login',label:'Entrar'},recover:{endpoint:'/api/auth/recuperar',label:'Enviar link de recuperação'},confirm:{endpoint:'/api/auth/confirmar',label:'Confirmar meu e-mail'},reset:{endpoint:'/api/auth/redefinir',label:'Atualizar senha'},organization:{endpoint:'/api/organizacoes',label:'Vincular organização'},signout:{endpoint:'/api/auth/sair',label:'Sair'},
  signup_pf:{endpoint:'/api/auth/cadastro-pf',label:'Criar acesso como pessoa física'},
 };
-const destinations=new Set(['/dashboard','/dashboard/organizacao','/dashboard/pessoa-fisica','/admin/atividades','/login','/login?status=senha-atualizada']);
+const destinations=new Set(['/cadastro/pessoa-fisica/completar','/dashboard','/dashboard/organizacao','/dashboard/pessoa-fisica','/admin/atividades','/login','/login?status=senha-atualizada']);
 export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:string;onNavigate?:(path:string)=>void}){
  const ready=useSyncExternalStore(subscribeHydration,()=>true,()=>false);
  const [pending,setPending]=useState(false);const [feedback,setFeedback]=useState<{message:string;error:boolean;fields?:Record<string,string>}|null>(null);const summary=useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:strin
  async function submit(event:FormEvent<HTMLFormElement>){
    event.preventDefault();if(inFlight.current)return;inFlight.current=true;const form=event.currentTarget;const data=new FormData(form);const body:Record<string,unknown>={};
    if(email)body.email=data.get('email');if(password)body.password=data.get('password');if(mode==='organization'){body.nome_publico=data.get('nome_publico');const channel=data.get('canal_publico');if(typeof channel==='string'&&channel.trim())body.canal_publico=channel;}if(tokenHash)body.token_hash=tokenHash;
-   if(mode==='signup_pf'||mode==='complete_pf')body.nome_publico=data.get('nome_publico');
+   if(mode==='complete_pf')body.nome_publico=data.get('nome_publico');
    setPending(true);setFeedback(null);
    try{
      const response=await fetch(config[mode].endpoint,{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
@@ -46,7 +46,7 @@ export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:strin
    {process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ENABLED==='true'&&['signup','signup_pf','signin'].includes(mode)&&<button type="button" disabled={pending||!ready} onClick={google}>Continuar com Google</button>}
    {feedback&&<div ref={summary} tabIndex={-1} role={feedback.error?'alert':'status'} className={feedback.error?'feedback error':'feedback'}>{feedback.message}</div>}
    {email&&field('email','E-mail','email')}{password&&field('password',mode==='reset'?'Nova senha':'Senha','password')}{mode==='organization'&&<>{field('nome_publico','Nome público da organização')}{field('canal_publico','Canal público (opcional)','url',false)}</>}
-   {['signup_pf','complete_pf'].includes(mode)&&<>{field('nome_publico','Nome público')}<p className="hint">Escolha como quer ser identificado. Não informe CPF ou documentos. O cadastro fica pendente de curadoria.</p></>}
+   {mode==='complete_pf'&&<>{field('nome_publico','Nome público')}<p className="hint">Escolha como quer ser identificado. Não informe CPF ou documentos. O cadastro fica pendente de curadoria.</p></>}
    <button type="submit" disabled={pending||!ready}>{pending?'Aguarde…':config[mode].label}</button>
  </form>;
 }

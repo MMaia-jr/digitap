@@ -10,19 +10,41 @@ const setup=()=>{
 };
 describe('adapter do fluxo com SDK simulado',()=>{
  it.each([
-  ['production','https://www.digitap.com.br/auth/confirm'],
+  ['production','https://canonical.example/auth/confirm'],
   ['development','http://127.0.0.1:3215/auth/confirm'],
  ] as const)('recuperação usa redirectTo no ambiente %s',async(mode,redirectTo)=>{
   vi.stubEnv('NODE_ENV',mode);
-  vi.stubEnv('APP_ORIGIN','http://127.0.0.1:3215');
+  vi.stubEnv('APP_ORIGIN',mode==='production'?'https://canonical.example':'http://127.0.0.1:3215');
   const s=setup();
   expect(await s.gateway.recover('a@example.invalid')).toEqual({error:null});
   expect(s.auth.resetPasswordForEmail).toHaveBeenCalledWith('a@example.invalid',{redirectTo});
  });
- it('cadastro não envia nome/role como metadata e não instancia serviço',async()=>{const s=setup();await s.gateway.signUp('a@example.invalid','senha-ficticia');expect(s.auth.signUp).toHaveBeenCalledWith({email:'a@example.invalid',password:'senha-ficticia'});expect(s.admin).not.toHaveBeenCalled();});
+ it('cadastro não envia nome/role como metadata e não instancia serviço',async()=>{const s=setup();await s.gateway.signUp('a@example.invalid','senha-ficticia');expect(s.auth.signUp).toHaveBeenCalledWith({email:'a@example.invalid',password:'senha-ficticia',options:{emailRedirectTo:'http://127.0.0.1:3215/auth/confirm'}});expect(s.admin).not.toHaveBeenCalled();});
  it('verifica OTP com tipo explícito',async()=>{const s=setup();await s.gateway.verify('hash','recovery');expect(s.auth.verifyOtp).toHaveBeenCalledWith({token_hash:'hash',type:'recovery'});});
  it('RPC COMPAT recebe somente identidade derivada e nome',async()=>{const s=setup();expect(await s.gateway.registerOrganization('user-ficticio','Organização Fictícia')).toEqual({organizacao_id:'org-ficticia'});expect(s.rpc).toHaveBeenCalledWith('criar_organizacao_com_sujeito',{p_auth_user_id:'user-ficticio',p_nome_publico:'Organização Fictícia',p_canal_publico:null});});
  it('logout local limpa cookies mesmo quando provider falha',async()=>{const s=setup();s.auth.signOut.mockRejectedValue(new Error('privado'));await expect(s.gateway.logout()).rejects.toThrow();expect(s.clear).toHaveBeenCalledOnce();});
  it('logout usa escopo local',async()=>{const s=setup();await s.gateway.logout();expect(s.auth.signOut).toHaveBeenCalledWith({scope:'local'});expect(s.clear).toHaveBeenCalledOnce();});
  it('erro de RPC não se transforma em sucesso',async()=>{const s=setup();s.rpc.mockResolvedValue({data:null,error:{code:'42501'}} as never);await expect(s.gateway.registerOrganization('u','Fictícia')).rejects.toMatchObject({status:403});});
+});
+
+it('MVP: cadastro e recuperação usam o deployment exato autorizado',async()=>{
+ vi.stubEnv('NODE_ENV','production');vi.stubEnv('APP_ORIGIN','https://canonical.example');vi.stubEnv('VERCEL','1');vi.stubEnv('VERCEL_ENV','production');vi.stubEnv('VERCEL_URL','digitap-fixture-team.vercel.app');
+ const s=setup();const gateway=createGateway({auth:s.auth} as never,s.admin,s.clear,'https://digitap-fixture-team.vercel.app');
+ await gateway.signUp('synthetic@example.invalid','SyntheticPasswordOnly!');await gateway.recover('synthetic@example.invalid');
+ expect(s.auth.signUp).toHaveBeenCalledWith({email:'synthetic@example.invalid',password:'SyntheticPasswordOnly!',options:{emailRedirectTo:'https://digitap-fixture-team.vercel.app/auth/confirm'}});
+ expect(s.auth.resetPasswordForEmail).toHaveBeenCalledWith('synthetic@example.invalid',{redirectTo:'https://digitap-fixture-team.vercel.app/auth/confirm'});
+});
+
+it('MVP: origem externa nunca chega ao SDK como redirectTo',async()=>{
+ vi.stubEnv('NODE_ENV','production');vi.stubEnv('APP_ORIGIN','https://canonical.example');
+ const s=setup();const gateway=createGateway({auth:s.auth} as never,s.admin,s.clear,'https://evil.example');
+ await expect(gateway.recover('synthetic@example.invalid')).rejects.toMatchObject({status:403});expect(s.auth.resetPasswordForEmail).not.toHaveBeenCalled();
+});
+it('MVP: templates locais respeitam RedirectTo controlado, sem domínio fixo',async()=>{
+ const {readFileSync}=await import('node:fs');
+ for(const name of ['confirmation','recovery']){
+  const template=readFileSync('supabase/templates/'+name+'.html','utf8');
+  expect(template).toContain('{{ .RedirectTo }}?token_hash={{ .TokenHash }}');expect(template).not.toContain('{{ .SiteURL }}');
+  expect(template).toContain('type='+ (name==='confirmation'?'signup':'recovery'));
+ }
 });

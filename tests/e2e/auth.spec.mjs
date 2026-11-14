@@ -49,7 +49,7 @@ async function fixture(browser){
   fixtures.push(f);return f;
 }
 async function signup(f){
-  await f.page.goto('/cadastro');await f.page.getByLabel('E-mail',{exact:true}).fill(f.email);
+  await f.page.goto('/cadastro/organizacao');await f.page.getByLabel('E-mail',{exact:true}).fill(f.email);
   await f.page.getByLabel('Senha',{exact:true}).fill(f.password);
   await f.page.getByRole('button',{name:'Criar acesso',exact:true}).click();
   await expect(f.page.getByRole('status')).toContainText('Se o cadastro puder ser concluído');
@@ -57,7 +57,7 @@ async function signup(f){
   expect(q.rowCount).toBe(1);f.id=q.rows[0].id;expect(q.rows[0].email_confirmed_at).toBeNull();
   return await mail(f,'signup');
 }
-async function confirm(f,url){await f.page.goto(url);await f.page.getByRole('button',{name:'Confirmar meu e-mail'}).click();await expect(f.page).toHaveURL(origin+'/dashboard/organizacao');}
+async function confirm(f,url){await f.page.goto(url);await f.page.getByRole('button',{name:'Confirmar meu e-mail'}).click();await expect(f.page).toHaveURL(origin+'/login');await login(f);await expect(f.page).toHaveURL(origin+'/cadastro/pessoa-fisica/completar');await f.page.goto('/dashboard/organizacao');}
 async function link(f){
   await f.page.getByLabel('Nome público da organização').fill(f.name);
   await f.page.getByRole('button',{name:'Vincular organização'}).click();
@@ -94,7 +94,7 @@ test('A01: cadastro, confirmação, vínculo pendente e sessão SSR',async({brow
   await confirm(a,url);
   // Failure between Auth and onboarding is recoverable after a fresh login.
   await a.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
-  await login(a);await expect(a.page).toHaveURL(origin+'/dashboard/organizacao');
+  await login(a);await expect(a.page).toHaveURL(origin+'/cadastro/pessoa-fisica/completar');await a.page.goto('/dashboard/organizacao');
   await link(a);
   const state=await db.query('select c.papel,c.situacao,o.estado_validacao from public.contas_acesso c join public.organizacoes o on o.id=c.organizacao_id where c.auth_user_id=$1',[a.id]);
   expect(state.rows).toEqual([{papel:'organizacao',situacao:'ativa',estado_validacao:'pendente'}]);
