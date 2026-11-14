@@ -34,8 +34,23 @@ afterAll(async()=>{
 
 async function published(){const v=await approved();await services[2].publish(v.id,command());return {...v,snapshot:await publicQuery.get(v.id)};}
 const scheduleCommand=(state='cancelada',previous='programada')=>({...command(),estado_programacao:state,estado_esperado:previous,motivo:'Motivo fictício restrito de programação.'});
-it('B12 PostgreSQL: sem publicações elegíveis, rascunhos não preenchem listagem',async()=>{
- expect(await publicQuery.list()).toEqual([]);const draft=await services[0].create(input());ids.push(draft.id);expect(await publicQuery.list()).toEqual([]);await expect(publicQuery.get(draft.id)).rejects.toMatchObject({status:404});
+it('B12 PostgreSQL: rascunhos próprios não preenchem a listagem, preservando publicações existentes',async()=>{
+ const subject=(await db.query('select id from public.sujeitos_publicadores where organizacao_legada_id=$1',[orgs[0]])).rows[0].id;
+ // This project's fixtures start empty; unrelated local publications are not ours to delete.
+ const baseline=await publicQuery.list();
+ expect(await publicQuery.byPublisher(subject)).toEqual([]);
+ const draft=await services[0].create(input());ids.push(draft.id);
+ expect(await publicQuery.byPublisher(subject)).toEqual([]);
+ expect(await publicQuery.list()).toEqual(baseline);
+ await expect(publicQuery.get(draft.id)).rejects.toMatchObject({status:404});
+ // Positive control: a genuinely approved publication appears, never the private draft.
+ const eligible=await published();
+ expect(await publicQuery.byPublisher(subject)).toEqual([eligible.snapshot]);
+ const visible=await publicQuery.list();
+ expect(visible.map(row=>row.id).sort()).toEqual([...baseline.map(row=>row.id),eligible.id].sort());
+ expect(visible.find(row=>row.id===eligible.id)).toEqual(eligible.snapshot);
+ expect(visible.some(row=>row.id===draft.id)).toBe(false);
+ await expect(publicQuery.get(draft.id)).rejects.toMatchObject({status:404});
 });
 it.each(['adiada','cancelada'])('B10 PostgreSQL: %s preserva snapshot, fecha apoios e audita autor/data',async state=>{
  const {id,snapshot}=await published();await db.query('update public.atividades set apoios_abertos=true where id=$1',[id]);
