@@ -19,12 +19,17 @@ it('home lista snapshots públicos pelo serviço existente e oferece publicaçã
 });
 it('home vazia convida a participar sem fabricar atividades', async () => {
   mocks.list.mockResolvedValue([]); render(await Home());
-  expect(screen.getByText(/A Praça está sendo construída/)).toBeTruthy();
+  expect(screen.getByRole('heading', { name: 'A Praça está esperando a primeira atividade' })).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Quero criar uma atividade' }).getAttribute('href')).toBe('/login');
+  expect(screen.queryByRole('link', { name: snapshot.titulo })).toBeNull();
+  expect(document.querySelector('.activity-grid')).toBeNull();
+  expect(screen.queryByText(/Não foi possível carregar as atividades/)).toBeNull();
 });
 it('consulta indisponível não é apresentada como lista vazia', async () => {
   mocks.list.mockRejectedValue(new Error('fixture'));
   render(await Home()); expect(screen.getByText(/Não foi possível carregar as atividades/)).toBeTruthy();
-  expect(screen.queryByText(/A Praça está sendo construída/)).toBeNull();
+  expect(screen.queryByRole('heading', { name: 'A Praça está esperando a primeira atividade' })).toBeNull();
+  expect(screen.queryByRole('link', { name: 'Quero criar uma atividade' })).toBeNull();
 });
 it('pessoa autenticada recebe link de publicação para o dashboard PF', async () => {
   mocks.list.mockResolvedValue([]); mocks.viewer.mockResolvedValue({ kind: 'ready', name: 'Pessoa Fictícia', dashboard: '/dashboard/pessoa-fisica' });
