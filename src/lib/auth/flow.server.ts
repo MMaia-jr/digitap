@@ -124,7 +124,6 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
       const body=payload(input,['email','password','nome_publico']);
       if(!gateway.signUpPF)throw unavailable();
       const result=await gateway.signUpPF(email(body.email),password(body.password),personName(body.nome_publico));
-      if(result.error)console.error('ERRO REAL NO CADASTRO:',result.error);
       provider(result);
       if(result.session){const ended=await gateway.logout();provider(ended);if(ended.error)throw unavailable();}
       if(result.error&&!['user_already_exists','email_exists'].includes(result.error.code??''))throw unavailable();
@@ -133,7 +132,6 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
     if (action === 'signup') {
       const body=payload(input,['email','password']);
       const result=await gateway.signUp(email(body.email), password(body.password));
-      if(result.error)console.error('ERRO REAL NO CADASTRO:',result.error);
       provider(result);
       if(result.session){const ended=await gateway.logout();provider(ended);if(ended.error)throw unavailable();}
       if (result.error && !['user_already_exists','email_exists'].includes(result.error.code ?? '')) throw unavailable();
@@ -205,7 +203,6 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
     throw new FlowError(404,'Página não encontrada.');
   } catch (error) {
     if(error instanceof FlowError) throw error;
-    if(action==='signup'||action==='signup_pf')console.error('ERRO REAL NO CADASTRO:',error);
     throw unavailable();
   }
 }
