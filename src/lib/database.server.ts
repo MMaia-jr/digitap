@@ -1,6 +1,7 @@
 import 'server-only';
 import { Pool,type PoolClient,type PoolConfig } from 'pg';
 import { isIP } from 'node:net';
+import { X509Certificate } from 'node:crypto';
 export type Sql=Pick<PoolClient,'query'>;
 export type Transaction=<T>(operation:(client:Sql)=>Promise<T>)=>Promise<T>;
 let pool:Pool|undefined;
@@ -28,7 +29,9 @@ function databaseConfig():PoolConfig{
    const labels=host.split('.');
    if(isIP(host.replace(/^\[|\]$/g,''))||labels.length<2||labels.some(label=>! /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(label))||! /^[a-z]+$/.test(labels[labels.length-1])||labels.some(label=>['localhost','local','localdomain','internal'].includes(label)))return invalidConfig();
    if(host!==endpoint.hostname.toLowerCase()||url.port!==endpoint.port||url.pathname!==endpoint.pathname)return invalidConfig();
-   options.ssl={rejectUnauthorized:true};
+   const ca=process.env.SUPABASE_DB_CA_PEM;
+   if(ca!==undefined&&(!/^-----BEGIN CERTIFICATE-----\r?\n[A-Za-z0-9+/=\r\n]+-----END CERTIFICATE-----$/.test(ca.trim())||!new X509Certificate(ca).ca))return invalidConfig();
+   options.ssl={rejectUnauthorized:true,...(ca!==undefined?{ca}:{})};
   }
   return options;
  }catch{return invalidConfig();}
