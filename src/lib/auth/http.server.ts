@@ -1,11 +1,14 @@
 import 'server-only';
 import { FlowError, type FlowResult } from './flow.server';
+import { mutationOrigins } from '../supabase/config.server';
 export const privateHeaders = { 'Cache-Control':'private, no-store, max-age=0', 'Pragma':'no-cache', 'Referrer-Policy':'no-referrer' };
 export async function handleMutation(request: Request, origin: string, execute: (input: unknown) => Promise<FlowResult>): Promise<Response> {
   const json=(value: unknown,status=200)=>Response.json(value,{status,headers:privateHeaders});
   try {
     if(request.method!=='POST') return json({message:'Método não permitido.'},405);
-    if((request.headers.get('host')!==null&&request.headers.get('host')!==new URL(origin).host)||request.headers.get('origin')!==origin || request.headers.get('sec-fetch-site')==='cross-site') throw new FlowError(403,'Origem não permitida.');
+    const requestedOrigin=request.headers.get('origin');
+    const selected=requestedOrigin===origin?origin:mutationOrigins(origin).find(allowed=>allowed===requestedOrigin);
+    if(!selected||(request.headers.get('host')!==null&&request.headers.get('host')!==new URL(selected).host)||request.headers.get('sec-fetch-site')==='cross-site') throw new FlowError(403,'Origem não permitida.');
     if(request.headers.get('content-type')?.split(';')[0].trim()!=='application/json') throw new FlowError(415,'Envie JSON.');
     const reader=request.body?.getReader();
     if(!reader) throw new FlowError(400,'Pedido inválido.');
