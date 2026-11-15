@@ -26,6 +26,7 @@ test.afterAll(async()=>{
    await db.query('begin');
    try{
     // Only the identities generated in this execution, using existing FK order.
+    await db.query('delete from public.ideias_privadas where owner_id=$1',[row.id]);
     await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=$1)',[row.id]);
     await db.query('delete from public.pessoas_fisicas where conta_id in (select id from public.contas_acesso where auth_user_id=$1)',[row.id]);
     await db.query('delete from public.sujeitos_publicadores where criado_por_conta_id in (select id from public.contas_acesso where auth_user_id=$1)',[row.id]);
@@ -59,7 +60,7 @@ async function profileCount(f){return (await db.query(`select
  (select count(*)::int from public.vinculos_publicadores v join public.contas_acesso c on c.id=v.conta_id where c.auth_user_id=$1 and v.atual and v.situacao='ativo' and v.papel_vinculo='titular') titulares`,[f.id])).rows[0];}
 async function snapshot(){
  // Aggregates only: do not read preexisting account content.
- const names=['contas_acesso','pessoas_fisicas','sujeitos_publicadores','vinculos_publicadores','projetos','atividades','registros_realizacao','evidencias','eventos_editoriais'];const result={};
+ const names=['contas_acesso','pessoas_fisicas','sujeitos_publicadores','vinculos_publicadores','projetos','atividades','registros_realizacao','evidencias','eventos_editoriais','ideias_privadas'];const result={};
  for(const name of names)result[name]=(await db.query('select count(*)::int n from public.'+name)).rows[0].n;
  return result;
 }
@@ -68,7 +69,7 @@ async function newPerson(browser,marker){
  const f={email:`e1-${randomUUID()}@example.invalid`,password:randomUUID()+'aA1!',name:'Pessoa Fictícia E1 '+randomUUID(),marker};fixtures.push(f);
  f.context=await browser.newContext({baseURL:origin});
  await f.context.route('**/*',route=>{const u=new URL(route.request().url());return u.hostname==='127.0.0.1'&&['3215','56151','56154'].includes(u.port)?route.continue():route.abort();});
- f.page=await f.context.newPage();
+ f.page=await f.context.newPage();f.browserErrors=[];f.page.on('pageerror',error=>f.browserErrors.push(error.name));f.page.on('console',message=>{if(message.type()==='error')f.browserErrors.push('console-error');});
  await f.page.goto('/cadastro');await f.page.getByLabel('E-mail',{exact:true}).fill(f.email);await f.page.getByLabel('Senha',{exact:true}).fill(f.password);await f.page.getByRole('button',{name:'Criar acesso como pessoa física',exact:true}).click();await expect(f.page.getByRole('status')).toContainText('Se o cadastro puder ser concluído');
  const user=(await db.query('select id,email_confirmed_at from auth.users where email=$1',[f.email])).rows;expect(user).toHaveLength(1);f.id=user[0].id;expect(user[0].email_confirmed_at).toBeNull();expect(await profileCount(f)).toEqual({contas:0,pessoas:0,titulares:0});
  const before=calls().length;
@@ -79,20 +80,25 @@ async function newPerson(browser,marker){
  await f.page.getByRole('link',{name:'Continuar como pessoa física',exact:true}).click();await f.page.getByLabel('Nome público',{exact:true}).fill(f.name);await f.page.getByRole('button',{name:'Concluir cadastro',exact:true}).click();await expect(f.page).toHaveURL(origin+'/dashboard/pessoa-fisica');await f.page.reload();
  expect(await profileCount(f)).toEqual({contas:1,pessoas:1,titulares:1});
  await f.page.getByRole('banner').getByRole('link',{name:'Descreva sua ideia',exact:true}).click();await expect(f.page).toHaveURL(origin+'/meu-espaco/ideia');
- const baseline=await snapshot();await f.page.getByLabel('Sua proposta').fill(proposal(marker));await f.page.getByRole('button',{name:'Interpretar proposta',exact:true}).click();await expect(f.page.getByRole('heading',{name:'Prévia para revisão humana',exact:true})).toBeVisible();
+ const baseline=await snapshot();await f.page.getByLabel('Título do rascunho').fill('Rascunho '+marker);await f.page.getByLabel('Sua proposta').fill(proposal(marker));await f.page.getByRole('button',{name:'Interpretar proposta',exact:true}).click();await expect(f.page.getByRole('heading',{name:'Prévia para revisão humana',exact:true})).toBeVisible();
  for(const label of ['Possíveis sujeitos','Possíveis projetos','Atividades propostas','Capacidades declaradas','Relações alegadas','Fontes citadas','Informações não verificadas'])await expect(f.page.getByRole('heading',{name:label,exact:true})).toBeVisible();
  await expect(f.page.getByText('Oficina '+marker,{exact:true})).toBeVisible();await expect(f.page.getByText(/^Interpretação não verificada\./)).toBeVisible();expect(await snapshot()).toEqual(baseline);
- expect(calls().length).toBe(before+1);
+ expect(calls().length).toBe(before+1);await f.page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();await expect(f.page.getByRole('status').filter({hasText:'Rascunho privado salvo'})).toBeVisible();
+ const persisted=(await db.query('select id,owner_id,title,original_text,version from public.ideias_privadas where owner_id=$1',[f.id])).rows;expect(persisted).toHaveLength(1);expect(persisted[0]).toMatchObject({owner_id:f.id,title:'Rascunho '+marker,version:1});
  await f.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(f.page).toHaveURL(origin+'/login');
  expect((await post(f,proposal(marker))).status()).toBe(401);await login(f);
  const cookies=await f.context.cookies();expect(cookies.some(c=>c.name.startsWith('ap-auth')&&c.httpOnly&&c.sameSite==='Lax')).toBe(true);expect(await f.page.evaluate(()=>document.cookie.includes('ap-auth'))).toBe(false);
- await f.page.getByRole('banner').getByRole('link',{name:'Meu espaço',exact:true}).click();await expect(f.page).toHaveURL(origin+'/dashboard/pessoa-fisica');
+ await f.page.getByRole('banner').getByRole('link',{name:'Descreva sua ideia',exact:true}).click();await expect(f.page).toHaveURL(origin+'/meu-espaco/ideia');await expect(f.page.getByRole('heading',{name:'Minhas ideias'})).toBeVisible();await f.page.getByRole('button',{name:'Retomar',exact:true}).click();try{await expect(f.page.getByRole('heading',{name:'Retomar: Rascunho '+marker})).toBeVisible();}catch{throw new Error('Retomar não alterou a interface; erros de navegador: '+f.browserErrors.join(','));}
+ expect(calls().length).toBe(before+1);await expect(f.page.getByLabel('Sua proposta')).toHaveAttribute('maxlength','20000');await expect(f.page.getByLabel('Sua proposta')).toHaveValue(proposal(marker));await expect(f.page.getByRole('heading',{name:'Prévia para revisão humana',exact:true})).toBeVisible();
+ await f.page.getByLabel('Título do rascunho').fill('Rascunho editado '+marker);await f.page.getByRole('button',{name:'Salvar alterações',exact:true}).click();await expect(f.page.getByRole('status').filter({hasText:'Rascunho privado salvo'})).toBeVisible();expect((await db.query('select title,original_text,revised_text,version from public.ideias_privadas where owner_id=$1',[f.id])).rows).toEqual([{title:'Rascunho editado '+marker,original_text:proposal(marker),revised_text:proposal(marker),version:2}]);
  const retry=await f.page.request.post('/api/auth/completar-pf',{headers:{origin},data:{nome_publico:f.name}});expect(retry.status()).toBe(200);expect(await profileCount(f)).toEqual({contas:1,pessoas:1,titulares:1});
  return f;
 }
 test('E1-01: primeira identidade, confirmação, Praça, perfil, HTTP real, prévia e reentrada',async({browser})=>{test.setTimeout(180000);await newPerson(browser,'IDEIA-UM');});
-test('E1-02: segunda identidade repete percurso e não recebe proposta privada da primeira',async({browser})=>{
- test.setTimeout(180000);const f=await newPerson(browser,'IDEIA-DOIS');await f.page.getByRole('banner').getByRole('link',{name:'Descreva sua ideia',exact:true}).click();await expect(f.page.getByText('Oficina IDEIA-UM',{exact:true})).toHaveCount(0);expect(await profileCount(fixtures[0])).toEqual({contas:1,pessoas:1,titulares:1});
+test('E2.2-02: duas identidades mantêm rascunhos privados isolados no navegador e na API',async({browser})=>{
+ test.setTimeout(180000);const f=await newPerson(browser,'IDEIA-DOIS');await expect(f.page.getByText('Rascunho IDEIA-UM',{exact:true})).toHaveCount(0);await expect(f.page.getByText('Rascunho editado IDEIA-DOIS',{exact:true})).toBeVisible();await f.page.getByRole('button',{name:'Retomar',exact:true}).click();await expect(f.page.getByText('Oficina IDEIA-DOIS',{exact:true})).toBeVisible();await expect(f.page.getByText('Oficina IDEIA-UM',{exact:true})).toHaveCount(0);
+ const first=(await db.query('select id from public.ideias_privadas where owner_id=$1',[fixtures[0].id])).rows[0];expect(first?.id).toBeTruthy();const foreignGet=await f.page.evaluate(async id=>{const response=await fetch('/api/ideias?id='+encodeURIComponent(id),{credentials:'same-origin'});return {status:response.status,body:await response.text()};},first.id);expect(foreignGet.status,`foreign GET: ${foreignGet.body}`).toBe(404);const foreignDelete=await f.page.evaluate(async id=>{const response=await fetch('/api/ideias',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'delete',id,confirmDelete:true})});return {status:response.status,body:await response.text()};},first.id);expect(foreignDelete.status,`foreign delete: ${foreignDelete.body}`).toBe(404);expect((await db.query('select count(*)::int n from public.ideias_privadas where owner_id=$1',[fixtures[0].id])).rows[0].n).toBe(1);expect(await profileCount(fixtures[0])).toEqual({contas:1,pessoas:1,titulares:1});
+ f.page.on('dialog',dialog=>dialog.accept());await f.page.getByRole('button',{name:'Excluir',exact:true}).click();await expect(f.page.getByRole('status').filter({hasText:'Rascunho excluído'})).toBeVisible();expect((await db.query('select count(*)::int n from public.ideias_privadas where owner_id=$1',[f.id])).rows[0].n).toBe(0);
 });
 test('E1-03: origem, payload privilegiado, bloqueio e visitante não chegam ao Gateway',async({browser})=>{
  const f=fixtures[0],before=calls().length,baseline=await snapshot();

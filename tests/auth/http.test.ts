@@ -23,6 +23,10 @@ describe('rotas simuladas: fronteira HTTP', () => {
   it('limita corpo mesmo sem Content-Length',async()=>{
     const run=vi.fn();expect((await handleMutation(request('a'.repeat(9000)),origin,run)).status).toBe(413);expect(run).not.toHaveBeenCalled();
   });
+  it('permite limite maior explicitamente configurado sem mudar o padrão das rotas Auth',async()=>{
+    const run=vi.fn().mockResolvedValue({message:'Ok'});const response=await handleMutation(request(JSON.stringify({texto:'x'.repeat(9000)})),origin,run,12000);
+    expect(response.status).toBe(200);expect(run).toHaveBeenCalledOnce();
+  });
   it('encaminha somente JSON validado e impede cache',async()=>{
     const run=vi.fn().mockResolvedValue({message:'Ok'});const response=await handleMutation(request('{"nome_publico":"Fictícia"}'),origin,run);
     expect(run).toHaveBeenCalledWith({nome_publico:'Fictícia'});expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toContain('no-store');

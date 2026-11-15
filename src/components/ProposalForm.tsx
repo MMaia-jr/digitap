@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
 import type { ProposalInterpretation } from '../lib/proposals/interpret.server';
+import type { IdeaView } from '../lib/ideas/service.server';
 const subscribe = () => () => {};
 const labels = {
   sujeitos: 'Possíveis sujeitos', projetos: 'Possíveis projetos', atividades: 'Atividades propostas',
@@ -9,17 +10,20 @@ const labels = {
 type DescriptionCategory = keyof typeof labels;
 type Category = keyof ProposalInterpretation['dados'];
 type SubjectType = ProposalInterpretation['dados']['sujeitos'][number]['tipo'];
+export type ProposalDraft = { title: string; originalText: string; originalInterpretation: ProposalInterpretation; revisedInterpretation: ProposalInterpretation | null; expectedVersion?: number; id?: string };
 const subjectLabels: Record<SubjectType, string> = {
   pessoa_fisica: 'Pessoa física', coletivo_informal: 'Coletivo informal',
   organizacao: 'Organização', nao_informado: 'Não informado',
 };
-export function ProposalForm() {
+export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; onSave?: (draft: ProposalDraft) => Promise<void> }) {
   const ready = useSyncExternalStore(subscribe, () => true, () => false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState(initialIdea?.revised_text ?? initialIdea?.original_text ?? '');
+  const [title, setTitle] = useState(initialIdea?.title ?? '');
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
-  const [preview, setPreview] = useState<ProposalInterpretation | null>(null);
-  const [original, setOriginal] = useState<ProposalInterpretation | null>(null);
+  const [preview, setPreview] = useState<ProposalInterpretation | null>(initialIdea?.revised_interpretation ?? initialIdea?.original_interpretation ?? null);
+  const [original, setOriginal] = useState<ProposalInterpretation | null>(initialIdea?.original_interpretation ?? null);
+  const [saving, setSaving] = useState(false);
   const restoreButton = useRef<HTMLButtonElement>(null);
   const inFlight = useRef(false);
   function editDescription(category: DescriptionCategory, index: number, value: string) {
@@ -67,12 +71,24 @@ export function ProposalForm() {
     } catch { setError('Não foi possível interpretar agora. Tente novamente mais tarde.'); }
     finally { inFlight.current = false; setPending(false); }
   }
+  async function saveDraft() {
+    if (!onSave || !preview || !original || saving) return;
+    if (!title.trim() || title.length > 160) { setError('Informe um título de até 160 caracteres.'); return; }
+    setSaving(true); setError('');
+    try {
+      await onSave({ title, originalText: text, originalInterpretation: original, revisedInterpretation: preview, ...(initialIdea ? { id: initialIdea.id, expectedVersion: initialIdea.version } : {}) });
+    } catch (cause) {
+      setError(cause instanceof Error && cause.message === 'conflict' ? 'Este rascunho foi alterado em outra sessão. Reabra a versão atual antes de salvar.' : 'Não foi possível salvar o rascunho. Tente novamente.');
+    } finally { setSaving(false); }
+  }
   return <>
     <p>Descreva a proposta sem senhas, documentos ou dados pessoais desnecessários. Ao interpretar, o texto será enviado a um serviço de IA para gerar sugestões. Nada será salvo ou publicado por este formulário.</p>
     <form action="/api/propostas/interpretar" method="post" onSubmit={submit} aria-busy={pending}>
+      <label htmlFor="idea-title">Título do rascunho</label>
+      <input id="idea-title" name="titulo" maxLength={160} value={title} onChange={event => setTitle(event.target.value)} />
       <label htmlFor="proposal-text">Sua proposta</label>
-      <textarea id="proposal-text" name="texto" rows={8} required maxLength={2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); setPreview(null); setOriginal(null); setError(''); }} />
-      <p id="proposal-limit">Até 2.000 caracteres. Reveja as sugestões: fontes e trechos não comprovam os fatos.</p>
+      <textarea id="proposal-text" name="texto" rows={8} required maxLength={initialIdea ? 20000 : 2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); if (!initialIdea) { setPreview(null); setOriginal(null); } setError(''); }} />
+      <p id="proposal-limit">Até {initialIdea ? '20.000' : '2.000'} caracteres. Reveja as sugestões: fontes e trechos não comprovam os fatos.</p>
       <button type="submit" disabled={pending || !ready}>{pending ? 'Interpretando…' : 'Interpretar proposta'}</button>
     </form>
     {pending && <p role="status">Aguarde a interpretação.</p>}
@@ -80,7 +96,8 @@ export function ProposalForm() {
     {preview && <section aria-label="Prévia da proposta" aria-live="polite">
       <h2>Prévia para revisão humana</h2>
       <p>Interpretação não verificada. Revise cada sugestão e seu trecho de origem. Ela não cria titularidade, representação institucional, vínculo de confiança ou publicação.</p>
-      <p>As correções são temporárias e desaparecerão ao sair da página. Nada será salvo. Restaurar recupera somente a resposta original desta interpretação.</p>
+      <p>As correções são temporárias e desaparecerão ao sair da página. Restaurar recupera somente a resposta original desta interpretação.</p>
+      {onSave ? <p>Esta prévia e quaisquer alterações ainda não estão salvas. Use “Salvar rascunho” para mantê-las privadamente.</p> : <p>Nada será salvo ou publicado por este formulário.</p>}
       <p id="review-limit">Até 1.000 caracteres por campo. Campos vazios precisam de revisão. Os trechos de origem não podem ser editados e não comprovam os fatos.</p>
       <button ref={restoreButton} type="button" onClick={() => setPreview(original)}>Restaurar prévia original</button>
       {(Object.keys(labels) as DescriptionCategory[]).map(category => <section key={category}>
@@ -108,6 +125,7 @@ export function ProposalForm() {
           <button type="button" onClick={() => discard('relacoes', index)}>Descartar Relações alegadas {index + 1}</button>
         </li>)}</ul> : <p>Nenhuma relação identificada.</p>}
       </section>
+      {onSave && <button type="button" onClick={saveDraft} disabled={saving || pending || !title.trim() || !text.trim()}>{saving ? 'Salvando…' : initialIdea ? 'Salvar alterações' : 'Salvar rascunho'}</button>}
     </section>}
   </>;
 }

@@ -5,6 +5,38 @@
 Este painel complementa o histórico preservado abaixo. Não autoriza execução
 automática, publicação ou ampliação de escopo.
 
+### E2.2 — Minhas ideias: rascunhos privados, 15/11/2026
+
+- **Escopo autorizado:** persistir ideias somente por ação explícita da pessoa;
+  listar, retomar, editar com controle de versão e excluir os próprios
+  rascunhos. Nenhuma interpretação cria projetos, atividades, sujeitos,
+  vínculos, confiança ou publicação.
+- **Resultado local e aceite humano:** o proponente aceitou o resultado técnico
+  local da E2.2 em 15/11/2026. Duas
+  migrações aditivas foram aplicadas somente ao Supabase local: tabela privada
+  `public.ideias_privadas` e campo separado `revised_text`. RLS, privilégios
+  mínimos e filtros de proprietário foram exercitados no PostgreSQL local.
+  Dados preexistentes foram preservados; não houve reset.
+- **Validação observada:** `npm test`: **827 PASS**; integração
+  `npm run test:onboarding:db`: **232 PASS**; E2E: **4 PASS, 0 FAIL, 0 SKIP**.
+  TypeScript, ESLint e `git diff --check`: PASS. A E2E usou duas identidades
+  fictícias, aplicação/Auth/PostgreSQL locais e mock somente do Vercel AI
+  Gateway. O relatório final registra a limpeza das duas contas sintéticas.
+- Os testes RED reproduziram validação incompleta do contrato, limite de corpo
+  insuficiente para o texto de proposta e rejeição de Host confiável na rota
+  autenticada; as correções permaneceram nos limites autorizados e passaram
+  pelas regressões. A interface salva apenas após ação explícita; retomar não
+  chama novamente a IA. Texto original e trechos de origem são preservados;
+  revisões ficam em campos próprios.
+- **Limites:** evidência exclusivamente local. Kimi/Gateway real, Cloud,
+  e-mails de produção, operação de produção, DOG-01 e VH-01–VH-03 não foram
+  validados. A política de retenção e descarte de produção continua pendente.
+  Não houve commit, push, deploy, migration remota ou chamada paga.
+- **Estado de sequência:** E2.2 concluída tecnicamente localmente e aceita
+  pelo proponente no escopo testado. E2.3 e demais incrementos
+  continuam não iniciados e sem autorização. Nenhuma próxima etapa é iniciada
+  automaticamente.
+
 ### E2.1 — revisão manual temporária, 15/11/2026
 
 - **Autorização humana específica:** editar descrições das categorias existentes,
@@ -89,11 +121,13 @@ automaticamente nem aprova todo o conteúdo das investigações.
   Nenhum defeito de produção foi identificado na E1; não houve correção de
   código de produção. Isso não afirma ausência geral de defeitos no produto.
 - **E2.1 — revisão manual temporária concluída tecnicamente e aceita pelo
-  proponente no escopo acima.** E2.2 permanece não iniciada e sem autorização;
-  demais incrementos E2 também não iniciados e sem
-  autorização de implementação. Nenhuma etapa seguinte está ativa.
+  proponente no escopo acima. E2.2 — rascunhos privados concluídos
+  tecnicamente em ambiente local e aceitos pelo proponente em 15/11/2026.**
+  E2.3 e demais incrementos continuam não iniciados e sem autorização.
+  Nenhuma etapa seguinte está ativa.
 - **Pendências:** Kimi real, Cloud, e-mails de produção, PostgreSQL/TLS e sessão
-  de produção não validados por E1; orçamento e política efetiva ainda pendentes.
+  de produção não validados por E2.2; orçamento e política de retenção de
+  produção ainda pendentes.
   DOG-01 e VH-01–VH-03 permanecem não validados.
 - O aceite humano desta execução local não equivale a DOG-01 ou I5.
   Não ampliar E2 automaticamente a partir da autorização limitada de E2.1.
@@ -107,7 +141,8 @@ decisão e autorização compatíveis com seu escopo.
 | --- | --- | --- |
 | E0 — concluída documentalmente | Planejamento: consolidar este painel | Aprovação documental e gravação; nenhuma implementação |
 | E1 — concluída tecnicamente e aceita pelo proponente no escopo local | Acesso/onboarding: jornada autenticada até a prévia, com rota HTTP real e Gateway mockado | 4 E2E novos, 60 E2E de regressão, 229 integração e 787 unitários/componentes aprovados; produção não validada |
-| E2.1 — revisão manual temporária concluída localmente; restante E2 não iniciado | Assistente IA: editar/descartar/restaurar a prévia, sem persistência | Revisar resultado e diff; eventual continuidade, persistência, retenção e custos exigem nova decisão/autorização; sem criação automática de autoridade |
+| E2.1 — revisão manual temporária concluída localmente e aceita | Assistente IA: editar/descartar/restaurar a prévia, sem persistência | Aceite registrado; sem criação automática de autoridade |
+| E2.2 — rascunhos privados concluídos tecnicamente localmente e aceitos pelo proponente em 15/11/2026 | Assistente IA: salvar explicitamente, listar, retomar, editar e excluir ideias privadas | 827 unitários/componentes, 232 integração, 4 E2E (0 FAIL/SKIP), TypeScript, ESLint e diff check PASS; Cloud/Kimi/produção e política de retenção não validados |
 | E3 — candidata | Feed/projetos: conectar descoberta e percursos existentes | Definir itens públicos, visibilidade e curadoria; preservar isolamento |
 | E4 — candidata | Capacidades/matching: declarações e encontros explicáveis | Aprovar contrato, consentimento, disponibilidade e efeitos; sem ranking universal |
 | E5 — candidata | Histórico PoWth: contribuição, proveniência e confiança contextual | Delimitar o incremento; preservar contestação/revogação; não antecipar motor completo ou certificação automática |

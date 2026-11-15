@@ -2,7 +2,7 @@ import 'server-only';
 import { FlowError, type FlowResult } from './flow.server';
 import { mutationOrigins } from '../supabase/config.server';
 export const privateHeaders = { 'Cache-Control':'private, no-store, max-age=0', 'Pragma':'no-cache', 'Referrer-Policy':'no-referrer' };
-export async function handleMutation(request: Request, origin: string, execute: (input: unknown) => Promise<FlowResult>): Promise<Response> {
+export async function handleMutation(request: Request, origin: string, execute: (input: unknown) => Promise<FlowResult>, maxBytes=8192): Promise<Response> {
   const json=(value: unknown,status=200)=>Response.json(value,{status,headers:privateHeaders});
   try {
     if(request.method!=='POST') return json({message:'Método não permitido.'},405);
@@ -16,7 +16,7 @@ export async function handleMutation(request: Request, origin: string, execute: 
     for(;;){
       const chunk=await reader.read();if(chunk.done) break;
       size+=chunk.value.byteLength;
-      if(size>8192){await reader.cancel();throw new FlowError(413,'Pedido muito grande.');}
+      if(size>(Number.isSafeInteger(maxBytes)&&maxBytes>=1&&maxBytes<=262144?maxBytes:8192)){await reader.cancel();throw new FlowError(413,'Pedido muito grande.');}
       body+=decoder.decode(chunk.value,{stream:true});
     }
     body+=decoder.decode();let input:unknown;
