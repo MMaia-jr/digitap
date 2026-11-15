@@ -5,7 +5,41 @@
 Este painel complementa o histórico preservado abaixo. Não autoriza execução
 automática, publicação ou ampliação de escopo.
 
-### Estado e evidências
+### E2.1 — revisão manual temporária, 15/11/2026
+
+- **Autorização humana específica:** editar descrições das categorias existentes,
+  corrigir tipos de sujeito somente nos quatro valores do contrato, editar origem,
+  destino e tipo das relações, descartar sugestões e restaurar a prévia original.
+  Trechos de origem imutáveis; correções somente em memória, perdidas ao sair.
+- Base desta execução: `main`, HEAD
+  `3f480db68c0132402ca11b426a2dfdb3d5879e1d`, sincronizado com `origin/main`.
+  Os dois commits E1 já foram publicados no Git; as 117 evidências não rastreadas
+  anteriores foram preservadas. Nenhum commit/push/deploy foi feito em E2.1.
+- **Resultado local:** implementação concluída tecnicamente, aguardando revisão
+  humana. RED: 20 novos testes falharam por comportamento ausente; 10 existentes
+  passaram. GREEN específico: 30 PASS. Regressão `npm test`: **807 PASS**, 69
+  arquivos, zero FAIL/SKIP. TypeScript sem emissão/incremental, lint geral e
+  `git diff --check`: PASS (exit 0).
+- **Aceite humano E2.1:** o proponente aprovou o resultado local desta revisão
+  temporária em 15/11/2026. E2.2 permanece não iniciada e sem autorização.
+- Testes: `tests/components/proposal-review.test.tsx` e regressões existentes.
+  Cobrem edição, descarte nas sete categorias, restauração sem nova requisição,
+  trechos imutáveis, limite de 1.000 caracteres por campo, teclado/foco,
+  conteúdo malicioso escapado e ausência de persistência ao remontar.
+- Escopo efetivo: `src/components/ProposalForm.tsx`, novo teste de revisão e
+  este plano. Função `interpretProposal`, contrato e endpoint HTTP intactos.
+  Somente mocks; nenhum Kimi real, E2E, integração com banco ou produção
+  revalidado neste incremento. Os aceites integrados E1 abaixo são históricos.
+- **Limites:** sem salvamento no navegador/servidor/banco, novas entidades,
+  representação, vínculos, publicação ou verificação. Campos vazios são rascunhos
+  sinalizados para revisão, não dados aprovados. As sugestões continuam não
+  verificadas, inclusive após correção humana.
+- **Próxima ação:** revisar este diff e o resultado local. Demais incrementos E2,
+  persistência e I6+ continuam sem autorização. Não iniciar outra etapa.
+  Rollback exige autorização e deve atingir apenas o diff E2.1, preservando
+  evidências e demais trabalhos; sem reset/clean.
+
+### Estado e evidências — fotografia do encerramento E1
 
 - Branch: `main`.
 - HEAD: `8a5d1199f4cc26906cd9ff30e75e625578e33cf9`.
@@ -54,14 +88,15 @@ automaticamente nem aprova todo o conteúdo das investigações.
   aceite expresso pelo proponente no pedido de encerramento de 15/11/2026.
   Nenhum defeito de produção foi identificado na E1; não houve correção de
   código de produção. Isso não afirma ausência geral de defeitos no produto.
-- **Nenhuma etapa técnica ativa. E2 é a próxima candidata, não iniciada e
-  sem autorização de implementação.** Preparar versionamento não autoriza
-  staging, commit ou publicação.
+- **E2.1 — revisão manual temporária concluída tecnicamente e aceita pelo
+  proponente no escopo acima.** E2.2 permanece não iniciada e sem autorização;
+  demais incrementos E2 também não iniciados e sem
+  autorização de implementação. Nenhuma etapa seguinte está ativa.
 - **Pendências:** Kimi real, Cloud, e-mails de produção, PostgreSQL/TLS e sessão
   de produção não validados por E1; orçamento e política efetiva ainda pendentes.
   DOG-01 e VH-01–VH-03 permanecem não validados.
 - O aceite humano desta execução local não equivale a DOG-01 ou I5.
-  Não iniciar E2 automaticamente.
+  Não ampliar E2 automaticamente a partir da autorização limitada de E2.1.
 
 ### Fila única e sequência condicionada
 
@@ -72,7 +107,7 @@ decisão e autorização compatíveis com seu escopo.
 | --- | --- | --- |
 | E0 — concluída documentalmente | Planejamento: consolidar este painel | Aprovação documental e gravação; nenhuma implementação |
 | E1 — concluída tecnicamente e aceita pelo proponente no escopo local | Acesso/onboarding: jornada autenticada até a prévia, com rota HTTP real e Gateway mockado | 4 E2E novos, 60 E2E de regressão, 229 integração e 787 unitários/componentes aprovados; produção não validada |
-| E2 — próxima candidata, não iniciada, sem autorização de implementação | Assistente IA: revisão, correção e eventual continuidade privada da proposta | Deliberar ações, persistência, retenção, custos e limites; obter autorização específica; sem criação automática de autoridade |
+| E2.1 — revisão manual temporária concluída localmente; restante E2 não iniciado | Assistente IA: editar/descartar/restaurar a prévia, sem persistência | Revisar resultado e diff; eventual continuidade, persistência, retenção e custos exigem nova decisão/autorização; sem criação automática de autoridade |
 | E3 — candidata | Feed/projetos: conectar descoberta e percursos existentes | Definir itens públicos, visibilidade e curadoria; preservar isolamento |
 | E4 — candidata | Capacidades/matching: declarações e encontros explicáveis | Aprovar contrato, consentimento, disponibilidade e efeitos; sem ranking universal |
 | E5 — candidata | Histórico PoWth: contribuição, proveniência e confiança contextual | Delimitar o incremento; preservar contestação/revogação; não antecipar motor completo ou certificação automática |
@@ -80,7 +115,8 @@ decisão e autorização compatíveis com seu escopo.
 | E7 — condicionada | Preparação de release | Segurança, e-mail/TLS, orçamento, privacidade, candidato e rollback verificados; publicações com autorização própria |
 | E8 — condicionada | DOG-01 integrado e portões humanos I5 | Definir critérios e registrar evidências próprios de DOG-01 e de cada VH-01–VH-03; dogfooding do fundador não comprova automaticamente a validação humana de I5; decidir continuidade |
 
-E2–E5 são candidatos, não compromissos de implementação. Antes de ativá-los,
+Além da autorização restrita de E2.1, os demais incrementos E2–E5 são candidatos,
+não compromissos de implementação. Antes de ativá-los,
 resolver expressamente seu enquadramento nos condicionantes I5/I6+.
 O resultado de DOG-01 orientará a continuidade; não representa adoção comprovada.
 DOG-01, VH-01, VH-02 e VH-03 exigem critérios, participantes e evidências
@@ -90,7 +126,8 @@ identificados separadamente; nenhuma equivalência automática será presumida.
 
 - Delimitar quais incrementos candidatos podem preceder I5 e sob quais
   exceções, sem transformar autorizações específicas em liberação geral.
-- Definir edição/persistência da proposta, capacidades, matching e
+- Deliberar continuidade/persistência da proposta além da revisão temporária E2.1,
+  capacidades, matching e
   reivindicação antes de materializar novas entidades ou vínculos.
 - Preservar autenticação ≠ perfil ≠ representação ≠ publicação ≠ verificação.
   Declaração de fundador ou interpretação da IA não estabelece propriedade.
