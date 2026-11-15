@@ -1,0 +1,1 @@
+{"two_journeys":true,"real_auth_mail_database_http":true,"only_external_gateway_mocked":true,"profile_uniqueness":true,"logout_and_second_login":true,"origin_and_permissions":true,"concurrency_and_quota":true,"gateway_failure_safe":true,"domain_counts_unchanged_by_ai":true,"mock_calls":6}

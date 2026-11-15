@@ -1,0 +1,57 @@
+{
+  "phase": "E1",
+  "result": "PASS_LOCAL_AWAITING_HUMAN_REVIEW",
+  "head": "8a5d1199f4cc26906cd9ff30e75e625578e33cf9",
+  "e1": {
+    "PASS": 4,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "e2e_regression": {
+    "PASS": 60,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "unit_components": {
+    "PASS": 787,
+    "FAIL": 0,
+    "SKIP": 0,
+    "exit_code": 0
+  },
+  "integration": {
+    "PASS": 229,
+    "FAIL": 0,
+    "SKIP": 0,
+    "exit_code": 0
+  },
+  "typecheck": "PASS (exit 0)",
+  "eslint_specific_and_general": "PASS (exit 0)",
+  "diff_check": "PASS",
+  "fixtures": {
+    "remaining_synthetic_e1_auth": 0,
+    "remaining_synthetic_e1_pf": 0,
+    "remaining_synthetic_e1_subjects": 0
+  },
+  "own_server_stopped": true,
+  "final_browser_run_duration_seconds": 495.42,
+  "gateway_mock_calls": 6,
+  "paid_inferences": 0,
+  "production_files_changed": [],
+  "preexisting_files_changed_by_e1": [],
+  "index_preserved": true,
+  "new_test_files": [
+    "tests/e2e/proposal-journey.spec.mjs",
+    "tests/e2e/helpers/gateway-preload.mjs"
+  ],
+  "preliminary_issues": [
+    "alert selector matched Next route announcer; narrowed selector without changing assertion",
+    "regression selection anchored to full Playwright title incorrectly; corrected filter verified to select 60 tests"
+  ],
+  "not_verified": [
+    "real Kimi/Bedrock inference or privacy policy",
+    "Cloud authentication/email/TLS",
+    "DOG-01 and VH-01–VH-03"
+  ],
+  "advance_to_e2": false,
+  "mailpit": "Existing fixture procedure may retain synthetic local email messages; no real recipients used."
+}

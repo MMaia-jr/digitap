@@ -1,0 +1,16 @@
+{
+  "versions": {
+    "next": "16.4.5",
+    "@playwright/test": "1.64.1",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
+    "pg": "8.23.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  },
+  "api": "LOCAL_LOOPBACK:56151",
+  "postgres": "LOCAL_LOOPBACK:56152",
+  "mail": "LOCAL_LOOPBACK:56154",
+  "application": "LOCAL_LOOPBACK:3215",
+  "gateway": "server-process mock; real provider credentials not used"
+}

@@ -1,0 +1,6 @@
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"ok"}
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"ok"}
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"slow"}
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"ok"}
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"failure"}
+{"mock":true,"provider":"bedrock","model":"moonshotai/kimi-k2.5","mode":"ok"}

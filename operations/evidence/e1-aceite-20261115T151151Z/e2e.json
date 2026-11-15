@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "PASS": 4,
+  "FAIL": 0,
+  "SKIP": 0,
+  "checks": [
+    {
+      "id": "E1-01",
+      "test": "E1-01: primeira identidade, confirmação, Praça, perfil, HTTP real, prévia e reentrada",
+      "status": "PASS",
+      "duration_ms": 8681,
+      "errors": []
+    },
+    {
+      "id": "E1-02",
+      "test": "E1-02: segunda identidade repete percurso e não recebe proposta privada da primeira",
+      "status": "PASS",
+      "duration_ms": 6223,
+      "errors": []
+    },
+    {
+      "id": "E1-03",
+      "test": "E1-03: origem, payload privilegiado, bloqueio e visitante não chegam ao Gateway",
+      "status": "PASS",
+      "duration_ms": 336,
+      "errors": []
+    },
+    {
+      "id": "E1-04",
+      "test": "E1-04: concorrência, quota, falha segura e nenhuma mutação pela interpretação",
+      "status": "PASS",
+      "duration_ms": 1900,
+      "errors": []
+    }
+  ]
+}

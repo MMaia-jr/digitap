@@ -1,0 +1,18 @@
+{
+  "e1": {
+    "exit_code": 0,
+    "status": "passed",
+    "PASS": 4,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "regression": {
+    "exit_code": 0,
+    "status": "passed",
+    "PASS": 60,
+    "FAIL": 0,
+    "SKIP": 0
+  },
+  "own_server_stopped": true,
+  "duration_seconds": 495.42
+}
