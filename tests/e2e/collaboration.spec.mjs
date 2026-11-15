@@ -47,7 +47,7 @@ test.afterAll(async()=>{
  for(const user of users)if((await admin.auth.admin.deleteUser(user)).error)throw new Error('Limpeza de fixture falhou.');
  }finally{await db?.end();}
 });
-async function login(page,fixture){await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(fixture.email);await page.getByLabel('Senha',{exact:true}).fill(fixture.password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+(fixture===organization?'/dashboard':fixture===editor?'/admin/atividades':'/dashboard/pessoa-fisica'));}
+async function login(page,fixture){await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(fixture.email);await page.getByLabel('Senha',{exact:true}).fill(fixture.password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/');await page.goto(fixture===organization?'/dashboard':fixture===editor?'/admin/atividades':'/dashboard/pessoa-fisica');}
 async function capture(page,name){await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:out+'/'+name,fullPage:true,animations:'disabled'});}
 async function invite(page,name,role='colaborador'){
  await page.getByLabel('Nome público da pessoa',{exact:true}).fill(name);await page.getByRole('button',{name:'Buscar pessoa',exact:true}).click();

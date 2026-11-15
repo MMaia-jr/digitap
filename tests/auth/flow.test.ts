@@ -36,16 +36,16 @@ describe('A01–A09: fluxo com provider simulado, não integração real', () =>
     const g=setup(); g.signIn.mockResolvedValue({error:{code:'invalid_credentials',status:400,message:input.password}} as never);
     await expect(run('signin',input,g)).rejects.toMatchObject({status:401,message:'Não foi possível entrar. Confira seus dados e a confirmação de e-mail.'});
   });
-  it('A01: sessão confirmada sem perfil conduz à conclusão PF', async () => {
-    expect(await run('signin', input)).toMatchObject({ next:'/cadastro/pessoa-fisica/completar' });
+  it('A01: sessão confirmada sem perfil volta à Praça', async () => {
+    expect(await run('signin', input)).toMatchObject({ next:'/' });
   });
-  it('login com conta própria ativa conduz à área restrita', async () => {
+  it('login com organização ativa volta à Praça', async () => {
     const g=setup();g.account.mockResolvedValue(account as never);
-    expect(await run('signin',input,g)).toMatchObject({next:'/dashboard'});
+    expect(await run('signin',input,g)).toMatchObject({next:'/'});
   });
-  it.each(['editor','administrador'])('B05: %s ativo do banco entra na fila editorial',async papel=>{
+  it.each(['editor','administrador'])('B05: %s ativo do banco volta à Praça com papel preservado',async papel=>{
     const g=setup();g.account.mockResolvedValue({...account,papel,organizacao_id:null} as never);
-    expect(await run('signin',input,g)).toMatchObject({next:'/admin/atividades'});expect(g.logout).not.toHaveBeenCalled();
+    expect(await run('signin',input,g)).toMatchObject({next:'/'});expect(g.logout).not.toHaveBeenCalled();
   });
   it('B05: editor bloqueado continua negado no login',async()=>{
     const g=setup();g.account.mockResolvedValue({...account,papel:'editor',situacao:'bloqueada'} as never);
@@ -55,7 +55,7 @@ describe('A01–A09: fluxo com provider simulado, não integração real', () =>
     const g=setup();g.account.mockResolvedValue({...account,papel:'supereditor'} as never);
     await expect(run('signin',input,g)).rejects.toMatchObject({status:403});
     g.account.mockResolvedValue(account as never);g.signIn.mockResolvedValue({user:{...user,user_metadata:{papel:'editor'}},session:true} as never);
-    expect(await run('signin',input,g)).toMatchObject({next:'/dashboard'});
+    expect(await run('signin',input,g)).toMatchObject({next:'/'});
   });
   it('A07: login sem email confirmado é negado e limpa sessão', async () => {
     const g=setup();g.signIn.mockResolvedValue({user:{...user,email_confirmed_at:null},session:true} as never);

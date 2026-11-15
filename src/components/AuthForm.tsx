@@ -8,7 +8,7 @@ const config={
  signup:{endpoint:'/api/auth/cadastro',label:'Criar acesso'},signin:{endpoint:'/api/auth/login',label:'Entrar'},recover:{endpoint:'/api/auth/recuperar',label:'Enviar link de recuperação'},confirm:{endpoint:'/api/auth/confirmar',label:'Confirmar meu e-mail'},reset:{endpoint:'/api/auth/redefinir',label:'Atualizar senha'},organization:{endpoint:'/api/organizacoes',label:'Vincular organização'},signout:{endpoint:'/api/auth/sair',label:'Sair'},
  signup_pf:{endpoint:'/api/auth/cadastro-pf',label:'Criar acesso como pessoa física'},
 };
-const destinations=new Set(['/cadastro/pessoa-fisica/completar','/dashboard','/dashboard/organizacao','/dashboard/pessoa-fisica','/admin/atividades','/login','/login?status=senha-atualizada']);
+const destinations=new Set(['/','/cadastro/pessoa-fisica/completar','/dashboard','/dashboard/organizacao','/dashboard/pessoa-fisica','/admin/atividades','/login','/login?status=senha-atualizada']);
 export function AuthForm({mode,tokenHash,onNavigate}:{mode:Mode;tokenHash?:string;onNavigate?:(path:string)=>void}){
  const ready=useSyncExternalStore(subscribeHydration,()=>true,()=>false);
  const [pending,setPending]=useState(false);const [feedback,setFeedback]=useState<{message:string;error:boolean;fields?:Record<string,string>}|null>(null);const summary=useRef<HTMLDivElement>(null);

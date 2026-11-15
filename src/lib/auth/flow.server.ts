@@ -140,8 +140,7 @@ export async function executeAuth(action: AuthAction, input: unknown, gateway: A
           throw new FlowError(401,loginMessage);
         }
         const account=await gateway.account(result.user.id); activeLoginAccount(account,result.user);
-        if(account?.papel==='publicador')return {message:'Acesso confirmado.',next:'/dashboard/pessoa-fisica'};
-        return {message:'Acesso confirmado.',next:account?account.papel==='organizacao'?'/dashboard':'/admin/atividades':'/cadastro/pessoa-fisica/completar'};
+        return {message:'Acesso confirmado.',next:'/'};
       });
     }
     if (action === 'recover') {

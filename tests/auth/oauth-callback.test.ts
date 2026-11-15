@@ -9,19 +9,19 @@ import { GET } from '../../src/app/auth/callback/route';
 const origin = 'http://127.0.0.1:3215';
 const user = { id: 'fixture-user', email_confirmed_at: '2026-11-06' };
 beforeEach(() => { vi.clearAllMocks(); mocks.exchange.mockResolvedValue({ error: null }); mocks.user.mockResolvedValue(user); mocks.account.mockResolvedValue(null); mocks.state.mockResolvedValue({ kind: 'ready' }); });
-it('novo usuário troca code e vai completar nome público sem criar PF automaticamente', async () => {
+it('novo usuário volta à Praça sem criar PF automaticamente', async () => {
   const r = await GET(new Request(origin + '/auth/callback?code=fixture-code&next=https://externo.invalid'));
   expect(mocks.exchange).toHaveBeenCalledWith('fixture-code');
-  expect(r.status).toBe(303); expect(r.headers.get('location')).toBe(origin + '/cadastro/pessoa-fisica/completar');
+  expect(r.status).toBe(303); expect(r.headers.get('location')).toBe(origin + '/');
   expect(r.headers.get('cache-control')).toContain('no-store');
 });
-it('PF existente vai ao dashboard PF', async () => {
+it('PF existente volta à Praça', async () => {
   mocks.account.mockResolvedValue({ auth_user_id: user.id, papel: 'publicador', situacao: 'ativa', organizacao_id: null });
-  expect((await GET(new Request(origin + '/auth/callback?code=fixture'))).headers.get('location')).toBe(origin + '/dashboard/pessoa-fisica');
+  expect((await GET(new Request(origin + '/auth/callback?code=fixture'))).headers.get('location')).toBe(origin + '/');
 });
 it.each(['editor','administrador','organizacao'])('preserva conta %s existente', async papel => {
   mocks.account.mockResolvedValue({ auth_user_id: user.id, papel, situacao: 'ativa', organizacao_id: papel === 'organizacao' ? 'org' : null });
-  expect((await GET(new Request(origin + '/auth/callback?code=fixture'))).headers.get('location')).toBe(origin + (papel === 'organizacao' ? '/dashboard' : '/admin/atividades'));
+  expect((await GET(new Request(origin + '/auth/callback?code=fixture'))).headers.get('location')).toBe(origin + '/');
 });
 it('sem code não tenta trocar sessão', async () => {
   expect((await GET(new Request(origin + '/auth/callback'))).headers.get('location')).toBe(origin + '/login?status=oauth-falhou');

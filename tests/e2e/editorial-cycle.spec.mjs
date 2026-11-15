@@ -41,7 +41,7 @@ test('CICLO-01: PF cria agora, envia, editor aprova e visitante vê na home',asy
  const ownerContext=await browser.newContext(),editorContext=await browser.newContext(),visitorContext=await browser.newContext();
  try{
   const owner=await ownerContext.newPage(),editor=await editorContext.newPage(),visitor=await visitorContext.newPage();
-  await login(owner,people[0]);await expect(owner).toHaveURL(origin+'/dashboard/pessoa-fisica');
+  await login(owner,people[0]);await expect(owner).toHaveURL(origin+'/');await owner.goto('/dashboard/pessoa-fisica');
   await expect(owner.getByRole('banner').getByRole('link',{name:'Admin',exact:true})).toHaveCount(0);
   await owner.getByRole('link',{name:'Criar Atividade',exact:true}).click();
   await owner.getByRole('checkbox',{name:'A atividade está acontecendo agora',exact:true}).check();
@@ -53,7 +53,7 @@ test('CICLO-01: PF cria agora, envia, editor aprova e visitante vê na home',asy
   const draft=owner.getByRole('main').locator('article').filter({has:owner.getByRole('heading',{name:title,exact:true})});
   await draft.getByRole('checkbox',{name:/Autorizo divulgar meu nome público/}).check();await draft.getByRole('button',{name:'Enviar atividade para revisão',exact:true}).click();
   await expect(draft.getByText('Enviada para revisão',{exact:true})).toBeVisible();
-  await login(editor,people[1]);await expect(editor).toHaveURL(origin+'/admin/atividades');
+  await login(editor,people[1]);await expect(editor).toHaveURL(origin+'/');await editor.goto('/admin/atividades');
   await expect(editor.getByRole('banner').getByRole('link',{name:'Admin',exact:true})).toBeVisible();
   const review=editor.getByRole('article',{name:title,exact:true});await expect(review.getByText(people[0].name,{exact:true})).toBeVisible();
   await editor.screenshot({path:'operations/evidence/mvp-ciclo-editorial/admin.png',fullPage:true});
@@ -71,11 +71,11 @@ test('CICLO-02: admin protegido e rejeição motivada não aparece publicamente'
  try{
   const owner=await ownerContext.newPage(),editor=await editorContext.newPage(),visitor=await visitorContext.newPage();
   await visitor.goto('/admin/atividades');await expect(visitor).toHaveURL(origin+'/login');
-  await login(owner,people[0]);await expect(owner).toHaveURL(origin+'/dashboard/pessoa-fisica');await owner.goto('/admin/atividades');await expect(owner.getByRole('heading',{name:'Acesso editorial indisponível',exact:true})).toBeVisible();
+  await login(owner,people[0]);await expect(owner).toHaveURL(origin+'/');await owner.goto('/dashboard/pessoa-fisica');await owner.goto('/admin/atividades');await expect(owner.getByRole('heading',{name:'Acesso editorial indisponível',exact:true})).toBeVisible();
   const created=await owner.request.post('/api/atividades',{headers:{origin},data:{titulo:'Atividade fictícia a revisar',descricao:'Descrição factual fictícia que será rejeitada.',inicio_previsto:new Date(Date.now()+86400000).toISOString(),orientacao_acesso:'Entrada fictícia.'}});expect(created.status()).toBe(200);const id=(await created.json()).atividade.id;
   expect((await owner.request.post('/api/atividades/'+id+'/enviar',{headers:{origin},data:{versao_esperada:1,autoriza_publicacao:true}})).status()).toBe(200);
   expect((await owner.request.post('/api/admin/atividades/'+id+'/decidir',{headers:{origin},data:{acao:'aprovar_publicacao',versao_esperada:1,pedido_id:randomUUID()}})).status()).toBe(403);
-  await login(editor,people[1]);await expect(editor).toHaveURL(origin+'/admin/atividades');const review=editor.getByRole('article',{name:'Atividade fictícia a revisar',exact:true});
+  await login(editor,people[1]);await expect(editor).toHaveURL(origin+'/');await editor.goto('/admin/atividades');const review=editor.getByRole('article',{name:'Atividade fictícia a revisar',exact:true});
   await review.getByLabel('Motivo da rejeição',{exact:true}).fill('Faltam informações suficientes sobre como participar.');await review.getByRole('button',{name:'Rejeitar',exact:true}).click();await expect(review).toHaveCount(0);
   await owner.goto('/dashboard/pessoa-fisica');await expect(owner.getByText('Motivo da decisão: Faltam informações suficientes sobre como participar.',{exact:true})).toBeVisible();
   expect((await visitor.request.get('/api/public/atividades/'+id)).status()).toBe(404);

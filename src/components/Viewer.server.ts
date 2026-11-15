@@ -12,6 +12,7 @@ export const getViewer = cache(async (): Promise<Viewer> => {
     const gateway = createGateway(await userClient(), adminClient, () => {});
     const user = await gateway.currentUser();
     if (!user) return { kind: 'visitor' };
+    if (!user.email_confirmed_at) return { kind: 'unavailable' };
     const account = await gateway.account(user.id);
     if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa')) return { kind: 'unavailable' };
     const editorial=Boolean(account&&['editor','administrador'].includes(account.papel));
@@ -25,6 +26,6 @@ export const getViewer = cache(async (): Promise<Viewer> => {
       return state.kind === 'ready' ? { kind: 'ready', name: state.organization.nome_publico, dashboard: '/dashboard' } : { kind: 'unavailable' };
     }
     const name = typeof user.user_metadata?.nome_publico === 'string' ? user.user_metadata.nome_publico : 'Minha conta';
-    return { kind: 'ready', name, editorial, dashboard: account ? '/admin/atividades' : '/dashboard/organizacao' };
+    return { kind: 'ready', name, editorial, dashboard: account ? '/admin/atividades' : '/meu-espaco' };
   } catch { return { kind: 'unavailable' }; }
 });

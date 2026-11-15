@@ -57,7 +57,7 @@ async function signup(f){
   expect(q.rowCount).toBe(1);f.id=q.rows[0].id;expect(q.rows[0].email_confirmed_at).toBeNull();
   return await mail(f,'signup');
 }
-async function confirm(f,url){await f.page.goto(url);await f.page.getByRole('button',{name:'Confirmar meu e-mail'}).click();await expect(f.page).toHaveURL(origin+'/login');await login(f);await expect(f.page).toHaveURL(origin+'/cadastro/pessoa-fisica/completar');await f.page.goto('/dashboard/organizacao');}
+async function confirm(f,url){await f.page.goto(url);await f.page.getByRole('button',{name:'Confirmar meu e-mail'}).click();await expect(f.page).toHaveURL(origin+'/login');await login(f);await expect(f.page).toHaveURL(origin+'/');await f.page.goto('/dashboard/organizacao');}
 async function link(f){
   await f.page.getByLabel('Nome público da organização').fill(f.name);
   await f.page.getByRole('button',{name:'Vincular organização'}).click();
@@ -94,7 +94,7 @@ test('A01: cadastro, confirmação, vínculo pendente e sessão SSR',async({brow
   await confirm(a,url);
   // Failure between Auth and onboarding is recoverable after a fresh login.
   await a.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
-  await login(a);await expect(a.page).toHaveURL(origin+'/cadastro/pessoa-fisica/completar');await a.page.goto('/dashboard/organizacao');
+  await login(a);await expect(a.page).toHaveURL(origin+'/');await a.page.goto('/dashboard/organizacao');
   await link(a);
   const state=await db.query('select c.papel,c.situacao,o.estado_validacao from public.contas_acesso c join public.organizacoes o on o.id=c.organizacao_id where c.auth_user_id=$1',[a.id]);
   expect(state.rows).toEqual([{papel:'organizacao',situacao:'ativa',estado_validacao:'pendente'}]);
@@ -106,7 +106,7 @@ test('A01: cadastro, confirmação, vínculo pendente e sessão SSR',async({brow
   const response=await a.page.request.get('/dashboard');expect(response.headers()['cache-control']).toContain('no-store');
   await a.page.goto(url);await a.page.getByRole('button',{name:'Confirmar meu e-mail'}).click();
   await expect(a.page.locator('form [role=alert]')).toContainText('Link inválido ou expirado');
-  await login(a);await expect(a.page).toHaveURL(origin+'/dashboard');
+  await login(a);await expect(a.page).toHaveURL(origin+'/');
   note('A01','UI+Next API+Auth+Mailpit+SQL','Cadastro e confirmação reais; retomada de Auth sem vínculo; organização pendente; cookies HttpOnly; SSR em navegação/reload; e-mail não exibido no dashboard.');
 });
 test('A02: validação e cadastro duplicado sem enumeração',async()=>{
@@ -119,7 +119,7 @@ test('A03: login incorreto negado e login válido restaura SSR',async()=>{
   await a.page.getByRole('banner').getByRole('button',{name:'Sair',exact:true}).click();await expect(a.page).toHaveURL(origin+'/login');
   await login(a,'SenhaFicticiaErrada123!');await expect(a.page.locator('form [role=alert]')).toContainText('Não foi possível entrar');
   await a.page.goto('/dashboard');await expect(a.page).toHaveURL(origin+'/login');
-  await login(a);await expect(a.page).toHaveURL(origin+'/dashboard');
+  await login(a);await expect(a.page).toHaveURL(origin+'/');
   note('A03','UI+Next API+Auth+SSR','Senha incorreta não libera dashboard; login válido estabelece sessão.');
 });
 test('A04: recuperação, token expirado e replay negados',async()=>{
@@ -130,7 +130,7 @@ test('A04: recuperação, token expirado e replay negados',async()=>{
   await expect(a.page).toHaveURL(origin+'/login?status=senha-atualizada');
   await a.page.goto(url);await a.page.getByLabel('Nova senha',{exact:true}).fill(randomUUID()+'aA3!');await a.page.getByRole('button',{name:'Atualizar senha'}).click();await expect(a.page.locator('form [role=alert]')).toContainText('Link inválido ou expirado');
   await login(a,previousPassword);await expect(a.page.locator('form [role=alert]')).toContainText('Não foi possível entrar');
-  await login(a);await expect(a.page).toHaveURL(origin+'/dashboard');
+  await login(a);await expect(a.page).toHaveURL(origin+'/');
   // Use a second fixture for expiry without waiting hours or modifying global Auth config.
   // The genuine issued token is expired by backdating only its user's sent_at fixture.
   note('A04','UI+Next API+Mailpit+Auth','Recuperação real, mudança de senha e token consumido negado. Expiração será exercitada em A08 com fixture temporal controlada.');
@@ -179,7 +179,7 @@ test('A08: suspensão, bloqueio, logout, sessão inválida e expiração control
   await b.page.goto('/dashboard');await expect(b.page).toHaveURL(origin+'/login');
   await b.context.addCookies([{name:'ap-auth',value:'base64-invalido',domain:'127.0.0.1',path:'/',httpOnly:true,sameSite:'Lax'}]);
   await b.page.goto('/dashboard');await expect(b.page).toHaveURL(origin+'/login');await b.context.clearCookies();
-  await login(b);await expect(b.page).toHaveURL(origin+'/dashboard');
+  await login(b);await expect(b.page).toHaveURL(origin+'/');
   // Expire the real server session for this fictitious user, then force a refresh
   // by expiring only the browser's cached session timestamp (no forged JWT).
   const changed=await db.query('update auth.sessions set not_after=now()-interval \'1 day\' where user_id=$1 returning id',[b.id]);expect(changed.rowCount>0).toBe(true);

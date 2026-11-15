@@ -39,7 +39,7 @@ test.beforeAll(async({browser})=>{
   else await db.query("insert into public.contas_acesso(auth_user_id,papel) values($1,'editor')",[person.id]);
   person.context=await context(browser);person.page=await person.context.newPage();
   await person.page.goto('/login');await person.page.getByLabel('E-mail',{exact:true}).fill(person.email);await person.page.getByLabel('Senha',{exact:true}).fill(person.password);await person.page.getByRole('button',{name:'Entrar',exact:true}).click();
-  await expect(person.page).toHaveURL(origin+(i<2?'/dashboard/pessoa-fisica':i===2?'/dashboard':'/admin/atividades'));
+  await expect(person.page).toHaveURL(origin+'/');await person.page.goto(i<2?'/dashboard/pessoa-fisica':i===2?'/dashboard':'/admin/atividades');
  }
  visitorContext=await context(browser);visitor=await visitorContext.newPage();
 },90000);

@@ -23,7 +23,7 @@ const decode=cookies=>JSON.parse(Buffer.from(sessionCookies(cookies).map(c=>c.va
 test('COOKIE-01: Home renova sessão antes do layout; navegação e logout sem erro de cookies',async({page,context})=>{
  const cookieErrors=[];const observe=message=>{if(/Cookies can only be modified/.test(message))cookieErrors.push('Erro de escrita de cookie durante renderização.');};
  page.on('pageerror',error=>observe(error.message));page.on('console',message=>observe(message.text()));
- await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(email);await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/dashboard/pessoa-fisica');
+ await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(email);await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/');await page.goto('/dashboard/pessoa-fisica');
  // Keep the genuine JWT/refresh token. Expire only the SDK's cached expiry
  // timestamp so the next request must refresh the real, valid Auth session.
  const session=decode(await context.cookies());session.expires_at=1;session.expires_in=0;

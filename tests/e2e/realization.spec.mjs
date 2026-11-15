@@ -39,7 +39,7 @@ test.afterAll(async()=>{
  }catch(error){await db.query('rollback');throw error;}
  if((await admin.auth.admin.deleteUser(person.user)).error)throw new Error('Limpeza Auth falhou.');}}finally{await db?.end();}
 });
-async function login(page,person){await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(person.email);await page.getByLabel('Senha',{exact:true}).fill(person.password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+(person===editor?'/admin/atividades':'/dashboard/pessoa-fisica'));}
+async function login(page,person){await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(person.email);await page.getByLabel('Senha',{exact:true}).fill(person.password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/');await page.goto(person===editor?'/admin/atividades':'/dashboard/pessoa-fisica');}
 async function capture(page,path){
  await page.evaluate(()=>{document.activeElement?.blur?.();document.documentElement.style.scrollBehavior='auto';});
  await expect.poll(()=>page.evaluate(()=>{window.scrollTo({top:0,behavior:'instant'});return window.scrollY;})).toBe(0);

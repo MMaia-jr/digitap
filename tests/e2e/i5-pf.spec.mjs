@@ -66,7 +66,7 @@ for(const iteration of [1,2])test('MVP-PF-'+iteration+': acesso novo até rascun
  expect((await db.query('select email_confirmed_at is not null confirmed from auth.users where id=$1',[id])).rows[0].confirmed).toBe(true);
  expect((await db.query('select count(*)::int n from public.contas_acesso where auth_user_id=$1',[id])).rows[0].n).toBe(0);
  await page.goto('/cadastro/pessoa-fisica/completar');await expect(page).toHaveURL(origin+'/login');
- await login(page,f);await expect(page).toHaveURL(origin+'/cadastro/pessoa-fisica/completar');await page.reload();await expect(page.getByRole('heading',{name:'Complete seu perfil de pessoa física'})).toBeVisible();
+ await login(page,f);await expect(page).toHaveURL(origin+'/');await page.goto('/cadastro/pessoa-fisica/completar');await page.reload();await expect(page.getByRole('heading',{name:'Complete seu perfil de pessoa física'})).toBeVisible();
  await page.getByLabel('Nome público',{exact:true}).fill(f.name);await page.getByRole('button',{name:'Concluir cadastro',exact:true}).click();await expect(page).toHaveURL(origin+'/dashboard/pessoa-fisica');
  await page.reload();await expect(page.getByText(f.name,{exact:true}).first()).toBeVisible();
  const count=async()=> (await db.query(`select (select count(*)::int from public.contas_acesso where auth_user_id=$1) contas,(select count(*)::int from public.pessoas_fisicas p join public.contas_acesso c on c.id=p.conta_id where c.auth_user_id=$1) pessoas,(select count(*)::int from public.vinculos_publicadores v join public.contas_acesso c on c.id=v.conta_id where c.auth_user_id=$1) vinculos`,[id])).rows[0];
@@ -91,5 +91,5 @@ for(const iteration of [1,2])test('MVP-PF-'+iteration+': acesso novo até rascun
  const denied=await page.request.post('/api/admin/atividades/'+randomUUID()+'/publicar',{headers:{origin},data:{versao_esperada:1,pedido_id:randomUUID()}});expect(denied.status()).toBe(403);
  await page.goto('/recuperar-acesso');await page.getByLabel('E-mail',{exact:true}).fill(f.email);await page.getByRole('button',{name:'Enviar link de recuperação'}).click();await expect(page.getByRole('status')).toContainText('Se houver uma conta elegível');
  const recovery=await mail(f,'recovery');expect(new URL(recovery).origin).toBe(origin);await page.goto(recovery);f.password=randomUUID()+'aA2!';await page.getByLabel('Nova senha',{exact:true}).fill(f.password);await page.getByRole('button',{name:'Atualizar senha'}).click();await expect(page).toHaveURL(origin+'/login?status=senha-atualizada');
- await login(page,f);await expect(page).toHaveURL(origin+'/dashboard/pessoa-fisica');await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();expect(await count()).toEqual({contas:1,pessoas:1,vinculos:1});
+ await login(page,f);await expect(page).toHaveURL(origin+'/');await page.goto('/dashboard/pessoa-fisica');await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();expect(await count()).toEqual({contas:1,pessoas:1,vinculos:1});
 });

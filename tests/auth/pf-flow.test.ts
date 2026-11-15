@@ -35,13 +35,13 @@ it('falha na RPC de conclusão pode ser repetida sem recriar identidade Auth',as
  expect(await executeAuth('complete_pf',{nome_publico:input.nome_publico},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});
  expect(g.registerPerson).toHaveBeenCalledTimes(2);expect(g.signUpPF).not.toHaveBeenCalled();
 });
-it('PF login com conta publicador própria não vai para organização/editorial',async()=>{
+it('PF login com conta própria volta à Praça, sem acesso editorial',async()=>{
  const g=fixture();g.account.mockResolvedValue({auth_user_id:id,papel:'publicador',situacao:'ativa',organizacao_id:null} as never);
- expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/dashboard/pessoa-fisica'});
+ expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/'});
 });
 it('metadata PF não muda papel editorial existente no banco',async()=>{
  const g=fixture();g.account.mockResolvedValue({auth_user_id:id,papel:'editor',situacao:'ativa',organizacao_id:null} as never);
- expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/admin/atividades'});expect(g.registerPerson).not.toHaveBeenCalled();
+ expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/'});expect(g.registerPerson).not.toHaveBeenCalled();
 });
 it('PF-11 papel publicador não ganha autorização editorial',async()=>{
  await expect(authorize({verifyUser:async()=>user,findAccount:async()=>({auth_user_id:id,papel:'publicador',situacao:'ativa',organizacao_id:null} as never)},{action:'editorial'})).rejects.toMatchObject({status:403});
@@ -64,9 +64,9 @@ it('MVP: confirmação encerra sessão transitória e exige login sem criar PF',
  const g=fixture();expect(await executeAuth('confirm',{token_hash:'a'.repeat(64)},g)).toMatchObject({next:'/login'});
  expect(g.logout).toHaveBeenCalledOnce();expect(g.registerPerson).not.toHaveBeenCalled();
 });
-it.each([undefined,{tipo:'pessoa_fisica'},{tipo:'organizacao'},{papel:'administrador'}])('MVP: conta sem perfil usa o mesmo destino, independentemente de metadata %j',async metadata=>{
+it.each([undefined,{tipo:'pessoa_fisica'},{tipo:'organizacao'},{papel:'administrador'}])('conta sem perfil volta à Praça independentemente de metadata %j',async metadata=>{
  const g=fixture();g.signIn.mockResolvedValue({user:{id,email_confirmed_at:user.email_confirmed_at,user_metadata:metadata} as unknown as typeof user,session:true});
- expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/cadastro/pessoa-fisica/completar'});
+ expect(await executeAuth('signin',{email:input.email,password:input.password},g)).toMatchObject({next:'/'});
  expect(g.registerPerson).not.toHaveBeenCalled();expect(g.registerOrganization).not.toHaveBeenCalled();expect(g.logout).not.toHaveBeenCalled();
 });
 it('MVP: perfil só é criado por conclusão explícita após identidade confirmada',async()=>{

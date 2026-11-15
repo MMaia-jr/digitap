@@ -38,7 +38,7 @@ test('MVP-01: home pública tem agenda e convite para publicar',async({page})=>{
 test('MVP-02: PF entra, cria rascunho, vê no painel e sai sem publicar',async({page})=>{
   const title='Oficina de horta comunitária — teste fictício';
   await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(email);await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Entrar',exact:true}).click();
-  await expect(page).toHaveURL('http://127.0.0.1:3215/dashboard/pessoa-fisica');
+  await expect(page).toHaveURL('http://127.0.0.1:3215/');await page.goto('/dashboard/pessoa-fisica');
   await expect(page.getByRole('banner').getByRole('link',{name:'Olá, '+name,exact:true})).toBeVisible();
   await page.getByRole('link',{name:'Criar Atividade',exact:true}).click();await expect(page).toHaveURL('http://127.0.0.1:3215/dashboard/pessoa-fisica/nova');
   await page.getByLabel('Título',{exact:true}).fill(title);await page.getByLabel('Descrição',{exact:true}).fill('Oficina fictícia para testar o produto visível.');

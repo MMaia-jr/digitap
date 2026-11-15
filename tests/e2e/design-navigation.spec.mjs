@@ -36,7 +36,7 @@ test('DESIGN-01: card da Home abre atividade e atividade abre perfil público',a
  try{
   const owner=await ownerContext.newPage(),page=await visitorContext.newPage();
   await page.goto('/');if(await page.getByText('A Praça está esperando a primeira atividade',{exact:true}).count())await page.screenshot({path:evidenceDir+'/home-vazia.png',fullPage:true});
-  await owner.goto('/login');await owner.getByLabel('E-mail',{exact:true}).fill(email);await owner.getByLabel('Senha',{exact:true}).fill(password);await owner.getByRole('button',{name:'Entrar',exact:true}).click();await expect(owner).toHaveURL(origin+'/admin/atividades');
+  await owner.goto('/login');await owner.getByLabel('E-mail',{exact:true}).fill(email);await owner.getByLabel('Senha',{exact:true}).fill(password);await owner.getByRole('button',{name:'Entrar',exact:true}).click();await expect(owner).toHaveURL(origin+'/');await owner.goto('/admin/atividades');
   for(let i=0;i<titles.length;i++){
    const created=await owner.request.post('/api/atividades',{headers:{origin},data:{titulo:titles[i],descricao:'Um encontro fictício para trocar conhecimentos, colocar a mão na terra e fazer boas conversas. Criado exclusivamente para esta demonstração visual.',inicio_previsto:new Date(Date.now()+86400000*(i+2)).toISOString(),orientacao_acesso:'Atividade fictícia, sem local ou inscrições reais. Na demonstração, a participação é aberta à comunidade.'}});expect(created.status()).toBe(200);const id=(await created.json()).atividade.id;
    expect((await owner.request.post('/api/atividades/'+id+'/enviar',{headers:{origin},data:{versao_esperada:1,autoriza_publicacao:true}})).status()).toBe(200);

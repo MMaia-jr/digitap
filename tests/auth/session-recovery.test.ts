@@ -67,7 +67,7 @@ describe('Etapa B — regressões de sessão e retomada com provider/banco simul
   });
   it('login bem-sucedido mantém a sessão própria ativa', async () => {
     const g = fixture(); g.account.mockResolvedValue(account);
-    expect(await executeAuth('signin', credentials, g)).toMatchObject({ next: '/dashboard' });
+    expect(await executeAuth('signin', credentials, g)).toMatchObject({ next: '/' });
     expect(g.logout).not.toHaveBeenCalled();
   });
   it('repetir cadastro já vinculado não escreve novamente nem depende da RPC', async () => {
