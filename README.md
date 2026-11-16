@@ -1,3 +1,118 @@
+# DigItap
+
+**Tecnologia para transformar iniciativas em colaboração, memória e oportunidades.**
+
+O DigItap é uma infraestrutura digital em desenvolvimento para pessoas, coletivos e organizações registrarem atividades, encontrarem capacidades e necessidades, organizarem colaborações e preservarem evidências de suas realizações.
+
+O projeto começa em Itaperuna (RJ), em diálogo com **A Praça**, iniciativa comunitária independente. Sua ambição de longo prazo é desenvolver uma tecnologia reutilizável por outras comunidades, sem subordinar suas relações à plataforma.
+
+O DigItap não é apenas uma agenda de eventos, uma rede social ou um sistema de reputação. Sua proposta é apoiar iniciativas reais e permitir que seus resultados sejam documentados, compreendidos e, quando cabível, demonstrados.
+
+## Estado do desenvolvimento
+
+**Referência: 16/11/2026.**
+
+O software já possui um núcleo de autenticação, perfis, projetos, atividades, curadoria editorial, registros de realização, evidências e portfólio.
+
+Incrementos locais posteriores também incluem interpretação assistida de propostas, ideias privadas, descoberta de capacidades e necessidades, manifestações de interesse e Biblioteca de Ações.
+
+**Importante:** parte desses incrementos permanece no checkout local, sem commit ou deploy. Os resultados dos testes foram relatados pelo Codex e não equivalem a validação independente de produção.
+
+Os próximos trabalhos previstos são a melhoria da documentação (DOC-01), a integração das jornadas existentes (INT-01) e a preparação da experiência DOG-01. E4.2 e E5 permanecem suspensos.
+
+A validação com pessoas reais continua pendente.
+
+## Entenda o projeto
+
+| Documento | Para que serve |
+|---|---|
+| [Norte do Produto](docs/digitap/00-norte-do-produto.md) | Compreender o propósito, a direção e os limites do DigItap |
+| [Modelo de Domínio](docs/digitap/01-modelo-de-dominio.md) | Entender contas, sujeitos, vínculos, atividades, evidências e publicação |
+| [Horizonte Estratégico](docs/digitap/02-horizonte-estrategico.md) | Conhecer as ambições de longo prazo sem confundi-las com funcionalidades aprovadas |
+| [Marco Zero](docs/Marco_Zero_2026-11-03.md) | Compreender a origem comunitária de A Praça |
+| [Reconstrução do Produto](docs/investigacoes/DIGITAP-RECONSTRUCAO-PRODUTO-E-DECISOES-2026-11-15.md) | Consultar a reconciliação das experiências, decisões e lacunas |
+| [Plano Operacional](sitrep/PROJECT_PLAN.md) | Consultar incrementos, checkpoints e evidências históricas |
+| [REL-01](specs/REL-01-registro-relacoes.md) | Conhecer o contrato ainda não implementado de relações e confiança contextual |
+
+Documentos com datas anteriores são registros de seu momento de elaboração. Para determinar o estado atual, confira a árvore Git local, o plano, os contratos e as evidências correspondentes. Um documento antigo não é substituído silenciosamente nem comprova o comportamento atual do código.
+
+## Começando pelo código
+
+O projeto utiliza Next.js, React, TypeScript, PostgreSQL e Supabase.
+
+Pré-requisitos declarados no repositório:
+
+- Node.js compatível com `^22.22.2 || ^24.15.0 || >=26.0.0`.
+- npm.
+- Serviços locais de Supabase/Auth/PostgreSQL configurados para os fluxos que dependem deles.
+
+Para preparar a interface:
+
+```bash
+npm ci
+cp .env.example .env.local
+```
+
+Preencha `.env.local` exclusivamente com as credenciais e configurações do seu ambiente de desenvolvimento. Nunca utilize credenciais de produção nem versione segredos.
+
+Inicie a interface:
+
+```bash
+npm run dev
+```
+
+Endereço configurado: `http://127.0.0.1:3215`.
+
+A interface iniciar não significa que autenticação, banco e demais integrações estejam operacionais. O comando `npm run local:start` está bloqueado no estado documentado; não o utilize como procedimento de inicialização automática.
+
+Verificações disponíveis:
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+```
+
+Os testes de integração PostgreSQL e E2E exigem preparação específica do ambiente e não devem ser executados contra dados reais. Consulte os scripts declarados em `package.json` e os procedimentos do projeto.
+
+## Onde encontrar o código
+
+| Diretório | Responsabilidade principal |
+|---|---|
+| `src/app/` | Rotas, páginas e endpoints |
+| `src/components/` | Componentes de interface |
+| `src/lib/` | Regras de domínio, serviços, autenticação e consultas |
+| `supabase/migrations/` | Evolução do esquema do banco |
+| `tests/` | Testes unitários, de integração e E2E |
+| `specs/` | Contratos e especificações |
+| `docs/` | Visão, contexto, arquitetura, investigações e decisões |
+| `operations/` | Checkpoints e evidências técnicas |
+| `sitrep/` | Registros de acompanhamento e continuidade |
+| `AGENTS.md` | Orientações para agentes de desenvolvimento |
+
+## Antes de contribuir
+
+Uma alteração deve começar por um comportamento ou problema identificado, acompanhado de um critério de aceite verificável.
+
+O projeto utiliza testes antes da implementação, incrementos pequenos e reversíveis, revisão de autorização e proteção de dados por padrão.
+
+Não confunda:
+- Conta autenticada com identidade ou representação comprovada.
+- Interesse com compromisso.
+- Atividade registrada com atividade realizada.
+- Evidência apresentada com fato verificado.
+- Código implementado com funcionalidade disponível em produção.
+
+A documentação para contribuição, licenciamento e execução local completa ainda está em consolidação.
+
+Não execute migrações, alterações de infraestrutura ou publicação como consequência automática de uma instrução documental.
+
+## Histórico técnico
+
+As reconciliações anteriores do README permanecem preservadas abaixo desta apresentação. Elas registram o estado observado em datas específicas e não devem ser interpretadas como instruções operacionais vigentes sem revalidação.
+
+## Histórico preservado
+
 # Reconciliação do estado local — 13/11/2026
 
 [CÓDIGO] Base inventariada: `fda9da280d8c2902cd172f7490b752ba3e485d66`; HEAD técnico antes desta nota: `b57d600`. Esta nota atualiza a leitura corrente; o conteúdo anterior abaixo é preservado como snapshot histórico e não comprova o estado de produção. Referências de produto: [Norte aprovado](docs/digitap/00-norte-do-produto.md) e [modelo de domínio](docs/digitap/01-modelo-de-dominio.md).

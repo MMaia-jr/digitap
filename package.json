@@ -13,6 +13,8 @@
     "build": "NEXT_TELEMETRY_DISABLED=1 next build",
     "dev": "NEXT_TELEMETRY_DISABLED=1 next dev --hostname 127.0.0.1 --port 3215",
     "local:start": "node scripts/start-local.mjs",
+    "beta:check": "node scripts/beta-local.mjs check",
+    "beta:demo": "node scripts/beta-local.mjs demo",
     "lint": "eslint .",
     "test:onboarding:db": "vitest run --config vitest.database.config.ts",
     "e2e:server": "node scripts/e2e-server.mjs",
