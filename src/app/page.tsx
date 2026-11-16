@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import {publicActivities} from '../lib/queries/public.server';
-import type {PublicActivity} from '../lib/activities/publication';
+import {publicPublisher,type PublicActivity,type PublicPublisher} from '../lib/activities/publication';
 import {getViewer} from '../components/Viewer.server';
 import {ActivityCard} from '../components/ActivityCard';
 import {CommunityIcon} from '../components/CommunityIcons';
 export const dynamic='force-dynamic';
+const publisherTypeLabels:Record<PublicPublisher['tipo'],string>={pessoa_fisica:'Pessoa física',coletivo_informal:'Coletivo informal',organizacao:'Organização'};
 export default async function Home(){
  const [viewer,result]=await Promise.all([getViewer(),publicActivities.list().then(activities=>({activities,unavailable:false})).catch(()=>({activities:[] as PublicActivity[],unavailable:true}))]);
+ const publishersById=new Map<string,PublicPublisher>();
+ if(!result.unavailable)for(const activity of result.activities){const publisher=publicPublisher(activity);if(!publishersById.has(publisher.id))publishersById.set(publisher.id,publisher);}
+ const publishers=Array.from(publishersById.values());
  const publish=viewer.kind==='ready'?viewer.dashboard:'/login';
  return <div className="home-feed">
   <section className="community-hero">
@@ -16,6 +20,7 @@ export default async function Home(){
   <section className="discovery" aria-labelledby="atividades-publicas"><div className="section-heading"><div><p className="eyebrow">Perto de você</p><h2 id="atividades-publicas">Encontre seu próximo encontro.</h2></div><span className="feed-label"><CommunityIcon name="leaf"/>Atividades na Praça</span></div>
    {result.unavailable?<div className="empty-state"><CommunityIcon name="calendar"/><h3>Uma pausa por aqui.</h3><p>Não foi possível carregar as atividades. Tente novamente em instantes.</p></div>:result.activities.length===0?<div className="empty-state"><div className="empty-illustration" aria-hidden="true"><span className="empty-halo"/><CommunityIcon name="leaf"/><span className="empty-spark spark-one"/><span className="empty-spark spark-two"/></div><p className="eyebrow">Toda praça começa com um encontro</p><h3>A Praça está esperando a primeira atividade</h3><p>Pode ser uma roda de conversa, uma oficina ou uma ação no bairro. Que tal começar algo bom?</p><Link className="button button-outline" href={publish}>Quero criar uma atividade<CommunityIcon name="arrow"/></Link></div>:<ul className="activity-grid">{result.activities.map(activity=><li key={activity.id}><ActivityCard activity={activity}/></li>)}</ul>}
   </section>
+  {publishers.length>0&&<section className="discovery" aria-labelledby="publicadores-titulo"><div className="section-heading"><div><p className="eyebrow">Gente que realiza</p><h2 id="publicadores-titulo">Quem faz a Praça</h2></div><span className="feed-label">Pessoas, coletivos e organizações com atividades publicadas</span></div><ul className="activity-grid publisher-grid">{publishers.map(publisher=><li key={publisher.id}><article className="activity-card"><div className="activity-card-body"><p className="card-kicker">{publisherTypeLabels[publisher.tipo]}</p><h3><Link aria-label={'Ver perfil e portfólio de '+publisher.nome_publico} href={'/perfil/'+publisher.id}>{publisher.nome_publico}</Link></h3></div></article></li>)}</ul></section>}
   <aside className="community-invitation"><div className="invitation-icon"><CommunityIcon name="people"/></div><div><h2>Tem uma ideia que merece companhia?</h2><p>A Praça também é sua. Compartilhe uma atividade e aproxime quem pode fazer parte.</p></div><Link className="button" href={publish}>Vamos criar um encontro<CommunityIcon name="arrow"/></Link></aside>
  </div>;
 }

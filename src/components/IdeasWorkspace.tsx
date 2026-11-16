@@ -1,5 +1,6 @@
 'use client';
 import { useState, useSyncExternalStore } from 'react';
+import Link from 'next/link';
 import type { IdeaView } from '../lib/ideas/service.server';
 import { ProposalForm, type ProposalDraft } from './ProposalForm';
 
@@ -61,6 +62,8 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
       <h2 id="minhas-ideias">Minhas ideias</h2>
       {ideas.length === 0 ? <p>Nenhum rascunho salvo.</p> : <ul>{ideas.map(idea => <li key={idea.id}>
         <h3>{idea.title}</h3><p>Privada · não verificada · não publicada</p>
+        <details><summary>Ver conteúdo da ideia</summary><h4>Texto original</h4><blockquote>{idea.original_text}</blockquote>{idea.revised_text&&<><h4>Texto revisado</h4><blockquote>{idea.revised_text}</blockquote></>}<h4>Possíveis atividades</h4><ul>{(idea.revised_interpretation??idea.original_interpretation).dados.atividades.map((item,index)=><li key={index}>{item.descricao}<blockquote>Trecho de origem: {item.trecho}</blockquote></li>)}</ul><p>As sugestões não são verificadas nem publicadas.</p></details>
+        <Link href={`/dashboard/pessoa-fisica/nova?ideia=${encodeURIComponent(idea.id)}`}>Usar esta ideia para criar uma atividade</Link>
         <button type="button" disabled={!hydrated || working} onClick={() => { setSelected(idea); setNotice(''); setError(''); }}>Retomar</button>
         <button type="button" disabled={!hydrated || working} onClick={() => remove(idea)}>Excluir</button>
       </li>)}</ul>}

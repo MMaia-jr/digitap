@@ -46,6 +46,58 @@ export function validateDraft(input:unknown,now=new Date()):DraftInput{
 export function validateVersion(value:unknown):number{
  if(typeof value!=='number'||!Number.isInteger(value)||value<1||value>2147483646)throw new ActivityError(422,'Informe a versão esperada válida.');return value;
 }
+export interface ExecutionPlanResource {
+ categoria?:string;
+ descricao?:string;
+ quantidade?:number;
+ unidade?:string;
+ valor_previsto_centavos?:number|null;
+}
+export interface ExecutionPlanInput {versao_esperada:number;recursos:ExecutionPlanResource[]}
+export interface ValidatedExecutionPlan extends ExecutionPlanInput {total_previsto_centavos:number}
+function optionalExecutionText(value:unknown,field:string,max:number):string|undefined{
+ if(value===undefined)return undefined;
+ if(typeof value!=='string')return invalid(field,'Informe um valor textual válido.');
+ const normalized=value.trim().normalize('NFC');
+ if(!normalized||Array.from(normalized).length>max||/<\/?[a-z!]/i.test(normalized)||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(normalized))return invalid(field,`Use de 1 a ${max} caracteres de texto, sem HTML.`);
+ return normalized;
+}
+/** Validates an indicative resource plan. It does not create expenses or payments. */
+export function validateExecutionPlan(input:unknown):ValidatedExecutionPlan{
+ const body=objectInput(input,['versao_esperada','recursos']);
+ const versao_esperada=validateVersion(body.versao_esperada);
+ if(!Array.isArray(body.recursos)||body.recursos.length<1||body.recursos.length>100) return invalid('recursos','Informe de 1 a 100 recursos previstos.');
+ let total_previsto_centavos=0;
+ const recursos=body.recursos.map((raw,index):ExecutionPlanResource=>{
+  const row=objectInput(raw,['categoria','descricao','quantidade','unidade','valor_previsto_centavos']);
+  const categoria=optionalExecutionText(row.categoria,`recursos.${index}.categoria`,80);
+  const descricao=optionalExecutionText(row.descricao,`recursos.${index}.descricao`,500);
+  const unidade=optionalExecutionText(row.unidade,`recursos.${index}.unidade`,40);
+  let quantidade:number|undefined;
+  if(row.quantidade!==undefined){
+   if(typeof row.quantidade!=='number'||!Number.isFinite(row.quantidade)||row.quantidade<=0||row.quantidade>Number.MAX_SAFE_INTEGER)return invalid(`recursos.${index}.quantidade`,'Informe uma quantidade positiva e finita.');
+   quantidade=row.quantidade;
+  }
+  let valor_previsto_centavos:number|null|undefined;
+  if(row.valor_previsto_centavos!==undefined){
+   if(row.valor_previsto_centavos===null)valor_previsto_centavos=null;
+   else if(typeof row.valor_previsto_centavos!=='number'||!Number.isSafeInteger(row.valor_previsto_centavos)||row.valor_previsto_centavos<0)return invalid(`recursos.${index}.valor_previsto_centavos`,'Informe um valor previsto não negativo em centavos inteiros seguros.');
+   else{
+    valor_previsto_centavos=row.valor_previsto_centavos;
+    const nextTotal=total_previsto_centavos+row.valor_previsto_centavos;
+    if(!Number.isSafeInteger(nextTotal))return invalid('recursos','A soma dos valores previstos excede o limite seguro.');
+    total_previsto_centavos=nextTotal;
+   }
+  }
+  if(categoria===undefined&&descricao===undefined&&quantidade===undefined&&unidade===undefined&&(valor_previsto_centavos===undefined||valor_previsto_centavos===null))return invalid(`recursos.${index}`,'Descreva ao menos uma característica do recurso previsto.');
+  return { ...(categoria!==undefined?{categoria}:{}),...(descricao!==undefined?{descricao}:{}),...(quantidade!==undefined?{quantidade}:{}),...(unidade!==undefined?{unidade}:{}),...(valor_previsto_centavos!==undefined?{valor_previsto_centavos}:{}) };
+ });
+ return {versao_esperada,recursos,total_previsto_centavos};
+}
+export function assertExecutionPlanVersion(expectedVersion:unknown,currentVersion:unknown):void{
+ const expected=validateVersion(expectedVersion),current=validateVersion(currentVersion);
+ if(expected!==current)throw new ActivityError(409,'O planejamento mudou em outra sessão. Recarregue antes de salvar.');
+}
 export function validateReview(input:unknown):ReviewInput{
  const common=['acao','versao_esperada','estado_esperado','pedido_id'];
  const body=objectInput(input,[...common,'motivo','autorizacao_id']);

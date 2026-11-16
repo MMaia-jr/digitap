@@ -1,7 +1,7 @@
 import 'server-only';
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
 import {recordOngoing,draftValidationClock,recordPersonConsent,versionAuthorization,initialPersonCuration,activePersonPublisher} from './editorial-pf.server';
-import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,validateEvidence,objectInput,type PrivateActivity,type ReviewAction } from './domain';
+import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
 import { withTransaction,type Transaction,type Sql } from '../database.server';
 import { authorize,AccessError,type AccessAccount,type VerifiedUser } from '../auth/permissions.server';
 import { userClient } from '../supabase/server';
@@ -21,23 +21,26 @@ const columns='criado_por_sujeito_id,projeto_aprovacao,projeto_versao_aprovada,p
 const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada','retirada')";
 type Row=Omit<PrivateActivity,'inicio_previsto'> & {inicio_previsto:Date|string};
 type Actor=AccessAccount & {id:string;sujeito_id?:string;sujeito_tipo?:string};
+type ExecutionPlanRow={id:string;atividade_id:string;sujeito_id:string;criado_por_conta_id:string;versao:number;total_previsto_centavos:string|number};
+type ExecutionPlanItemRow={categoria:string|null;descricao:string|null;quantidade:string|number|null;unidade:string|null;valor_previsto_centavos:string|number|null};
+type ExecutionPlanView={id:string;activity_id:string;subject_id:string;version:number;estado:'privado';total_previsto_centavos:number;recursos:ExecutionPlanResource[]};
 const dto=(row:Row):PrivateActivity=>({...row,inicio_previsto:row.inicio_previsto instanceof Date?row.inicio_previsto.toISOString():row.inicio_previsto});
 const unavailable=()=>new ActivityError(503,'Serviço indisponível. Tente novamente.');
 function identifier(value:string){if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value))throw new ActivityError(404,'Atividade não encontrada.');return value;}
 async function verifiedUser(){return createGateway(await userClient(),adminClient,()=>{}).currentUser();}
 export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser|null>;transaction?:Transaction;now?:()=>Date}={}){
  const verifyUser=deps.verifyUser??verifiedUser,transaction=deps.transaction??withTransaction,now=deps.now??(()=>new Date());
- async function run<T>(mode:'organizacao'|'leitura'|'editorial'|'criar_rascunho'|'listar_rascunhos'|'enviar_rascunho'|'registro_leitura'|'registro_escrita'|'registro_envio',operation:(sql:Sql,actor:Actor)=>Promise<T>):Promise<T>{
+ async function run<T>(mode:'organizacao'|'leitura'|'editorial'|'criar_rascunho'|'converter_ideia'|'listar_rascunhos'|'enviar_rascunho'|'registro_leitura'|'registro_escrita'|'registro_envio'|'plano_privado_leitura'|'plano_privado_escrita',operation:(sql:Sql,actor:Actor)=>Promise<T>):Promise<T>{
   try{
    const user=await verifyUser();if(!user?.id)throw new ActivityError(401,'Autenticação necessária.');if(!user.email_confirmed_at)throw new ActivityError(403,'Confirme seu e-mail.');
    return await transaction(async sql=>{
-    const actor=(await sql.query<Actor>('select id,auth_user_id,organizacao_id,papel,situacao from public.contas_acesso where auth_user_id=$1 for share',[user.id])).rows[0];
-    if(actor?.papel==='publicador'&&actor.situacao==='ativa'&&actor.organizacao_id===null&&['listar_rascunhos','criar_rascunho','enviar_rascunho','leitura','organizacao'].includes(mode)){
-     const collective=(await sql.query<{id:string}>(`select s.id from public.sujeitos_publicadores s join public.vinculos_publicadores v on v.sujeito_id=s.id where s.tipo='coletivo_informal' and s.estado in ('pendente','ativo') and v.conta_id=$1 and v.atual and v.situacao='ativo' and v.papel_vinculo='titular' and $2=any(v.escopos) for share of s,v`,[actor.id,['criar_rascunho','organizacao'].includes(mode)?'editar':mode==='enviar_rascunho'?'enviar':'ler_privado'])).rows[0];
+    const actor=(await sql.query<Actor>(`select id,auth_user_id,organizacao_id,papel,situacao from public.contas_acesso where auth_user_id=$1 ${mode==='converter_ideia'?'for update':'for share'}`,[user.id])).rows[0];
+    if(actor?.papel==='publicador'&&actor.situacao==='ativa'&&actor.organizacao_id===null&&['listar_rascunhos','criar_rascunho','converter_ideia','enviar_rascunho','leitura','organizacao','plano_privado_leitura','plano_privado_escrita'].includes(mode)){
+     const collective=(await sql.query<{id:string}>(`select s.id from public.sujeitos_publicadores s join public.vinculos_publicadores v on v.sujeito_id=s.id where s.tipo='coletivo_informal' and s.estado in ('pendente','ativo') and v.conta_id=$1 and v.atual and v.situacao='ativo' and v.papel_vinculo='titular' and $2=any(v.escopos) for share of s,v`,[actor.id,['criar_rascunho','converter_ideia','organizacao','plano_privado_escrita'].includes(mode)?'editar':mode==='enviar_rascunho'?'enviar':'ler_privado'])).rows[0];
      if(collective)return operation(sql,{...actor,sujeito_id:collective.id,sujeito_tipo:'coletivo_informal'});
     }
     // PF operations always require the person's own subject, account and active scope.
-    if(actor&&(actor.papel==='publicador'||(['editor','administrador'].includes(actor.papel)&&actor.organizacao_id===null))&&((actor.papel==='publicador'&&mode==='leitura')||mode==='criar_rascunho'||mode==='listar_rascunhos'||mode==='enviar_rascunho'||mode==='registro_leitura'||mode==='registro_escrita'||mode==='registro_envio')){
+    if(actor&&(actor.papel==='publicador'||(['editor','administrador'].includes(actor.papel)&&actor.organizacao_id===null))&&((actor.papel==='publicador'&&mode==='leitura')||mode==='criar_rascunho'||mode==='converter_ideia'||mode==='listar_rascunhos'||mode==='enviar_rascunho'||mode==='registro_leitura'||mode==='registro_escrita'||mode==='registro_envio'||mode==='plano_privado_leitura'||mode==='plano_privado_escrita')){
       if(actor.auth_user_id!==user.id||actor.situacao!=='ativa'||actor.organizacao_id!==null)throw new ActivityError(403,'Acesso indisponível para esta conta.');
       const subject=(await sql.query<{id:string}>(`select s.id from public.pessoas_fisicas p
         join public.sujeitos_publicadores s on s.id=p.sujeito_id
@@ -45,8 +48,8 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
         where p.conta_id=$1 and s.criado_por_conta_id=$1 and s.tipo='pessoa_fisica'
           and s.organizacao_legada_id is null and s.estado in ('pendente','ativo')
           and v.atual and v.situacao='ativo' and v.papel_vinculo='titular'
-          and $2=any(v.escopos) and ($2='ler_privado' or s.risco<>'alto')
-        for share of p,s,v`,[actor.id,['criar_rascunho','registro_escrita'].includes(mode)?'editar':['enviar_rascunho','registro_envio'].includes(mode)?'enviar':'ler_privado'])).rows[0];
+        and $2=any(v.escopos) and ($2='ler_privado' or s.risco<>'alto')
+        for share of p,s,v`,[actor.id,['criar_rascunho','converter_ideia','registro_escrita','plano_privado_escrita'].includes(mode)?'editar':['enviar_rascunho','registro_envio'].includes(mode)?'enviar':'ler_privado'])).rows[0];
       if(!subject)throw new ActivityError(403,'Vínculo de pessoa física indisponível.');
       return operation(sql,{...actor,sujeito_id:subject.id,sujeito_tipo:'pessoa_fisica'});
     }
@@ -70,6 +73,45 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   if(!projectId)return;
   const project=(await sql.query(`select p.id from public.projetos p join public.sujeitos_publicadores s on s.id=p.sujeito_id where p.id=$1 and (s.id=$2 or s.organizacao_legada_id=$3 or exists(select 1 from public.vinculos_colaboracao v where v.projeto_id=p.id and v.sujeito_id=$2 and v.status='ativo')) and s.estado in ('pendente','ativo') for share of p`,[projectId,actor.sujeito_id??null,actor.organizacao_id])).rows[0];
   if(!project)throw new ActivityError(422,'Selecione um projeto do seu perfil.',{projeto_id:'Projeto indisponível para este perfil.'});
+ }
+ async function createDraft(sql:Sql,actor:Actor,value:ReturnType<typeof validateDraft>,rawInput:unknown):Promise<PrivateActivity>{
+  await checkProject(sql,actor,value.projeto_id);
+  if(actor.sujeito_id){
+   const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,sujeito_id,politica_publicacao,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values(null,$1,'i4',$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.sujeito_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];
+   const created=dto(row);await recordOngoing(sql,created,actor.id,rawInput);return created;
+  }
+  const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values($1,$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.organizacao_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];
+  const created=dto(row);await recordOngoing(sql,created,actor.id,rawInput);return created;
+ }
+ function executionPlanView(plan:ExecutionPlanRow,items:ExecutionPlanItemRow[]):ExecutionPlanView{
+  const recursos=items.map(item=>({
+   ...(item.categoria!==null?{categoria:item.categoria}:{}),
+   ...(item.descricao!==null?{descricao:item.descricao}:{}),
+   ...(item.quantidade!==null?{quantidade:Number(item.quantidade)}:{}),
+   ...(item.unidade!==null?{unidade:item.unidade}:{}),
+   ...(item.valor_previsto_centavos!==null?{valor_previsto_centavos:Number(item.valor_previsto_centavos)}:{}),
+  }));
+  const validated=validateExecutionPlan({versao_esperada:plan.versao,recursos});
+  const total=Number(plan.total_previsto_centavos);
+  if(!Number.isSafeInteger(total)||total<0||total!==validated.total_previsto_centavos)throw unavailable();
+  return{id:plan.id,activity_id:plan.atividade_id,subject_id:plan.sujeito_id,version:plan.versao,estado:'privado',total_previsto_centavos:total,recursos:validated.recursos};
+ }
+ async function insertExecutionPlanItems(sql:Sql,planId:string,resources:ExecutionPlanResource[]){
+  for(const [index,item] of resources.entries()){
+   await sql.query(`insert into public.itens_planejamento_execucao
+    (plano_id,ordem,categoria,descricao,quantidade,unidade,valor_previsto_centavos)
+    values($1,$2,$3,$4,$5,$6,$7)`,[
+    planId,index+1,item.categoria??null,item.descricao??null,item.quantidade??null,item.unidade??null,item.valor_previsto_centavos??null,
+   ]);
+  }
+ }
+ async function readExecutionPlan(sql:Sql,activity:PrivateActivity):Promise<ExecutionPlanView>{
+  const plan=(await sql.query<ExecutionPlanRow>(`select id,atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos
+   from public.planos_execucao where atividade_id=$1 and sujeito_id=$2`,[activity.id,activity.criado_por_sujeito_id])).rows[0];
+  if(!plan)throw new ActivityError(404,'Planejamento não encontrado.');
+  const items=(await sql.query<ExecutionPlanItemRow>(`select categoria,descricao,quantidade,unidade,valor_previsto_centavos
+   from public.itens_planejamento_execucao where plano_id=$1 order by ordem`,[plan.id])).rows;
+  return executionPlanView(plan,items);
  }
  function requireCoordination(row:PrivateActivity){
   if(row.projeto_aprovacao&& (row.projeto_aprovacao!=='aprovada'||row.projeto_versao_aprovada!==row.versao_submetida))throw new ActivityError(409,'A versão ainda precisa de aprovação da coordenação do projeto.');
@@ -222,12 +264,77 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   },
   async create(input:unknown){
    const value=validateDraft(input,now());
-   return run('criar_rascunho',async(sql,actor)=>{
-    await checkProject(sql,actor,value.projeto_id);
-    if(actor.sujeito_id){
-      const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,sujeito_id,politica_publicacao,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values(null,$1,'i4',$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.sujeito_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];const created=dto(row);await recordOngoing(sql,created,actor.id,input);return created;
+   return run('criar_rascunho',(sql,actor)=>createDraft(sql,actor,value,input));
+  },
+  async createExecutionPlan(activityId:string,input:unknown):Promise<ExecutionPlanView>{
+   const id=identifier(activityId),body=objectInput(input,['versao_esperada','recursos']);
+   const value=validateExecutionPlan({versao_esperada:body.versao_esperada??1,recursos:body.recursos});
+   return run('plano_privado_escrita',async(sql,actor)=>{
+    const activity=await load(sql,actor,id,true);
+    const subjectId=activity.criado_por_sujeito_id;
+    if(!subjectId)throw new ActivityError(404,'Atividade não encontrada.');
+    const existing=(await sql.query<ExecutionPlanRow>(`select id,atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos
+     from public.planos_execucao where atividade_id=$1 for update`,[activity.id])).rows[0];
+    if(existing)throw new ActivityError(409,'Esta atividade já possui um planejamento. Reabra para editar.');
+    const inserted=await sql.query<ExecutionPlanRow>(`insert into public.planos_execucao
+     (atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos)
+     values($1,$2,$3,1,$4) returning id,atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos`,
+     [activity.id,subjectId,actor.id,value.total_previsto_centavos]);
+    await insertExecutionPlanItems(sql,inserted.rows[0].id,value.recursos);
+    return executionPlanView(inserted.rows[0],value.recursos.map(item=>({
+     categoria:item.categoria??null,descricao:item.descricao??null,quantidade:item.quantidade??null,
+     unidade:item.unidade??null,valor_previsto_centavos:item.valor_previsto_centavos??null,
+    })));
+   });
+  },
+  async getExecutionPlan(activityId:string):Promise<ExecutionPlanView>{
+   const id=identifier(activityId);
+   return run('plano_privado_leitura',async(sql,actor)=>readExecutionPlan(sql,await load(sql,actor,id)));
+  },
+  async updateExecutionPlan(activityId:string,input:unknown):Promise<ExecutionPlanView>{
+   const id=identifier(activityId),body=objectInput(input,['versao_esperada','recursos']);
+   const value=validateExecutionPlan({versao_esperada:body.versao_esperada,recursos:body.recursos});
+   return run('plano_privado_escrita',async(sql,actor)=>{
+    const activity=await load(sql,actor,id,true);
+    const plan=(await sql.query<ExecutionPlanRow>(`select id,atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos
+     from public.planos_execucao where atividade_id=$1 and sujeito_id=$2 for update`,[activity.id,activity.criado_por_sujeito_id])).rows[0];
+    if(!plan)throw new ActivityError(404,'Planejamento não encontrado.');
+    assertExecutionPlanVersion(value.versao_esperada,plan.versao);
+    const updated=await sql.query<ExecutionPlanRow>(`update public.planos_execucao set versao=versao+1,total_previsto_centavos=$2,atualizado_em=clock_timestamp()
+     where id=$1 and versao=$3 returning id,atividade_id,sujeito_id,criado_por_conta_id,versao,total_previsto_centavos`,
+     [plan.id,value.total_previsto_centavos,value.versao_esperada]);
+    if(!updated.rows[0])throw new ActivityError(409,'O planejamento mudou em outra sessão. Recarregue antes de salvar.');
+    await sql.query('delete from public.itens_planejamento_execucao where plano_id=$1',[plan.id]);
+    await insertExecutionPlanItems(sql,plan.id,value.recursos);
+    return executionPlanView(updated.rows[0],value.recursos.map(item=>({
+     categoria:item.categoria??null,descricao:item.descricao??null,quantidade:item.quantidade??null,
+     unidade:item.unidade??null,valor_previsto_centavos:item.valor_previsto_centavos??null,
+    })));
+   });
+  },
+  async convertIdea(ideaId:string,input:unknown):Promise<PrivateActivity&{repetida:boolean}>{
+   if(typeof ideaId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(ideaId))throw new ActivityError(404,'Rascunho não encontrado.');
+   const body=objectInput(input,['versao_esperada','pedido_id','titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','projeto_id']);
+   const version=validateVersion(body.versao_esperada);
+   if(typeof body.pedido_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.pedido_id))throw new ActivityError(422,'Identificador de pedido inválido.');
+   const {versao_esperada:ignoredVersion,pedido_id:requestId,...draftInput}=body;void ignoredVersion;
+   const value=validateDraft(draftInput,now()),request=requestId.toLowerCase();
+   const payloadHash=createHash('sha256').update(JSON.stringify({ideaId,version,value})).digest('hex');
+   return run('converter_ideia',async(sql,actor)=>{
+    // The account row lock serializes this actor's idempotency keys across ideas.
+    const history=(await sql.query<{objeto_id:string;justificativa_restrita:string}>(`select objeto_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='atividade' and acao='atividade_criada_de_ideia' and executada_por_conta_id=$1`,[actor.id])).rows;
+    for(const event of history){
+     let metadata:Record<string,unknown>;try{metadata=JSON.parse(event.justificativa_restrita);}catch{continue;}
+     if(metadata.tipo!=='conversao-ideia.v1'||metadata.pedido_id!==request)continue;
+     if(metadata.idea_id!==ideaId||metadata.payload_sha256!==payloadHash)throw new ActivityError(409,'Identificador de pedido já utilizado.');
+     return {...await load(sql,actor,event.objeto_id),repetida:true};
     }
-    const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values($1,$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.organizacao_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];const created=dto(row);await recordOngoing(sql,created,actor.id,input);return created;
+    const idea=(await sql.query<{version:number}>(`select version from public.ideias_privadas where id=$1 and owner_id=$2 for update`,[ideaId,actor.auth_user_id])).rows[0];
+    if(!idea)throw new ActivityError(404,'Rascunho não encontrado.');
+    if(idea.version!==version)throw new ActivityError(409,'A ideia mudou. Reabra a versão atual antes de criar a atividade.');
+    const created=await createDraft(sql,actor,value,input);
+    await sql.query(`insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_criada_de_ideia',$2,'rascunho',$3)`,[created.id,actor.id,JSON.stringify({tipo:'conversao-ideia.v1',idea_id:ideaId,idea_version:version,pedido_id:request,payload_sha256:payloadHash})]);
+    return {...created,repetida:false};
    });
   },
   async list(){return run('listar_rascunhos',async(sql,actor)=>{
@@ -354,12 +461,13 @@ export const activities=createActivityService();
 export async function activityResponse(operation:()=>Promise<unknown>){
  try{return Response.json(await operation(),{headers:privateHeaders});}catch(error){return Response.json({message:error instanceof ActivityError?error.message:'Serviço indisponível. Tente novamente.'},{status:error instanceof ActivityError?error.status:503,headers:privateHeaders});}
 }
-export async function activityMutation(request:Request,action:'create'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence'|'recordSend'|'recordReview'|'revokeAuthorization'|'contestRecord'|'editorialDecision'|'registerRealization'|'decideRealization',id?:string){
+export async function activityMutation(request:Request,action:'create'|'convertIdea'|'update'|'submit'|'review'|'publish'|'withdraw'|'schedule'|'createRecord'|'addEvidence'|'recordSend'|'recordReview'|'revokeAuthorization'|'contestRecord'|'editorialDecision'|'registerRealization'|'decideRealization',id?:string){
  // Route exports limit methods. Normalize PATCH only for reuse of the existing
  // JSON/origin/payload boundary; the original method is still PATCH over HTTP.
  return handleMutation(request.method==='PATCH'?new Request(request,{method:'POST'}):request,appOrigin(),async input=>{
   try{
    if(action==='registerRealization'){const registro=await activities.registerRealization(id!,input);return {message:'Evidência registrada e enviada para revisão editorial.',registro,next:'/dashboard/pessoa-fisica?registro=enviado'};}
+   if(action==='convertIdea'){const atividade=await activities.convertIdea(id!,input);return {message:'Rascunho privado criado a partir da ideia.',atividade,next:'/dashboard/atividade/'+atividade.id};}
    if(action==='decideRealization'){const registro=await activities.decideRealization(id!,input);return {message:'Decisão sobre o relato registrada.',registro,next:'/admin/atividades'};}
    if(action==='editorialDecision'){const atividade=await activities.editorialDecision(id!,input);return {message:atividade.estado_editorial==='publicada'?'Atividade aprovada e publicada.':'Atividade rejeitada.',atividade,next:'/admin/atividades'};}
    if(action==='contestRecord'){const contestacao=await activities.contestRecord(id!,input);return {message:'Divergência registrada, sem conclusão consensual.',contestacao,next:'/dashboard/atividade/'+id};}

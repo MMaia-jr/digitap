@@ -5,6 +5,7 @@ import { Client } from 'pg';
 import { createClient } from '@supabase/supabase-js';
 let db, admin, user;
 const name='Ana — participante fictícia', email=`mvp-ui-${randomUUID()}@example.invalid`, password=randomUUID()+'aA1!';
+const evidenceDir=process.env.A_PRACA_EVIDENCE_DIR??'operations/evidence/mvp-visivel';
 test.beforeAll(async()=>{
   if(process.env.A_PRACA_ALLOW_FIXTURE_CLEANUP!=='1')throw new Error('Fixtures não autorizadas.');
   const local=JSON.parse(execFileSync('./node_modules/.bin/supabase',['status','--output','json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
@@ -33,7 +34,7 @@ test('MVP-01: home pública tem agenda e convite para publicar',async({page})=>{
   await expect(discovery.getByText('Atividades na Praça',{exact:true})).toBeVisible();
   await expect(page.getByRole('link',{name:'Quero publicar uma atividade',exact:true})).toHaveAttribute('href','/login');
   await expect(page.getByRole('banner').getByRole('link',{name:'Entrar',exact:true})).toBeVisible();
-  await page.screenshot({path:'operations/evidence/mvp-visivel/home.png',fullPage:true});
+  await page.screenshot({path:evidenceDir+'/mvp-home.png',fullPage:true});
 });
 test('MVP-02: PF entra, cria rascunho, vê no painel e sai sem publicar',async({page})=>{
   const title='Oficina de horta comunitária — teste fictício';
@@ -43,10 +44,10 @@ test('MVP-02: PF entra, cria rascunho, vê no painel e sai sem publicar',async({
   await page.getByRole('link',{name:'Criar Atividade',exact:true}).click();await expect(page).toHaveURL('http://127.0.0.1:3215/dashboard/pessoa-fisica/nova');
   await page.getByLabel('Título',{exact:true}).fill(title);await page.getByLabel('Descrição',{exact:true}).fill('Oficina fictícia para testar o produto visível.');
   await page.getByLabel('Data e horário (America/Sao_Paulo)',{exact:true}).fill(new Date(Date.now()+86400000*3).toISOString().slice(0,16));
-  await page.getByLabel('Orientação de acesso',{exact:true}).fill('Entrada gratuita fictícia.');await page.screenshot({path:'operations/evidence/mvp-visivel/form.png',fullPage:true});await page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();
+  await page.getByLabel('Orientação de acesso',{exact:true}).fill('Entrada gratuita fictícia.');await page.screenshot({path:evidenceDir+'/mvp-form.png',fullPage:true});await page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();
   await expect(page).toHaveURL('http://127.0.0.1:3215/dashboard/pessoa-fisica');await expect(page.getByRole('main').getByRole('heading',{name:title,exact:true})).toBeVisible();
   await expect(page.getByRole('main').getByText('Rascunho privado',{exact:true})).toBeVisible();
-  await page.screenshot({path:'operations/evidence/mvp-visivel/dashboard.png',fullPage:true});
+  await page.screenshot({path:evidenceDir+'/mvp-dashboard.png',fullPage:true});
   const row=(await db.query('select a.id,a.estado_editorial,a.versao_publicada,a.organizacao_id from public.atividades a join public.contas_acesso c on c.id=a.criada_por_conta_id where c.auth_user_id=$1 and a.titulo=$2',[user,title])).rows[0];
   expect(row).toMatchObject({estado_editorial:'rascunho',versao_publicada:null,organizacao_id:null});
   expect((await page.request.get('/api/public/atividades/'+row.id)).status()).toBe(404);

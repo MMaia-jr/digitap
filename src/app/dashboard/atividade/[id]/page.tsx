@@ -14,6 +14,7 @@ import {RecordForm} from '../../../../components/RecordForm';
 import {ScheduleForm} from '../../../../components/ScheduleForm';
 import {WithdrawForm} from '../../../../components/WithdrawForm';
 import {PublishForm} from '../../../../components/PublishForm';
+import {ExecutionPlanWorkspace,type ExecutionPlan} from '../../../../components/ExecutionPlanWorkspace';
 export const dynamic='force-dynamic';
 export default async function ActivityDetail({params}:{params:Promise<{id:string}>}){
  let activity;
@@ -25,11 +26,16 @@ export default async function ActivityDetail({params}:{params:Promise<{id:string
  const presentation=activity.pode_editar?await managedProfile():null;
  const personal=presentation?.subject.tipo==='pessoa_fisica';
  const projects=presentation?.availableProjects??[];
+ let executionPlan:ExecutionPlan|null=null;let planUnavailable=false;
+ if(activity.pode_editar&&activity.criado_por_sujeito_id){
+  try{const plan=await activities.getExecutionPlan(activity.id);if(plan)executionPlan={version:plan.version,total_previsto_centavos:plan.total_previsto_centavos,recursos:plan.recursos};}catch(error){if(!(error instanceof ActivityError&&error.status===404))planUnavailable=true;}
+ }
  let record;let recordUnavailable=false;
  try{record=await activities.getRecord(activity.id);}catch(error){if(!(error instanceof ActivityError&&error.status===404))recordUnavailable=true;}
  const labels={rascunho:'Rascunho privado',enviada:'Enviada — continua privada',em_revisao:'Em revisão — continua privada',aprovada:'Aprovada — continua privada',devolvida:'Devolvida — continua privada',rejeitada:'Rejeitada — continua privada',publicada:'Publicada',retirada:'Retirada — não está pública'};
  return <section className="card"><Link href={activity.acesso_editorial?'/admin/atividades':'/dashboard'}>Voltar à área restrita</Link><h1>{activity.titulo}</h1>{activity.projeto_aprovacao&&<p className="feedback">{activity.projeto_aprovacao==='pendente'?'Aguardando envio ou aprovação da coordenação do projeto.':activity.projeto_aprovacao==='aprovada'?'Atividade aprovada pela coordenação. A publicação depende da revisão editorial.':'Atividade rejeitada pela coordenação. Edite e envie uma nova versão.'} {activity.projeto_parecer}</p>}<p>{labels[activity.estado_editorial]}</p>
   {activity.pode_editar?<><ActivityForm projects={projects} returnTo={personal?'/dashboard/pessoa-fisica':undefined} activity={activity}/>{personal&&activity.estado_editorial==='rascunho'&&<SubmitActivityForm id={activity.id} version={activity.versao_submetida} title={activity.titulo}/>}</>:<><p>{activity.descricao}</p><dl><dt>Data e horário (America/Sao_Paulo)</dt><dd>{new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(new Date(activity.inicio_previsto))}</dd><dt>Orientação de acesso</dt><dd>{activity.orientacao_acesso}</dd></dl>{activity.referencia_oficial&&<p><a href={activity.referencia_oficial} rel="noreferrer noopener">Link oficial</a></p>}</>}
+  {activity.pode_editar&&activity.criado_por_sujeito_id&&(planUnavailable?<p role="alert">Planejamento privado indisponível. Tente novamente.</p>:<ExecutionPlanWorkspace activityId={activity.id} initialPlan={executionPlan}/>)}
   {activity.motivo_editorial&&<section aria-label="Motivo editorial"><h2>Motivo editorial</h2><p>{activity.motivo_editorial}</p></section>}
   {activity.motivo_retirada&&<section aria-label="Motivo da retirada"><h2>Motivo da retirada</h2><p>{activity.motivo_retirada}</p></section>}
   {activity.tem_publicacao&&activity.estado_editorial!=='retirada'&&activity.estado_editorial!=='publicada'&&<p>A versão {activity.numero_versao_publicada} continua pública enquanto esta versão está pendente.</p>}

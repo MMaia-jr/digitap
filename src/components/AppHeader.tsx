@@ -7,9 +7,9 @@ export async function AppHeader() {
   const viewer = await getViewer();
   return <header className="app-header"><div className="app-header-inner">
     <Link href="/" className="brand" aria-label="DigItap — início"><DigItapLogo/></Link>
-    <nav aria-label="Navegação principal"><Link className="nav-explore" href="/#atividades-publicas">Explorar</Link>
-      {viewer.kind === 'ready' ? <><Link href="/meu-espaco">Meu espaço</Link><Link href="/meu-espaco/ideia">Descreva sua ideia</Link><Link href={viewer.dashboard}>Olá, {viewer.name}</Link>{viewer.editorial&&<Link href="/admin/atividades">Admin</Link>}<AuthForm mode="signout" /></> : <>
-        <Link href="/login">Entrar</Link><Link className="nav-signup" href="/cadastro">Criar acesso<CommunityIcon name="arrow"/></Link>
+    <nav aria-label="Navegação principal"><Link className="nav-explore" href="/#atividades-publicas">Explorar</Link><Link href="/biblioteca-acoes">Biblioteca de Ações</Link>
+      {viewer.kind === 'ready' ? <><Link href="/meu-espaco">Meu espaço</Link><Link href="/meu-espaco/ideia">Descreva sua ideia</Link><Link href="/meu-espaco/capacidades">Capacidades</Link><Link href="/encontros">Encontros</Link><Link href={viewer.dashboard}>Olá, {viewer.name}</Link>{viewer.editorial&&<Link href="/admin/atividades">Admin</Link>}<AuthForm mode="signout" /></> : <>
+        <Link href="/encontros">Encontros</Link><Link href="/login">Entrar</Link><Link className="nav-signup" href="/cadastro">Criar acesso<CommunityIcon name="arrow"/></Link>
         {viewer.kind === 'unavailable' && <span>Não foi possível verificar seu acesso.</span>}
       </>}
     </nav>

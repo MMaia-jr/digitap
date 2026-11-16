@@ -69,3 +69,11 @@ it('exclui somente após confirmação explícita e atualiza a lista privada', a
   expect(JSON.parse(fetcher.mock.calls[0][1].body)).toEqual({ action: 'delete', id: saved.id, confirmDelete: true });
   expect(screen.queryByText(saved.title)).toBeNull();
 });
+
+it('oferece conversão explícita do rascunho próprio para o formulário de atividade', () => {
+  render(<IdeasWorkspace initialIdeas={[saved]} />);
+  const link = screen.getByRole('link', { name: 'Usar esta ideia para criar uma atividade' });
+  expect(link.getAttribute('href')).toBe(`/dashboard/pessoa-fisica/nova?ideia=${saved.id}`);
+  expect(screen.getByText(source)).toBeTruthy();
+  expect(screen.getByText('Privada · não verificada · não publicada')).toBeTruthy();
+});
