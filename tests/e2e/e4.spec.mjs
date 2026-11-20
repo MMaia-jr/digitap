@@ -248,6 +248,7 @@ test('E4.1: biblioteca adapta rascunho PF; pedido privado só aparece após publ
   test.setTimeout(240000);
   const owner = fixtures.find(item => item.subject === participantSubject);
   const participant = await fixtureAccount('help-participante');
+  let resumedOwnerContext;
   const helpOwnerContext = await browser.newContext({ baseURL: base });
   const participantContext = await browser.newContext({ baseURL: base });
   const reviewerContext = await browser.newContext({ baseURL: base });
@@ -319,6 +320,56 @@ test('E4.1: biblioteca adapta rascunho PF; pedido privado só aparece após publ
     expect(Number((await db.query('select count(*)::int n from public.vinculos_colaboracao where sujeito_id=$1', [participant.subject])).rows[0].n)).toBe(linkCountBefore);
     expect((await db.query('select count(*)::int n from public.interesses_necessidade where necessidade_id=$1 and status=\'ativo\'', [needId])).rows[0].n).toBe(1);
 
+    // INC-01-B: interesse próprio não concede acesso à lista privada do titular.
+    const interestsUrl = `${base}/api/e4?action=activity-interests&activity_id=${activityId}`;
+    const deniedInterests = await participantContext.request.get(interestsUrl);
+    expect(deniedInterests.status()).toBe(403);
+    expect(await deniedInterests.json()).toEqual({ message: expect.any(String) });
+    const ownInterestsUrl = `${base}/api/e4?action=interests&subject_id=${participant.subject}`;
+    const ownInterests = await participantContext.request.get(ownInterestsUrl);
+    expect(ownInterests.status()).toBe(200);
+    const ownInterest = (await ownInterests.json()).interests.find(item => item.necessidade_id === needId);
+    expect(ownInterest).toMatchObject({ necessidade_id: needId, status: 'ativo' });
+
+    // INC-01-A: logout real, perda do acesso anterior e login da mesma conta em contexto novo.
+    await helpOwner.getByRole('banner').getByRole('button', { name: 'Sair', exact: true }).click();
+    await expect(helpOwner).toHaveURL(`${base}/login`);
+    const loggedOutInterests = await helpOwnerContext.request.get(interestsUrl);
+    expect(loggedOutInterests.status()).toBe(401);
+    expect(await loggedOutInterests.json()).toEqual({ message: expect.any(String) });
+    await helpOwner.goto(`/dashboard/pessoa-fisica/atividade/${activityId}/ajuda`);
+    await expect(helpOwner).toHaveURL(`${base}/login`);
+
+    resumedOwnerContext = await browser.newContext({ baseURL: base });
+    await resumedOwnerContext.route('**/*', route => {
+      const url = new URL(route.request().url());
+      return url.hostname === '127.0.0.1' && ['3215', '56151', '56154'].includes(url.port) ? route.continue() : route.abort();
+    });
+    // Não copiar cookies/storageState: o helper autentica novamente a mesma fixture A.
+    expect((await resumedOwnerContext.request.get(interestsUrl)).status()).toBe(401);
+    const resumedOwner = await resumedOwnerContext.newPage();
+    await login(resumedOwner, owner);
+    await resumedOwner.goto(`/dashboard/pessoa-fisica/atividade/${activityId}/ajuda`);
+    await expect(resumedOwner.getByText(actionLibraryActivity, { exact: true })).toBeVisible();
+    await expect(resumedOwner.getByRole('heading', { name: 'Solicito ajuda para revisar este boletim comunitário.', exact: true })).toBeVisible();
+    await expect(resumedOwner.getByRole('heading', { name: 'Interesses recebidos', exact: true })).toBeVisible();
+    await expect(resumedOwner.getByText(/E4 pessoa fictícia help-participante/)).toBeVisible();
+    await expect(resumedOwner.getByText('Esta manifestação não cria colaboração, vínculo ou compromisso. Não há convite institucional para atividade independente.', { exact: true })).toBeVisible();
+    const resumedInterests = await resumedOwnerContext.request.get(interestsUrl);
+    expect(resumedInterests.status()).toBe(200);
+    expect((await resumedInterests.json()).interests).toEqual([
+      expect.objectContaining({ id: ownInterest.id, sujeito_id: participant.subject, status: 'ativo' }),
+    ]);
+    // A sessão antiga continua encerrada; B mantém somente a consulta da própria manifestação.
+    expect((await helpOwnerContext.request.get(interestsUrl)).status()).toBe(401);
+    const ownInterestsAfterLogin = await participantContext.request.get(ownInterestsUrl);
+    expect(ownInterestsAfterLogin.status()).toBe(200);
+    expect((await ownInterestsAfterLogin.json()).interests).toEqual([
+      expect.objectContaining({ id: ownInterest.id, necessidade_id: needId, status: 'ativo' }),
+    ]);
+    expect(Number((await db.query('select count(*)::int n from public.vinculos_colaboracao where sujeito_id=$1', [participant.subject])).rows[0].n)).toBe(linkCountBefore);
+    expect((await db.query('select count(*)::int n from public.interesses_necessidade where necessidade_id=$1 and status=\'ativo\'', [needId])).rows[0].n).toBe(1);
+
     const authorizationId = (await db.query("select id from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=$1 and situacao='vigente' and revogada_em is null order by autorizada_em desc,id desc limit 1", [activityId])).rows[0]?.id;
     expect(authorizationId).toBeTruthy();
     await db.query("update public.autorizacoes_publicacao set situacao='revogada',revogada_em=now() where id=$1", [authorizationId]);
@@ -329,6 +380,6 @@ test('E4.1: biblioteca adapta rascunho PF; pedido privado só aparece após publ
     expect(staleInterestStatus).toBe(403);
     expect((await db.query('select count(*)::int as count from public.interesses_necessidade where necessidade_id=$1 and request_id=$2', [needId, staleRequestId])).rows[0].count).toBe(0);
   } finally {
-    await Promise.all([helpOwnerContext.close(), participantContext.close(), reviewerContext.close(), visitorContext.close()]);
+    await Promise.all([helpOwnerContext.close(), participantContext.close(), reviewerContext.close(), visitorContext.close(), resumedOwnerContext?.close()]);
   }
 });
