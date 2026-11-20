@@ -1,6 +1,15 @@
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 
+// Política técnica provisória; requer validação de produto e enforcement no Storage.
+const MAX_PRIVATE_FILE_BYTES = 25 * 1024 * 1024;
+const ALLOWED_PRIVATE_FILE_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'application/pdf',
+]);
+
 type Scope = 'upload' | 'read';
 type Metadata = { registroId: string; objectKey: string; contentType: string; sizeBytes: number };
 type PrivateFile = Metadata & { id: string; estado: 'pendente' | 'confirmado' };
@@ -9,6 +18,9 @@ interface Dependencies {
   authorize(input: { actorId: string; registroId: string; scope: Scope }): Promise<boolean>;
   repository: {
     insertPending(metadata: Metadata): Promise<PrivateFile>;
+    // Adaptadores existentes podem ainda não implementar a compensação;
+    // integração real exige remoção condicional de metadados ainda pendentes.
+    deletePending?(id: string): Promise<void>;
     find(id: string): Promise<PrivateFile | null>;
     markConfirmed(id: string): Promise<PrivateFile>;
   };
@@ -67,9 +79,12 @@ export function createPrivateFileService(deps: Dependencies) {
       return run(async actorId => {
         const body = parameters(input, ['registroId', 'contentType', 'sizeBytes']);
         const registroId = identifier(body.registroId);
-        if (typeof body.contentType !== 'string' || body.contentType.length > 255
-          || !/^[a-z0-9][a-z0-9!#$&^_.+-]*\/[a-z0-9][a-z0-9!#$&^_.+-]*$/i.test(body.contentType)
-          || typeof body.sizeBytes !== 'number' || !Number.isSafeInteger(body.sizeBytes) || body.sizeBytes <= 0) {
+        if (typeof body.contentType !== 'string'
+          || !ALLOWED_PRIVATE_FILE_TYPES.has(body.contentType)
+          || typeof body.sizeBytes !== 'number'
+          || !Number.isSafeInteger(body.sizeBytes)
+          || body.sizeBytes <= 0
+          || body.sizeBytes > MAX_PRIVATE_FILE_BYTES) {
           throw new PrivateFileError(422, 'Tipo ou tamanho de arquivo inválido.');
         }
         await authorize(actorId, registroId, 'upload');
@@ -77,7 +92,19 @@ export function createPrivateFileService(deps: Dependencies) {
         const file = await deps.repository.insertPending({
           registroId, objectKey, contentType: body.contentType, sizeBytes: body.sizeBytes,
         });
-        const upload = await deps.storage.signedUpload(objectKey);
+        let upload: { url: string };
+        try {
+          upload = await deps.storage.signedUpload(objectKey);
+        } catch {
+          // Compensação apenas do registro pendente recém-criado, jamais do objeto no Storage.
+          // Se falhar ou não existir no adaptador, é necessária reconciliação posterior.
+          try {
+            await deps.repository.deletePending?.(file.id);
+          } catch {
+            // Não expor detalhes do adaptador nem alegar que a limpeza ocorreu.
+          }
+          throw new PrivateFileError(503, 'Serviço indisponível. Tente novamente.');
+        }
         return { arquivoId: file.id, objectKey, uploadUrl: upload.url };
       });
     },
@@ -89,7 +116,20 @@ export function createPrivateFileService(deps: Dependencies) {
         if (!actual || actual.contentType !== file.contentType || actual.sizeBytes !== file.sizeBytes) {
           throw new PrivateFileError(422, 'Arquivo ausente ou incompatível com o upload solicitado.');
         }
-        await deps.repository.markConfirmed(file.id);
+        // O acesso pode ter sido revogado durante o stat externo.
+        // Esta segunda checagem ainda não substitui a autorização atômica no banco.
+        await authorize(actorId, file.registroId, 'upload');
+        try {
+          // O adaptador deve garantir CAS atômico pendente -> confirmado.
+          // Somente o conflito 409 de markConfirmed vira erro de domínio 409.
+          await deps.repository.markConfirmed(file.id);
+        } catch (error) {
+          if (error instanceof Error && 'status' in error && error.status === 409) {
+            throw new PrivateFileError(409, 'Arquivo não está pendente.');
+          }
+          // Erros inesperados continuam sanitizados por run() como 503.
+          throw error;
+        }
         return { estado: 'confirmado' as const };
       });
     },
