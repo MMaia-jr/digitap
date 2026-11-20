@@ -1,3 +1,13 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D3 · TESTADO / OBSERVADO** — O plano de 16/11 relata 890 testes Vitest, 246 de PostgreSQL e 68 E2E aprovados localmente. O preflight e cinco rotas HTTP 200 foram observados naquele ambiente preparado. O relato não certifica o Mac atual nem produção. Fonte: PROJECT_PLAN, candidato local de 16/11; README, ambiente informado.
+
+**D12 · SUPERADO** — Ler descrições de fase sem software como história da exploração. Preservar D1–D4 e os cenários originais nos seus respectivos escopos. Código e teste de percurso posterior não autorizam mudanças institucionais. Fonte: PROJECT_PLAN, evidência local 16/11.
+
+---
+
 # Reconciliação do estado local — 13/11/2026
 
 [CÓDIGO] Base inventariada: `fda9da280d8c2902cd172f7490b752ba3e485d66`; HEAD técnico antes desta nota: `b57d600`. Esta nota atualiza a leitura corrente; o conteúdo anterior abaixo é preservado como snapshot histórico e não comprova o estado de produção. Referências de produto: [Norte aprovado](digitap/00-norte-do-produto.md) e [modelo de domínio](digitap/01-modelo-de-dominio.md).

@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D9 · PROPOSTO** — Priorizar inventário de custódia e recuperação sintética fora da conta de origem. Medir desembolso, horas e reserva de continuidade separadamente. Operação brasileira própria, infraestrutura compartilhada, nós locais e federação dependem de necessidade, equipe e custo observados. Fonte: SOB-01 e consolidação final, 20/11.
+
+---
+
 # Nota de incorporação das investigações — 13/11/2026
 
 Por autorização humana explícita do proponente, foram incorporadas cópias

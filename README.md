@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+Índice da proposta: [visão integrada](docs/planejamento/visao-integrada.md), [registro](docs/planejamento/registro.md), [planejamento](docs/planejamento/roadmap.md).
+
+---
+
 # DigItap
 
 **Tecnologia para transformar iniciativas em colaboração, memória e oportunidades.**

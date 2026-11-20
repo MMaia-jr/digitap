@@ -1,3 +1,13 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D7 · DECIDIDO / PENDENTE** — Preservar participação sem pagamento obrigatório e colaboração livre. Documentação, tradução, ensino, revisão e apoio territorial podem gerar valor. Remuneração de obrigações permanentes exige orçamento e instrumento adequado. Registro de contribuição não concede quotas, voto ou remuneração. Fonte: Mandato de 20/11, participação e direitos.
+
+**D8 · VISÃO / PENDENTE** — Comum digital é hipótese de conhecimento, padrões e componentes sob direitos verificáveis. Separar remuneração, lucros distribuíveis, valorização societária e recursos de manutenção. Licença, titularidade, entidade guardiã, participação econômica e sucessão dependem de decisões e instrumentos próprios. Fonte: Dossiê final e mandato de 20/11.
+
+---
+
 # Nota de revisão vigente — 04/11/2026
 
 **Fonte preservada:** `04-—-GOVERNANÇA-Projeto-A-Praça.txt` (Project Files). **Natureza:** atualização de escopo e leitura, com seções exploratórias antigas preservadas para rastreabilidade. **Não é** autorização de publicação, DDL, migração, alteração de RLS/código, consulta ao Git local ou constituição institucional. I3 concluído em 05/11/2026 (commit 623ee50, 20/20 cenários B+C PASS); I4 especificado, não implementado; I5 não iniciado.

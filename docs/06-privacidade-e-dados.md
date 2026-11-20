@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D10 · PENDENTE** — Preservar proveniência, escopo, versão, contestação e revogação. Administração técnica e mandato editorial têm limites distintos. Antes de uso real validar TLS, SMTP, autorização por objeto, controlador, retenção, canal de incidente e restauração sem reabrir acesso revogado. Aplicar a Resolução CD/ANPD 15/2024 ao incidente comunicável, inclusive o prazo geral de três dias úteis e as regras específicas aplicáveis. Fonte: README e procedimento do beta; SOB-01, 20/11.
+
+---
+
 # Nota de revisão vigente — 04/11/2026
 
 **Fonte preservada:** `📘-06-—-PRIVACIDADE-E-DADOS-Projeto-A-Praça.txt` (Project Files). **Natureza:** atualização de escopo e leitura, com seções exploratórias antigas preservadas para rastreabilidade. **Não é** autorização de publicação, DDL, migração, alteração de RLS/código, consulta ao Git local ou constituição institucional. I3 concluído em 05/11/2026 (commit 623ee50, 20/20 cenários B+C PASS); I4 especificado, não implementado; I5 não iniciado.

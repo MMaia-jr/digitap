@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D6 · HIPÓTESE** — Comparar o ganho de reutilizar uma realização com o de coordenar oportunidades recorrentes. B2C pode remunerar assistência opcional; B2B e B2G podem contratar operação. Em B2B2C/B2G2C o participante usa e uma organização ou programa paga. Compra adjacente não prova demanda DigItap. Fonte: Revisão B2G e estudo híbrido, 20/11.
+
+---
+
 # DigItap — Horizonte Estratégico: Itaperuna → Brasil → Mundo
 
 **Data:** 13/11/2026.

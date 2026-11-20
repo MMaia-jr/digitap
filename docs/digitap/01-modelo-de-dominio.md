@@ -1,3 +1,15 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D4 · IMPLEMENTADO** — Uma PF pode declarar capacidade privada e manifestar interesse em pedido elegível. Publicar oferta exige atividade pública elegível do sujeito. O encontro usa categoria declarada em comum e apresenta uma sugestão. Fonte: E4/E4.1, serviço e teste no remoto consultado em 20/11.
+
+**D5 · PROPOSTO / PENDENTE** — REL-01 especifica declaração, confirmação da contraparte, exame e contestação. O motor está ausente. Verificação depende de critérios e autoridade humana legítima. Autorização não expressa reputação. Fonte: REL-01, estados e competência, consultado em 20/11.
+
+**D13 · IMPLEMENTADO / PENDENTE** — Há interpretação assistida com demonstração local simulada. A pessoa revisa e autoriza o resultado. Uso real requer controle sobre destino, conteúdo e retenção e um caminho manual. Fonte: Beta 16/11, gateway simulado.
+
+---
+
 # DigItap — Modelo de Domínio
 
 ## 1. Leitura e limites

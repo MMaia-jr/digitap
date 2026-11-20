@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+**D2 · DECIDIDO / VISÃO** — DigItap conecta capacidades, necessidades, oportunidades, projetos, realizações e memória. Começa em Itaperuna; escala brasileira e global é ambição. Uma atividade editorial é uma parte desse percurso. Fonte: Norte e Horizonte, direção de 13/11.
+
+---
+
 # Reconciliação operacional — 11/11/2026
 
 O app está em produção na Vercel + Supabase Cloud, conforme informado pelo proponente. O portfólio público com exportação pela impressão em PDF já foi implementado antes da validação I5, contrariando a sequência prevista abaixo. Esta nota registra a exceção, sem presumir aprovação histórica ou conclusão de VH-01–VH-03.

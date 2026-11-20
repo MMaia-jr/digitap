@@ -1,3 +1,11 @@
+# Aditivo de leitura — RC2 • 20/11/2026 • revisão proposta
+
+**Precedência.** Até o aceite expresso, valem as decisões humanas já vigentes. Após o aceite, este aditivo rege exclusivamente os assuntos que identifica. O corpo preservado abaixo documenta a origem; decisões anteriores fora desse escopo continuam válidas. Hipóteses e pendências conservam sua classificação mesmo após o aceite documental.
+
+O sequenciamento proposto está no [roadmap executivo](../docs/planejamento/roadmap.md). O candidato local e os resultados abaixo preservam sua data de execução. A prioridade humana de 20/11 é aprovar o alinhamento documental antes de iniciar incrementos.
+
+---
+
 # A Praça — Plano
 
 ## Beta Fechado — candidato local versionado e demonstrável, 16/11/2026
