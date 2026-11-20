@@ -38,7 +38,7 @@ function fixture(initialActor: string | null = OWNER) {
       return file;
     }),
     find: vi.fn(async (id: string) => id === FILE ? file : null),
-    markConfirmed: vi.fn(async (id: string) => {
+    markConfirmed: vi.fn(async ({arquivoId: id}: {arquivoId: string}) => {
       if (id !== FILE || !file) throw new Error('Arquivo não encontrado');
       file = {...file, estado: 'confirmado'};
       return file;
@@ -67,7 +67,7 @@ async function confirmed(f: ReturnType<typeof fixture>) {
   expect(f.verifyActor).toHaveBeenCalledOnce();
   expect(f.authorize).toHaveBeenCalledWith({actorId: OWNER, registroId: RECORD, scope: 'upload'});
   expect(f.storage.stat).toHaveBeenCalledWith(created.objectKey);
-  expect(f.repository.markConfirmed).toHaveBeenCalledWith(created.arquivoId);
+  expect(f.repository.markConfirmed).toHaveBeenCalledWith({actorId: OWNER, arquivoId: created.arquivoId, registroId: RECORD});
   expect(f.file?.estado).toBe('confirmado');
   return created;
 }

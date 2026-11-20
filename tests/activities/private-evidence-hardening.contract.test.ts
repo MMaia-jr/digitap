@@ -37,7 +37,7 @@ function fixture() {
       if (file?.id === id && file.estado === 'pendente') file = null;
     }),
     // Simula CAS atômico: uma única transição pendente -> confirmado.
-    markConfirmed: vi.fn(async (id: string) => {
+    markConfirmed: vi.fn(async ({arquivoId: id}: {arquivoId: string}) => {
       if (id !== FILE || !file || file.estado !== 'pendente') {
         throw Object.assign(new Error('Conflito sintético'), {status: 409});
       }

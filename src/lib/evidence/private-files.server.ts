@@ -22,7 +22,7 @@ interface Dependencies {
     // integração real exige remoção condicional de metadados ainda pendentes.
     deletePending?(id: string): Promise<void>;
     find(id: string): Promise<PrivateFile | null>;
-    markConfirmed(id: string): Promise<PrivateFile>;
+    markConfirmed(input: { actorId: string; arquivoId: string; registroId: string }): Promise<PrivateFile>;
   };
   storage: {
     signedUpload(key: string): Promise<{ url: string }>;
@@ -49,7 +49,7 @@ function identifier(value: unknown): string {
   return value.toLowerCase();
 }
 
-// Fronteira experimental: nenhum adaptador real, persistência ou autoridade editorial aqui.
+// O serviço recebe os adaptadores por injeção e opera fora do fluxo editorial.
 export function createPrivateFileService(deps: Dependencies) {
   async function run<T>(operation: (actorId: string) => Promise<T>): Promise<T> {
     try {
@@ -121,11 +121,12 @@ export function createPrivateFileService(deps: Dependencies) {
         await authorize(actorId, file.registroId, 'upload');
         try {
           // O adaptador deve garantir CAS atômico pendente -> confirmado.
-          // Somente o conflito 409 de markConfirmed vira erro de domínio 409.
-          await deps.repository.markConfirmed(file.id);
+          await deps.repository.markConfirmed({ actorId, arquivoId: file.id, registroId: file.registroId });
         } catch (error) {
-          if (error instanceof Error && 'status' in error && error.status === 409) {
-            throw new PrivateFileError(409, 'Arquivo não está pendente.');
+          if (error instanceof Error && 'status' in error) {
+            if (error.status === 403) throw new PrivateFileError(403, 'Você não tem autorização para este registro.');
+            if (error.status === 404) throw new PrivateFileError(404, 'Arquivo não encontrado.');
+            if (error.status === 409) throw new PrivateFileError(409, 'Arquivo não está pendente.');
           }
           // Erros inesperados continuam sanitizados por run() como 503.
           throw error;
