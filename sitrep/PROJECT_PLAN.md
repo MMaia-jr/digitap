@@ -1,5 +1,12 @@
 # A Praça — Plano
 
+## FIX-AUT-ORG-01 — isolamento da edição organizacional, 21/11/2026
+
+- Validação local concluída. O PATCH da atividade agora exige vínculo organizacional atual e ativo de titular ou representante com escopo `editar`, no sujeito da atividade e na transação da edição.
+- T06 voltou a passar: representante com `enviar` e `publicar` enviou com consentimento pela interface. O PATCH direto retornou 403 e preservou título e versão 1.
+- Evidência anterior de falha preservada. RED da correção: quatro edições indevidas em PostgreSQL. GREEN: 33/33 PostgreSQL, T06 1/1, quatro regressões Chromium de AFLORA e portfólio e 949/949 Vitest. TypeScript aprovado, ESLint sem erros.
+- Escopo local com identidades sintéticas. Sem alteração de schema, infraestrutura, envio delegado ou política geral de representação. Evidências detalhadas permanecem no relatório local não versionado.
+
 ## Beta Fechado — candidato local versionado e demonstrável, 16/11/2026
 
 - **Branch local:** `release/beta-fechado-20261116`, criada a partir de `main`
