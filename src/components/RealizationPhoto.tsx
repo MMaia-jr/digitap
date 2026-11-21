@@ -7,5 +7,5 @@ export function RealizationPhoto({url}:{url:string}){
  // External, editor-approved references are loaded by the browser, never fetched by our server.
  // eslint-disable-next-line @next/next/no-img-element
  <img src={url} alt="Foto da atividade compartilhada pelo responsável" loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>}
- <figcaption><a href={url} target="_blank" rel="noreferrer noopener">{image?'Abrir foto original':'Ver foto ou vídeo da atividade'} ↗</a></figcaption></figure>;
+ <figcaption><a href={url} target="_blank" rel="noreferrer noopener">{image?'Abrir foto original':'Abrir referência original'} ↗</a></figcaption></figure>;
 }

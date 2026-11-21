@@ -1,8 +1,10 @@
 import {test,expect} from '@playwright/test';
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
+import {writeFileSync} from 'node:fs';
 import {Client} from 'pg';
 import {createClient} from '@supabase/supabase-js';
+import {fixtureCounts} from './helpers/fixture-counts.mjs';
 const origin='http://127.0.0.1:3215',dir=process.env.A_PRACA_EVIDENCE_DIR??'operations/evidence/portfolio-gestao';
 if(!/^operations\/evidence\/[a-zA-Z0-9-]+$/.test(dir))throw new Error('Diretório inválido.');
 const relato='Na nossa demonstração fictícia, preparamos os canteiros, compartilhamos sementes e conversamos sobre o cuidado com a horta. O encontro reuniu vizinhos para aprender juntos e deixar o espaço mais acolhedor. Nenhum encontro real é representado por este teste.';
@@ -39,10 +41,27 @@ test.beforeAll(async()=>{
 
 });
 test.afterAll(async()=>{
- await db.query('rollback');
- try{for(const person of fixtures){await db.query('begin');try{
+ if(!db)return;
+ const cleanup=[];
+ try{for(const person of fixtures){let entries,before;await db.query('begin');try{
   const ids=(await db.query('select id from public.atividades where sujeito_id=$1',[person.subject])).rows.map(r=>r.id);
   const records=(await db.query('select id from public.registros_realizacao where atividade_id=any($1::uuid[])',[ids])).rows.map(r=>r.id);
+  const projects=(await db.query('select id from public.projetos where sujeito_id=$1',[person.subject??null])).rows.map(r=>r.id);
+  const realSubjects=person.subject?[person.subject]:[];
+  const grants=(await db.query("select id from public.autorizacoes_publicacao where (objeto_tipo='atividade' and objeto_id=any($1::uuid[])) or (objeto_tipo='registro' and objeto_id=any($2::uuid[]))",[ids,records])).rows.map(r=>r.id);
+  entries={
+   auth:['auth.users','id',[person.user]], subject:['public.sujeitos_publicadores','id',realSubjects],
+   organization:['public.organizacoes','id',person.org?[person.org]:[]],
+   account:['public.contas_acesso','auth_user_id',[person.user]], links:['public.vinculos_publicadores','sujeito_id',realSubjects],
+   person:['public.pessoas_fisicas','sujeito_id',realSubjects], collective:['public.coletivos_informais','sujeito_id',realSubjects],
+   activities:['public.atividades','id',ids],records:['public.registros_realizacao','id',records],
+   evidence:['public.evidencias','registro_id',records],grants:['public.autorizacoes_publicacao','id',grants],
+   events:['public.eventos_editoriais','objeto_id',[...ids,...records,...realSubjects,...grants]],
+   moderation:['public.casos_moderacao','sujeito_id',realSubjects],projects:['public.projetos','id',projects],
+   projectLinks:['public.vinculos_colaboracao','projeto_id',projects],
+  };
+  before=await fixtureCounts(db,entries);
+
   await db.query('delete from public.eventos_editoriais where objeto_id=any($1::uuid[]) or objeto_id=any($2::uuid[]) or objeto_id=$3',[ids,records,person.subject]);
   await db.query('delete from public.evidencias where registro_id=any($1::uuid[])',[records]);
   await db.query('delete from public.autorizacoes_publicacao where objeto_id=any($1::uuid[]) or objeto_id=any($2::uuid[])',[ids,records]);
@@ -56,8 +75,22 @@ test.afterAll(async()=>{
   await db.query('delete from public.sujeitos_publicadores where id=$1',[person.subject]);
   await db.query('delete from public.contas_acesso where auth_user_id=$1',[person.user]);if(person.org)await db.query('delete from public.organizacoes where id=$1',[person.org]);await db.query('commit');
  }catch(error){await db.query('rollback');throw error;}
- if((await admin.auth.admin.deleteUser(person.user)).error)throw new Error('Limpeza Auth falhou.');}}finally{await db?.end();}
+ if((await admin.auth.admin.deleteUser(person.user)).error)throw new Error('Limpeza Auth falhou.');
+ const after=await fixtureCounts(db,entries);
+ cleanup.push({before,after});
+ expect(Object.values(after).every(value=>value===0)).toBe(true);
+ }
+ if(dir.startsWith('operations/evidence/aflora-aut-org-01-')){
+  writeFileSync(dir+'/portfolio-fixtures.json',JSON.stringify({fixtures:cleanup},null,2)+'\n',{flag:'wx'});
+ }
+ }finally{await db.end();}
 });
+async function loopback(context){
+ await context.route('**/*',route=>{
+  const url=new URL(route.request().url());
+  return [origin,'http://127.0.0.1:56151'].includes(url.origin)?route.continue():route.abort();
+ });
+}
 async function login(page,person){await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(person.email);await page.getByLabel('Senha',{exact:true}).fill(person.password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page).toHaveURL(origin+'/');await page.goto(person===editor?'/admin/atividades':person===organization||person===collective?'/dashboard':'/dashboard/pessoa-fisica');}
 async function capture(page,path){
  await page.evaluate(()=>{document.activeElement?.blur?.();document.documentElement.style.scrollBehavior='auto';});
@@ -67,6 +100,7 @@ async function capture(page,path){
 test('PORT-01: portfólio público reúne atividades e relatos aprovados; gestão PF/organização e impressão',async({browser})=>{
  const ownerContext=await browser.newContext({viewport:{width:1440,height:1050}}),editorContext=await browser.newContext(),orgContext=await browser.newContext({viewport:{width:1440,height:1050}}),visitorContext=await browser.newContext({viewport:{width:1440,height:1050}});
  try{
+  await Promise.all([ownerContext,editorContext,orgContext,visitorContext].map(loopback));
   const page=await ownerContext.newPage(),reviewer=await editorContext.newPage(),orgPage=await orgContext.newPage(),visitor=await visitorContext.newPage();
   await Promise.all([login(page,owner),login(reviewer,editor),login(orgPage,organization)]);
   await page.getByLabel('Sua apresentação',{exact:true}).fill('Sou Ana, produtora cultural. Minha trajetória reúne saberes, encontros e cuidado com o território. Apresentação fictícia.');
@@ -80,8 +114,10 @@ test('PORT-01: portfólio público reúne atividades e relatos aprovados; gestã
   const orgActivity=orgPage.url().split('/').at(-1);expect((await db.query('select projeto_id from public.atividades where id=$1',[orgActivity])).rows[0].projeto_id).toBe(project);
   expect((await page.request.post('/api/atividades',{headers:{origin},data:{titulo:'Projeto de terceiro',descricao:'Tentativa fictícia de vínculo indevido.',inicio_previsto:new Date(Date.now()+86400000).toISOString(),orientacao_acesso:'Acesso fictício.',projeto_id:project}})).status()).toBe(422);
   await db.query("update public.organizacoes set estado_validacao='validada' where id=$1",[organization.org]);
-  expect((await orgPage.request.post('/api/atividades/'+orgActivity+'/enviar',{headers:{origin},data:{versao_esperada:1}})).status()).toBe(200);
-  const authorization=randomUUID();await db.query("insert into public.autorizacoes_publicacao(id,objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,situacao,autorizada_em) values($1,'atividade',$2,ARRAY['divulgacao','atividade:versao:1'],'Responsável fictício','Autorização fictícia de teste','vigente',clock_timestamp())",[authorization,orgActivity]);
+  expect((await orgPage.request.post('/api/atividades/'+orgActivity+'/enviar',{headers:{origin},data:{versao_esperada:1,autoriza_publicacao:true}})).status()).toBe(200);
+  const authorizations=await db.query("select id from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=$1",[orgActivity]);
+  expect(authorizations.rowCount).toBe(1);
+  const authorization=authorizations.rows[0].id;
   for(const command of [{acao:'iniciar',estado_esperado:'enviada'},{acao:'aprovar',estado_esperado:'em_revisao',autorizacao_id:authorization}])expect((await reviewer.request.post('/api/admin/atividades/'+orgActivity+'/revisar',{headers:{origin},data:{...command,versao_esperada:1,pedido_id:randomUUID()}})).status()).toBe(200);
   expect((await reviewer.request.post('/api/admin/atividades/'+orgActivity+'/publicar',{headers:{origin},data:{versao_esperada:1,pedido_id:randomUUID()}})).status()).toBe(200);
   await visitor.goto('/perfil/'+organization.subject);await expect(visitor.getByRole('heading',{name:'Bio Institucional',exact:true})).toBeVisible();await expect(visitor.getByRole('heading',{name:'Nossos Projetos',exact:true})).toBeVisible();await expect(visitor.locator('.public-project')).toContainText('Raízes do Amanhã');await expect(visitor.locator('.public-project .activity-card')).toHaveCount(1);await capture(visitor,dir+'/portfolio-organizacao.png');
@@ -119,6 +155,7 @@ test('PORT-01: portfólio público reúne atividades e relatos aprovados; gestã
 });
 
 test('PORT-02: coletivo usa bio institucional e projetos com vínculo próprio',async({page})=>{
+ await loopback(page.context());
  await login(page,collective);await expect(page.getByRole('heading',{name:'Bio Institucional',exact:true})).toBeVisible();
  await page.getByLabel('Sobre a organização ou coletivo').fill('Somos um coletivo fictício de cuidado e memória do território.');await page.getByRole('button',{name:'Salvar bio',exact:true}).click();await expect(page.locator('.feedback[role=status]')).toContainText('Bio atualizada');
  await page.getByText('Criar novo projeto',{exact:true}).click();await page.getByLabel('Título do projeto',{exact:true}).fill('Sementes em Rede');await page.getByRole('button',{name:'Salvar projeto',exact:true}).click();await expect(page.locator('.feedback[role=status]')).toContainText('Projeto criado');

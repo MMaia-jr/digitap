@@ -1,6 +1,6 @@
 import 'server-only';
 import {createHash,randomUUID} from 'node:crypto';
-import {recordOngoing,draftValidationClock,recordPersonConsent,versionAuthorization,initialPersonCuration,activePersonPublisher} from './editorial-pf.server';
+import {recordDraftTiming,draftTimingDeclaration,draftValidationClock,recordPersonConsent,versionAuthorization,initialPersonCuration,activePersonPublisher} from './editorial-pf.server';
 import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
 import { withTransaction,type Transaction,type Sql } from '../database.server';
 import { authorize,AccessError,type AccessAccount,type VerifiedUser } from '../auth/permissions.server';
@@ -11,7 +11,7 @@ import { handleMutation,privateHeaders } from '../auth/http.server';
 import { FlowError } from '../auth/flow.server';
 import { appOrigin } from '../supabase/config.server';
 import {validatePublish,createSnapshot,createSubjectSnapshot,parseSnapshot} from './publication';
-import {requireVersionAuthorization as requireAuthorization,approvalForVersion,publicationRecord,snapshotHash,approvedContentHash} from './publication.server';
+import {requireVersionAuthorization as requireAuthorization,approvalForVersion,publicationRecord,snapshotHash,approvedContentHash,recordOrganizationConsent} from './publication.server';
 import {validateContestation,contestRecord,privateContestations} from './contestation.server';
 import {validateRevocation,revokeAuthorization} from './revocation.server';
 import {validateRecordTransition} from './record-workflow';
@@ -74,14 +74,40 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   const project=(await sql.query(`select p.id from public.projetos p join public.sujeitos_publicadores s on s.id=p.sujeito_id where p.id=$1 and (s.id=$2 or s.organizacao_legada_id=$3 or exists(select 1 from public.vinculos_colaboracao v where v.projeto_id=p.id and v.sujeito_id=$2 and v.status='ativo')) and s.estado in ('pendente','ativo') for share of p`,[projectId,actor.sujeito_id??null,actor.organizacao_id])).rows[0];
   if(!project)throw new ActivityError(422,'Selecione um projeto do seu perfil.',{projeto_id:'Projeto indisponível para este perfil.'});
  }
+ async function organizationConsentAuthority(sql:Sql,actor:Actor){
+  const result=await sql.query<{id:string;papel_vinculo:'titular'|'representante'}>(`
+   select s.id,v.papel_vinculo from public.sujeitos_publicadores s
+   join public.vinculos_publicadores v on v.sujeito_id=s.id
+   where s.organizacao_legada_id=$1 and s.tipo='organizacao' and s.estado in ('pendente','ativo')
+     and v.conta_id=$2 and v.atual and v.situacao='ativo'
+     and v.papel_vinculo in ('titular','representante')
+     and 'enviar'=any(v.escopos) and 'publicar'=any(v.escopos)
+   for share of s,v
+  `,[actor.organizacao_id,actor.id]);
+  return result.rows[0]??null;
+ }
+ async function authorizeRetrospective(sql:Sql,actor:Actor,input:unknown){
+  if((input as {retrospectiva?:unknown}).retrospectiva!==true)return;
+  if(actor.papel!=='organizacao'||!actor.organizacao_id)throw new ActivityError(403,'Registro retrospectivo disponível para a organização titular.');
+  const holder=await sql.query(`
+   select s.id from public.sujeitos_publicadores s
+   join public.vinculos_publicadores v on v.sujeito_id=s.id
+   where s.organizacao_legada_id=$1 and s.tipo='organizacao' and s.estado in ('pendente','ativo')
+     and v.conta_id=$2 and v.atual and v.situacao='ativo'
+     and v.papel_vinculo='titular' and 'editar'=any(v.escopos)
+   for share of s,v
+  `,[actor.organizacao_id,actor.id]);
+  if(!holder.rows.length)throw new ActivityError(403,'Registro retrospectivo disponível para a organização titular.');
+ }
  async function createDraft(sql:Sql,actor:Actor,value:ReturnType<typeof validateDraft>,rawInput:unknown):Promise<PrivateActivity>{
+  await authorizeRetrospective(sql,actor,rawInput);
   await checkProject(sql,actor,value.projeto_id);
   if(actor.sujeito_id){
    const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,sujeito_id,politica_publicacao,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values(null,$1,'i4',$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.sujeito_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];
-   const created=dto(row);await recordOngoing(sql,created,actor.id,rawInput);return created;
+   const created=dto(row);await recordDraftTiming(sql,created,actor.id,rawInput);return created;
   }
   const row=(await sql.query<Row>(`insert into public.atividades (organizacao_id,criada_por_conta_id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,projeto_id) values($1,$2,$3,$4,$5,$6,$7,$8) returning ${columns}`,[actor.organizacao_id,actor.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id??null])).rows[0];
-  const created=dto(row);await recordOngoing(sql,created,actor.id,rawInput);return created;
+  const created=dto(row);await recordDraftTiming(sql,created,actor.id,rawInput);return created;
  }
  function executionPlanView(plan:ExecutionPlanRow,items:ExecutionPlanItemRow[]):ExecutionPlanView{
   const recursos=items.map(item=>({
@@ -129,7 +155,8 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
      person=await activePersonPublisher(sql,stored.sujeito_id);
     }
     const publishedSnapshot=row.estado_editorial==='publicada'?parseSnapshot(stored.versao_publicada):null;
-    const approval=await approvalForVersion(sql,publishedSnapshot?{...publishedSnapshot,versao_submetida:publishedSnapshot.versao}:row);await requireAuthorization(sql,row,approval.authorization_id);
+    const approvedContent=publishedSnapshot?{...publishedSnapshot,versao_submetida:publishedSnapshot.versao}:row;
+    const approval=await approvalForVersion(sql,approvedContent);await requireAuthorization(sql,approvedContent,approval.authorization_id);
     if(row.estado_editorial==='publicada'){
      const event=await publicationRecord(sql,row.id,row.versao_submetida),snapshot=parseSnapshot(stored.versao_publicada);
      if(event.author!==actor.id||event.pedido_id!==command.pedido_id||event.versao_esperada!==command.versao_esperada||event.autorizacao_id!==approval.authorization_id||event.aprovacao_evento_id!==approval.event_id||snapshot.id!==row.id||snapshot.versao!==stored.numero_versao_publicada||event.snapshot_sha256!==snapshotHash(snapshot))throw new ActivityError(409,'Publicação já concluída ou inconsistente.');
@@ -140,9 +167,11 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
      const prior=parseSnapshot(stored.versao_publicada),event=await publicationRecord(sql,row.id,prior.versao);
      if(prior.versao!==stored.numero_versao_publicada||event.snapshot_sha256!==snapshotHash(prior))throw new ActivityError(409,'Snapshot anterior inconsistente.');
     }else if(stored.versao_publicada!==null||stored.publicada_em!==null)throw new ActivityError(409,'Publicação inconsistente.');
-    const timestamp=now(),validationClock=await draftValidationClock(sql,row,timestamp);
-    const snapshot=org?createSnapshot(row,org,stored.estado_programacao,timestamp,validationClock):createSubjectSnapshot(row,person!,stored.estado_programacao,timestamp,validationClock);
-    const published=dto((await sql.query<Row>(`update public.atividades set versao_publicada=$2::jsonb,numero_versao_publicada=$3,publicada_em=$4,estado_editorial='publicada',apoios_abertos=false,atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id,JSON.stringify(snapshot),row.versao_submetida,timestamp.toISOString()])).rows[0]);
+    const timestamp=now(),timing=await draftTimingDeclaration(sql,row,timestamp);
+    const validationClock=await draftValidationClock(sql,row,timestamp,timing);
+    const programmingState=timing==='retrospectiva'?'realizada':stored.estado_programacao;
+    const snapshot=org?createSnapshot(row,org,programmingState,timestamp,validationClock):createSubjectSnapshot(row,person!,programmingState,timestamp,validationClock);
+    const published=dto((await sql.query<Row>(`update public.atividades set versao_publicada=$2::jsonb,numero_versao_publicada=$3,publicada_em=$4,estado_programacao=$5,estado_editorial='publicada',apoios_abertos=false,atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id,JSON.stringify(snapshot),row.versao_submetida,timestamp.toISOString(),programmingState])).rows[0]);
     const metadata=JSON.stringify({tipo:'publicacao.v1',...command,autorizacao_id:approval.authorization_id,aprovacao_evento_id:approval.event_id,snapshot_sha256:snapshotHash(snapshot),snapshot});
     await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_publicada',$2,'aprovada','publicada',$3)",[row.id,actor.id,metadata]);
     return {...published,repetida:false};
@@ -356,19 +385,40 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     if(meta.tipo!=='retirada.v1'||typeof meta.motivo!=='string')throw unavailable();activity.motivo_retirada=meta.motivo;
    }
    const editorial=['editor','administrador'].includes(actor.papel);
-   return {...activity,pode_editar:(actor.papel==='organizacao'||Boolean(actor.sujeito_id))&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
+   const retrospective=await draftTimingDeclaration(sql,activity,now())==='retrospectiva';
+   let organizationalAuthority:'titular'|'representante'|'indisponivel'|undefined;
+   if(actor.papel==='organizacao'&&activity.estado_editorial==='rascunho'){
+    const authority=await organizationConsentAuthority(sql,actor);
+    organizationalAuthority=authority?authority.papel_vinculo:'indisponivel';
+   }
+   return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:(actor.papel==='organizacao'||Boolean(actor.sujeito_id))&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
   });},
   async update(id:string,input:unknown){
-   const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada','acontecendo_agora','projeto_id']);const version=validateVersion(body.versao_esperada);
+   const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada','acontecendo_agora','retrospectiva','projeto_id']);const version=validateVersion(body.versao_esperada);
    const {versao_esperada:ignored,...content}=body;void ignored;const value=validateDraft(content,now());
    return run('criar_rascunho',async(sql,actor)=>{
-    const row=await load(sql,actor,id,true);if((!['rascunho','publicada'].includes(row.estado_editorial)&&row.projeto_aprovacao!=='rejeitada')||row.versao_submetida!==version)throw new ActivityError(409,'A atividade mudou. Recarregue antes de continuar.');
+    const row=await load(sql,actor,id,true);
+    if(actor.papel==='organizacao'){
+     const editor=await sql.query(`
+      select s.id from public.sujeitos_publicadores s
+      join public.vinculos_publicadores v on v.sujeito_id=s.id
+      join public.atividades a on a.sujeito_id=s.id
+      where s.organizacao_legada_id=$1 and a.organizacao_id=$1 and a.id=$3
+        and s.tipo='organizacao' and s.estado in ('pendente','ativo')
+        and v.conta_id=$2 and v.atual and v.situacao='ativo'
+        and v.papel_vinculo in ('titular','representante') and 'editar'=any(v.escopos)
+      for share of s,v
+     `,[actor.organizacao_id,actor.id,row.id]);
+     if(!editor.rows.length)throw new ActivityError(403,'A edição exige vínculo organizacional ativo com permissão de editar.');
+    }
+    if((!['rascunho','publicada'].includes(row.estado_editorial)&&row.projeto_aprovacao!=='rejeitada')||row.versao_submetida!==version)throw new ActivityError(409,'A atividade mudou. Recarregue antes de continuar.');
+    await authorizeRetrospective(sql,actor,input);
     await checkProject(sql,actor,value.projeto_id);
     const archive=(await sql.query<{versao_publicada:unknown;numero_versao_publicada:number|null}>('select versao_publicada,numero_versao_publicada from public.atividades where id=$1',[row.id])).rows[0];
     const updated=dto((await sql.query<Row>(`update public.atividades set titulo=$2,descricao=$3,inicio_previsto=$4,orientacao_acesso=$5,referencia_oficial=$6,projeto_id=$7,versao_submetida = versao_submetida + 1,estado_editorial='rascunho',atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id,value.titulo,value.descricao,value.inicio_previsto,value.orientacao_acesso,value.referencia_oficial,value.projeto_id===undefined?row.projeto_id??null:value.projeto_id])).rows[0]);
     if(archive?.numero_versao_publicada){const metadata=JSON.stringify({tipo:'edicao.v1',versao_anterior:version,versao_nova:updated.versao_submetida,snapshot_anterior:archive.versao_publicada});
      await sql.query(`insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_edicao_iniciada',$2,$3,'rascunho',$4)`,[row.id,actor.id,row.estado_editorial,metadata]);}
-    await recordOngoing(sql,updated,actor.id,input);return updated;
+    await recordDraftTiming(sql,updated,actor.id,input);return updated;
    });
   },
   async submit(id:string,input:unknown){
@@ -376,10 +426,18 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    if(body.autoriza_publicacao!==undefined&&typeof body.autoriza_publicacao!=='boolean')throw new ActivityError(422,'Confirme a autorização para divulgação.');
    return run('enviar_rascunho',async(sql,actor)=>{
     const row=await load(sql,actor,id,true);if(row.versao_submetida!==version)throw new ActivityError(409,'A atividade mudou. Recarregue antes de continuar.');
+    const organizationId=actor.papel==='organizacao'?actor.organizacao_id:null;
+    let organizationAuthority;
+    if(organizationId){
+     if(body.autoriza_publicacao!==true)throw new ActivityError(422,'Autorize a divulgação desta versão antes de enviar.');
+     organizationAuthority=await organizationConsentAuthority(sql,actor);
+     if(!organizationAuthority)throw new ActivityError(403,'A autorização exige vínculo organizacional ativo com permissão de envio e divulgação.');
+    }
     if(actor.sujeito_id&&actor.sujeito_tipo!=='coletivo_informal'&&body.autoriza_publicacao!==true)throw new ActivityError(422,'Autorize a divulgação desta versão antes de enviar.');
     if(row.estado_editorial==='enviada')return row;
     if(row.estado_editorial!=='rascunho')throw new ActivityError(409,'Esta atividade não pode ser enviada neste estado.');
     validateDraft({titulo:row.titulo,descricao:row.descricao,inicio_previsto:row.inicio_previsto,orientacao_acesso:row.orientacao_acesso,referencia_oficial:row.referencia_oficial},await draftValidationClock(sql,row,now()));
+    if(organizationId&&organizationAuthority)await recordOrganizationConsent(sql,row,actor.id,organizationId,organizationAuthority.id);
     if(actor.sujeito_id&&actor.sujeito_tipo!=='coletivo_informal')await recordPersonConsent(sql,row,actor.id,actor.sujeito_id);
     const sent=dto((await sql.query<Row>(`update public.atividades set estado_editorial='enviada',atualizada_em=clock_timestamp() where id=$1 returning ${columns}`,[row.id])).rows[0]);
     await sql.query("insert into public.eventos_editoriais (objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo) values('atividade',$1,'atividade_enviada',$2,'rascunho','enviada')",[row.id,actor.id]);return sent;

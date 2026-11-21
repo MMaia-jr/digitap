@@ -9,6 +9,7 @@ function setup(role='organizacao'){
  const query=vi.fn(async(text:string,values?:unknown[])=>{
  if(text.includes('from public.contas_acesso'))return {rows:[{id:user,auth_user_id:user,organizacao_id:org,papel:role,situacao:'ativa'}]};
  if(text.includes('from public.organizacoes'))return {rows:[{estado_validacao:'validada'}]};
+ if(text.includes('join public.vinculos_publicadores')&&text.includes("'editar'=any(v.escopos)"))return {rows:[{id:org}]};
  if(text.includes('from public.atividades'))return {rows:[{...row}]};
  if(text.includes('from public.eventos_editoriais'))return {rows:[]};
  if(text.includes('insert into public.eventos_editoriais')){events.push(values??[]);return {rows:[]};}

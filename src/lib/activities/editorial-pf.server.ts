@@ -5,17 +5,42 @@ import {ActivityError,type PrivateActivity} from './domain';
 import type {PublicPublisher} from './publication';
 import {approvedContentHash} from './publication.server';
 
-export async function recordOngoing(sql:Sql,row:PrivateActivity,actor:string,input:unknown){
- if((input as {acontecendo_agora?:unknown}).acontecendo_agora!==true)return;
- await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_horario_atual',$2,'rascunho',$3)",[row.id,actor,JSON.stringify({tipo:'horario-atual.v1',versao:row.versao_submetida,inicio_previsto:row.inicio_previsto})]);
+const timingDeclarations = {
+ atual: { action: 'atividade_horario_atual', type: 'horario-atual.v1' },
+ retrospectiva: { action: 'atividade_horario_retrospectivo', type: 'horario-retrospectivo.v1' },
+};
+type TimingDeclaration = keyof typeof timingDeclarations;
+
+export async function recordDraftTiming(sql:Sql,row:PrivateActivity,actor:string,input:unknown){
+ const body=input as {acontecendo_agora?:unknown;retrospectiva?:unknown};
+ const mode=body.retrospectiva===true?'retrospectiva':body.acontecendo_agora===true?'atual':null;
+ if(!mode)return;
+ const {action,type}=timingDeclarations[mode];
+ const metadata=JSON.stringify({tipo:type,versao:row.versao_submetida,inicio_previsto:row.inicio_previsto});
+ await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_novo,justificativa_restrita) values('atividade',$1,$2,$3,'rascunho',$4)",[row.id,action,actor,metadata]);
+}
+
+export async function draftTimingDeclaration(sql:Sql,row:PrivateActivity,clock:Date):Promise<TimingDeclaration|null>{
+ if(Date.parse(row.inicio_previsto)>clock.getTime())return null;
+ const events=(await sql.query<{acao:string;justificativa_restrita:string}>(`
+  select acao,justificativa_restrita from public.eventos_editoriais
+  where objeto_tipo='atividade' and objeto_id=$1 and acao=any($2::text[])
+ `,[row.id,Object.values(timingDeclarations).map(item=>item.action)])).rows;
+ for(const event of events){
+  const mode=event.acao===timingDeclarations.retrospectiva.action?'retrospectiva':'atual';
+  try{
+   const metadata=JSON.parse(event.justificativa_restrita);
+   if(event.acao===timingDeclarations[mode].action&&metadata.tipo===timingDeclarations[mode].type
+    &&metadata.versao===row.versao_submetida&&metadata.inicio_previsto===row.inicio_previsto)return mode;
+  }catch{/* A declaração só vale quando os metadados correspondem à versão. */}
+ }
+ return null;
 }
 
 /** Only a server-recorded declaration for this exact version permits a past start. */
-export async function draftValidationClock(sql:Sql,row:PrivateActivity,clock:Date){
- if(new Date(row.inicio_previsto).getTime()>clock.getTime())return clock;
- const events=(await sql.query<{justificativa_restrita:string}>("select justificativa_restrita from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=$1 and acao='atividade_horario_atual'",[row.id])).rows;
- const declared=events.some(event=>{try{const m=JSON.parse(event.justificativa_restrita);return m.tipo==='horario-atual.v1'&&m.versao===row.versao_submetida&&m.inicio_previsto===row.inicio_previsto;}catch{return false;}});
- return declared?new Date(0):clock;
+export async function draftValidationClock(sql:Sql,row:PrivateActivity,clock:Date,declaration?:TimingDeclaration|null){
+ const timing=declaration===undefined?await draftTimingDeclaration(sql,row,clock):declaration;
+ return timing?new Date(0):clock;
 }
 
 export async function recordPersonConsent(sql:Sql,row:PrivateActivity,account:string,subject:string){

@@ -11,7 +11,7 @@ export function createPublicQueries(deps:{transaction?:Transaction}={}){
    const snapshot=parseSnapshot(row.versao_publicada),event=await publicationRecord(sql,row.id,snapshot.versao);
    const ownerMatches=snapshot.tipo==='atividade-publica.v1'?snapshot.organizacao.id===row.organizacao_id:row.organizacao_id===null&&snapshot.sujeito.id===row.sujeito_id&&snapshot.sujeito.tipo===row.sujeito_tipo;
    if(snapshot.id!==row.id||!ownerMatches||snapshot.versao!==row.numero_versao_publicada||event.versao_esperada!==snapshot.versao||event.snapshot_sha256!==snapshotHash(snapshot))return null;
-   await requireVersionAuthorization(sql,{id:row.id,versao_submetida:snapshot.versao},event.autorizacao_id);
+   await requireVersionAuthorization(sql,{...snapshot,versao_submetida:snapshot.versao},event.autorizacao_id);
    const state=row.estado_programacao??snapshot.estado_programacao;
    if(!['programada','adiada','cancelada','realizada'].includes(state))return null;
    return {...snapshot,estado_programacao:state};

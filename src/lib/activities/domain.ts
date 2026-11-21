@@ -3,10 +3,10 @@ export class ActivityError extends Error {
 }
 export interface DraftInput {projeto_id?:string|null;titulo:string;descricao:string;inicio_previsto:string;orientacao_acesso:string;referencia_oficial:string|null}
 export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida'|'rejeitada'|'publicada'|'retirada';
-export interface PrivateActivity extends DraftInput {criado_por_sujeito_id?:string;projeto_aprovacao?:'pendente'|'aprovada'|'rejeitada'|null;projeto_versao_aprovada?:number|null;projeto_parecer?:string|null;id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
+export interface PrivateActivity extends DraftInput {retrospectiva?:true;criado_por_sujeito_id?:string;projeto_aprovacao?:'pendente'|'aprovada'|'rejeitada'|null;projeto_versao_aprovada?:number|null;projeto_parecer?:string|null;id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
-const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','projeto_id'];
+const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','retrospectiva','projeto_id'];
 export function objectInput(input:unknown,allowed:string[]):Record<string,unknown>{
  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!allowed.includes(k)))throw new ActivityError(400,'Pedido inválido.');
  return input as Record<string,unknown>;
@@ -18,7 +18,7 @@ function text(input:unknown,field:string,min:number,max:number){
  if(length<min||length>max||/<\/?[a-z!]/i.test(result)||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(result))return invalid(field,`Use de ${min} a ${max} caracteres de texto, sem HTML.`);
  return result;
 }
-function start(value:unknown,now:Date){
+function start(value:unknown,now:Date,retrospective=false){
  if(typeof value!=='string')return invalid('inicio_previsto','Informe data e horário com fuso.');
  const m=value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?(Z|([+-])(\d{2}):(\d{2}))$/);
  if(!m)return invalid('inicio_previsto','Informe uma data válida com fuso explícito.');
@@ -26,14 +26,19 @@ function start(value:unknown,now:Date){
  const calendar=new Date(0);calendar.setUTCFullYear(y,mo-1,d);calendar.setUTCHours(0,0,0,0);
  if(y<2000||calendar.getUTCFullYear()!==y||calendar.getUTCMonth()!==mo-1||calendar.getUTCDate()!==d||Number(hour)>23||Number(minute)>59||Number(second??0)>59||Number(m[10]??0)>14||Number(m[11]??0)>59||(Number(m[10])===14&&Number(m[11])!==0))return invalid('inicio_previsto','Data ou horário inválido.');
  const instant=new Date(value);
- if(!Number.isFinite(instant.getTime())||instant.getTime()<=now.getTime())return invalid('inicio_previsto','Escolha uma data futura.');
+ if(!Number.isFinite(instant.getTime()))return invalid('inicio_previsto','Data ou horário inválido.');
+ if(retrospective){
+  if(instant.getTime()>now.getTime())return invalid('inicio_previsto','Informe o início da atividade já realizada.');
+ }else if(instant.getTime()<=now.getTime())return invalid('inicio_previsto','Escolha uma data futura.');
  return instant.toISOString();
 }
 export function validateDraft(input:unknown,now=new Date()):DraftInput{
  const body=objectInput(input,fields);
  const titulo=text(body.titulo,'titulo',3,180),descricao=text(body.descricao,'descricao',10,5000),orientacao_acesso=text(body.orientacao_acesso,'orientacao_acesso',3,600);
  if(body.acontecendo_agora!==undefined&&typeof body.acontecendo_agora!=='boolean')throw new ActivityError(422,'Informe se a atividade está acontecendo agora.');
- const inicio_previsto=start(body.inicio_previsto,body.acontecendo_agora===true?new Date(now.getTime()-300000):now);
+ if(body.retrospectiva!==undefined&&typeof body.retrospectiva!=='boolean')throw new ActivityError(422,'Informe se a atividade já aconteceu.');
+ if(body.retrospectiva===true&&body.acontecendo_agora===true)throw new ActivityError(422,'Escolha apenas um modo para a atividade.');
+ const inicio_previsto=start(body.inicio_previsto,body.acontecendo_agora===true?new Date(now.getTime()-300000):now,body.retrospectiva===true);
  if(body.acontecendo_agora===true&&Date.parse(inicio_previsto)>now.getTime()+60000)throw new ActivityError(422,'O horário informado deve ser o horário atual.');
  let referencia_oficial:string|null=null;
  if(body.referencia_oficial!==undefined&&body.referencia_oficial!==null&&body.referencia_oficial!==''){
@@ -112,12 +117,12 @@ function localParts(date:Date){
  const p=Object.fromEntries(parts.map(v=>[v.type,v.value]));return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
 }
 export function instantToLocalStart(value:string){return localParts(new Date(value));}
-export function localStartToInstant(value:string,now=new Date()):string{
+export function localStartToInstant(value:string,now=new Date(),retrospective=false):string{
  if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value))return invalid('inicio_previsto','Informe data e horário válidos.');
  const guess=new Date(value+'Z');if(!Number.isFinite(guess.getTime()))return invalid('inicio_previsto','Data inválida.');
  const offset=new Date(localParts(guess)+'Z').getTime()-guess.getTime();const result=new Date(guess.getTime()-offset);
  if(localParts(result)!==value)return invalid('inicio_previsto','Data ou horário inválido.');
- return start(result.toISOString(),now);
+ return start(result.toISOString(),now,retrospective);
 }
 
 export function validateWithdrawal(input:unknown){

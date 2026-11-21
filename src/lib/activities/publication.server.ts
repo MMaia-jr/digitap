@@ -5,9 +5,31 @@ import {ActivityError,validateDraft,type PrivateActivity,type DraftInput} from '
 import {uuid,type PublicActivity} from './publication';
 export function snapshotHash(snapshot:PublicActivity){return createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');}
 export function approvedContentHash(row:DraftInput&Pick<PrivateActivity,'id'|'versao_submetida'>){const content=validateDraft({titulo:row.titulo,descricao:row.descricao,inicio_previsto:row.inicio_previsto,orientacao_acesso:row.orientacao_acesso,referencia_oficial:row.referencia_oficial},new Date(0));return createHash('sha256').update(JSON.stringify({id:row.id,versao:row.versao_submetida,...content})).digest('hex');}
-export async function requireVersionAuthorization(sql:Sql,row:{id:string;versao_submetida:number},authorizationId:string|null){
- const result=await sql.query<{id:string}>("select id from public.autorizacoes_publicacao where id=$1 and objeto_tipo='atividade' and objeto_id=$2 and situacao='vigente' and revogada_em is null and autorizada_em<=clock_timestamp() and (validade_ate is null or validade_ate>clock_timestamp()) and 'divulgacao'=any(escopo_autorizado) and $3=any(escopo_autorizado) and char_length(trim(papel_autorizante))>0 and char_length(trim(comprovante_restrito))>0 for share",[authorizationId,row.id,'atividade:versao:'+row.versao_submetida]);
- if(!result.rows[0])throw new ActivityError(422,'Autorização indisponível ou incompatível com esta atividade e versão.');
+const organizationAuthorizer='Representação organizacional autenticada';
+type AuthorizationContent=DraftInput&Pick<PrivateActivity,'id'|'versao_submetida'>;
+
+export async function recordOrganizationConsent(sql:Sql,row:AuthorizationContent,account:string,organization:string,subject:string){
+ const proof=JSON.stringify({
+  tipo:'consentimento-organizacao.v1',conta_id:account,organizacao_id:organization,sujeito_id:subject,
+  atividade_id:row.id,versao:row.versao_submetida,conteudo_sha256:approvedContentHash(row),
+  declaracao:'Representante autorizado declarou a divulgação desta versão da atividade após revisão editorial.',
+ });
+ await sql.query("insert into public.autorizacoes_publicacao(objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em) values('atividade',$1,$2,$3,$4,clock_timestamp())",[row.id,['divulgacao','atividade:versao:'+row.versao_submetida],organizationAuthorizer,proof]);
+ await sql.query("insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_anterior,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_divulgacao_autorizada',$2,'rascunho','rascunho',$3)",[row.id,account,proof]);
+}
+
+export async function requireVersionAuthorization(sql:Sql,row:AuthorizationContent,authorizationId:string|null){
+ const result=await sql.query<{papel_autorizante:string;comprovante_restrito:string}>("select papel_autorizante,comprovante_restrito from public.autorizacoes_publicacao where id=$1 and objeto_tipo='atividade' and objeto_id=$2 and situacao='vigente' and revogada_em is null and autorizada_em<=clock_timestamp() and (validade_ate is null or validade_ate>clock_timestamp()) and 'divulgacao'=any(escopo_autorizado) and $3=any(escopo_autorizado) and char_length(trim(papel_autorizante))>0 and char_length(trim(comprovante_restrito))>0 for share",[authorizationId,row.id,'atividade:versao:'+row.versao_submetida]);
+ const authorization=result.rows[0];
+ if(!authorization)throw new ActivityError(422,'Autorização indisponível ou incompatível com esta atividade e versão.');
+ if(authorization.papel_autorizante===organizationAuthorizer){
+  let proof;
+  try{proof=JSON.parse(authorization.comprovante_restrito);}catch{throw new ActivityError(422,'Autorização organizacional inválida.');}
+  if(proof?.tipo!=='consentimento-organizacao.v1'||proof.atividade_id!==row.id
+   ||proof.versao!==row.versao_submetida||proof.conteudo_sha256!==approvedContentHash(row)){
+   throw new ActivityError(422,'Autorização incompatível com o conteúdo desta versão.');
+  }
+ }
 }
 export async function approvalForVersion(sql:Sql,row:DraftInput&Pick<PrivateActivity,'id'|'versao_submetida'>){
  const id=row.id,version=row.versao_submetida,hash=approvedContentHash(row);
