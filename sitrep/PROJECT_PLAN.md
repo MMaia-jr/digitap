@@ -7,6 +7,54 @@
 - Evidência anterior de falha preservada. RED da correção: quatro edições indevidas em PostgreSQL. GREEN: 33/33 PostgreSQL, T06 1/1, quatro regressões Chromium de AFLORA e portfólio e 949/949 Vitest. TypeScript aprovado, ESLint sem erros.
 - Escopo local com identidades sintéticas. Sem alteração de schema, infraestrutura, envio delegado ou política geral de representação. Evidências detalhadas permanecem no relatório local não versionado.
 
+## Decisão vigente — infraestrutura original, 19/11/2026
+
+- O proponente substituiu a decisão anterior de banco novo limpo: o destino
+  operacional é o Supabase original `ntecccthdcdrpyuvljid`, com sua conta Auth
+  preservada e Resend existente, Vercel original
+  `prj_r7gARRtVGlIFsdqr1TPaGkcLCL7v`, main de `MMaia-jr/digitap` e domínio
+  `https://digitap.com.br`. Não migrar usuários nem replicar provedor SMTP.
+- Inspeção remota: 11 das 14 migrações Beta presentes. Pendentes somente
+  `20261115230335`, `20261115233000`, `20261116120000`; cinco tabelas novas
+  ausentes e dependência `atividades(id,sujeito_id)` confirmada. Não reaplicar
+  as 11 existentes. Nenhum DDL foi executado.
+- Revisão única de SQL, impacto, verificação e rollback em
+  `operations/evidence/infra-original-20261119/REVIEW.md`. Regressão local:
+  108 PASS; novo gate SQL somente leitura falhou como esperado por tabela
+  Beta ausente. Isso não comprova migração ou funcionamento online.
+- Backup verificável é requisito anterior a qualquer DDL. Consulta de backup
+  falhou com `BackupListNetworkError`; Auth/SMTP com `ENOTFOUND` na Management
+  API. Aplicação e push permanecem pendentes, sem alteração da produção.
+  Caixa de teste confirmada pelo proponente; conector Gmail ainda não forneceu
+  acesso autenticado. Recursos Beta permanecem preservados, sem desativação.
+
+## Histórico de 19/11/2026 — decisão pelo banco novo, substituída pela decisão de manter o Supabase original
+
+- O proponente autorizou iniciar a operação com o Supabase novo
+  `looaneeqzxikneophzlv`, preservando o antigo `ntecccthdcdrpyuvljid`
+  somente como contingência. A conta confirmada antiga não será migrada nem
+  excluída; seu titular precisará realizar novo cadastro no banco definitivo.
+  Sua existência não bloqueia mais a estratégia de banco limpo.
+- Destino autorizado: projeto Vercel principal `digitap`, branch `main`,
+  domínio oficial `https://digitap.com.br`, cadastro público com confirmação
+  obrigatória. A integração da Beta na main e a troca das variáveis devem
+  ocorrer **depois da validação do fluxo de autenticação**, conforme a
+  sequência humana mais recente. Nada foi publicado por esta atualização.
+- Pendências efetivas: a leitura Auth/SMTP dos dois projetos ainda retorna
+  `ENOTFOUND api.supabase.com`; configuração segura do SMTP Resend no painel
+  do projeto novo e identificação explícita da caixa postal de teste foram
+  solicitadas. Não há prova de configuração SMTP nem de recebimento online.
+- O campo secreto a preencher diretamente no painel é **Password** em
+  Authentication → Email → SMTP Settings. Usar a API key Resend existente,
+  sem registrar seu valor; host `smtp.resend.com`, porta `465`, usuário
+  `resend`, remetente e nome do remetente já usados no projeto antigo.
+  Não foi criado provedor nem alterado o projeto antigo.
+- Evidências e rollback anteriores:
+  `operations/evidence/consolidacao-definitiva-20261119/PREFLIGHT.md`.
+  O bloqueio histórico de continuidade da conta foi resolvido pela decisão
+  acima; os bloqueios de SMTP, acesso e teste permanecem. A ativação pública
+  definitiva só poderá ser declarada após testes em `digitap.com.br`.
+
 ## Beta Fechado — candidato local versionado e demonstrável, 16/11/2026
 
 - **Branch local:** `release/beta-fechado-20261116`, criada a partir de `main`

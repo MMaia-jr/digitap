@@ -1,5 +1,11 @@
 # A Praça — Status Report
 
+> **Nota de contexto — 21/11/2026.** Os incrementos I1–I4 documentam o desenvolvimento técnico do DigItap.
+> Os campos de fase, progresso e último commit abaixo descrevem o checkpoint histórico de 06/11.
+> Em 21/11, a branch local `release/beta-fechado-20261116` registrou `76f1c7f` (implementação)
+> e `1c01271` (registro documental). A constituição, a governança e a validação comunitária
+> de A Praça dependem de atos e evidências próprios. Esses commits locais não comprovam tais marcos.
+
 > **Last Updated:** 2026-11-06 — fechamento técnico do I4 autorizado
 > **Projeto:** A Praça
 > **Fase atual:** I4 concluído tecnicamente; I5 próximo (não iniciado)
