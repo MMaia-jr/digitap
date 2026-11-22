@@ -1,7 +1,15 @@
 # DigItap — candidato local de Beta Fechado
 
 **Estado:** procedimento local preparado; homologação externa não iniciada.
-**Escopo:** E1–E4.1, ECO-01, AFLORA-01/02C, AUT-ORG-01/FIX e OSS-01A/01B existentes neste candidato local. E5 permanece suspensa.
+**Escopo:** E1–E4.1, ECO-01, AFLORA-01/02C, AUT-ORG-01/FIX e OSS-01A–01D existentes neste candidato local. E5 permanece suspensa.
+
+## Checkpoint local INC-OSS-01D — 22/11/2026
+
+- Fluxo existente de registro de realização conectado a handlers privados para iniciar upload, confirmar objeto no Storage, listar somente arquivos confirmados e emitir leitura privada. A interface envia bytes pelo SDK Supabase já instalado. Nenhuma migration/schema foi criada neste incremento.
+- Ensaio exclusivamente local: `npm run beta:check` PASS com API/Auth `127.0.0.1:56151`, PostgreSQL `127.0.0.1:56152`, 15 migrations sem pendências e zero usuários sintéticos residuais. Teste PostgreSQL + Storage real: 8/8; Playwright direcionado DOG-01: 1/1; Vitest: 965/965; TypeScript PASS; ESLint zero erros/quatro avisos; `git diff --check` PASS.
+- `npm run build` com Turbopack falhou ao resolver `next/package.json` a partir da raiz por `node_modules` em symlink externo. `npm run build -- --webpack` passou compilação, TypeScript e geração das rotas. Não foram instaladas dependências. Evidência sanitizada do percurso: `operations/evidence/inc-oss-01d-green-20261122-7/`.
+- Fixtures e bucket privado temporário foram criados apenas na stack local e removidos por IDs/nomes próprios do ensaio; relatório final registrou zero atividades, registros, arquivos e usuários residuais. Upload/leitura de bytes sintéticos passaram para PF, coletivo e organização; representante `ler_privado` listou sem obter controles de upload; acesso alheio e novas autorizações após revogação retornaram 403. Um link assinado antes da revogação permaneceu utilizável até o TTL, de até 300 segundos.
+- Esses resultados não comprovam Cloud, paridade de Storage/RLS, malware scanning, Auth/e-mail online, uso humano ou prontidão para beta com participantes. Não interpretar declaração ou arquivo como fato independentemente verificado.
 
 ## Checkpoint local INC-EST-02/03 — 22/11/2026
 

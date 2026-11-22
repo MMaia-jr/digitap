@@ -1,5 +1,17 @@
 # A Praça — Plano
 
+## INC-OSS-01D — jornada de evidência privada, 22/11/2026
+
+- **Estado:** implementação local na worktree isolada `release/inc-oss-01d-20261122`, baseada em `3114b7108ec0cdb5550c6e7b51412f63b231c743`. Sem push, merge, deploy, migration ou alteração Cloud.
+- **CÓDIGO:** OSS-01C foi conectado aos detalhes existentes de registros de realização por handlers privados de iniciar upload, confirmar, listar e emitir leitura; a UI usa `@supabase/supabase-js` para enviar bytes ao bucket privado. Nenhum endpoint público de arquivo foi criado.
+- **RED → GREEN:** o RED de interface confirmou ausência do percurso; REDs de contrato/PostgreSQL reproduziram listagem não autorizada convertida em 503 (esperado 403) e bloqueio indevido da leitura privada de colaborador sem permissão editorial de envio. GREEN mapeia a negação controlada para 403 e calcula `pode_ler_privado` a partir do vínculo/escope atual, com locks compartilhados no PostgreSQL. PATCH de edição e autorização de upload continuam exigindo o escopo efetivo `editar`.
+- **TESTADO LOCAL:** PostgreSQL + Storage Supabase local: 8/8; bytes sintéticos PF, coletivo e organização enviados e lidos; representante com `ler_privado` sem upload; titular não relacionado e vínculo revogado sem novas URLs; URL já assinada continuou válida até o TTL. Playwright DOG-01: 1/1; Vitest: 965/965; TypeScript PASS; ESLint zero erros/quatro avisos; `git diff --check` PASS; `beta:check` PASS (Node 22.23.2, API/Auth `127.0.0.1:56151`, PostgreSQL `127.0.0.1:56152`, 15 migrations sem pendências, zero contas sintéticas residuais). Evidência sanitizada: `operations/evidence/inc-oss-01d-green-20261122-7/`.
+- **BUILD:** `npm run build` via Turbopack falhou ao resolver `next/package.json` porque `node_modules` é symlink externo à worktree. `npm run build -- --webpack` passou compilação, TypeScript e geração de rotas usando o backend suportado pelo Next instalado; nenhuma dependência foi instalada.
+- **LIMITES:** ensaio apenas local, sem Storage/Cloud, operação online, validação humana DOG-01 ou beta com participantes. Leitura assinada emitida não é revogada instantaneamente: permanece válida até expirar (máximo 300 segundos). Bucket de teste e fixtures sintéticas foram limpos; `beta:check` confirmou zero resíduos de Auth, mas o bucket é removido pelo teste.
+- **NOW:** revisar e registrar commits locais seletivos de código/testes e documentação, mantendo evidências de execução fora dos commits.
+- **NEXT:** preparar IA-CORE-01 em worktree própria, anterior ao DOG-01 humano: avaliar AI SDK e Mastra e testar somente componentes open source que demonstrem benefício para recuperar necessidades, capacidades, relações e realizações autorizadas. Preservar proveniência, temporalidade, supervisão humana, separação declaração/verificação e portabilidade entre provedores; não criar framework próprio nem antecipar esse escopo nesta branch.
+- **LATER:** ensaio humano DOG-01 e gates de Cloud/homologação exigem autorização e evidências próprias. Não inferir adoção, mandato institucional ou prontidão online deste resultado.
+
 ## INC-OSS-01C — integração local com Supabase Storage, 22/11/2026
 
 - **Estado:** código e testes locais na worktree isolada `release/inc-oss-01c-20261122`, baseada em `fbbf1ff4b10c62ed60c5c19d5e2163f07dd4a5e5`. Sem push, merge, deploy, alteração Cloud ou migration.
