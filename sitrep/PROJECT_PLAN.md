@@ -1,5 +1,15 @@
 # A Praça — Plano
 
+## INC-OSS-01C — integração local com Supabase Storage, 22/11/2026
+
+- **Estado:** código e testes locais na worktree isolada `release/inc-oss-01c-20261122`, baseada em `fbbf1ff4b10c62ed60c5c19d5e2163f07dd4a5e5`. Sem push, merge, deploy, alteração Cloud ou migration.
+- **RED → GREEN:** os contratos inicialmente falharam pela ausência do adaptador; a integração PostgreSQL identificou autorização que não considerava revogação/escopos. A menor correção passou a consultar vínculos vigentes e a bloquear as linhas de autorização na transação.
+- **CÓDIGO / TESTADO LOCAL:** adaptador server-only baseado em `@supabase/supabase-js`; bucket temporário privado e bytes sintéticos reais no Storage local. Integrações PostgreSQL + Storage: 12/12; Vitest completo: 961/961; TypeScript e `git diff --check`: PASS; ESLint: zero erros, quatro avisos. `beta:check`: 15 migrations locais sem pendência e zero usuários sintéticos; verificação final: zero buckets temporários OSS-01C.
+- **Limites:** o build não pôde resolver `next/package.json` porque `node_modules` foi reutilizado por symlink externo à raiz do worktree; não foram instaladas nem copiadas dependências. Nenhuma rota/interface de produto foi conectada. O ensaio não comprova Storage/Cloud. Revogar vínculo impede novas autorizações observadas, mas URL de leitura já emitida continua utilizável até o TTL máximo de 300 segundos.
+- **NOW:** rever o diff e registrar commits locais seletivos. Manter a habilitação local de Storage e as fixture suites restritas ao Supabase local; nenhuma migração ou dado de infraestrutura remota.
+- **NEXT:** conectar o serviço a um percurso de produto somente com contrato de interface/autorização próprio; validar configuração, políticas, retenção e operação Cloud em gate separado. Isso não está incluído neste incremento.
+- **LATER:** nenhuma expansão para REL-01 ou IA contextual.
+
 ## INC-EST-02/03 — checkpoint técnico local, 22/11/2026
 
 - **Estado:** worktree isolada `release/inc-est-03-20261122`, iniciada em `e6cae4c9a6808fc713d733f9d438dcd257995561`; sem integração no GitHub. A candidata INC-EST-02 e o checkout original foram preservados.
