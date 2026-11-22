@@ -173,6 +173,34 @@ npm run dev
 
 [CÓDIGO] `npm run local:start` continua bloqueado por [start-local.mjs](scripts/start-local.mjs). O procedimento histórico está em [autenticação local](operations/autenticacao-local.md); o bloqueio do script não comprova que Docker esteja parado hoje. Esta revisão não inspecionou Docker nem banco.
 
+## Licenciamento e direitos autorais
+
+O titular declarado das contribuições originais autorizadas é Marcos Antonio
+Maia Junior, Copyright (C) 2026. O código original que ele tem autoridade para
+licenciar é oferecido sob **AGPL-3.0-only**; o texto integral está em
+[`LICENSE`](LICENSE) e na [publicação oficial GNU](https://www.gnu.org/licenses/agpl-3.0.html).
+Não se concede a opção “ou qualquer versão posterior”.
+
+A documentação original e autorizada é oferecida sob **CC BY-SA 4.0**, conforme
+o escopo de [`LICENSE-DOCS.md`](LICENSE-DOCS.md) e o
+[legalcode oficial](https://creativecommons.org/licenses/by-sa/4.0/legalcode).
+Esses avisos concedem somente os direitos que seus respectivos titulares podem
+licenciar; não comprovam transferência de titularidade à A Praça, ao DigItap
+como pessoa jurídica ou a uma empresa.
+
+As licenças não se estendem automaticamente a conteúdo ou arquivos de usuários,
+dados pessoais, segredos, obras e código de terceiros, capturas de tela,
+fotografias, fontes, logotipos, identidade visual, marcas ou aos projetos
+separados Célula Zero e Esentya. Consulte avisos específicos antes de reutilizar
+qualquer material excluído.
+
+**Proveniência pendente:** `src/lib/interoperability/valueflows-projection.ts`
+foi desenvolvido com um ZIP ValueFlows como insumo, mas o arquivo original não
+está disponível nesta worktree para comparação e sua licença não foi
+confirmada. Não se afirma que esse módulo ou seus testes sejam relicenciados
+por este aviso. Isso também impede tratar a cobertura de todo o repositório
+como integralmente verificada.
+
 ## Privacidade, governança e contribuição
 
 - [CÓDIGO] Existem as páginas [privacidade](src/app/privacidade/page.tsx), [termos](src/app/termos/page.tsx), [contestação](src/app/contestacao/page.tsx) e [governança](src/app/governanca/page.tsx). Os caminhos públicos correspondentes são `/privacidade`, `/termos`, `/contestacao` e `/governanca`; disponibilidade remota não foi verificada.
