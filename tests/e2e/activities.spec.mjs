@@ -70,10 +70,10 @@ test('B03: API rejeita datas/URL/HTML e IDs de organização forjados',async()=>
  expect((await api(a.page,'/api/atividades',{...content(),organizacao_id:fixtures[1].org})).status).toBe(400);
 });
 test('B04: envio real permanece privado, audita uma vez e retry é idempotente',async({browser})=>{
- const a=fixtures[0];await a.page.goto('/dashboard/atividade/'+activity);await a.page.getByRole('button',{name:'Enviar atividade',exact:true}).click();await expect(a.page.getByText('Enviada — continua privada',{exact:true})).toBeVisible();
+ const a=fixtures[0];await a.page.goto('/dashboard/atividade/'+activity);await a.page.getByLabel('Autorizo a divulgação desta versão após revisão editorial.',{exact:true}).check();await a.page.getByRole('button',{name:'Enviar atividade',exact:true}).click();await expect(a.page.getByText('Enviada — continua privada',{exact:true})).toBeVisible();
  const version=(await db.query('select versao_submetida from public.atividades where id=$1',[activity])).rows[0].versao_submetida;
- const retries=await Promise.all(Array.from({length:4},()=>api(a.page,'/api/atividades/'+activity+'/enviar',{versao_esperada:version})));expect(retries.every(r=>r.status===200&&r.cache.includes('no-store'))).toBe(true);
- expect((await db.query('select count(*)::int n from public.eventos_editoriais where objeto_id=$1',[activity])).rows[0].n).toBe(1);
+ const retries=await Promise.all(Array.from({length:4},()=>api(a.page,'/api/atividades/'+activity+'/enviar',{versao_esperada:version,autoriza_publicacao:true})));expect(retries.every(r=>r.status===200&&r.cache.includes('no-store'))).toBe(true);
+ expect((await db.query('select acao,count(*)::int n from public.eventos_editoriais where objeto_id=$1 group by acao order by acao',[activity])).rows).toEqual([{acao:'atividade_divulgacao_autorizada',n:1},{acao:'atividade_enviada',n:1}]);
  const stored=(await db.query('select estado_editorial,versao_publicada,publicada_em,apoios_abertos from public.atividades where id=$1',[activity])).rows[0];expect(stored).toEqual({estado_editorial:'enviada',versao_publicada:null,publicada_em:null,apoios_abertos:false});
  const visitor=await browser.newContext({baseURL:origin});const page=await visitor.newPage();const publicResponse=await page.goto('/atividade/'+activity);expect(publicResponse.status()).toBe(404);expect((await page.locator('body').innerText()).includes('Atividade Fictícia Editada E2E')).toBe(false);
  await page.goto('/');expect((await page.locator('body').innerText()).includes('Atividade Fictícia Editada E2E')).toBe(false);expect((await page.request.get('/api/atividades')).status()).toBe(401);await visitor.close();

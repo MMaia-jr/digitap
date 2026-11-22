@@ -110,7 +110,7 @@ test('PORT-01: portfólio público reúne atividades e relatos aprovados; gestã
   await orgPage.getByText('Criar novo projeto',{exact:true}).click();
   await orgPage.getByLabel('Título do projeto',{exact:true}).fill('Raízes do Amanhã');await orgPage.getByLabel('Descrição',{exact:true}).fill('Um projeto de cuidado com o território, cultivo comunitário e trocas de saberes. Dados fictícios para demonstrar nosso portfólio institucional.');await orgPage.getByRole('button',{name:'Salvar projeto',exact:true}).click();await expect(orgPage.getByRole('status')).toContainText('Projeto criado');
   const project=(await db.query('select id from public.projetos where sujeito_id=$1',[organization.subject])).rows[0].id;
-  await orgPage.goto('/dashboard/nova-atividade');await expect(orgPage.getByLabel('Projeto (opcional)')).toBeVisible();await orgPage.getByLabel('Projeto (opcional)').selectOption(project);await orgPage.getByLabel('Título',{exact:true}).fill('Oficina de sementes e cultivo comunitário');await orgPage.getByLabel('Descrição',{exact:true}).fill('Oficina fictícia de cultivo para aprender juntos e cuidar do nosso território.');await orgPage.getByLabel('Data e horário (America/Sao_Paulo)').fill('2027-06-15T14:00');await orgPage.getByLabel('Orientação de acesso').fill('Demonstração fictícia, sem inscrições.');await orgPage.getByRole('button',{name:'Salvar rascunho',exact:true}).click();await expect(orgPage).toHaveURL(/\/dashboard\/atividade\//);
+  await orgPage.goto('/dashboard/nova-atividade');await expect(orgPage.getByLabel('Projeto (opcional)')).toBeVisible();await orgPage.getByLabel('Projeto (opcional)').selectOption(project);await orgPage.getByLabel('Título',{exact:true}).fill('Oficina de sementes e cultivo comunitário');await orgPage.getByLabel('Descrição',{exact:true}).fill('Oficina fictícia de cultivo para aprender juntos e cuidar do nosso território.');await orgPage.getByLabel('Data e horário (America/Sao_Paulo)').fill('2027-06-15T14:00');await orgPage.getByLabel('Orientação de acesso').fill('Demonstração fictícia, sem inscrições.');const createResponse=orgPage.waitForResponse(response=>new URL(response.url()).pathname==='/api/atividades'&&response.request().method()==='POST');await orgPage.getByRole('button',{name:'Salvar rascunho',exact:true}).click();const createResult=await createResponse;expect(createResult.status()).toBe(200);await expect(orgPage).toHaveURL(/\/dashboard\/atividade\//);
   const orgActivity=orgPage.url().split('/').at(-1);expect((await db.query('select projeto_id from public.atividades where id=$1',[orgActivity])).rows[0].projeto_id).toBe(project);
   expect((await page.request.post('/api/atividades',{headers:{origin},data:{titulo:'Projeto de terceiro',descricao:'Tentativa fictícia de vínculo indevido.',inicio_previsto:new Date(Date.now()+86400000).toISOString(),orientacao_acesso:'Acesso fictício.',projeto_id:project}})).status()).toBe(422);
   await db.query("update public.organizacoes set estado_validacao='validada' where id=$1",[organization.org]);
@@ -161,4 +161,33 @@ test('PORT-02: coletivo usa bio institucional e projetos com vínculo próprio',
  await page.getByText('Criar novo projeto',{exact:true}).click();await page.getByLabel('Título do projeto',{exact:true}).fill('Sementes em Rede');await page.getByRole('button',{name:'Salvar projeto',exact:true}).click();await expect(page.locator('.feedback[role=status]')).toContainText('Projeto criado');
  await page.goto('/dashboard/nova-atividade');await page.getByLabel('Projeto (opcional)').selectOption({label:'Sementes em Rede'});await page.getByLabel('Título',{exact:true}).fill('Roda de saberes do coletivo');await page.getByLabel('Descrição',{exact:true}).fill('Encontro fictício para compartilhar saberes no território.');await page.getByLabel('Data e horário (America/Sao_Paulo)').fill('2027-07-15T14:00');await page.getByLabel('Orientação de acesso').fill('Demonstração fictícia, sem inscrições.');await page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();await expect(page).toHaveURL(/\/dashboard\/atividade\//);await expect(page.getByLabel('Projeto (opcional)')).toHaveValue((await db.query('select id from public.projetos where sujeito_id=$1',[collective.subject])).rows[0].id);
  await page.goto('/perfil/'+collective.subject);await expect(page.getByRole('heading',{name:'Bio Institucional',exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Nossos Projetos',exact:true})).toBeVisible();
+});
+
+test('PORT-03: pessoa física persiste a bio e outra conta não pode alterá-la',async({browser})=>{
+ const ownerContext=await browser.newContext(),otherContext=await browser.newContext();
+ const bioOwner=await makePerson('Titular PF PORT-03 — pessoa sintética');
+ const bio='Bio PF sintética para regressão de persistência — salva pela interface e recarregada.';
+ const tentativa='Tentativa sintética de outra conta para sobrescrever bio alheia.';
+ try{
+  await Promise.all([ownerContext,otherContext].map(loopback));
+  const page=await ownerContext.newPage(),other=await otherContext.newPage();
+  await login(page,bioOwner);
+  await page.getByLabel('Sua apresentação',{exact:true}).fill(bio);
+  await page.getByRole('button',{name:'Salvar bio',exact:true}).click();
+  await expect(page.locator('.feedback[role=status]')).toContainText('Bio atualizada');
+  await page.reload();
+  await expect(page.getByLabel('Sua apresentação',{exact:true})).toHaveValue(bio);
+  expect((await db.query('select bio from public.sujeitos_publicadores where id=$1',[bioOwner.subject])).rows[0]?.bio).toBe(bio);
+
+  await login(other,organization);
+  const bioForm=other.locator('form').filter({has:other.getByRole('button',{name:'Salvar bio',exact:true})});
+  await expect(bioForm).toHaveCount(1);
+  await bioForm.locator('textarea[name="bio"]').fill(tentativa);
+  // Altera o campo oculto por último: o rerender do formulário pode restaurar
+  // o valor do sujeito da própria sessão se o campo for adulterado antes do fill.
+  await bioForm.locator('input[name="sujeito_id"]').evaluate((input,id)=>{input.value=id;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));},bioOwner.subject);
+  await bioForm.getByRole('button',{name:'Salvar bio',exact:true}).click();
+  await expect(other).toHaveURL(/\/dashboard\?erro=/);
+  expect((await db.query('select bio from public.sujeitos_publicadores where id=$1',[bioOwner.subject])).rows[0]?.bio).toBe(bio);
+ }finally{await ownerContext.close();await otherContext.close();}
 });
