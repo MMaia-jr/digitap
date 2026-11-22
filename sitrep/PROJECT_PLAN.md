@@ -1,5 +1,14 @@
 # A Praça — Plano
 
+## Registro documental — DIG-IA-MEM-01 (22/11/2026)
+
+- **Fonte:** [One Tap e Memória Contextual](../docs/digitap/03-one-tap-memoria-contextual.md), registro de reconciliação estratégica.
+- **Direção de experiência:** One Tap — simplificar a expressão de necessidades e capacidades sem autorizar ações automáticas.
+- **HIP-IA-01:** memória contextual autorizada pode melhorar a assistência; não validada.
+- **HIP-ECO-01:** possível ganho econômico incremental; os R$ 750/mês citados no registro são simulação, não receita nem resultado observado.
+- **EXP-IA-MEM-01:** comparação futura de E4 determinístico, IA sem memória e IA com memória em 30 casos sintéticos; proposta não iniciada e sem autorização de implementação.
+- **Limites:** documentação não altera a prioridade do beta, os gates humanos, a arquitetura operacional nem o estado Git local.
+
 ## Beta Fechado — candidato local versionado e demonstrável, 16/11/2026
 
 - **Branch local:** `release/beta-fechado-20261116`, criada a partir de `main`
