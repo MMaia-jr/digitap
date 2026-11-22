@@ -1,2 +1,2 @@
 import { defineConfig } from 'vitest/config';
-export default defineConfig({test:{include:['tests/security/access.test.ts','tests/security/adapter.test.ts','tests/auth/**/*.test.ts','tests/components/**/*.test.tsx','tests/activities/**/*.test.ts'],restoreMocks:true}});
+export default defineConfig({test:{include:['tests/security/access.test.ts','tests/security/adapter.test.ts','tests/auth/**/*.test.ts','tests/components/**/*.test.tsx','tests/activities/**/*.test.ts','tests/interoperability/**/*.test.ts'],restoreMocks:true}});
