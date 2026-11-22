@@ -25,7 +25,7 @@ port = 56153
 enabled = true
 port = 56154
 [storage]
-enabled = false
+enabled = true
 [storage.vector]
 enabled = false
 [storage.s3_protocol]

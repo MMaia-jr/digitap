@@ -48,7 +48,7 @@ function fixture() {
   };
 
   const storage = {
-    signedUpload: vi.fn(async (_key: string) => ({url: 'https://storage.example.invalid/private/upload?signature=synthetic'})),
+    signedUpload: vi.fn(async (_key: string) => ({url: 'https://storage.example.invalid/private/upload?signature=synthetic', token: 'synthetic-upload-token'})),
     stat: vi.fn(async (_key: string): Promise<{contentType: string; sizeBytes: number} | null> => ({
       contentType: MIME, sizeBytes: BYTES,
     })),

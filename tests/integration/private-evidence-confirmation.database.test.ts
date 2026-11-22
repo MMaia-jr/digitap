@@ -102,6 +102,26 @@ async function suspend(sql: Sql) {
   expect(result.rowCount).toBe(1);
 }
 
+async function resetOwnerLink(sql: Sql) {
+  const current = (await sql.query<{id: string; versao: number; situacao: string; escopos: string[]}>(`
+    select v.id, v.versao, v.situacao, v.escopos
+    from public.vinculos_publicadores v
+    join public.contas_acesso c on c.id = v.conta_id
+    where c.auth_user_id = $1 and v.atual
+  `, [owner])).rows[0];
+  if (current?.situacao === 'ativo' && current.escopos.includes('editar') && current.escopos.includes('ler_privado')) return;
+  if (!current) throw new Error('Vínculo sintético OSS-01B ausente.');
+  await sql.query('update public.vinculos_publicadores set atual = false where id = $1 and versao = $2', [current.id, current.versao]);
+  await sql.query(`
+    insert into public.vinculos_publicadores
+      (id, versao, atual, sujeito_id, conta_id, papel_vinculo, escopos, situacao, origem, ativada_em)
+    select id, versao + 1, true, sujeito_id, conta_id, papel_vinculo,
+           array['ler_privado','editar','enviar','publicar','gerir_vinculo']::text[],
+           'ativo', origem, clock_timestamp()
+    from public.vinculos_publicadores where id = $1 and versao = $2
+  `, [current.id, current.versao]);
+}
+
 async function storedState() {
   return withTransaction(async sql => {
     const result = await sql.query<{estado: string}>(
@@ -165,6 +185,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   await withTransaction(async sql => {
     await sql.query("update public.organizacoes set estado_validacao = 'validada' where id = $1", [organization]);
+    await resetOwnerLink(sql);
     await sql.query(`
       insert into public.evidencias_arquivos_privados
         (id, registro_id, object_key, content_type, size_bytes)
@@ -217,6 +238,47 @@ afterAll(async () => {
 }, 15_000);
 
 describe('OSS-01B — confirmação persistente', () => {
+  it('bloqueia novas autorizações após revogação do vínculo vigente', async () => {
+    await withTransaction(async sql => {
+      const result = await sql.query(`
+        update public.vinculos_publicadores
+        set situacao = 'revogado', revogada_em = clock_timestamp()
+        where conta_id = (select id from public.contas_acesso where auth_user_id = $1)
+          and sujeito_id = (select id from public.sujeitos_publicadores where organizacao_legada_id = $2)
+          and atual and situacao = 'ativo'
+      `, [owner, organization]);
+      expect(result.rowCount).toBe(1);
+    });
+
+    const access = createPrivateFileRepository();
+    await expect(access.authorize({actorId: owner, registroId: record, scope: 'upload'})).resolves.toBe(false);
+    await expect(access.authorize({actorId: owner, registroId: record, scope: 'read'})).resolves.toBe(false);
+  });
+
+  it('exige escopo editar para upload e ler_privado para emitir leitura', async () => {
+    await withTransaction(async sql => {
+      const current = (await sql.query<{id: string; versao: number}>(`
+        select id, versao from public.vinculos_publicadores
+        where conta_id = (select id from public.contas_acesso where auth_user_id = $1)
+          and sujeito_id = (select id from public.sujeitos_publicadores where organizacao_legada_id = $2)
+          and atual and situacao = 'ativo'
+      `, [owner, organization])).rows[0];
+      expect(current).toBeDefined();
+      await sql.query('update public.vinculos_publicadores set atual = false where id = $1 and versao = $2', [current!.id, current!.versao]);
+      await sql.query(`
+        insert into public.vinculos_publicadores
+          (id, versao, atual, sujeito_id, conta_id, papel_vinculo, escopos, situacao, origem, ativada_em)
+        select id, versao + 1, true, sujeito_id, conta_id, papel_vinculo,
+               array['ler_privado']::text[], 'ativo', origem, clock_timestamp()
+        from public.vinculos_publicadores where id = $1 and versao = $2
+      `, [current!.id, current!.versao]);
+    });
+
+    const access = createPrivateFileRepository();
+    await expect(access.authorize({actorId: owner, registroId: record, scope: 'upload'})).resolves.toBe(false);
+    await expect(access.authorize({actorId: owner, registroId: record, scope: 'read'})).resolves.toBe(true);
+  });
+
   it('duas confirmações concorrentes produzem uma escrita e um 409', async () => {
     const bothPending = barrier();
     const releaseCommit = barrier();

@@ -45,7 +45,7 @@ function fixture(initialActor: string | null = OWNER) {
     }),
   };
   const storage = {
-    signedUpload: vi.fn(async (_key: string) => ({url: 'https://storage.example.invalid/private/upload?signature=synthetic'})),
+    signedUpload: vi.fn(async (_key: string) => ({url: 'https://storage.example.invalid/private/upload?signature=synthetic', token: 'synthetic-upload-token'})),
     stat: vi.fn(async (_key: string): Promise<{contentType: string; sizeBytes: number} | null> => ({contentType: MIME, sizeBytes: BYTES})),
     signedRead: vi.fn(async (_key: string, expiresIn: number) => ({url: `https://storage.example.invalid/private/read?ttl=${expiresIn}&signature=synthetic`})),
   };
@@ -92,6 +92,7 @@ describe('OSS-01A RED-0 / fronteira privada independente do editorial', () => {
     const created = await f.service.iniciarUpload(uploadInput());
     expect(created.arquivoId).toBe(FILE);
     expect(created.uploadUrl).toContain('/private/upload');
+    expect(created.uploadToken).toBe('synthetic-upload-token');
     expect(created.objectKey).toMatch(new RegExp(`^evidencias/${RECORD}/`));
     expect(f.repository.insertPending).toHaveBeenCalledOnce();
     expect(f.file).toMatchObject({id: FILE, registroId: RECORD, contentType: MIME, sizeBytes: BYTES, estado: 'pendente'});

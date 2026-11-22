@@ -17,7 +17,7 @@ interface Dependencies {
   verifyActor(): Promise<string | null>;
   authorize(input: { actorId: string; registroId: string; scope: Scope }): Promise<boolean>;
   repository: {
-    insertPending(metadata: Metadata): Promise<PrivateFile>;
+    insertPending(metadata: Metadata, actorId: string): Promise<PrivateFile>;
     // Adaptadores existentes podem ainda não implementar a compensação;
     // integração real exige remoção condicional de metadados ainda pendentes.
     deletePending?(id: string): Promise<void>;
@@ -25,7 +25,7 @@ interface Dependencies {
     markConfirmed(input: { actorId: string; arquivoId: string; registroId: string }): Promise<PrivateFile>;
   };
   storage: {
-    signedUpload(key: string): Promise<{ url: string }>;
+    signedUpload(key: string): Promise<{ url: string; token: string }>;
     stat(key: string): Promise<{ contentType: string; sizeBytes: number } | null>;
     signedRead(key: string, expiresIn: number): Promise<{ url: string }>;
   };
@@ -89,10 +89,18 @@ export function createPrivateFileService(deps: Dependencies) {
         }
         await authorize(actorId, registroId, 'upload');
         const objectKey = `evidencias/${registroId}/${randomUUID()}`;
-        const file = await deps.repository.insertPending({
-          registroId, objectKey, contentType: body.contentType, sizeBytes: body.sizeBytes,
-        });
-        let upload: { url: string };
+        let file: PrivateFile;
+        try {
+          file = await deps.repository.insertPending({
+            registroId, objectKey, contentType: body.contentType, sizeBytes: body.sizeBytes,
+          }, actorId);
+        } catch (error) {
+          if (error instanceof Error && 'status' in error && error.status === 403) {
+            throw new PrivateFileError(403, 'Você não tem autorização para este registro.');
+          }
+          throw error;
+        }
+        let upload: { url: string; token: string };
         try {
           upload = await deps.storage.signedUpload(objectKey);
         } catch {
@@ -105,7 +113,7 @@ export function createPrivateFileService(deps: Dependencies) {
           }
           throw new PrivateFileError(503, 'Serviço indisponível. Tente novamente.');
         }
-        return { arquivoId: file.id, objectKey, uploadUrl: upload.url };
+        return { arquivoId: file.id, objectKey, uploadUrl: upload.url, uploadToken: upload.token };
       });
     },
     async confirmarUpload(input: unknown) {
