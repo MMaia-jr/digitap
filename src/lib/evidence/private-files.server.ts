@@ -18,6 +18,7 @@ interface Dependencies {
   authorize(input: { actorId: string; registroId: string; scope: Scope }): Promise<boolean>;
   repository: {
     insertPending(metadata: Metadata, actorId: string): Promise<PrivateFile>;
+    listConfirmed(input: {actorId: string; registroId: string}): Promise<Array<{id: string; contentType: string; sizeBytes: number}>>;
     // Adaptadores existentes podem ainda não implementar a compensação;
     // integração real exige remoção condicional de metadados ainda pendentes.
     deletePending?(id: string): Promise<void>;
@@ -149,6 +150,21 @@ export function createPrivateFileService(deps: Dependencies) {
         const expiresIn = 300;
         const signed = await deps.storage.signedRead(file.objectKey, expiresIn);
         return { url: signed.url, expiresIn };
+      });
+    },
+    async listarArquivos(input: unknown) {
+      return run(async actorId => {
+        const body = parameters(input, ['registroId']);
+        const registroId = identifier(body.registroId);
+        try {
+          const arquivos = await deps.repository.listConfirmed({actorId, registroId});
+          return {arquivos};
+        } catch (error) {
+          if (error instanceof Error && 'status' in error && error.status === 403) {
+            throw new PrivateFileError(403, 'Você não tem autorização para este registro.');
+          }
+          throw error;
+        }
       });
     },
   };

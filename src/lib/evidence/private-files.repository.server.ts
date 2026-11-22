@@ -101,6 +101,18 @@ export function createPrivateFileRepository(
         `, [id]);
         return result.rows[0] ?? null;
       }),
+      listConfirmed: ({actorId, registroId}) => transaction(async sql => {
+        if (!await authorizedRecord(sql, actorId, registroId, 'read')) {
+          throw new ConfirmationError(403, 'Você não tem autorização para este registro.');
+        }
+        const result = await sql.query<{id: string; contentType: string; sizeBytes: number}>(`
+          select id, content_type as "contentType", size_bytes as "sizeBytes"
+          from public.evidencias_arquivos_privados
+          where registro_id = $1 and estado = 'confirmado'
+          order by id
+        `, [registroId]);
+        return result.rows;
+      }),
       markConfirmed: ({actorId, arquivoId, registroId}) => transaction(async sql => {
         if (!await authorizedRecord(sql, actorId, registroId, 'upload', arquivoId)) {
           throw new ConfirmationError(403, 'Você não tem autorização para este registro.');

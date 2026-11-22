@@ -1,5 +1,6 @@
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
+import {setTimeout as delay} from 'node:timers/promises';
 import {createClient, type SupabaseClient} from '@supabase/supabase-js';
 import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi} from 'vitest';
 import {closeDatabasePool, withTransaction} from '../../src/lib/database.server';
@@ -33,6 +34,21 @@ let bucketOwned = false;
 let fixtureAttempted = false;
 const ownObjectKeys = new Set<string>();
 const ownFileIds = new Set<string>();
+
+function gate() {
+  let release!: () => void;
+  const reached = new Promise<void>(resolve => { release = resolve; });
+  return {reached, release};
+}
+
+async function until(description: string, predicate: () => Promise<boolean>) {
+  const deadline = performance.now() + 2_000;
+  do {
+    if (await predicate()) return;
+    await delay(10);
+  } while (performance.now() < deadline);
+  throw new Error(`Sincronização de revogação OSS-01D: ${description}`);
+}
 
 function signedStorage() {
   if (!admin) throw new Error('Supabase Storage local não inicializado.');
@@ -300,6 +316,11 @@ describe('OSS-01C — integração privada real PostgreSQL + Storage local', () 
     await expect(access.authorize({actorId: owner, registroId: collectiveRecord, scope: 'upload'})).resolves.toBe(false);
   });
 
+  it('nega listagem por outro titular com conflito 403 controlado', async () => {
+    const denied = service(unrelated);
+    await expect(denied.service.listarArquivos({registroId: record})).rejects.toMatchObject({status: 403});
+  });
+
   it('uploada bytes pelo SDK, mantém pendente, confirma e lê bytes por URL curta', async () => {
     const started = await startUpload();
     await expect(started.service.obterUrlLeitura({arquivoId: started.started.arquivoId})).rejects.toMatchObject({status: 409});
@@ -334,6 +355,49 @@ describe('OSS-01C — integração privada real PostgreSQL + Storage local', () 
     expect(prior.status).toBe(200);
     expect(Buffer.from(await prior.arrayBuffer())).toEqual(bytes);
   });
+
+  it('serializa emissão de URL com revogação concorrente e nega após o commit da revogação', async () => {
+    const started = await startUpload();
+    await upload(admin!, started.started.objectKey, started.started.uploadToken);
+    await started.service.confirmarUpload({arquivoId: started.started.arquivoId});
+
+    const revocationLocked = gate();
+    const finishRevocation = gate();
+    let revokerPid: number | undefined;
+    const revocation = withTransaction(async sql => {
+      revokerPid = (await sql.query<{pid: number}>('select pg_backend_pid() as pid')).rows[0].pid;
+      await sql.query(`update public.vinculos_publicadores
+        set situacao = 'revogado', revogada_em = clock_timestamp()
+        where conta_id = (select id from public.contas_acesso where auth_user_id = $1) and atual`, [owner]);
+      revocationLocked.release();
+      await finishRevocation.reached;
+    });
+
+    await revocationLocked.reached;
+    const reader = service(owner);
+    const readAttempt = Promise.allSettled([
+      reader.service.obterUrlLeitura({arquivoId: started.started.arquivoId}),
+    ]);
+    try {
+      await until('a autorização de leitura aguarda o lock explícito de revogação', async () => {
+        if (!revokerPid) return false;
+        const result = await withTransaction(sql => sql.query<{blocked: boolean}>(`
+          select exists (
+            select 1 from pg_stat_activity waiter
+            where $1::int = any(pg_blocking_pids(waiter.pid))
+              and waiter.pid <> $1::int
+          ) as blocked
+        `, [revokerPid]));
+        return result.rows[0].blocked;
+      });
+    } finally {
+      finishRevocation.release();
+      await revocation;
+      await readAttempt;
+    }
+    expect(await readAttempt).toMatchObject([{status: 'rejected', reason: {status: 403}}]);
+    expect(reader.storage.signedRead).not.toHaveBeenCalled();
+  }, 15_000);
 
   it('uma confirmação concorrente por objeto real vence e a outra recebe 409', async () => {
     const started = await startUpload();

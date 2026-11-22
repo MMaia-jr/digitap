@@ -97,6 +97,26 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   }
   return false;
  }
+ async function canReadPrivateRecord(sql:Sql,actor:Actor,activity:PrivateActivity){
+  if(actor.sujeito_id)return true;
+  if(actor.papel!=='organizacao'||!actor.organizacao_id)return false;
+  const result=await sql.query(`
+   select r.id from public.contas_acesso c
+   join public.organizacoes o on o.id=c.organizacao_id
+   join public.atividades a on a.organizacao_id=o.id
+   join public.registros_realizacao r on r.atividade_id=a.id
+   join public.sujeitos_publicadores s on s.organizacao_legada_id=o.id and s.tipo='organizacao'
+   join public.vinculos_publicadores v on v.sujeito_id=s.id and v.conta_id=c.id
+   where c.id=$1 and c.papel='organizacao' and c.situacao='ativa'
+    and o.id=$2 and o.estado_validacao<>'suspensa'
+    and a.id=$3 and s.estado in ('pendente','ativo')
+    and v.atual and v.situacao='ativo'
+    and v.papel_vinculo in ('titular','representante')
+    and 'ler_privado'=any(v.escopos)
+   for share of c,o,a,r,s,v
+  `,[actor.id,actor.organizacao_id,activity.id]);
+  return result.rowCount===1;
+ }
  async function checkProject(sql:Sql,actor:Actor,projectId:string|null|undefined){
   if(!projectId)return;
   const project=(await sql.query(`select p.id from public.projetos p join public.sujeitos_publicadores s on s.id=p.sujeito_id where p.id=$1 and (s.id=$2 or s.organizacao_legada_id=$3 or exists(select 1 from public.vinculos_colaboracao v where v.projeto_id=p.id and v.sujeito_id=$2 and v.status='ativo')) and s.estado in ('pendente','ativo') for share of p`,[projectId,actor.sujeito_id??null,actor.organizacao_id])).rows[0];
@@ -420,7 +440,8 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     organizationalAuthority=authority?authority.papel_vinculo:'indisponivel';
    }
    const podeEditar=await canEditActivity(sql,actor,activity);
-   return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:podeEditar&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
+   const podeLerPrivado=await canReadPrivateRecord(sql,actor,activity);
+   return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:podeEditar&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),pode_ler_privado:podeLerPrivado,acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
   });},
   async update(id:string,input:unknown){
    const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada','acontecendo_agora','retrospectiva','projeto_id']);const version=validateVersion(body.versao_esperada);

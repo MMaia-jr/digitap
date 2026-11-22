@@ -38,6 +38,7 @@ function fixture(initialActor: string | null = OWNER) {
       return file;
     }),
     find: vi.fn(async (id: string) => id === FILE ? file : null),
+    listConfirmed: vi.fn(async () => []),
     markConfirmed: vi.fn(async ({arquivoId: id}: {arquivoId: string}) => {
       if (id !== FILE || !file) throw new Error('Arquivo não encontrado');
       file = {...file, estado: 'confirmado'};
@@ -85,6 +86,14 @@ describe('OSS-01A RED-0 / fronteira privada independente do editorial', () => {
     await expect(f.service.iniciarUpload(uploadInput())).rejects.toMatchObject({status: 403});
     expect(f.storage.signedUpload).not.toHaveBeenCalled();
     expect(f.repository.insertPending).not.toHaveBeenCalled();
+  });
+
+  it('preserva o conflito controlado da autorização ao listar anexos privados', async () => {
+    const f = fixture();
+    f.repository.listConfirmed.mockRejectedValueOnce(Object.assign(
+      new Error('Você não tem autorização para este registro.'), {status: 403},
+    ));
+    await expect(f.service.listarArquivos({registroId: RECORD})).rejects.toMatchObject({status: 403});
   });
 
   it('gera objectKey no servidor e não persiste URL temporária ou URL pública', async () => {

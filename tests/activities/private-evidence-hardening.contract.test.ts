@@ -32,6 +32,7 @@ function fixture() {
       return file;
     }),
     find: vi.fn(async (id: string) => id === FILE ? file : null),
+    listConfirmed: vi.fn(async () => []),
     // Sem contrato de produção para compensação ainda. Este método é proposto pelo RED-1.
     deletePending: vi.fn(async (id: string) => {
       if (file?.id === id && file.estado === 'pendente') file = null;
