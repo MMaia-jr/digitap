@@ -1,5 +1,14 @@
 # A Praça — Plano
 
+## LIC-01B — licenciamento documental local, 22/11/2026
+
+- **Estado:** arquivos de licença preparados na branch isolada `docs/lic-01-20261122`, baseada no checkpoint INC-OSS-01D `917e708dfdfaaf3e398f2f04c4d239df69955466`. Sem push, merge, deploy ou alteração remota.
+- **DECIDIDO pelo proponente:** AGPL-3.0-only para código original autorizado; CC BY-SA 4.0 para documentação original autorizada; titular declarado das contribuições originais: Marcos Antonio Maia Junior. Sem transferência de direitos, sem licença or-later e sem atribuição de propriedade institucional.
+- **CÓDIGO/DOCUMENTAÇÃO:** incluídos o texto oficial integral AGPLv3, escopo de documentação CC, metadado SPDX, seção README, instruções de contribuição e harmonização textual dos Termos. Exclusões explícitas cobrem conteúdo de usuários, dados pessoais, segredos, materiais de terceiros, marcas e ativos visuais, além de Célula Zero e Esentya como projetos separados.
+- **PENDÊNCIA de proveniência:** o módulo `src/lib/interoperability/valueflows-projection.ts` foi trabalhado com um ZIP ValueFlows, mas o artefato original não está nesta worktree e sua licença/comparação não foi comprovada. Nenhum aviso ou licença foi inventado; README, LICENSE-DOCS e Termos não afirmam que o módulo está coberto. Capturas e marcas também permanecem fora da concessão por falta de verificação.
+- **ACEITE:** validação documental por checks de arquivos, texto oficial, SPDX, links, exclusões e diff autorizado; `git diff --check`. Nenhuma mudança de comportamento, schema ou dependência prevista.
+- **Limite:** o registro confirma uma decisão de licenciar direitos autorizados, não comprova titularidade de terceiros nem regulariza automaticamente todo o conteúdo do repositório. Preservar os registros históricos de governança e arquitetura sem reescrevê-los.
+
 ## INC-OSS-01D — jornada de evidência privada, 22/11/2026
 
 - **Estado:** implementação local na worktree isolada `release/inc-oss-01d-20261122`, baseada em `3114b7108ec0cdb5550c6e7b51412f63b231c743`. Sem push, merge, deploy, migration ou alteração Cloud.
