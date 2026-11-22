@@ -29,6 +29,7 @@ A validação com pessoas reais continua pendente.
 | [Norte do Produto](docs/digitap/00-norte-do-produto.md) | Compreender o propósito, a direção e os limites do DigItap |
 | [Modelo de Domínio](docs/digitap/01-modelo-de-dominio.md) | Entender contas, sujeitos, vínculos, atividades, evidências e publicação |
 | [Horizonte Estratégico](docs/digitap/02-horizonte-estrategico.md) | Conhecer as ambições de longo prazo sem confundi-las com funcionalidades aprovadas |
+| [One Tap e Memória Contextual](docs/digitap/03-one-tap-memoria-contextual.md) | Direção de experiência e hipóteses técnicas/econômicas; IA-MEM-01 ainda não autorizado |
 | [Marco Zero](docs/Marco_Zero_2026-11-03.md) | Compreender a origem comunitária de A Praça |
 | [Reconstrução do Produto](docs/investigacoes/DIGITAP-RECONSTRUCAO-PRODUTO-E-DECISOES-2026-11-15.md) | Consultar a reconciliação das experiências, decisões e lacunas |
 | [Plano Operacional](sitrep/PROJECT_PLAN.md) | Consultar incrementos, checkpoints e evidências históricas |
