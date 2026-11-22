@@ -69,6 +69,34 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   const result=await sql.query<Row>(`select ${columns} from public.atividades where id=$1 and ($2::uuid is null or organizacao_id = $2) and estado_editorial in ${privateStates}${write?' for update':''}`,[identifier(id),owner]);
   if(!result.rows[0])throw new ActivityError(404,'Atividade não encontrada.');return dto(result.rows[0]);
  }
+ async function canEditActivity(sql:Sql,actor:Actor,activity:PrivateActivity){
+  if(actor.sujeito_id){
+   const editor=await sql.query(`
+    select s.id from public.sujeitos_publicadores s
+    join public.vinculos_publicadores v on v.sujeito_id=s.id
+    join public.atividades a on a.sujeito_id=s.id
+    where s.id=$1 and a.id=$3 and a.criada_por_conta_id=$2 and a.organizacao_id is null
+      and s.estado in ('pendente','ativo') and v.conta_id=$2 and v.atual and v.situacao='ativo'
+      and v.papel_vinculo='titular' and 'editar'=any(v.escopos)
+    for share of s,v
+   `,[actor.sujeito_id,actor.id,activity.id]);
+   return editor.rows.length>0;
+  }
+  if(actor.papel==='organizacao'){
+   const editor=await sql.query(`
+    select s.id from public.sujeitos_publicadores s
+    join public.vinculos_publicadores v on v.sujeito_id=s.id
+    join public.atividades a on a.sujeito_id=s.id
+    where s.organizacao_legada_id=$1 and a.organizacao_id=$1 and a.id=$3
+      and s.tipo='organizacao' and s.estado in ('pendente','ativo')
+      and v.conta_id=$2 and v.atual and v.situacao='ativo'
+      and v.papel_vinculo in ('titular','representante') and 'editar'=any(v.escopos)
+    for share of s,v
+   `,[actor.organizacao_id,actor.id,activity.id]);
+   return editor.rows.length>0;
+  }
+  return false;
+ }
  async function checkProject(sql:Sql,actor:Actor,projectId:string|null|undefined){
   if(!projectId)return;
   const project=(await sql.query(`select p.id from public.projetos p join public.sujeitos_publicadores s on s.id=p.sujeito_id where p.id=$1 and (s.id=$2 or s.organizacao_legada_id=$3 or exists(select 1 from public.vinculos_colaboracao v where v.projeto_id=p.id and v.sujeito_id=$2 and v.status='ativo')) and s.estado in ('pendente','ativo') for share of p`,[projectId,actor.sujeito_id??null,actor.organizacao_id])).rows[0];
@@ -391,26 +419,15 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     const authority=await organizationConsentAuthority(sql,actor);
     organizationalAuthority=authority?authority.papel_vinculo:'indisponivel';
    }
-   return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:(actor.papel==='organizacao'||Boolean(actor.sujeito_id))&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
+   const podeEditar=await canEditActivity(sql,actor,activity);
+   return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:podeEditar&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
   });},
   async update(id:string,input:unknown){
    const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada','acontecendo_agora','retrospectiva','projeto_id']);const version=validateVersion(body.versao_esperada);
    const {versao_esperada:ignored,...content}=body;void ignored;const value=validateDraft(content,now());
    return run('criar_rascunho',async(sql,actor)=>{
     const row=await load(sql,actor,id,true);
-    if(actor.papel==='organizacao'){
-     const editor=await sql.query(`
-      select s.id from public.sujeitos_publicadores s
-      join public.vinculos_publicadores v on v.sujeito_id=s.id
-      join public.atividades a on a.sujeito_id=s.id
-      where s.organizacao_legada_id=$1 and a.organizacao_id=$1 and a.id=$3
-        and s.tipo='organizacao' and s.estado in ('pendente','ativo')
-        and v.conta_id=$2 and v.atual and v.situacao='ativo'
-        and v.papel_vinculo in ('titular','representante') and 'editar'=any(v.escopos)
-      for share of s,v
-     `,[actor.organizacao_id,actor.id,row.id]);
-     if(!editor.rows.length)throw new ActivityError(403,'A edição exige vínculo organizacional ativo com permissão de editar.');
-    }
+    if(!await canEditActivity(sql,actor,row))throw new ActivityError(403,'A edição exige vínculo ativo com permissão de editar.');
     if((!['rascunho','publicada'].includes(row.estado_editorial)&&row.projeto_aprovacao!=='rejeitada')||row.versao_submetida!==version)throw new ActivityError(409,'A atividade mudou. Recarregue antes de continuar.');
     await authorizeRetrospective(sql,actor,input);
     await checkProject(sql,actor,value.projeto_id);

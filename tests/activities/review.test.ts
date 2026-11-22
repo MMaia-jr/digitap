@@ -17,6 +17,7 @@ function setup(options:{role?:string;blocked?:boolean;anonymous?:boolean;state?:
  const activity={id,titulo:'Atividade fictícia',descricao:'Descrição fictícia de revisão.',inicio_previsto:'2030-04-12T18:30:00Z',orientacao_acesso:'Entrada fictícia.',referencia_oficial:null,estado_editorial:options.state??'enviada',versao_submetida:options.version??1};
  const query=vi.fn(async(text:string,values?:unknown[])=>{
   if(text.includes('from public.contas_acesso'))return {rows:[account]};
+  if(text.includes('from public.sujeitos_publicadores'))return {rows:[]};
   if(text.includes('from public.organizacoes'))return {rows:[{estado_validacao:'pendente'}]};
   if(text.includes('from public.atividades'))return {rows:options.other?[]:[{...activity}]};
   if(text.includes('from public.autorizacoes_publicacao'))return {rows:options.auth===false?[]:[{id:auth}]};

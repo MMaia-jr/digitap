@@ -248,7 +248,7 @@ it('AUT-ORG-01: T01, falha na auditoria do envio reverte também a autorização
  expect((await db.query("select id from public.eventos_editoriais where objeto_id=$1 and acao='atividade_divulgacao_autorizada'",[activity.id])).rowCount).toBe(0);
 });
 
-async function editRepresentative(mode:'sem-editar'|'editar'|'suspenso'|'revogado'|'substituido'){
+async function editRepresentative(mode:'sem-editar'|'editar'|'suspenso'|'revogado'|'substituido',options:{transaction?:Transaction}={}){
  const email=`publication-db-edit-${randomUUID()}@example.invalid`,password=randomUUID()+'aA1!';
  const created=await admin.auth.admin.createUser({email,password,email_confirm:true});
  if(created.error||!created.data.user)throw new Error('Fixture de representação indisponível.');
@@ -273,11 +273,11 @@ async function editRepresentative(mode:'sem-editar'|'editar'|'suspenso'|'revogad
  const client=createClient('http://127.0.0.1:56151',localPublishableKey,{auth:{persistSession:false,autoRefreshToken:false}});
  clients.push(client);
  if((await client.auth.signInWithPassword({email,password})).error)throw new Error('Login fixture falhou.');
- return createActivityService({verifyUser:async()=>(await client.auth.getUser()).data.user});
+ return {service:createActivityService({verifyUser:async()=>(await client.auth.getUser()).data.user,transaction:options.transaction}),linkId:link};
 }
 
 it.each(['sem-editar','suspenso','revogado','substituido'] as const)('FIX-AUT-ORG-01: %s não edita e mantém conteúdo e versão',async mode=>{
- const representative=await editRepresentative(mode);
+ const representative=(await editRepresentative(mode)).service;
  const original=input(),activity=await services[0].create(original);ids.push(activity.id);
  const stored=async()=> (await db.query(`select titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,
    versao_submetida,estado_editorial from public.atividades where id=$1`,[activity.id])).rows[0];
@@ -293,7 +293,7 @@ it.each(['sem-editar','suspenso','revogado','substituido'] as const)('FIX-AUT-OR
 });
 
 it('FIX-AUT-ORG-01: titular e representante com editar progridem; alheio e versão obsoleta falham',async()=>{
- const representative=await editRepresentative('editar');
+ const representative=(await editRepresentative('editar')).service;
  const original=input(),activity=await services[0].create(original);ids.push(activity.id);
  const edit={...original,titulo:'Alteração sintética autorizada',versao_esperada:1};
  await expect(services[1].update(activity.id,edit)).rejects.toMatchObject({status:404});
@@ -301,4 +301,70 @@ it('FIX-AUT-ORG-01: titular e representante com editar progridem; alheio e vers�
  await expect(representative.update(activity.id,edit)).rejects.toMatchObject({status:409});
  await expect(representative.update(activity.id,{...edit,titulo:'Edição sintética do representante',versao_esperada:2}))
   .resolves.toMatchObject({titulo:'Edição sintética do representante',versao_submetida:3});
+});
+
+it('INC-EST-03: DTO nega edição a representante enviar/publicar sem editar; PATCH preserva conteúdo e versão',async()=>{
+ const representative=(await editRepresentative('sem-editar')).service;
+ const original=input(),activity=await services[0].create(original);ids.push(activity.id);
+ const stored=async()=> (await db.query('select titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,versao_submetida from public.atividades where id=$1',[activity.id])).rows[0];
+ const before=await stored();
+ await expect(representative.update(activity.id,{...original,titulo:'Alteração não autorizada fictícia',versao_esperada:1})).rejects.toMatchObject({status:403});
+ expect(await stored()).toEqual(before);
+ await expect(representative.get(activity.id)).resolves.toMatchObject({pode_editar:false});
+});
+
+it('INC-EST-03: revogação concorrente segura o vínculo; PATCH espera e nega após commit da revogação',async()=>{
+ let signal!: (pid:number)=>void;
+ const authorizationQueryStarted=new Promise<number>(resolve=>{signal=resolve;});
+ const transaction:Transaction=operation=>withTransaction(async sql=>operation({
+  async query(statement:string,values?:unknown[]){
+   if(statement.includes("'editar'=any(v.escopos)")&&statement.includes('from public.sujeitos_publicadores')){
+    signal((await sql.query<{pid:number}>('select pg_backend_pid() as pid')).rows[0].pid);
+   }
+   return sql.query(statement,values);
+  },
+ } as Sql));
+ const {service:representative,linkId}=await editRepresentative('editar',{transaction});
+ const original=input(),activity=await services[0].create(original);ids.push(activity.id);
+ const stored=async()=> (await db.query('select titulo,versao_submetida from public.atividades where id=$1',[activity.id])).rows[0];
+ const before=await stored();
+ await db.query('begin');
+ const blocker=(await db.query<{pid:number}>('select pg_backend_pid() as pid')).rows[0].pid;
+ await db.query("update public.vinculos_publicadores set situacao='revogado',revogada_em=clock_timestamp(),atualizada_em=clock_timestamp() where id=$1 and atual and situacao='ativo'",[linkId]);
+ let finished=false;
+ const patch=representative.update(activity.id,{...original,titulo:'Edição durante revogação fictícia',versao_esperada:1}).then(
+  value=>({value,error:undefined}),error=>({value:undefined,error}),
+ ).finally(()=>{finished=true;});
+ let committed=false;
+ try{
+  let timeout:ReturnType<typeof setTimeout>|undefined;
+  let waiter:number;
+  try{
+   waiter=await Promise.race([authorizationQueryStarted,new Promise<never>((_,reject)=>{
+    timeout=setTimeout(()=>reject(new Error('PATCH não iniciou a consulta de autorização em 5 s.')),5_000);
+   })]);
+  }finally{if(timeout)clearTimeout(timeout);}
+  let blocked=false;
+  const deadline=performance.now()+5_000;
+  while(performance.now()<deadline){
+   await db.query('select pg_stat_clear_snapshot()');
+   const observed=await db.query<{blocked:boolean;wait_event_type:string|null}>(`
+    select $2::int=any(pg_blocking_pids($1::int)) as blocked,
+      (select wait_event_type from pg_stat_activity where pid=$1::int) as wait_event_type
+   `,[waiter,blocker]);
+   if(observed.rows[0].blocked&&observed.rows[0].wait_event_type==='Lock'){blocked=true;break;}
+   if(finished)break;
+   await new Promise<void>(resolve=>setImmediate(resolve));
+  }
+  expect(blocked).toBe(true);
+  await db.query('commit');
+  committed=true;
+ }catch(error){
+  if(!committed)await db.query('rollback');
+  await patch;
+  throw error;
+ }
+ const result=await patch;
+ expect(result.error).toMatchObject({status:403});
+ expect(await stored()).toEqual(before);
 });

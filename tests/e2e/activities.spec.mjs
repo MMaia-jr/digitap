@@ -31,6 +31,15 @@ test.beforeAll(async({browser})=>{
  // Grant editor explicitly to this fixture after a real organization login;
  // this tests server-side role re-reading, not a new editor login feature.
  await db.query("update public.contas_acesso set papel='editor' where auth_user_id=$1",[fixtures[2].id]);
+ const representative={email:`activity-e2e-representative-${randomUUID()}@example.invalid`,password:randomUUID()+'aA1!',org:fixtures[0].org};fixtures.push(representative);
+ const created=await admin.auth.admin.createUser({email:representative.email,password:representative.password,email_confirm:true});if(created.error||!created.data.user)throw new Error('Fixture de representante falhou.');representative.id=created.data.user.id;
+ const account=(await db.query("insert into public.contas_acesso(auth_user_id,organizacao_id,papel) values($1,$2,'organizacao') returning id",[representative.id,representative.org])).rows[0].id;
+ const subject=(await db.query('select id from public.sujeitos_publicadores where organizacao_legada_id=$1',[representative.org])).rows[0].id;
+ await db.query("insert into public.vinculos_publicadores(sujeito_id,conta_id,papel_vinculo,escopos,situacao,origem,ativada_em,atual) values($1,$2,'representante',$3,'ativo','cadastro',clock_timestamp(),true)",[subject,account,['enviar','publicar']]);
+ representative.context=await browser.newContext({baseURL:origin,timezoneId:'America/Sao_Paulo'});
+ await representative.context.route('**/*',route=>{const url=new URL(route.request().url());return url.hostname==='127.0.0.1'&&['3215','56151'].includes(url.port)?route.continue():route.abort();});
+ representative.page=await representative.context.newPage();
+ await representative.page.goto('/login');await representative.page.getByLabel('E-mail',{exact:true}).fill(representative.email);await representative.page.getByLabel('Senha',{exact:true}).fill(representative.password);await representative.page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(representative.page).toHaveURL(origin+'/');
 },60000);
 test.afterAll(async()=>{
  for(const f of fixtures)await f.context?.close();
@@ -57,6 +66,15 @@ test('B01: rascunho privado, edição própria, visitante e tenant alheio negado
  expect((await api(b.page,'/api/atividades/'+activity,{...content(),versao_esperada:2},'PATCH')).status).toBe(404);
  await e.page.goto('/dashboard/atividade/'+activity);await expect(e.page.getByRole('heading',{name:'Atividade Fictícia Editada E2E',exact:true})).toBeVisible();expect(await e.page.getByRole('button',{name:'Enviar atividade',exact:true}).count()).toBe(0);
  const visitor=await browser.newContext({baseURL:origin});const page=await visitor.newPage();await page.goto('/dashboard/atividade/'+activity);await expect(page).toHaveURL(origin+'/login');expect((await page.request.get('/api/atividades/'+activity)).status()).toBe(401);await visitor.close();
+});
+test('INC-EST-03: representante enviar/publicar vê affordance sem edição e PATCH preserva atividade',async()=>{
+ const representative=fixtures[3];await representative.page.goto('/dashboard/atividade/'+activity);
+ await expect(representative.page.getByRole('form',{name:'Enviar rascunho'})).toBeVisible();
+ await expect(representative.page.getByLabel('Título',{exact:true})).toHaveCount(0);
+ await expect(representative.page.getByLabel('Autorizo a divulgação desta versão após revisão editorial.',{exact:true})).toBeVisible();
+ const before=(await db.query('select titulo,versao_submetida from public.atividades where id=$1',[activity])).rows[0];
+ const response=await api(representative.page,'/api/atividades/'+activity,{...content(),titulo:'Tentativa não autorizada fictícia',versao_esperada:before.versao_submetida},'PATCH');expect(response.status).toBe(403);
+ expect((await db.query('select titulo,versao_submetida from public.atividades where id=$1',[activity])).rows[0]).toEqual(before);
 });
 test('B02: campos obrigatórios ausentes impedem salvar/enviar por UI/API',async()=>{
  const a=fixtures[0];await a.page.goto('/dashboard/nova-atividade');await a.page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();await expect(a.page.locator('form [role=alert]')).toBeVisible();
