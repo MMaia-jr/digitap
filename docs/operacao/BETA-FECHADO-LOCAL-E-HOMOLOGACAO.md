@@ -1,7 +1,44 @@
 # DigItap — candidato local de Beta Fechado
 
 **Estado:** procedimento local preparado; homologação externa não iniciada.
-**Escopo:** E1–E4.1 e ECO-01 existentes neste checkout. E5 permanece suspensa.
+**Escopo:** E1–E4.1, ECO-01, AFLORA-01/02C, AUT-ORG-01/FIX e OSS-01A/01B existentes neste candidato local. E5 permanece suspensa.
+
+## Checkpoint local INC-EST-02/03 — 22/11/2026
+
+- `npm run beta:check` observou Node 22.23.2, Supabase API/Auth em
+  `127.0.0.1:56151`, PostgreSQL em `127.0.0.1:56152`, **15 migrations locais
+  reconhecidas, sem pendências**, e zero contas sintéticas `@example.invalid`
+  após cada lote de fixtures. Esse resultado descreve exclusivamente a stack
+  local; não implica paridade, aplicação ou aprovação de migration no Supabase
+  Cloud.
+- OSS-01A/01B e sua migration versionada fazem parte da árvore candidata. O
+  incremento INC-EST-03 não executou migrations nem alterou schema. O serviço
+  OSS de arquivos privados e o repositório transacional possuem contratos locais;
+  a migration local registrada não prova que exista um adaptador Storage
+  conectado ou que o fluxo esteja operacional no Cloud.
+- Resultados desta worktree, sempre com dados sintéticos e destinos loopback:
+  C01 Chromium 5/5 execuções válidas; atividade 5/5; registros C02–C04 1/1;
+  portfólio 3/3; publicação PostgreSQL 35/35; Vitest 957/957; TypeScript e
+  build PASS; ESLint zero erros/quatro avisos preexistentes. O timeout inicial
+  de C01 não teve causa-raiz comprovada; não foi reproduzido nas cinco
+  execuções sequenciais posteriores. Esses resultados não são uma suíte E2E
+  completa, homologação online ou autorização para Beta com pessoas.
+- A worktree de INC-EST-03 não está na allowlist do supervisor
+  `scripts/e2e-server.mjs`. Os E2E executados usaram Chromium já instalado e
+  servidor Next temporário ligado somente a `127.0.0.1:3215`, com variáveis da
+  stack local passadas em memória e sem registrar seus valores. Para repetir em
+  outra worktree, primeiro comprove loopback, porta livre e ausência de fixtures;
+  não contorne a allowlist com serviços remotos nem copie `.env`.
+- Evidências sanitizadas próprias permanecem em diretórios novos
+  `operations/evidence/inc-est-03-*` e
+  `operations/evidence/aflora-aut-org-01-inc-est-03-*` da worktree. Não usar
+  evidências brutas como prova de Cloud ou uso humano; não sobrescrever pastas
+  históricas.
+
+Antes de qualquer beta acompanhado continuam necessários gates humanos e
+operacionais próprios para Auth/e-mail, TLS/conexão de banco, backups,
+isolamento, paridade de migrations, privacidade/retenção e validação humana.
+Não cadastrar participantes reais nesta etapa.
 
 ## Ambiente e configuração
 

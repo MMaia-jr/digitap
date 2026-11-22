@@ -1,5 +1,19 @@
 # A Praça — Plano
 
+## INC-EST-02/03 — checkpoint técnico local, 22/11/2026
+
+- **Estado:** worktree isolada `release/inc-est-03-20261122`, iniciada em `e6cae4c9a6808fc713d733f9d438dcd257995561`; sem integração no GitHub. A candidata INC-EST-02 e o checkout original foram preservados.
+- **Commits locais seletivos de código:** `a07538b` C01; `dd0786a` DTO/PATCH e revogação; `dfa6a18` projeção ValueFlows experimental. O commit documental deste checkpoint ainda será aplicado nesta branch; não houve push.
+- **CÓDIGO / TESTADO LOCAL:** DTO `pode_editar` agora usa a mesma autorização vigente por sujeito e escopo `editar` do PATCH; representante com apenas `enviar`/`publicar` recebe 403 sem alteração. PostgreSQL verificou o lock do vínculo: PATCH bloqueia durante revogação ainda não confirmada e, depois do commit, termina em 403 sem alterar título/versão. PostgreSQL de publicação 35/35; E2E atividades 5/5.
+- **C01:** cinco execuções Chromium sucessivas passaram com sincronização por respostas 422/200 observáveis; cada ensaio registrou apenas método, rota, status e estado da UI. O timeout anterior sem resposta não teve causa-raiz determinada e não foi reproduzido nas cinco execuções; não atribuir a falha a causa de produção.
+- **Regressões:** registros C02–C04 1/1; portfólio 3/3; Vitest 957/957; TypeScript/build PASS; ESLint zero erros e quatro avisos preexistentes. Preflight local: 15 migrations reconhecidas, sem pendências e zero contas sintéticas residuais. Isso não comprova paridade Supabase Cloud nem homologação online.
+- **ValueFlows:** módulo puro experimental de projeção de necessidade pública E4 para `Proposal`/`Intent`, com ação explícita e receptor confiável fornecido pelo chamador; teste 8/8. Sem endpoint, persistência ou recuperação IA. É mapeamento provisório, não valida interoperabilidade total nem cria `Commitment`, `EconomicEvent`, verificação ou score.
+- **NOW:** revisar o diff e concluir commits locais seletivos somente depois de todos os gates deste incremento; manter os artefatos de execução locais separados do código commitado. Nenhum teste online, uso humano ou liberação a participantes está autorizado por estes resultados.
+- **NEXT:** comprovar separadamente os gates operacionais de Auth/e-mail, banco/TLS, backups, isolamento e paridade de migrations antes de qualquer homologação online; fazer validação humana DOG-01/VH-01–VH-03 apenas com autorização própria.
+- **LATER:** deliberar sobre integração/uso do ValueFlows experimental e sobre hipóteses One Tap/Memória. O PR #2 continua fora desta release, conforme registro fornecido; não tratar como implementação aprovada.
+
+Este checkpoint complementa os registros de 06/11, 16/11 e 19–21/11, sem alterar suas datas ou decisões históricas.
+
 ## FIX-AUT-ORG-01 — isolamento da edição organizacional, 21/11/2026
 
 - Validação local concluída. O PATCH da atividade agora exige vínculo organizacional atual e ativo de titular ou representante com escopo `editar`, no sujeito da atividade e na transação da edição.

@@ -1,5 +1,11 @@
 # A Praça — Status Report
 
+> **Checkpoint técnico — 22/11/2026 (INC-EST-02/03).** A worktree candidata local `release/inc-est-03-20261122`, iniciada em `e6cae4c9`, verificou C01 em cinco execuções Chromium sucessivas após sincronizar pelas respostas reais da API; o timeout anterior não teve causa-raiz comprovada. A suíte PostgreSQL de publicação passou 35/35, incluindo DTO/PATCH e revogação concorrente; E2E atividades 5/5, registros C02–C04 1/1 e portfólio 3/3; Vitest 957/957, TypeScript e build passaram. ESLint: zero erros e quatro avisos preexistentes. `beta:check`: 15 migrations locais reconhecidas, sem pendências e zero contas sintéticas residuais. É evidência local da candidata, não homologação online, uso humano ou paridade Cloud.
+
+> **CÓDIGO experimental — ValueFlows.** Foi adicionada uma função pura de projeção pública E4 → JSON-LD ValueFlows, sem rota ou persistência, com teste específico 8/8. O mapeamento é provisório; o envelope de proveniência é específico do DigItap e não declara verificação.
+
+> **Pendências mantidas.** Estado online de Supabase/Auth, TLS, migrations, backups e políticas não foi verificado nesta execução. `pode_editar` foi corrigido para refletir o escopo ativo do PATCH; a corrida revogação/PATCH foi exercitada localmente sob lock transacional. DOG-01, VH-01–VH-03, D14–D17 e adoção continuam sem prova humana. O PR #2 One Tap/Memória permanece hipótese documental segundo o registro fornecido; não foi integrado aqui.
+
 > **Nota de contexto — 21/11/2026.** Os incrementos I1–I4 documentam o desenvolvimento técnico do DigItap.
 > Os campos de fase, progresso e último commit abaixo descrevem o checkpoint histórico de 06/11.
 > Em 21/11, a branch local `release/beta-fechado-20261116` registrou `76f1c7f` (implementação)

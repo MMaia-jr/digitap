@@ -81,7 +81,9 @@
 
 [DECIDIDO] Reutilizar infraestrutura comum, incluindo a direção de usar Supabase Storage para arquivos, está no [Norte aprovado](00-norte-do-produto.md).
 
-[PENDENTE] O núcleo inspecionado trabalha com URLs, sem percurso de upload privado implementado. Integração Storage, regras de acesso, retenção e revisão de documentos continuam pendentes; uma referência privada no banco não protege o arquivo externo. Filtros textuais não garantem remoção de todo dado pessoal.
+[CÓDIGO — implementação local OSS-01A/01B] Existe serviço de upload privado e tabela separada de metadados `evidencias_arquivos_privados`; a migration `20261120224204_oss01b_private_evidence_files.sql` define estado `pendente/confirmado`, chave privada e acesso restrito a `service_role`. O repositório PostgreSQL confirma por CAS transacional e bloqueia a autorização do sujeito/organização durante a transição. Testes de contrato e integração local cobrem autorização, concorrência e isolamento. Essa implementação local não é prova de que a migration esteja aplicada em qualquer Cloud.
+
+[PENDENTE — Storage/Cloud] O serviço recebe o adaptador de Storage por dependência; não foi encontrado adaptador Supabase Storage conectado a uma rota de produto. Upload assinado, inspeção do objeto, URL de leitura curta e limites do contrato são exercitados por ports/testes, mas não comprovam armazenamento real. Permanecem pendentes integração e políticas de Storage, retenção, revisão documental, paridade de migrations e validação online. Uma referência ou metadado privado no banco não protege um objeto externo inexistente ou mal configurado. Filtros textuais não garantem remoção de todo dado pessoal.
 
 ## 8. Curadoria, autorização e contestação
 
