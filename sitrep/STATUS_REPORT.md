@@ -1,5 +1,7 @@
 # A Praça — Status Report
 
+> **Checkpoint documental — 22/11/2026 (LIC-01B).** Na branch isolada `docs/lic-01-20261122`, foram adicionados `LICENSE` (AGPLv3 oficial, versão fixa 3), `LICENSE-DOCS.md`, `CONTRIBUTING.md`, SPDX `AGPL-3.0-only`, esclarecimentos no README/Termos e notas no plano/status. O texto oficial foi obtido da fonte GNU indicada; a versão CC BY-SA 4.0 foi conferida no legalcode oficial. `git diff --check` e checks documentais passaram. Não houve mudança de runtime, dependência, banco ou serviço remoto. A licença cobre somente contribuições originais com autoridade para licenciar e documentação original autorizada; não transfere titularidade institucional. O código associado ao ZIP ValueFlows permanece com proveniência/licença pendente e explicitamente não declarado como coberto; capturas, marcas, usuários, dados pessoais, segredos e material de terceiros permanecem excluídos. Isso não equivale a revisão jurídica nem declara o repositório inteiro com direitos regularizados.
+
 > **Last Updated:** 2026-11-06 — fechamento técnico do I4 autorizado
 > **Projeto:** A Praça
 > **Fase atual:** I4 concluído tecnicamente; I5 próximo (não iniciado)
