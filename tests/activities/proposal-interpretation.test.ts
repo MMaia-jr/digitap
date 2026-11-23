@@ -13,21 +13,21 @@ const extraction=()=>({
 });
 function response(data:unknown=extraction(),extra:{finishReason?:string}={}) {const reason=extra.finishReason??'stop';return Response.json({content:[{type:'text',text:JSON.stringify(data)}],finishReason:{unified:reason,raw:reason==='tool-calls'?'tool_calls':reason},usage:{inputTokens:{total:1,noCache:1,cacheRead:0,cacheWrite:0},outputTokens:{total:1,text:1,reasoning:0}}});}
 let fetcher:ReturnType<typeof vi.fn<typeof fetch>>;
-beforeEach(()=>{vi.stubEnv('AI_GATEWAY_API_KEY','synthetic-gateway-key');vi.stubEnv('AI_GATEWAY_MODEL','moonshotai/kimi-k2.5');fetcher=vi.fn<typeof fetch>().mockResolvedValue(response());vi.stubGlobal('fetch',fetcher);});
+beforeEach(()=>{vi.stubEnv('AI_GATEWAY_API_KEY','synthetic-gateway-key');vi.stubEnv('AI_GATEWAY_MODEL','moonshotai/kimi-k2.6');fetcher=vi.fn<typeof fetch>().mockResolvedValue(response());vi.stubGlobal('fetch',fetcher);});
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();vi.restoreAllMocks();});
 it('extrai sete categorias como sugestões não verificadas com revisão obrigatória',async()=>{
  const result=await interpretProposal(proposal);
  expect(result).toEqual({estado:'revisao_humana_pendente',verificacao:'nao_verificada',dados:extraction()});
  expect(fetcher).toHaveBeenCalledOnce();
 });
-it('usa somente Gateway/Kimi, Bedrock, ZDR, schema estrito e credencial no header servidor',async()=>{
+it('usa Gateway K2.6 somente via Parasail, com ZDR, sem treinamento e schema estrito',async()=>{
  await interpretProposal(proposal);const [url,init]=fetcher.mock.calls[0];const body=JSON.parse(init!.body as string);
  expect(url).toBe('https://ai-gateway.vercel.sh/v4/ai/language-model');
  const headers=new Headers(init!.headers);
  expect(headers.get('authorization')).toBe('Bearer synthetic-gateway-key');
- expect(headers.get('ai-language-model-id')).toBe('moonshotai/kimi-k2.5');
+ expect(headers.get('ai-language-model-id')).toBe('moonshotai/kimi-k2.6');
  expect(init).toMatchObject({redirect:'error',cache:'no-store'});expect(init!.signal).toBeInstanceOf(AbortSignal);
- expect(body).toMatchObject({maxOutputTokens:6000,providerOptions:{gateway:{only:['bedrock'],zeroDataRetention:true}},responseFormat:{type:'json',schema:{additionalProperties:false}}});
+ expect(body).toMatchObject({maxOutputTokens:6000,providerOptions:{gateway:{only:['parasail'],zeroDataRetention:true,disallowPromptTraining:true}},responseFormat:{type:'json',schema:{additionalProperties:false}}});
  expect(body.tools).toBeUndefined();expect(body.providerOptions.gateway.models).toBeUndefined();
  expect(body.prompt[0]).toMatchObject({role:'system',content:expect.stringContaining('não confiável')});
  expect(body.prompt[1]).toMatchObject({role:'user',content:[{type:'text',text:proposal}]});
@@ -40,14 +40,14 @@ it('preserva o timeout de 30 segundos e entrega o sinal ao transporte do SDK',as
  expect(fetcher.mock.calls[0][1]!.signal).toBeInstanceOf(AbortSignal);
 });
 it('modelo configurável aceita somente família Kimi via configuração do servidor',async()=>{
- vi.stubEnv('AI_GATEWAY_MODEL','moonshotai/kimi-k2.5');await interpretProposal(proposal);
- expect(new Headers(fetcher.mock.calls[0][1]!.headers).get('ai-language-model-id')).toBe('moonshotai/kimi-k2.5');
+ vi.stubEnv('AI_GATEWAY_MODEL','moonshotai/kimi-k2.6');await interpretProposal(proposal);
+ expect(new Headers(fetcher.mock.calls[0][1]!.headers).get('ai-language-model-id')).toBe('moonshotai/kimi-k2.6');
 });
 it.each(['openai/gpt-5','moonshotai/kimi-k2.5?x=1','https://evil.invalid',''])('recusa configuração de modelo fora do contrato %s',async model=>{
  vi.stubEnv('AI_GATEWAY_MODEL',model);await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'CONFIGURATION'});expect(fetcher).not.toHaveBeenCalled();
 });
-it('modelo inicial é Kimi K2.5 se configuração opcional estiver ausente',async()=>{
- delete process.env.AI_GATEWAY_MODEL;await interpretProposal(proposal);expect(new Headers(fetcher.mock.calls[0][1]!.headers).get('ai-language-model-id')).toBe('moonshotai/kimi-k2.5');
+it('modelo inicial é Kimi K2.6 se configuração opcional estiver ausente',async()=>{
+ delete process.env.AI_GATEWAY_MODEL;await interpretProposal(proposal);expect(new Headers(fetcher.mock.calls[0][1]!.headers).get('ai-language-model-id')).toBe('moonshotai/kimi-k2.6');
 });
 it.each(['','   '])('credencial ausente falha antes de qualquer rede',async key=>{
  vi.stubEnv('AI_GATEWAY_API_KEY',key);await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'CONFIGURATION'});expect(fetcher).not.toHaveBeenCalled();
@@ -79,6 +79,15 @@ it.each([
 });
 it.each([401,402,429,500,503])('falha HTTP %s não expõe corpo nem repete chamada',async status=>{
  fetcher.mockResolvedValue(new Response('SENSITIVE_PROVIDER_MARKER',{status}));await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'UNAVAILABLE',message:'Interpretação indisponível.'});expect(fetcher).toHaveBeenCalledOnce();
+});
+it('falha fechada quando não há endpoint Parasail elegível, sem fallback de provedor',async()=>{
+ fetcher.mockResolvedValue(Response.json({error:{type:'no_zdr_providers_available'}},{status:400}));
+ await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'UNAVAILABLE',message:'Interpretação indisponível.'});
+ const body=JSON.parse(fetcher.mock.calls[0][1]!.body as string);
+ expect(body.providerOptions.gateway.only).toEqual(['parasail']);
+ expect(body.providerOptions.gateway.zeroDataRetention).toBe(true);
+ expect(body.providerOptions.gateway.disallowPromptTraining).toBe(true);
+ expect(fetcher).toHaveBeenCalledOnce();
 });
 it('exceção e logs não expõem chave, proposta ou detalhes do provedor',async()=>{
  const errorLog=vi.spyOn(console,'error');const warning=vi.spyOn(console,'warn');const log=vi.spyOn(console,'log');

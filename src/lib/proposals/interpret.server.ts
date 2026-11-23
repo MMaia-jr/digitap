@@ -93,13 +93,13 @@ async function boundedGatewayFetch(input: RequestInfo | URL, init?: RequestInit)
 }
 
 /** Server-only interpretation, with no persistence, URL fetching or tools.
- * AI_GATEWAY_MODEL may select a Kimi model; provider routing remains Bedrock-only.
+ * AI_GATEWAY_MODEL may select a Kimi model; provider routing remains Parasail-only.
  * Gateway policy/access must be verified separately before any real inference.
  */
 export async function interpretProposal(input: unknown): Promise<ProposalInterpretation> {
   if (typeof input !== 'string' || !input.trim() || input.length > 20000) return fail('INPUT');
   const key = process.env.AI_GATEWAY_API_KEY;
-  const model = process.env.AI_GATEWAY_MODEL ?? 'moonshotai/kimi-k2.5';
+  const model = process.env.AI_GATEWAY_MODEL ?? 'moonshotai/kimi-k2.6';
   if (!key || !key.trim() || key !== key.trim() || /\s/.test(key) || !/^moonshotai\/kimi-[a-z0-9]+(?:[.-][a-z0-9]+)*$/.test(model)) return fail('CONFIGURATION');
   let output: unknown;
   let finishReason: string | undefined;
@@ -111,7 +111,7 @@ export async function interpretProposal(input: unknown): Promise<ProposalInterpr
       prompt: input,
       output: Output.object({ schema: jsonSchema<Extraction>(schema as never) }),
       maxOutputTokens: 6000,
-      providerOptions: { gateway: { only: ['bedrock'], zeroDataRetention: true } },
+      providerOptions: { gateway: { only: ['parasail'], zeroDataRetention: true, disallowPromptTraining: true } },
       maxRetries: 0,
       abortSignal: AbortSignal.timeout(30000),
     });
