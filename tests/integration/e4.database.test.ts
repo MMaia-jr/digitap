@@ -9,8 +9,9 @@ import { closeDatabasePool,withTransaction,type Sql,type Transaction } from '../
 vi.mock('server-only',()=>({}));
 
 let db:Client,admin:SupabaseClient,local:Record<string,string>;
-const users:string[]=[],subjects:string[]=[],orgs:string[]=[],projects:string[]=[],activities:string[]=[],authClients:SupabaseClient[]=[];
+const users:string[]=[],subjects:string[]=[],orgs:string[]=[],projects:string[]=[],activities:string[]=[],records:string[]=[],authClients:SupabaseClient[]=[];
 let pfA:string,pfB:string,orgSubject:string,projectId:string;
+let subjectRevocationTarget:{userId:string;subjectId:string}|null=null;
 const prefix=`E4 synthetic ${randomUUID()}`;
 const opts={auth:{persistSession:false,autoRefreshToken:false}};
 const services=new Map<string,ReturnType<typeof createE4Service>>();
@@ -40,6 +41,10 @@ describe('E4 — integração com PostgreSQL local, sessão e isolamento',()=>{
    try{
     await db.query("delete from public.eventos_editoriais where (objeto_tipo='atividade' and objeto_id=any($1::uuid[])) or (objeto_tipo='sujeito' and objeto_id=any($2::uuid[]))",[activities,subjects]);
     await db.query('delete from public.casos_moderacao where atividade_id=any($1::uuid[]) and sujeito_id=any($2::uuid[])',[activities,subjects]);
+    await db.query("delete from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=any($1::uuid[])",[records]);
+    await db.query('delete from public.evidencias where registro_id=any($1::uuid[])',[records]);
+    await db.query('delete from public.registros_realizacao where id=any($1::uuid[])',[records]);
+    await db.query("delete from public.autorizacoes_publicacao where objeto_tipo='registro' and objeto_id=any($1::uuid[])",[records]);
     await db.query("delete from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[activities]);
     await db.query('delete from public.atividades where id=any($1::uuid[])',[activities]);
     await db.query('delete from public.interesses_necessidade where sujeito_id=any($1::uuid[]) or owner_auth_user_id=any($2::uuid[])',[subjects,users]);
@@ -125,6 +130,66 @@ describe('E4 — integração com PostgreSQL local, sessão e isolamento',()=>{
   expect(after).toEqual(before);
  });
 
+ it('contexto autenticado conserva história própria e acesso relacional revogável sem revelar privados alheios',async()=>{
+  const own=await service(users[0]).createCapability({subjectId:pfA,description:'Privado sintético de A para contexto.',category:'cultura'});
+  const publicOwn=await service(users[0]).createCapability({subjectId:pfA,description:'Público sintético de A para contexto.',category:'educacao'});
+  const foreign=await service(users[1]).createCapability({subjectId:pfB,description:'SEGREDO_PRIVADO_B_CONTEXT',category:'cultura'});
+  const privateProjectNeed=await service(users[2]).createNeed({projectId,description:'SEGREDO_PRIVADO_PROJETO_CONTEXT',categories:['cultura']});
+  const publicProjectNeed=await service(users[2]).createNeed({projectId,description:'Necessidade pública sintética do projeto relacionado.',categories:['cultura']});
+  const publishActivity=async(owner:string,label:string)=>{
+   const ongoing=owner===users[0];
+   const activity=await activityService(owner).create({titulo:`Contexto ${label} ${randomUUID()}`,descricao:'Atividade sintética publicada para habilitar conteúdo público E4.',inicio_previsto:ongoing?new Date().toISOString():'2026-11-20T10:00:00-03:00',...(ongoing?{acontecendo_agora:true}:{retrospectiva:true}),orientacao_acesso:'Acesso sintético de teste.',referencia_oficial:null});
+   activities.push(activity.id);await activityService(owner).submit(activity.id,{versao_esperada:1,autoriza_publicacao:true});
+   await activityService(users[3]).editorialDecision(activity.id,{acao:'aprovar_publicacao',versao_esperada:1,pedido_id:randomUUID()});return activity.id;
+  };
+  const ownActivity=await publishActivity(users[0],'PF');await publishActivity(users[2],'organização');
+  await service(users[0]).updateCapability({id:publicOwn.id,expectedVersion:1,description:'Público sintético de A para contexto.',category:'educacao',visibility:'publica'});
+  await service(users[2]).updateNeed({id:publicProjectNeed.id,expectedVersion:1,description:'Necessidade pública sintética do projeto relacionado.',categories:['cultura'],visibility:'visivel'});
+
+  const contextFor=(userId:string,subjectId:string)=>{
+   const retrieve=Reflect.get(service(userId),'context') as (subjectId:string)=>Promise<{
+   capabilities:Array<{recordId:string;subjectId:string;source:string;version:number;state:string;visibility:string;authorizedScope:string}>;
+   projects:Array<{projectId:string;ownerSubjectId:string;access:string;authorizedScope:string}>;
+   needs:Array<{recordId:string;ownerSubjectId:string;source:string;version:number;state:string;visibility:string;authorizedScope:string}>;
+   realizations:Array<{recordId:string;activityId:string;subjectId:string;source:string;version:number;state:string;certainty:string;authorizedScope:string}>;
+   }>;
+   return retrieve.call(service(userId),subjectId);
+  };
+  const context=await contextFor(users[0],pfA);
+  expect(context.capabilities.find(item=>item.recordId===own.id)).toMatchObject({subjectId:pfA,source:'capacidades',version:1,state:'ativa',visibility:'privada',authorizedScope:'titular'});
+  expect(context.capabilities.find(item=>item.recordId===publicOwn.id)).toMatchObject({subjectId:pfA,source:'capacidades',version:2,state:'ativa',visibility:'publica',authorizedScope:'publico_e_titular'});
+  expect(context.capabilities.some(item=>item.recordId===foreign.id)).toBe(false);
+  expect(context.projects).toContainEqual(expect.objectContaining({projectId,ownerSubjectId:orgSubject,access:'colaboracao_ativa',authorizedScope:'vinculo_colaboracao'}));
+  expect(context.needs.find(item=>item.recordId===publicProjectNeed.id)).toMatchObject({ownerSubjectId:orgSubject,source:'necessidades_projeto',version:2,state:'aberta',visibility:'visivel',authorizedScope:'publico'});
+  expect(context.needs.some(item=>item.recordId===privateProjectNeed.id)).toBe(false);
+  const coordinatorContext=await contextFor(users[2],orgSubject);
+  expect(coordinatorContext.projects).toContainEqual(expect.objectContaining({projectId,access:'owner',authorizedScope:'titular_do_projeto'}));
+  expect(coordinatorContext.needs.find(item=>item.recordId===privateProjectNeed.id)).toMatchObject({ownerSubjectId:orgSubject,visibility:'privada',authorizedScope:'titular_do_projeto'});
+  expect(JSON.stringify(context)).not.toMatch(/SEGREDO_PRIVADO|auth_user_id|comprovante_restrito/);
+  await expect(contextFor(users[1],pfA)).rejects.toMatchObject({status:403});
+
+  const record=await activityService(users[0]).createRecord(ownActivity,{pedido_id:randomUUID(),versao_esperada:1,data_realizacao:new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()),descricao_factual:'Relato sintético publicado e posteriormente contestado.',origem_informacao:'Declaração sintética de teste.'});
+  records.push(record.id);
+  const authId=randomUUID();await db.query("insert into public.autorizacoes_publicacao(id,objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em) values($1,'registro',$2,array['registro_realizacao','registro:versao:1'],'Titular sintético','Comprovante sintético restrito',clock_timestamp())",[authId,record.id]);
+  const transition=async(userId:string,action:string,state:string,extra:Record<string,unknown>={})=>{
+   const target=activityService(userId),current=await target.getRecord(ownActivity),operation=Reflect.get(target,'recordTransition') as (id:string,input:Record<string,unknown>)=>Promise<unknown>;
+   return operation.call(target,ownActivity,{pedido_id:randomUUID(),acao:action,estado_esperado:state,conteudo_esperado:current.conteudo_sha256,...extra});
+  };
+  await transition(users[0],'enviar','rascunho');await transition(users[3],'iniciar','enviada');
+  await transition(users[3],'aprovar','em_revisao',{autorizacao_id:authId,evidencias_aprovadas:[]});await transition(users[3],'publicar','aprovada');
+  const publishedRecord=await activityService(users[0]).getRecord(ownActivity);
+  await activityService(users[0]).contestRecord(ownActivity,{pedido_id:randomUUID(),conteudo_esperado:publishedRecord.conteudo_sha256,divergencia:'Divergência sintética registrada para teste, sem decisão sobre sua procedência.'});
+  const contested=(await contextFor(users[0],pfA)).realizations.find(item=>item.recordId===record.id);
+  expect(contested).toMatchObject({activityId:ownActivity,subjectId:pfA,source:'registros_realizacao',version:1,state:'contestado',certainty:'contestacao_registrada_nao_verificada',authorizedScope:'publico'});
+
+  await db.query("update public.vinculos_colaboracao set status='recusado' where sujeito_id=$1 and projeto_id=$2 and status='ativo'",[pfA,projectId]);
+  const afterRevocation=await contextFor(users[0],pfA);
+  expect(afterRevocation.projects.some(item=>item.projectId===projectId)).toBe(false);
+  expect(afterRevocation.needs.some(item=>item.recordId===publicProjectNeed.id||item.recordId===privateProjectNeed.id)).toBe(false);
+  expect(afterRevocation.capabilities.some(item=>item.recordId===own.id)).toBe(true);
+  subjectRevocationTarget={userId:users[0],subjectId:pfA};
+ });
+
  it('somente coordenação gerencia necessidades; participante ativo não recebe permissão de coordenação',async()=>{
   const created=await service(users[2]).createNeed({projectId,description:'Apoio declarado em oficinas.',categories:['cultura','comunicacao'],conditions:'Condições serão combinadas.'});
   expect(created.visibilidade).toBe('privada');expect(created.estado).toBe('aberta');
@@ -154,5 +219,13 @@ describe('E4 — integração com PostgreSQL local, sessão e isolamento',()=>{
   const need=await service(users[2]).createNeed({projectId,description:'Necessidade exclusivamente privada.',categories:['cultura']});
   const discoveries=await service(users[0]).discover();expect(discoveries.some(row=>row.capabilityId===cap.id||row.needId===need.id)).toBe(false);
   const rows=await db.query('select estado,visibilidade from public.capacidades where id=$1 union all select estado,visibilidade from public.necessidades_projeto where id=$2',[cap.id,need.id]);expect(rows.rows).toEqual([{estado:'ativa',visibilidade:'privada'},{estado:'aberta',visibilidade:'privada'}]);
+ });
+
+ it('revogação do vínculo titular bloqueia consultas contextuais privadas subsequentes',async()=>{
+  expect(subjectRevocationTarget).not.toBeNull();
+  const target=subjectRevocationTarget!;
+  const revoked=(await db.query("update public.vinculos_publicadores set situacao='revogado',revogada_em=clock_timestamp(),atualizada_em=clock_timestamp() where sujeito_id=$1 and atual and situacao='ativo' returning id",[target.subjectId])).rows;
+  expect(revoked).toHaveLength(1);
+  await expect(service(target.userId).context(target.subjectId)).rejects.toMatchObject({status:403});
  });
 });
