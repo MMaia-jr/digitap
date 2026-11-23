@@ -4,11 +4,13 @@ export type CapabilityCategory = typeof capabilityCategories[number];
 export interface DeclaredCapability {
   id: string; subjectId: string; subjectName: string; description: string;
   category: CapabilityCategory; conditions: string; visibility: string; status: string;
+  version?: number; createdAt?: string; updatedAt?: string;
 }
 export interface DeclaredNeed {
   id: string; projectId?: string | null; projectTitle?: string | null; activityId?: string | null; activityTitle?: string | null;
   targetType?: 'projeto' | 'atividade'; description: string;
   categories: CapabilityCategory[]; conditions: string; visibility: string; status: string;
+  ownerSubjectId?: string; version?: number; createdAt?: string; updatedAt?: string;
 }
 export interface CapabilityMatch {
   capabilityId: string; subjectId: string; subjectName: string; description: string;
@@ -16,6 +18,9 @@ export interface CapabilityMatch {
   targetId: string; targetTitle: string; projectId?: string; activityId?: string;
   projectTitle?: string; activityTitle?: string; needDescription: string; needConditions: string;
   reason: string; certainty: 'sugestao_nao_confirmada';
+  needOwnerSubjectId?: string;
+  capabilityVersion?: number; capabilityStatus?: string; capabilityCreatedAt?: string; capabilityUpdatedAt?: string;
+  needVersion?: number; needStatus?: string; needCreatedAt?: string; needUpdatedAt?: string;
 }
 
 /** Compatibilidade explicável por igualdade exata de categoria declarada. */
@@ -38,6 +43,15 @@ export function findCapabilityMatches(capabilities: DeclaredCapability[], needs:
         needDescription: need.description, needConditions: need.conditions,
         reason: `Categoria declarada em comum: ${capability.category}.`,
         certainty: 'sugestao_nao_confirmada',
+        ...(need.ownerSubjectId ? { needOwnerSubjectId: need.ownerSubjectId } : {}),
+        ...(capability.version !== undefined ? { capabilityVersion: capability.version } : {}),
+        ...(capability.status ? { capabilityStatus: capability.status } : {}),
+        ...(capability.createdAt ? { capabilityCreatedAt: capability.createdAt } : {}),
+        ...(capability.updatedAt ? { capabilityUpdatedAt: capability.updatedAt } : {}),
+        ...(need.version !== undefined ? { needVersion: need.version } : {}),
+        ...(need.status ? { needStatus: need.status } : {}),
+        ...(need.createdAt ? { needCreatedAt: need.createdAt } : {}),
+        ...(need.updatedAt ? { needUpdatedAt: need.updatedAt } : {}),
       });
     }
   }
