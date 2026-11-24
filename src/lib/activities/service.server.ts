@@ -1,7 +1,7 @@
 import 'server-only';
 import {createHash,randomUUID} from 'node:crypto';
 import {recordDraftTiming,draftTimingDeclaration,draftValidationClock,recordPersonConsent,versionAuthorization,initialPersonCuration,activePersonPublisher} from './editorial-pf.server';
-import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
+import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,activityLocalDay,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
 import { withTransaction,type Transaction,type Sql } from '../database.server';
 import { authorize,AccessError,type AccessAccount,type VerifiedUser } from '../auth/permissions.server';
 import { userClient } from '../supabase/server';
@@ -26,6 +26,15 @@ type ExecutionPlanItemRow={categoria:string|null;descricao:string|null;quantidad
 type ExecutionPlanView={id:string;activity_id:string;subject_id:string;version:number;estado:'privado';total_previsto_centavos:number;recursos:ExecutionPlanResource[]};
 const dto=(row:Row):PrivateActivity=>({...row,inicio_previsto:row.inicio_previsto instanceof Date?row.inicio_previsto.toISOString():row.inicio_previsto});
 const unavailable=()=>new ActivityError(503,'Serviço indisponível. Tente novamente.');
+function assertPrivateRecordActivity(actor:Actor,activity:PrivateActivity,clock:Date,date?:string){
+ if(!actor.sujeito_id)return;
+ const privateDraft=actor.sujeito_tipo==='pessoa_fisica'&&activity.estado_editorial==='rascunho';
+ const started=Date.parse(activity.inicio_previsto)<=clock.getTime();
+ if(!started||(!privateDraft&&activity.estado_editorial!=='publicada'))throw new ActivityError(422,'Registre uma atividade elegível que já tenha começado.');
+ if(privateDraft&&date&&date<activityLocalDay(new Date(activity.inicio_previsto))){
+  throw new ActivityError(422,'Confira a data efetiva.',{data_realizacao:'Informe a data de início ou uma data posterior.'});
+ }
+}
 function identifier(value:string){if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value))throw new ActivityError(404,'Atividade não encontrada.');return value;}
 async function verifiedUser(){return createGateway(await userClient(),adminClient,()=>{}).currentUser();}
 export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser|null>;transaction?:Transaction;now?:()=>Date}={}){
@@ -136,6 +145,8 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
  }
  async function authorizeRetrospective(sql:Sql,actor:Actor,input:unknown){
   if((input as {retrospectiva?:unknown}).retrospectiva!==true)return;
+  // O fluxo PF de criação/edição já exige titular ativo e escopo editar.
+  if(actor.sujeito_tipo==='pessoa_fisica')return;
   if(actor.papel!=='organizacao'||!actor.organizacao_id)throw new ActivityError(403,'Registro retrospectivo disponível para a organização titular.');
   const holder=await sql.query(`
    select s.id from public.sujeitos_publicadores s
@@ -289,7 +300,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    const command=validateEvidence(input,now()),metadata=JSON.stringify({tipo:'evidencia.v1',...command});
    return run('registro_escrita',async(sql,actor)=>{
     const activity=await load(sql,actor,id,true);
-    if(actor.sujeito_id&&(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime()))throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');
+    assertPrivateRecordActivity(actor,activity,now());
     const record=(await sql.query<{id:string;estado_editorial:string}>("select id,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
     if(!record)throw new ActivityError(404,'Registro não encontrado.');if(record.estado_editorial!=='rascunho')throw new ActivityError(409,'Registro não permite novas referências neste estado.');
     const history=(await sql.query<{executada_por_conta_id:string;justificativa_restrita:string}>("select executada_por_conta_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=$1 and acao='evidencia_referenciada'",[record.id])).rows;
@@ -301,10 +312,10 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    });
   },
   async createRecord(id:string,input:unknown){
-   const command=validateRecord(input,now()),metadata=JSON.stringify({tipo:'registro-criacao.v1',...command});
+   const clock=now(),command=validateRecord(input,clock),metadata=JSON.stringify({tipo:'registro-criacao.v1',...command});
    return run('registro_escrita',async(sql,actor)=>{
     const activity=await load(sql,actor,id,true);
-    if(actor.sujeito_id&&(activity.estado_editorial!=='publicada'||Date.parse(activity.inicio_previsto)>now().getTime()))throw new ActivityError(422,'O relato exige uma atividade publicada que já tenha começado.');
+    assertPrivateRecordActivity(actor,activity,clock,command.data_realizacao);
     if(activity.versao_submetida!==command.versao_esperada)throw new ActivityError(409,'A versão mudou. Recarregue antes de registrar.');
     const existing=(await sql.query("select id,atividade_id,data_realizacao::text as data_realizacao,descricao_factual,origem_informacao,estado_apuracao,estado_editorial from public.registros_realizacao where atividade_id=$1",[activity.id])).rows[0];
     if(existing){

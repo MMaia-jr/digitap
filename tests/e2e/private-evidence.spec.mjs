@@ -160,6 +160,15 @@ test.beforeAll(async ({browser}) => {
 
 test.afterAll(async () => {
   const errors = [];
+  if (db && fixtureSetupStarted) {
+    try {
+      const accounts = actors.map(actor => actor.accountId).filter(Boolean);
+      const activities = await db.query('select id from public.atividades where criada_por_conta_id=any($1::uuid[])', [accounts]);
+      for (const {id} of activities.rows) if (!ownedActivityIds.includes(id)) ownedActivityIds.push(id);
+      const records = await db.query('select id from public.registros_realizacao where atividade_id=any($1::uuid[])', [ownedActivityIds]);
+      for (const {id} of records.rows) if (!ownedRecordIds.includes(id)) ownedRecordIds.push(id);
+    } catch (error) { errors.push(error); }
+  }
   if (db && admin && bucketOwned) {
     try {
       const rows = (await db.query(`select object_key from public.evidencias_arquivos_privados where registro_id=any($1::uuid[])`, [ownedRecordIds])).rows;
@@ -178,6 +187,9 @@ test.afterAll(async () => {
   if (db && fixtureSetupStarted) {
     try {
       await db.query('begin');
+      await db.query('delete from public.itens_planejamento_execucao where plano_id in (select id from public.planos_execucao where atividade_id=any($1::uuid[]))', [ownedActivityIds]);
+      await db.query('delete from public.planos_execucao where atividade_id=any($1::uuid[])', [ownedActivityIds]);
+      await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])", [ownedActivityIds]);
       const accountIds = actors.map(actor => actor.accountId).filter(Boolean);
       await db.query("delete from public.eventos_editoriais where objeto_tipo='registro' and objeto_id=any($1::uuid[])", [ownedRecordIds]);
       await db.query('delete from public.evidencias_arquivos_privados where registro_id=any($1::uuid[])', [ownedRecordIds]);
@@ -300,4 +312,124 @@ test('DOG-01: titular envia bytes privados pela tela; PF, coletivo, organizaçã
   observations.push({role: outsider.label, denied: denied.status(), listing: unrelatedList.status(), revoked: 403,
     revokedUpload: revokedInit.status(), priorUrlTtl: oldLinkStillValid.status(), publicFeed: publicFeed.status(),
     privateMarkersAbsentFromPublicFeed: true, unpublishedProfileHidden: publicProfile.status()});
+});
+
+async function startFollowUp(actor, dashboard, title, historicDay) {
+  const page = actor.page;
+  await page.goto(dashboard);
+  await page.getByRole('link', {name: 'Preparar uma atividade'}).click();
+  const form = page.getByRole('form', {name: 'Nova atividade'});
+  await form.getByLabel('Título', {exact: true}).fill(title);
+  await form.getByLabel('Descrição', {exact: true}).fill('Compromisso sintético de facilitar uma oficina de colagem.');
+  await form.getByLabel('Orientação de acesso').fill('Simulação local, sem participantes reais.');
+  if (historicDay) {
+    await form.getByLabel('Esta atividade já aconteceu').check();
+    await form.getByLabel('Início informado (America/Sao_Paulo)').fill(`${historicDay}T14:15`);
+  } else {
+    await form.getByLabel('A atividade está acontecendo agora').check();
+  }
+  const created = page.waitForResponse(response => new URL(response.url()).pathname === '/api/atividades'
+    && response.request().method() === 'POST');
+  await form.getByRole('button', {name: 'Salvar rascunho'}).click();
+  const response = await created;
+  expect(response.status()).toBe(200);
+  const createdActivity = await db.query(`select id, to_char(inicio_previsto at time zone 'America/Sao_Paulo', 'YYYY-MM-DD HH24:MI') as inicio_local from public.atividades where criada_por_conta_id=$1 and titulo=$2`, [actor.accountId, title]);
+  expect(createdActivity.rowCount).toBe(1);
+  const atividade = createdActivity.rows[0];
+  ownedActivityIds.push(atividade.id);
+  if (historicDay) expect(atividade.inicio_local).toBe(`${historicDay} 14:15`);
+  await expect(page).toHaveURL(dashboard === '/dashboard' ? new RegExp(`/dashboard/atividade/${atividade.id}$`) : origin + dashboard);
+
+  await page.goto(dashboard);
+  await page.getByRole('link', {name: 'Acompanhar compromissos e evidências'}).click();
+  await expect(page).toHaveURL(/#minhas-atividades$/);
+  await page.getByRole('link', {name: `Acompanhar ${title}`, exact: true}).click();
+  await expect(page).toHaveURL(new RegExp(`/dashboard/atividade/${atividade.id}#acompanhamento$`));
+  const followUp = page.getByRole('region', {name: 'Acompanhamento da atividade'});
+  await followUp.getByLabel('Descrição do recurso').fill('Papel e tintas sintéticos');
+  await followUp.getByLabel('Valor previsto (R$)').fill('24,50');
+  await followUp.getByRole('button', {name: 'Salvar planejamento'}).click();
+  await expect(followUp.getByText('Planejamento privado salvo.', {exact: false})).toBeVisible();
+  await page.reload();
+  await expect(followUp.getByLabel('Descrição do recurso')).toHaveValue('Papel e tintas sintéticos');
+  await expect(followUp.getByText('Total previsto: R$ 24,50')).toBeVisible();
+  return {id: atividade.id, followUp};
+}
+
+async function saveFollowUp(owner, dashboard, title, {id, followUp}, day, screenshot) {
+  const form = followUp.getByRole('form', {name: 'Registro de realização'});
+  await form.getByLabel('Data efetiva').fill(day);
+  await form.getByLabel('Descrição factual').fill('No ensaio sintético, os materiais previstos foram utilizados na oficina.');
+  await form.getByLabel('Origem da informação').fill('Declaração sintética do titular responsável pela oficina.');
+  const registered = owner.page.waitForResponse(response => new URL(response.url()).pathname === `/api/atividades/${id}/registro`
+    && response.request().method() === 'POST');
+  await form.getByRole('button', {name: 'Salvar declaração privada'}).click();
+  const recordResponse = await registered;
+  expect(recordResponse.status()).toBe(200);
+  const createdRecord = await db.query('select id, data_realizacao::text, estado_editorial, estado_apuracao, versao_publicada from public.registros_realizacao where atividade_id=$1', [id]);
+  expect(createdRecord.rowCount).toBe(1);
+  const recordId = createdRecord.rows[0].id;
+  ownedRecordIds.push(recordId);
+  expect(createdRecord.rows[0]).toMatchObject({data_realizacao:day, estado_editorial:'rascunho', estado_apuracao:'declarado', versao_publicada:null});
+  await expect(followUp.getByRole('region', {name: 'Registro privado'})).toBeVisible();
+  const fileInput = followUp.getByLabel('Arquivo de evidência privada');
+  await expect(fileInput).toBeEnabled();
+  await fileInput.setInputFiles({name: 'oficina-sintetica.png', mimeType: 'image/png', buffer: png});
+  const upload = followUp.getByRole('button', {name: 'Enviar evidência privada'});
+  await expect(upload).toBeEnabled();
+  await upload.click();
+  await expect(followUp.getByRole('link', {name: 'Abrir anexo privado'})).toBeVisible();
+
+  await owner.page.goto(dashboard);
+  await owner.page.getByRole('link', {name: `Acompanhar ${title}`, exact: true}).click();
+  await expect(followUp.getByLabel('Descrição do recurso')).toHaveValue('Papel e tintas sintéticos');
+  await expect(followUp.getByText(/os materiais previstos foram utilizados/)).toBeVisible();
+  const link = followUp.getByRole('link', {name: 'Abrir anexo privado'});
+  const attachmentPath = await link.getAttribute('href');
+  expect(attachmentPath).toMatch(/^\/api\/registros\/[a-z0-9-]+\/arquivos\/[a-z0-9-]+$/);
+  const redirect = await owner.page.request.get(attachmentPath, {maxRedirects: 0});
+  expect(redirect.status()).toBe(302);
+  const signed = new URL(redirect.headers().location);
+  expect(signed.origin).toBe('http://127.0.0.1:56151');
+  expect(await (await owner.page.request.get(signed.href, {maxRedirects: 0})).body()).toEqual(png);
+  await owner.page.screenshot({path: `${evidenceDir}/${screenshot}`, fullPage: true});
+  const saved = await db.query('select estado_editorial, numero_versao_publicada from public.atividades where id=$1', [id]);
+  expect(saved.rows).toEqual([{estado_editorial: 'rascunho', numero_versao_publicada: null}]);
+  const consent = await db.query("select count(*)::int n from public.autorizacoes_publicacao where (objeto_tipo='atividade' and objeto_id=$1) or (objeto_tipo='registro' and objeto_id=$2)", [id, recordId]);
+  expect(consent.rows[0].n).toBe(0);
+  expect((await owner.page.request.get(`/api/public/atividades/${id}`, {maxRedirects:0})).status()).toBe(404);
+  expect((await owner.page.request.get(`/api/public/atividades/${id}/registro`, {maxRedirects:0})).status()).toBe(404);
+}
+
+test('TAP08-03: PF retoma realização retrospectiva e anexo; organização e representante mantêm seus escopos', async () => {
+  const localDay = date => new Intl.DateTimeFormat('sv-SE', {timeZone:'America/Sao_Paulo', dateStyle:'short'}).format(date);
+  const yesterday = localDay(new Date(Date.now() - 86400000));
+  const person = actors[2];
+  const personalTitle = 'TAP08-03 · Oficina retrospectiva sintética PF';
+  const personalActivity = await startFollowUp(person, '/dashboard/pessoa-fisica', personalTitle, yesterday);
+  await saveFollowUp(person, '/dashboard/pessoa-fisica', personalTitle, personalActivity, yesterday, 'tap08-pf-retrospectiva.png');
+
+  const owner = actors[0];
+  const title = 'TAP08-03 · Oficina sintética da organização';
+  const organizationActivity = await startFollowUp(owner, '/dashboard', title);
+  await saveFollowUp(owner, '/dashboard', title, organizationActivity, localDay(new Date()), 'tap08-organizacao-acompanhamento.png');
+  const {id} = organizationActivity;
+
+  const representative = await createActor(owner.page.context().browser(), 'representante sintético com escopo de envio');
+  representative.organizationId = owner.organizationId;
+  representative.accountId = (await db.query(
+    "insert into public.contas_acesso(auth_user_id,organizacao_id,papel,situacao) values($1,$2,'organizacao','ativa') returning id",
+    [representative.id, owner.organizationId])).rows[0].id;
+  await db.query(`insert into public.vinculos_publicadores
+    (sujeito_id,conta_id,papel_vinculo,escopos,situacao,origem,ativada_em)
+    values($1,$2,'representante',array['enviar','publicar'],'ativo','cadastro',clock_timestamp())`,
+  [owner.subjectId, representative.accountId]);
+  await login(representative);
+  await representative.page.goto(`/dashboard/atividade/${id}#acompanhamento`);
+  await expect(representative.page.getByText('Seu acesso a esta atividade é restrito ao envio.')).toBeVisible();
+  await expect(representative.page.getByRole('region', {name: 'Registro privado'})).toHaveCount(0);
+  await expect(representative.page.getByRole('region', {name: 'Planejamento privado de recursos e custos previstos'})).toHaveCount(0);
+  await expect(representative.page.getByLabel('Arquivo de evidência privada')).toHaveCount(0);
+  await representative.page.screenshot({path: `${evidenceDir}/tap08-representante.png`, fullPage: true});
+  observations.push({journey: 'TAP08-03', retrospectivePersonalRecordAndAttachmentReopened: true, organizationRecordAndAttachmentReopened: true, representativeSendOnly: true, publication: false});
 });

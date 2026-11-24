@@ -138,13 +138,17 @@ export function validateScheduling(input:unknown){
  return {...common,estado_programacao:String(body.estado_programacao),estado_esperado:String(body.estado_esperado)};
 }
 
+export function activityLocalDay(date:Date):string{
+ return localParts(date).slice(0,10);
+}
+
 export function validateRecord(input:unknown,now=new Date()){
  const body=objectInput(input,['data_realizacao','descricao_factual','origem_informacao','versao_esperada','pedido_id']);
  const {versao_esperada,pedido_id}=validateWithdrawal({versao_esperada:body.versao_esperada,pedido_id:body.pedido_id,motivo:'Registro factual privado.'});
  const date=body.data_realizacao;
  if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number(date.slice(0,4))<1)return invalid('data_realizacao','Informe uma data válida, não futura.');
  const instant=new Date(date+'T12:00:00Z');
- if(!Number.isFinite(instant.getTime())||instant.toISOString().slice(0,10)!==date||date>localParts(now).slice(0,10))return invalid('data_realizacao','Informe uma data válida, não futura.');
+ if(!Number.isFinite(instant.getTime())||instant.toISOString().slice(0,10)!==date||date>activityLocalDay(now))return invalid('data_realizacao','Informe uma data válida, não futura.');
  return {pedido_id,versao_esperada,data_realizacao:date,descricao_factual:text(body.descricao_factual,'descricao_factual',10,5000),origem_informacao:text(body.origem_informacao,'origem_informacao',3,600)};
 }
 

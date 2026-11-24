@@ -44,3 +44,70 @@ it('C01: ano zero não é data persistível no PostgreSQL',async()=>{
 it('C04: data de consulta inexistente não é normalizada silenciosamente',()=>{
  expect(()=>validateEvidence({pedido_id:command.pedido_id,tipo_fonte:'Fonte fictícia',url_publica:'https://example.invalid/relato',afirmacao_sustentada:'A fonte sustenta somente a abertura.',consultada_em:'2026-02-30T12:00:00Z'},new Date('2026-11-04T18:00:00Z'))).toThrow();
 });
+
+const personalSubject = '30000000-0000-4000-8000-000000000001';
+
+function personalDraftService(inicio = '2026-11-04T01:00:00Z') {
+ const query = vi.fn(async (sql: string, values?: unknown[]) => {
+  if (sql.includes('from public.contas_acesso')) return {rows:[{id,auth_user_id:id,organizacao_id:null,papel:'publicador',situacao:'ativa'}]};
+  if (sql.includes("s.tipo='coletivo_informal'")) return {rows:[]};
+  if (sql.includes('from public.pessoas_fisicas')) {
+   expect(values).toEqual([id,'editar']);
+   return {rows:[{id:personalSubject}]};
+  }
+  if (sql.includes('from public.atividades')) {
+   expect(values).toEqual([id,personalSubject,id]);
+   return {rows:[{id,inicio_previsto:inicio,estado_editorial:'rascunho',versao_submetida:1}]};
+  }
+  if (sql.includes('insert into public.atividades')) return {rows:[{id,inicio_previsto:values?.[4],estado_editorial:'rascunho',versao_submetida:1}]};
+  if (sql.includes('from public.registros_realizacao')) return {rows:[]};
+  if (sql.includes('insert into public.registros_realizacao')) return {rows:[{id,data_realizacao:values?.[1],estado_editorial:'rascunho',estado_apuracao:'declarado'}]};
+  if (sql.includes('insert into public.eventos_editoriais')) return {rows:[]};
+  throw new Error('SQL inesperado');
+ });
+ const transaction = (async (operation: (sql: Sql) => Promise<unknown>) => operation({query} as unknown as Sql)) as Transaction;
+ return {query,service:createActivityService({transaction,verifyUser:async()=>({id,email_confirmed_at:'2026-01-01'}),now:()=>new Date('2026-11-06T18:00:00Z')})};
+}
+
+it('TAP08-03 grava relato de rascunho PF próprio sem autorização de divulgação', async () => {
+ const {service,query} = personalDraftService();
+ // O início UTC em 04/11 ainda corresponde a 03/11 em São Paulo.
+ const data_realizacao = '2026-11-03';
+ await expect(service.createRecord(id,{...command,data_realizacao})).resolves.toMatchObject({data_realizacao,estado_editorial:'rascunho',estado_apuracao:'declarado'});
+ expect(query.mock.calls.some(([sql]) => sql.includes('registro_criado'))).toBe(true);
+ expect(query.mock.calls.some(([sql]) => /autorizacoes_publicacao|update public\.atividades/.test(sql))).toBe(false);
+});
+
+it('TAP08-03 rejeita data de realização anterior ao início do rascunho PF no fuso local', async () => {
+ const {service,query} = personalDraftService();
+ await expect(service.createRecord(id,{...command,data_realizacao:'2026-11-02'})).rejects.toMatchObject({status:422,fields:{data_realizacao:expect.any(String)}});
+ expect(query.mock.calls.some(([sql]) => sql.includes('insert into public.registros_realizacao'))).toBe(false);
+});
+
+it('TAP08-03 mantém o início futuro inelegível para relato PF', async () => {
+ const {service,query} = personalDraftService('2026-11-06T19:00:00Z');
+ await expect(service.createRecord(id,{...command,data_realizacao:'2026-11-06'})).rejects.toMatchObject({status:422});
+ expect(query.mock.calls.some(([sql]) => sql.includes('insert into public.registros_realizacao'))).toBe(false);
+});
+
+it('TAP08-03 conserva a exigência de publicação no formulário simplificado de envio', async () => {
+ const {service,query} = personalDraftService();
+ await expect(service.registerRealization(id,{
+  pedido_id:command.pedido_id, versao_esperada:1, relato:'Relato sintético da atividade, com detalhes suficientes para o formulário editorial.',
+  participantes:3, autoriza_publicacao:true,
+ })).rejects.toMatchObject({status:422,message:expect.stringContaining('publicada')});
+ expect(query.mock.calls.some(([sql]) => sql.includes('insert into public.registros_realizacao'))).toBe(false);
+});
+
+
+it('TAP08-03 registra a declaração retrospectiva na versão e horário informados pelo titular PF', async () => {
+ const {service,query} = personalDraftService();
+ const inicio_previsto = '2026-11-04T01:00:00.000Z';
+ await expect(service.create({
+  titulo:'Oficina sintética', descricao:'Descrição da oficina sintética.', orientacao_acesso:'Ensaio local.',
+  inicio_previsto, retrospectiva:true,
+ })).resolves.toMatchObject({estado_editorial:'rascunho',inicio_previsto});
+ expect(query.mock.calls.find(([,params]) => params?.[1]==='atividade_horario_retrospectivo')?.[1]).toEqual([
+  id,'atividade_horario_retrospectivo',id,JSON.stringify({tipo:'horario-retrospectivo.v1',versao:1,inicio_previsto}),
+ ]);
+});

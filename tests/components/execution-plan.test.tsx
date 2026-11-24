@@ -182,3 +182,32 @@ it('informa falha de rede sem perder os campos editados', async () => {
   await waitFor(() => expect(screen.getByRole('alert').textContent).toMatch(/conexão|rede/i));
   expect(description).toHaveProperty('value', 'Cadeiras emprestadas');
 });
+
+it('TAP 08 reúne o plano e o relato existentes na área de acompanhamento', async () => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('[]', { status: 200 })));
+  mocks.get.mockResolvedValue(activity);
+  mocks.getPlan.mockResolvedValue(null);
+  mocks.getRecord.mockResolvedValue({
+    id: 'record-id',
+    descricao_factual: 'Oficina declarada pelo responsável.',
+    evidencias: [],
+    contestacoes: [],
+  });
+  mocks.managedProfile.mockResolvedValue({ subject: { tipo: 'pessoa_fisica' }, availableProjects: [] });
+  render(await ActivityDetail({ params: Promise.resolve({ id: activity.id }) }));
+  const followUp = screen.getByRole('region', { name: 'Acompanhamento da atividade' });
+  expect(followUp.id).toBe('acompanhamento');
+  expect(followUp.contains(screen.getByRole('region', { name: 'Planejamento privado de recursos e custos previstos' }))).toBe(true);
+  expect(followUp.contains(screen.getByRole('region', { name: 'Registro privado' }))).toBe(true);
+  expect(followUp.contains(screen.getByRole('region', { name: 'Anexos privados' }))).toBe(true);
+  expect(followUp.textContent).toMatch(/prestação de contas.*Aldir Blanc/i);
+});
+
+it('TAP 08 não concede acompanhamento nem consulta registros a um representante com acesso restrito ao envio', async () => {
+  mocks.get.mockResolvedValue({ ...activity, autorizacao_organizacional: 'representante' });
+  render(await ActivityDetail({ params: Promise.resolve({ id: activity.id }) }));
+  expect(screen.queryByRole('region', { name: 'Acompanhamento da atividade' })).toBeNull();
+  expect(screen.getByText('Seu acesso a esta atividade é restrito ao envio.').id).toBe('acompanhamento');
+  expect(mocks.getPlan).not.toHaveBeenCalled();
+  expect(mocks.getRecord).not.toHaveBeenCalled();
+});

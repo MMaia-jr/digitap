@@ -69,3 +69,17 @@ it('dashboard organizacional mantém o redirecionamento de onboarding', async ()
   deps.institutionalState.mockResolvedValue({ kind: 'onboarding' });
   await expect(OrganizationDashboard({ searchParams: Promise.resolve({}) })).rejects.toThrow('redirect:/dashboard/organizacao');
 });
+
+it.each([
+  ['pessoa física', PersonDashboard],
+  ['organização', OrganizationDashboard],
+])('TAP 08 encaminha %s para selecionar a atividade a acompanhar', async (_name, Dashboard) => {
+  deps.activitiesList.mockResolvedValue([{ id: 'activity-id', titulo: 'Oficina de cultura', estado_editorial: 'rascunho', inicio_previsto: '2030-01-01T12:00:00Z' }]);
+  const { container } = render(await Dashboard({ searchParams: Promise.resolve({}) }));
+  const tap = screen.getByRole('link', { name: 'Acompanhar compromissos e evidências' });
+  const target = tap.getAttribute('href');
+  expect(target).toBe('#minhas-atividades');
+  expect(container.querySelector(target!)).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Acompanhar Oficina de cultura' }).getAttribute('href'))
+    .toBe('/dashboard/atividade/activity-id#acompanhamento');
+});

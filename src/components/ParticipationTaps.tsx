@@ -41,6 +41,9 @@ export function ParticipationTaps({ variant }: { variant: Variant }) {
         <Link className="button-outline" href={organizationHref[variant]}>{tapLabels[variant].organization}</Link>
         <Link className="button-outline" href="/biblioteca-acoes">Explorar a Biblioteca de Ações</Link>
         <Link className="button-outline" href={discoveryHref}>Descobrir atividades e encontros</Link>
+        {variant !== 'unlinked' && (
+          <Link className="button-outline" href="#minhas-atividades">Acompanhar compromissos e evidências</Link>
+        )}
       </nav>
 
       {variant === 'unlinked' && (
