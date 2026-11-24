@@ -1,3 +1,130 @@
+# G5 — consolidação local dos incrementos de 24/11/2026
+
+- Base de recuperação preservada em `3e2f93b17ee85fd4cc156ab35fbb38b05b707e9e`. TAP08-01/02/03 em `c9cd035`, interpretação contextual com saída estruturada e cancelamento voluntário em `8254f12`, contrato experimental de recuperação IA-MEM-01 em `12bf473`. OSS-GOV-01 e os resultados experimentais permanecem registrados. A memória experimental fica separada do produto.
+- Vitest padrão **1.022/1.022** e IA-MEM-01 isolado **6/6**. PostgreSQL/Storage **284/284** em duas execuções sem sobreposição, com cinco casos executados separadamente após habilitar a flag de limpeza ECO-01. Chromium **7/7** em duas execuções sem sobreposição. Cinco casos passaram inicialmente. O primeiro E4 excedeu o limite do teste, bloqueando o segundo em série. A repetição focal E4 passou **2/2** e confirmou limpeza, sem causa determinada para a interrupção inicial. Build local, typecheck e diff aprovados. Lint sem erros e cinco avisos preexistentes.
+- A regressão de navegador usou Gateway simulado. Foram conferidos os manifestos existentes da jornada contextual real e dos ensaios IA-MEM-01. Nenhuma nova inferência ou gasto. Os recibos e artefatos de execução seguem locais, com o relatório da consolidação em `operations/evidence/g4-03b-recovery-g5-consolidacao-20261124T224048Z` e a repetição focal em `operations/evidence/g4-03b-recovery-g5-e4-20261124T224722Z`. A credencial protegida, arquivos gerados e logs ficam fora dos commits.
+
+---
+
+# G4 — jornada contextual real concluída, 24/11/2026
+
+- Chromium local com sandbox **1/1**, 80,331 s totais, zero falhas ou skips. A pessoa sintética abriu o Tap pelo painel PF, consentiu explicitamente e recebeu a prévia não verificada após a recuperação E4 autorizada. O cancelamento foi verificado antes do envio. Na chamada real, o aviso de espera e o controle de cancelamento permaneceram disponíveis. A pessoa revisou a sugestão, salvou a ideia privada e retomou texto e revisão após recarregar, sem nova inferência. PostgreSQL confirmou texto, interpretação original, revisão e versão 1.
+- Kimi K2.6 via Moonshot AI, com failover nativo e filtros de privacidade mantidos. A projeção incluiu a capacidade sintética do titular e excluiu identificadores e escopos. As sete listas, a ancoragem e a validação semântica passaram após explicitar os campos no prompt contextual. Gateway 71,820 s e API observada no browser 72,346 s. 650 tokens de entrada e 3.390 de saída. Recibo de US$ 0,01417750 na rodada aprovada. As duas respostas anteriores do Gateway foram rejeitadas pela API. A primeira tentativa parou no harness antes da rede.
+- Custo contextual de US$ 0,04979766. Custo conhecido acumulado de US$ 0,07665978. Reservas incertas preservadas em US$ 3,054728. Saldo conservador de US$ 1,86861222 sobre US$ 5,00. Cleanup por IDs confirmou zero resíduos nas tabelas verificadas e a porta 3215 ficou sem listener. Relatórios, recibos e manifesto em `operations/evidence/g4-03b-recovery-contextual-real-20261124T221405Z`.
+- Próximo incremento executável no Garagem-30 conforme os checkpoints disponíveis. Estabilizar o delta local posterior ao congelamento G5, com escopo seletivo para G4 real e TAP08-03 e verificação dos gates afetados. OSS-GOV-01 e IA-MEM-01 permanecem preservados. CONS-03B segue condicionado à recuperação atual verificada e à autorização específica. Validação humana permanece pendente. A consolidação não repetiu testes ou inferências nem alterou produção.
+
+---
+
+# G4 — inferência do Tap sem prazo artificial, 24/11/2026
+
+- O adaptador não cria prazo local para a inferência. O sinal da requisição permite distinguir cancelamento voluntário de indisponibilidade. A API mantém a resposta JSON completa e validada e a rechecagem de autorização. Limites obrigatórios de transporte, infraestrutura e provedor continuam aplicáveis.
+- A intenção sintética de oficina completou em **103.505 ms** no adaptador local. HTTP 200 via Moonshot AI, Kimi K2.6, 366 tokens de entrada e 3.657 de saída. A saída estruturada foi aceita como prévia não verificada para revisão humana. O tempo de processamento isolado do provedor e o limite da hospedagem não foram medidos.
+- RED 70 PASS e 4 FAIL. Regressão focal G4 **115/115**, typecheck e diff aprovados, lint sem erros e cinco avisos preexistentes. Custo da chamada de US$ 0,01477346. Saldo conservador acumulado de US$ 1,91840988 sobre o teto de US$ 5,00, com US$ 3,054728 ainda reservados para cobranças incertas. Evidências em `operations/evidence/g4-tap-inferencia-sem-prazo`.
+
+---
+
+# G3 — contrato de recuperação separado do Tap, 24/11/2026
+
+- O replay offline do Markdown real de M21-B reproduziu `OUTPUT` com HTTP 200. O Tap extrai menções ancoradas na proposta. Recuperação de memória seleciona evidência autorizada e pode registrar abstenção explícita. O Tap manteve schema, regras de ancoragem, timeout de 30 s, failover e filtros de privacidade. O prompt passou a exigir JSON sem Markdown. O teste confirma que o cliente não envia `temperature`.
+- RED 42 PASS e 1 FAIL pela falta da instrução JSON. Regressão focal 55/55 e contrato experimental 6/6. Typecheck, lint sem erros e diff aprovados. A intenção sintética de oficina atingiu o timeout do Tap. O par de recuperação M21 passou com 60 s e 1.200 tokens de saída no runner experimental. B se absteve. C selecionou o registro contestado e não verificado com proveniência da projeção sintética. A data de realização do placeholder do harness não conta como evidência temporal. Sem expansão do corpus porque o gate do Tap ficou pendente. D segue pendente.
+- Custo conhecido acumulado de US$ 0,01208866 pelos recibos do Gateway. Permanecem US$ 3,054728 de reservas sem cobrança confirmada e US$ 1,93318334 livres pelo ledger conservador. Evidências em `operations/evidence/g3-ia-mem-01-correcao`. TAP08-03 e OSS-GOV-01 preservados.
+
+---
+
+# G3 — roteamento independente de provedor e inferência real, 24/11/2026
+
+- Procedimento permanente para experimentos locais. Guarde `AI_GATEWAY_API_KEY` no `.env.local` ignorado pelo Git, com permissão `0600`. Na raiz da worktree, carregue o arquivo somente no processo experimental com `env -u AI_GATEWAY_API_KEY -u VERCEL_OIDC_TOKEN node --env-file=.env.local …`. Confira apenas presença, permissões e exclusão do Git. Mantenha o conteúdo fora de logs, manifestos e diffs.
+- O modelo é configurável dentro da família Kimi. O Gateway faz a seleção e o failover nativo entre provedores elegíveis do mesmo modelo. O adaptador não fixa provedor nem usa fallback de modelo. Preserva `zeroDataRetention`, `disallowPromptTraining`, schema estrito, limite de 6.000 tokens na saída, timeout de 30 s e zero retries no SDK. O erro permanece fechado quando nenhum endpoint é elegível.
+- RED 40 PASS e 2 FAIL por fixação em Parasail. GREEN focado 54/54. Typecheck e diff aprovados. Lint com zero erros e cinco warnings preexistentes. As expectativas do harness Chromium e da integração PostgreSQL foram alinhadas ao novo contrato, sem execução física nesta rodada.
+- G3 real usou M18 e M21. A evidência A continua histórica. B recebeu dois HTTP 200 via Moonshot AI e o adaptador recusou ambos como `OUTPUT`. Uma saída bruta observada veio em Markdown. C atingiu o timeout nos dois casos. D ficou pendente sem laboratório ativo. M08 permanece sem pontuação. A comparação B/C e a vantagem temporal de D seguem inconclusivas. O adaptador atual extrai menções e exige âncoras na proposta, o que limita sua capacidade de responder às perguntas temporais do catálogo.
+- Teto acumulado de US$ 5,00. Gateway informou US$ 0,00792636 nas duas respostas. As reservas de US$ 3,818410 permaneceram contabilizadas, incluindo três tentativas sem custo confirmado, com US$ 1,181590 livres pelo ledger conservador. O próximo par exigia US$ 1,527364. Matriz, reprodução e manifesto em `operations/evidence/g3-ia-mem-01-real`.
+
+---
+
+# G3 — gate de inferência real comparativa, 24/11/2026
+
+- Catálogo do Vercel AI Gateway confirmou Kimi K2.6 no Parasail, com ZDR, ausência de treinamento e tarifas de US$ 0,75/M de entrada, US$ 3,50/M de saída e US$ 0,16/M de leitura do cache. Estimativa de US$ 0,217608 por tentativa, com 262.144 tokens de entrada no limite conservador e 6.000 de saída no adaptador. Nenhuma tentativa reservada ou executada.
+- B e C ficaram bloqueados pela ausência de credencial protegida confirmada no ambiente de execução. D permanece pendente pela indisponibilidade do runtime isolado do laboratório. A conserva a evidência G3-R. M08 segue com pontuação suspensa e os bloqueios prévios foram preservados. Zero chamadas, US$ 0,00 consumidos e saldo autorizado de US$ 1,00.
+- Resultados históricos, transporte simulado e campos reais pendentes constam na matriz e no manifesto em `operations/evidence/g3-ia-mem-01-inferencia`. E4 mantém a autoridade sobre o contexto. A projeção atual deixa lacunas de versão histórica e vigência, ainda sem evidência de ganho comparativo de Graphiti neste corpus.
+
+---
+
+# G3 — retomada local de IA-MEM-01
+
+- O catálogo M01–M30 manteve o SHA-256 `e4950e7718129667662f4625ccdfed614d753e97bdab9ce0254bda889fedcae9`. A evidência G3-R de E4 foi reaproveitada. M08 continua com pontuação suspensa. Permanecem os bloqueios de M07, M09, M10, M19 e M22 e a decisão de escopo de M13.
+- Nesta rodada, **18/18 verificações locais de transporte simulado** passaram. Oito pares B/C usaram as perguntas M16, M17, M18, M20, M21, M23, M25 e M29. B enviou só a pergunta. C enviou os campos suportados pelo projetor atual, incluindo estado, versão e certeza quando disponíveis. A versão histórica anterior de M18 e a programação de M20/M29 não chegaram ao adaptador. O mock retornou o mesmo objeto vazio para B e C. Em M11 e M30, dependências E4 simuladas reprovaram a rechecagem ou rejeitaram a recuperação, e a rota real retornou 403 e 503 sem chamar o transporte.
+- Graphiti 0.31.2/FalkorDB e o redutor são evidências separadas do cenário EP-01–03. O readback físico histórico demonstrou o término da vigência do local, com extração simulada. O redutor atua somente sobre eventos normalizados. O runtime e o serviço ativo não estavam disponíveis para uma nova rodada D, e a comparação D sobre M01–M30 permanece pendente. IA-ECON-01 bloqueou a estimativa do primeiro episódio com teto zero. Nenhuma inferência, medição física nova, instalação ou gasto.
+- A proposta de próximo ensaio exige autorização separada para inferência e limites de custo e, para D, disponibilidade isolada do laboratório e um contrato de entrada autorizado. O comparativo de transporte não estabelece qualidade de resposta, latência de inferência ou ganho de Graphiti. Evidências, matriz e manifesto em `operations/evidence/g3-ia-mem-01-retomada`. TAP08-03 e OSS-GOV-01 preservados.
+
+---
+
+# TAP08-03 — acompanhamento privado e retrospectivo
+
+- A condição de atividade publicada e já iniciada veio da ampliação do fluxo editorial de realização PF em `7ac0577`. O modelo de domínio distingue esse formulário, que colhe consentimento e envia à revisão, do registro factual privado em rascunho. A condição permanece no formulário simplificado e nas transições editoriais.
+- Titular PF com escopo de edição pode registrar uma realização e referências privadas de atividade própria em rascunho que já começou. A data efetiva deve estar entre o dia de início informado e o dia atual em America/Sao_Paulo. A opção retrospectiva grava a declaração para o horário e a versão informados. O relato nasce declarado, a auditoria mantém o momento real do registro e nenhum snapshot ou autorização de divulgação é criado.
+- A organização continua usando os controles existentes. As restrições de representação e as permissões de anexos permanecem. Nenhuma mudança de schema.
+- A jornada PF retrospectiva passou do painel à retomada do planejamento, relato e anexo. Chromium confirmou ausência de snapshot e autorização de divulgação, resposta 404 nas consultas públicas das duas atividades sintéticas e limpeza das fixtures. Organização e interface do representante restrito ao envio passaram na mesma rodada. Vitest 1.019/1.019, PostgreSQL 71/71 e Chromium 2/2. Evidências em `operations/evidence/g4-03b-recovery-tap08-digitap-tap0803-bwwlh1k5`.
+
+## OSS-GOV-01 — frente complementar
+
+Investigação de reaproveitamento restrita a três candidatos para deliberação organizacional. O Garagem-30 e o TAP08-03 continuam no caminho principal. Nenhum código, schema, serviço ou dependência foi incorporado nesta rodada.
+
+1. **Rallly, horários para consulta de disponibilidade.** Adaptar os casos de Vitest de horários inexistentes, repetidos e intervalos após meia-noite ao tratamento de fuso já existente no DigItap. `getTimeOptions` depende do wrapper Day.js e `wallTimeToInstant`/ `wallTimeExists` dependem dos ajustes de fuso do Rallly. A fatia de menor acoplamento começa pelos testes, mantendo a escolha humana de horário. AGPL v3. [Testes de opções](https://github.com/lukevella/rallly/blob/33fed0f6350c82ea8771d8decaa30735a359e654/apps/web/src/features/poll/components/forms/poll-options-form/utils.test.ts) · [Funções de fuso](https://github.com/lukevella/rallly/blob/33fed0f6350c82ea8771d8decaa30735a359e654/apps/web/src/lib/datetime/wall-time.ts) · [Licença](https://github.com/lukevella/rallly/blob/33fed0f6350c82ea8771d8decaa30735a359e654/LICENSE)
+2. **Choices, contrato de resposta individual em consulta interna.** Adaptar a invariável de unicidade da resposta por consulta e pessoa autenticada e os testes de estado da própria resposta. O SQL de origem inclui remoção de duplicatas e depende da identidade de usuário do Choices. Reaproveitar apenas o contrato de unicidade e adaptá-lo à identidade do DigItap após decisão sobre elegibilidade. O arquivo de licença traz MIT e termos adicionais de biometria, fora desta fatia. [Índice de unicidade](https://github.com/choices-project/choices/blob/dc42a1428bd70ebbbb6ad4981c38ae761fa962fb/supabase/migrations/20260313000001_add_poll_rankings_unique_constraint.sql) · [Testes de contrato](https://github.com/choices-project/choices/blob/dc42a1428bd70ebbbb6ad4981c38ae761fa962fb/web/tests/contracts/polls-vote-status.contract.test.ts) · [Licença](https://github.com/choices-project/choices/blob/dc42a1428bd70ebbbb6ad4981c38ae761fa962fb/LICENSE)
+3. **Supabase Realtime Chat, apresentação de conversa privada.** `useChatScroll` usa apenas React. O componente `ChatMessageItem` pode ser adaptado à interface existente sem copiar o cliente do registry. `useRealtimeChat` demonstra Broadcast por canal e limpeza da inscrição; o exemplo usa autoria fornecida pelo cliente e não persiste mensagens. Antes de qualquer integração, decidir retenção, autoria verificada e autorização por vínculo, com entrega em tempo real separada do registro de decisões. Apache 2.0, preservar os avisos aplicáveis. [Rolagem](https://github.com/supabase/supabase/blob/9298ed68c1580bb48e6d864511acc3f8aa0d9351/apps/ui-library/registry/default/blocks/realtime-chat/hooks/use-chat-scroll.tsx) · [Mensagem](https://github.com/supabase/supabase/blob/9298ed68c1580bb48e6d864511acc3f8aa0d9351/apps/ui-library/registry/default/blocks/realtime-chat/components/chat-message.tsx) · [Licença](https://github.com/supabase/supabase/blob/9298ed68c1580bb48e6d864511acc3f8aa0d9351/LICENSE)
+
+Loomio e Decidim ficam como referências de domínio. `StanceService.create/update` e `OutcomeService.create` separam posição de resultado no Loomio; `AnswerProposal`, seus testes, e `Decidim::Accountability::Result` oferecem referência para decisão e acompanhamento. O acoplamento a Rails e aos papéis próprios de cada aplicação supera o ganho de portar código nesta etapa. Loomio declara AGPL v3 e Decidim AGPL-3.0-or-later. Aplicar a política do DigItap por trecho, preservando proveniência e avisos. [Loomio](https://github.com/loomio/loomio/tree/200d7001d35e9ca2b746fb95d9acdbd76d757df0) · [Decidim](https://github.com/decidim/decidim/tree/645e94fc49ba8981f637a47eeae29d814a2a1a54)
+
+---
+
+# TAP08-02 — jornada local de acompanhamento
+
+- Em Chromium com sandbox, uma organização titular criou uma atividade sintética pelo painel, salvou recursos e custo previsto, reabriu o planejamento, declarou a realização, anexou um arquivo privado e reabriu o conjunto pelo Tap. O arquivo recuperado coincidiu byte a byte com a fixture. A atividade permaneceu em rascunho.
+- Em pessoa física, a jornada validou criação, acesso pelo Tap, planejamento persistido e reabertura. A regra vigente exige atividade publicada e já iniciada para registrar a realização de pessoa física. A rodada preservou essa regra e não fez publicação local ou remota.
+- O representante sintético com escopo de envio viu a interface restrita, sem plano, relato ou controle de anexos. O cenário existente de evidência privada também passou, incluindo leitura sem upload para colaborador autorizado e rejeição de novos acessos após revogação.
+- Testes focais 31/31 e Chromium 2/2. A rodada final devolveu o banco e o Storage às contagens iniciais e encerrou o servidor. Ajustes do teste de navegador trataram a captura de IDs após navegação e a espera pela habilitação do campo de arquivo. Não houve mudança de autorização, schema ou requisito de prestação de contas.
+
+---
+
+# TAP 08 — acompanhamento para prestação de contas
+
+- Primeira fatia local sobre `3e2f93b17ee85fd4cc156ab35fbb38b05b707e9e`. O Tap leva pessoas físicas e organizações à lista de atividades do respectivo painel. A partir de uma atividade, o atalho **Acompanhar** abre planejamento, relato e evidências na área existente, respeitando as permissões de leitura, envio e edição.
+- A Política Nacional Aldir Blanc é uma aplicação inicial desse acompanhamento. Planejamento de recursos, realização declarada e evidências continuam distintos. Requisitos de instrumentos específicos, consolidação financeira e entrega formal ainda dependem de validação.
+
+---
+
+# CONS-03A — preservação e recuperabilidade, 24/11/2026
+
+- **Direção do fundador.** Entregar até 30/11 o máximo de capacidades úteis, funcionais e seguras. Garagem-30 é um marco de entrega. A Praça está em governança fundacional individual. O poder de decisão será compartilhado progressivamente conforme contribuições, compromissos e responsabilidades efetivamente assumidos.
+- **Escuta e evolução.** A oficina de prestação de contas de 26/11, informada pelo fundador, é oportunidade de escuta e validação em campo. Aldir Blanc é uma aplicação inicial de uma capacidade mais ampla de acompanhar relações, compromissos, realizações, recursos e evidências. Sustentabilidade integral e multidimensional orienta o produto. A taxonomia específica segue em elaboração.
+- **Experimentos preservados.** Inteligência relacional e memória contextual e temporal são direções de evolução. REL-01, IA-MEM, ValueFlows e Graphiti seguem experimentais, com integração incremental baseada em evidências. Sem mudança de arquitetura, schema ou implementação do TAP 08 nesta missão.
+- **GitHub e Vercel.** `release/digitap-cons-03` aponta para `3e2f93b17ee85fd4cc156ab35fbb38b05b707e9e` e `main` permanece em `cfa65fe37e5aae2113e92dd64c2b410e97f8d16e`. A consulta prévia indicava criação automática desabilitada, mas a operação gerou o preview Git `dpl_B754kgfz3V798jm8BehtX7ur3vFD`, com proteção observada na requisição anônima. O target Production permaneceu em `dpl_ovMkpued6TcgVR7ZSFGyLYeX7ohR`. Nenhum PR, promoção ou mudança de configuração.
+- **Banco.** Supabase original em PostgreSQL 17.11, 14 migrations, TLS observado e zero buckets e objetos. A exportação atual está bloqueada pela ausência de conexão PostgreSQL recuperável em canal autorizado. Um arquivo histórico de 19/11, com 11 versões no ledger, passou em ensaio isolado de restauração. Esse resultado cobre o snapshot histórico. CONS-03B permanece preparado e condicionado a um ponto de recuperação atual verificado e autorização específica.
+- **Evidências.** Relatório e manifesto em `~/projects/digitap-evidencias/cons-03a/20261124-preservacao-3e2f93b`. Artefatos de banco em diretório privado separado. Sem DDL ou escrita de dados em produção.
+
+---
+
+# CONS-02 — integração local, 24/11/2026
+
+- Integração local em `3e2f93b17ee85fd4cc156ab35fbb38b05b707e9e`, com pais `934f7efde02f88ac5ddb448375555e82d990c3a9` e `cfa65fe37e5aae2113e92dd64c2b410e97f8d16e`. SitRep conserva LIC-01B e os checkpoints técnicos. Aplicação, scripts, schema e lockfile preservados.
+- Vitest 1.010/1.010, Chromium 5/5 com Gateway simulado, typecheck, lint sem erros e build aprovados. PostgreSQL/Storage amplo chegou a 283/284 após alinhar as fixtures legadas ao consentimento. O arquivo restante passou 28/28 depois de ajustar o detector do lock real. Limpeza local confirmada e servidor encerrado.
+- Produção permanece em `cfa65fe`, deployment `dpl_ovMkpued6TcgVR7ZSFGyLYeX7ohR`. Deploy automático por Git desabilitado. As três migrações anteriores constam no ledger e somente `20261120224204` está pendente entre as quatro examinadas. Não há bucket no Storage original nem configuração de bucket ou Gateway no ambiente Vercel Production. Auth exige confirmação e tem SMTP configurado. Backup listado vazio e PITR desativado. É necessário comprovar recuperação antes de DDL.
+- CONS-03 requer autorizações específicas para Git remoto, recuperação/DDL, bucket e variáveis, deploy manual e homologação autenticada. A meta de 30/11/2026 permanece vigente. Relatório e manifesto conferidos em `~/projects/digitap-evidencias/cons-02/20261124T201110Z`. Nenhuma configuração ou dado remoto foi alterado.
+
+---
+
+# CONS-01 — consolidação para entrega de produto, 24/11/2026
+
+- **Direção do fundador.** Disponibilizar até 30/11/2026 a versão mais completa, funcional e útil que possa ser entregue com segurança. Garagem-30 é marco de entrega. A limitação anterior a uma demonstração G4/G6 foi superada. IA-MEM e Graphiti permanecem preservados para integração incremental posterior.
+- **Candidata.** `recovery/g4-20261124` em `934f7efde02f88ac5ddb448375555e82d990c3a9`, filho de `917b9e3644a16ce59460559a5eba61c92107cb0e`. O commit contém os 12 arquivos G5 conferidos contra a cópia congelada. Valem como evidência de checkpoint os 1.010 testes padrão, 184 físicos e cinco E2E. A rodada focal posterior aprovou 83 testes. O arquivo gerado `next-env.d.ts` e as evidências locais ficaram fora do commit.
+- **Reconciliação preparada.** O GitHub confirmou `cfa65fe37e5aae2113e92dd64c2b410e97f8d16e` em `main`. A simulação de três vias com objetos descartáveis identificou somente `sitrep/PROJECT_PLAN.md` e `sitrep/STATUS_REPORT.md`. Em ambos, preservar o bloco da candidata dentro dos marcadores e manter o bloco LIC-01B já incorporado fora deles. `package.json` foi combinado automaticamente. O gate online de `ab2da55` equivale a `67d58f4` por patch-id. As superfícies de licença, contribuição, README e Termos do squash remoto coincidem com as equivalentes da candidata. A origem/licença pendente do ZIP associado ao módulo experimental ValueFlows continua registrada.
+- **Gate da árvore integrada.** Após autorização para integrar, resolver os dois blocos acima, conferir a árvore resultante e executar `git diff --check`, `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, a suíte PostgreSQL/Storage com `npm run test:onboarding:db` usando o ambiente local isolado e as credenciais de teste, e os specs `e4.spec.mjs` e `g4-03b-contextual-idea.spec.mjs` pelo harness local com Gateway simulado. Registrar versão testada e limpeza de fixtures. Os resultados anteriores continuam vinculados ao checkpoint G5.
+- **Gate de infraestrutura antes da atualização.** Confirmar em leitura no Supabase original o ledger, tabelas e políticas, Auth/SMTP, TLS, backup verificável e bucket privado `SUPABASE_PRIVATE_EVIDENCE_BUCKET`. Em relação a `cfa65fe`, a candidata acrescenta a migração `20261120224204` de evidências privadas e liga Storage no ambiente local. A inspeção de 19/11 também encontrou ausentes `20261115230335` (E4), `20261115233000` (necessidades de atividade) e `20261116120000` (planos de execução). Determinar o conjunto real pendente pela leitura atual, antes de aplicar qualquer DDL. Confirmar no Vercel original o deployment de retorno, vínculo da branch e gatilho automático, configuração Supabase, bucket e presença da configuração do Gateway sem exibir segredos.
+- **Publicação sujeita a autorização específica.** Autorizar separadamente a integração Git, o push e incorporação à `main`, eventual DDL pendente e configuração de ambiente/bucket, e a ativação em produção. Se a incorporação à `main` acionar deploy automático, liberar essa ação apenas após o gate de infraestrutura e com autorização de deploy. Executar então o gate público existente com `./node_modules/.bin/playwright test --config=playwright.online.config.mjs --project=chromium`. Ele observa o domínio público e não cria conta ou atividade. Homologação autenticada com fixtures e eventual inferência real exigem autorização própria. Se a ativação falhar, voltar ao deployment anterior e tratar o banco separadamente, sem remoção automática de dados ou tabelas.
+- Nesta rodada houve commit local e leitura do GitHub. Nenhum merge, push, deploy, migration, instalação ou inferência paga.
+
+---
+
 # G5 — estabilização e congelamento local, 24/11/2026
 
 - [CÓDIGO] R4 versionado seletivamente em `917b9e3644a16ce59460559a5eba61c92107cb0e` (`BASE_G5`), filho de `146ffd135d5b56f47b880edc1f4c3ca4174845c0`. Os quatro arquivos e os manifestos independentes de R4 foram conferidos. G5 permanece sem commit. `next-env.d.ts` continua separado como artefato gerado pelo Next.
