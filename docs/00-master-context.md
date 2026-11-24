@@ -1,3 +1,65 @@
+# G5 — continuidade decisória consolidada, 24/11/2026
+
+- Implementação, migration privada e testes em `b158ef3bd0c153cd5b5867199ad7367ff7716faa`, descendente de `6b010b6`. A confirmação de exclusão informa que o histórico e a fotografia decisória são apagados quando existem, e que a atividade permanece. RED por ausência do aviso, seguido de GREEN e confirmação no Chromium. Cancelar preserva a ideia.
+- Gates afetados aprovados. Componentes e contratos **45/45**, PostgreSQL **13/13**, Chromium **1/1** com Gateway simulado, build, typecheck, lint focal e diff. O teste HTTP decisório passou a integrar a suíte normal. Manifestos anteriores de G2/G3 e G4 preservados e verificados. Evidência G5 em `operations/evidence/g4-03b-recovery-g5-decisoes-20261124T234621Z`.
+- CONS-03A já registra `verified_restore=true` e conclusão em `offline restore` no manifesto 20261124T205650Z-qq_bxru3 do snapshot de 24/11. Esse registro supera o bloqueio de backup descrito no checkpoint anterior para aquele snapshot. Não houve nova conexão, exportação ou restauração.
+- Publicação continua condicionada a CONS-03B. Conferir o ledger na execução autorizada e aplicar `20261124203300` e `20261120224204` se pendente. O último checkpoint registrou OSS-01B pendente e bucket privado e Gateway ausentes em Production. Configurar o bucket e os vínculos `SUPABASE_PRIVATE_EVIDENCE_BUCKET` e `AI_GATEWAY_API_KEY` antes da ativação. Autorizar separadamente a publicação Git e a ativação dessa candidata em digitap.com.br, mantendo o deployment de retorno. Kimi K2.6 continua padrão com failover nativo e filtros de privacidade. Sem push, deploy, DDL remoto ou gasto nesta rodada.
+
+---
+
+# G4 — persistência e continuidade decisória local, 24/11/2026
+
+- Aplicada exclusivamente no PostgreSQL local a migration `20261124203300_private_decisions`. A confirmação humana explícita grava revisões privadas com estado DEFINIDO, PROVISÓRIO, PENDENTE ou EXCLUÍDO, autoria da sessão e checagem da versão da ideia. Texto e interpretação permanecem independentes. Nenhum caminho de inferência grava decisões.
+- A conversão registra a versão de origem e uma fotografia decisória junto com a atividade, na mesma transação. O titular autorizado a recupera no acompanhamento TAP08, com alternativas excluídas separadas da orientação vigente. Edições posteriores da ideia preservam a fotografia. A exclusão explícita da ideia remove histórico e fotografia por cascata e preserva a atividade. A interface consulta as 50 confirmações mais recentes e o banco mantém as demais enquanto a ideia existe.
+- RED HTTP de confirmação ausente e GREEN **4/4**, com regressão focal **40/40**. PostgreSQL **8/8** em dois arquivos e repetição focal final **5/5** com retenção verificada. Foram comprovados concorrência 200/409, histórico, titularidade, negação a terceiro e após revogação, e rollback da confirmação e da conversão. Chromium **1/1** com Gateway simulado e TAP08, typecheck, lint focal e diff aprovados. Fixtures removidas e servidor encerrado.
+- Candidata `6b010b6` preservada como ponto de recuperação. Evidências em `operations/evidence/g4-03b-recovery-decisoes-20261124T233926Z`. Sem nova inferência, Graphiti, instalação, publicação ou operação em produção.
+
+---
+
+# G4 — continuidade decisória e encerramento experimental G2/G3, 24/11/2026
+
+- G2/G3 encerrado com resultados, contratos, recibos e aprendizados anteriores preservados. Os manifestos do replay e das rodadas reais foram conferidos. Graphiti permanece experimental. Nenhuma nova inferência.
+- A revisão já mantém texto, autoria e versão. A conversão confere titularidade e versão e registra origem restrita. O plano TAP08 possui versão e acesso privados próprios. Falta persistência de decisões humanas e da fotografia decisória da ideia na atividade. O próximo incremento depende de autorização para schema privado e transações de confirmação e conversão. Estados propostos mantidos conforme direção humana: DEFINIDO, PROVISÓRIO, PENDENTE e EXCLUÍDO. Ausência de registro permanece distinta de uma decisão PENDENTE confirmada.
+- Contrato executável registrou 3 PASS e 1 RED esperado. A confirmação explícita devolve 400 na candidata. PostgreSQL focal **4/4** com Gateway simulado demonstrou revisão humana, conversão e recuperação do plano privado na mesma atividade, com bloqueio a terceiro. Componentes e contratos focais **50/50**, typecheck e diff aprovados. Realização e evidência privada reaproveitam o checkpoint TAP08.
+- Contrato, resultado RED e manifesto em `operations/evidence/g4-continuidad-decisoria`. Somente contrato, testes e documentação foram alterados. Candidata `6b010b6`, código de produção e schema preservados.
+
+---
+
+# G3 — execução do par com proveniência refinada, 24/11/2026
+
+- Foram feitas somente as duas chamadas preparadas com Kimi K2.6 e teto de 16.000 tokens de saída, ambas via Moonshot AI. Sem timeout local, retry, mudança de contrato ou Graphiti físico. A recebeu E4. B recebeu E4 e o replay sintético temporal autorizado. Ambos terminaram por stop.
+- A passou no contrato em 41,207 s, com 397 tokens de entrada, 1.948 de raciocínio e 172 de resposta. Absteve-se corretamente em vigência, exclusão, mudança e pendência, mas também omitiu a intenção de oficina gratuita que estava no E4. Nenhuma referência foi emitida.
+- B terminou em 158,167 s, com 793 tokens de entrada, 4.829 de raciocínio e 268 de resposta. O texto bruto acertou gratuidade, presencial, cobrança excluída e local a definir. Reconheceu indisponibilidade genericamente, sem identificar o Espaço Sintético e sua transição. A intenção foi formulada como responsabilidade atribuída. Os IDs citados eram autorizados. O validador rejeitou três chaves de categoria renomeadas, impedindo considerar B saída válida. O ganho temporal no contrato estrito permanece inconclusivo.
+- Custo do par US$ 0,02999850 e acumulado conhecido US$ 0,15847896. Reservas incertas anteriores US$ 3,054728 e saldo conservador US$ 1,78679304 sobre o teto de US$ 5,00. Recibos, avaliação e manifesto em `operations/evidence/g3-proveniencia-pareado-real`. Candidata `6b010b6` preservada.
+
+---
+
+# G3 — contrato experimental de proveniência refinado, 24/11/2026
+
+- O replay offline reproduziu a rejeição da resposta bruta de A com 6.000 tokens. RED por contrato ausente e GREEN **6/6**. O sistema fornece IDs explícitos por braço, exige citação por categoria e resolve cada ID no registro local. Fontes desconhecidas, referências autorizadas só no outro braço, metadados inventados e abstenções incoerentes são recusados.
+- O redutor já entrega vigência, exclusão, mudança e pendência às 11h. B passa a receber o estado compacto já resolvido, com o local anterior no histórico. A IA seleciona, explica e cita os fatos disponíveis. A recuperação temporal é medida no replay e a capacidade cognitiva fica sem avaliação até haver resposta concluída. O novo par muda contrato, projeção temporal e limite de saída em relação ao ensaio anterior.
+- Próximo par preparado offline com Kimi K2.6 e 16.000 tokens de saída por chamada, sem timeout experimental ou redução de raciocínio. Reserva de US$ 0,878682 por chamada e US$ 1,757364 para o par. Restam US$ 0,05942754 após reservar o par no saldo conservador de US$ 1,81679154. As reservas incertas anteriores permanecem integrais. Zero chamadas e zero gasto neste incremento.
+- Testes, dados preparados, relatório e manifesto em `operations/evidence/g3-proveniencia-contrato`. Candidata `6b010b6`, código de produção, laboratório e rodadas anteriores preservados. Nenhuma execução física do Graphiti.
+
+---
+
+# G2/G3 — correção do limite de saída da inferência, 24/11/2026
+
+- **Regra metodológica permanente.** Um término imposto por limite experimental de tempo ou tokens constitui evidência de truncamento do ensaio. A capacidade cognitiva fica sem avaliação quando esse limite impede uma resposta concluída. Preserve o resultado truncado como evidência metodológica. Para o Kimi K2.6, discrimine os tokens de raciocínio e de resposta quando o Gateway os informar.
+- Repetição autorizada somente de A/B, com pergunta, contexto, schema, critérios e modelo preservados. O limite de saída passou de 1.200 para 6.000 tokens, já usado em G4. Kimi K2.6 via Moonshot AI nos dois braços, com roteamento nativo, sem timeout local ou retries. B usou o replay sintético autorizado, sem execução física de Graphiti.
+- A terminou em 90,174 s com 330 tokens de entrada, 3.747 de raciocínio e 368 de resposta final. A resposta bruta recolheu a intenção de oficina gratuita e se absteve sobre os fatos que a projeção E4 não continha. As referências da lista não obedeceram ao contrato de proveniência, e a saída foi rejeitada. B terminou em 152,794 s por limite de saída, com 916 tokens de entrada, 5.999 de raciocínio e um atribuído à resposta final, sem texto entregue. B permanece sem pontuação e a comparação de ganho temporal continua inconclusiva.
+- Reserva do par US$ 1,527364. Custos medidos de US$ 0,01657126 e US$ 0,02446572, total US$ 0,04103698. Acumulado conhecido US$ 0,12848046. Permanecem US$ 3,054728 em reservas incertas anteriores e US$ 1,81679154 de saldo conservador. Rodada anterior de 1.200 tokens intacta. Recibos e manifesto em `operations/evidence/g2-g3-continuidade-pareada-6000`. A candidata `6b010b6` e o código de produto foram preservados.
+
+---
+
+# G2/G3 — rodada real pareada da continuidade temporal, 24/11/2026
+
+- Kimi K2.6 via Moonshot AI nas duas chamadas. Mesma pergunta às 11h, schema e limite de 1.200 tokens de saída. A recebeu a projeção E4. B recebeu a mesma projeção enriquecida com as fotografias do replay temporal sintético autorizado. Sem Graphiti físico, timeout local ou retry do SDK.
+- A retornou HTTP 200 em 29,528 s, com 330/1.200 tokens e US$ 0,00511350. B retornou HTTP 200 em 45,246 s, com 916/1.200 tokens e US$ 0,00567020. As duas chamadas terminaram por limite de saída, com texto vazio. Nenhuma saída foi validada. Acertos, falhas factuais, abstenção, vigência, exclusão, mudança, pendência e proveniência ficaram sem pontuação. A comparação real ficou inconclusiva.
+- Tarifas reconfirmadas no catálogo público. Reserva prévia de US$ 1,416964 para o par. Custo realizado US$ 0,01078370. Acumulado conhecido US$ 0,08744348, reservas incertas anteriores de US$ 3,054728 e saldo conservador US$ 1,85782852 sobre o teto de US$ 5,00. Duas chamadas, sem repetição. Relatório, critérios e recibos em `operations/evidence/g2-g3-continuidade-pareada`. A candidata `6b010b6` e o código de produto permanecem preservados.
+
+---
+
 # G5 — consolidação local dos incrementos de 24/11/2026
 
 - Base de recuperação preservada em `3e2f93b17ee85fd4cc156ab35fbb38b05b707e9e`. TAP08-01/02/03 em `c9cd035`, interpretação contextual com saída estruturada e cancelamento voluntário em `8254f12`, contrato experimental de recuperação IA-MEM-01 em `12bf473`. OSS-GOV-01 e os resultados experimentais permanecem registrados. A memória experimental fica separada do produto.
