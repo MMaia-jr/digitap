@@ -10,7 +10,7 @@ let db:Client,admin:SupabaseClient;const users:string[]=[],orgs:string[]=[],auth
 const services:ReturnType<typeof createActivityService>[]=[];
 const input=()=>({titulo:'Revisão Fictícia '+randomUUID(),descricao:'Descrição fictícia para revisão local.',inicio_previsto:new Date(Date.now()+86400000*3).toISOString(),orientacao_acesso:'Entrada fictícia de teste.'});
 const command=(acao='iniciar',estado_esperado='enviada',extra:Record<string,unknown>={})=>({acao,estado_esperado,versao_esperada:1,pedido_id:randomUUID(),...extra});
-async function submitted(review=false){const row=await services[0].create(input());ids.push(row.id);await services[0].submit(row.id,{versao_esperada:1});if(review)await services[2].review(row.id,command());return row.id;}
+async function submitted(review=false){const row=await services[0].create(input());ids.push(row.id);await services[0].submit(row.id,{versao_esperada:1,autoriza_publicacao:true});if(review)await services[2].review(row.id,command());return row.id;}
 async function authorization(id:string,patch:Record<string,unknown>={}){
  const record={id:randomUUID(),objeto_tipo:'atividade',objeto_id:id,escopo_autorizado:['divulgacao','atividade:versao:1'],papel_autorizante:'Responsável fictício',comprovante_restrito:'Comprovação fictícia exclusiva de teste',autorizada_em:new Date(Date.now()-10000),situacao:'vigente',validade_ate:new Date(Date.now()+3600000),revogada_em:null,...patch};
  await db.query('insert into public.autorizacoes_publicacao (id,objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em,situacao,validade_ate,revogada_em) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',Object.values(record));auths.push(record.id);return record.id;
@@ -33,7 +33,8 @@ afterAll(async()=>{
  if(db){
   await db.query('rollback');
   await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);
-  await db.query('delete from public.autorizacoes_publicacao where id=any($1::uuid[])',[auths]);await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
+  await db.query('delete from public.autorizacoes_publicacao where id=any($1::uuid[])',[auths]);await db.query("delete from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);
+  await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
   await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))',[users]);await db.query('delete from public.sujeitos_publicadores where organizacao_legada_id=any($1::uuid[])',[orgs]);await db.query('delete from public.contas_acesso where auth_user_id=any($1::uuid[])',[users]);await db.query('delete from public.organizacoes where id=any($1::uuid[])',[orgs]);
   for(const c of clients)await c.auth.signOut({scope:'local'});for(const id of users)if((await admin.auth.admin.deleteUser(id)).error)throw new Error('Limpeza fixture Auth falhou.');await db.end();
  }
@@ -64,7 +65,7 @@ it('B05 real: aprovação autorizada audita versão sem snapshot, publicação o
  const id=await submitted(true),auth=await authorization(id);await expect(services[2].review(id,command('aprovar','em_revisao',{autorizacao_id:auth}))).resolves.toMatchObject({estado_editorial:'aprovada'});
  const row=(await db.query('select estado_editorial,versao_publicada,numero_versao_publicada,publicada_em,apoios_abertos from public.atividades where id=$1',[id])).rows[0];expect(row).toEqual({estado_editorial:'aprovada',versao_publicada:null,numero_versao_publicada:null,publicada_em:null,apoios_abertos:false});
  const e=(await db.query("select justificativa_restrita,executada_por_conta_id is not null author from public.eventos_editoriais where objeto_id=$1 and estado_novo='aprovada'",[id])).rows[0];expect(e.author).toBe(true);expect(JSON.parse(e.justificativa_restrita)).toMatchObject({versao_esperada:1,autorizacao_id:auth});
- await expect(services[0].submit(id,{versao_esperada:1})).rejects.toMatchObject({status:409});
+ await expect(services[0].submit(id,{versao_esperada:1,autoriza_publicacao:true})).rejects.toMatchObject({status:409});
 });
 it.each(['devolver','rejeitar'])('B06 real: %s exige motivo e só dono/editor o consultam',async acao=>{
  const id=await submitted(),motivo='Justificativa fictícia restrita desta decisão.';
@@ -104,6 +105,6 @@ it('B05 real: revogação concorrente confirmada impede aprovação que esperava
  const id=await submitted(true),auth=await authorization(id);await db.query('begin');await db.query("update public.autorizacoes_publicacao set situacao='revogada',revogada_em=now() where id=$1",[auth]);
  const result=services[2].review(id,command('aprovar','em_revisao',{autorizacao_id:auth})).then(value=>({value,error:undefined}),error=>({value:undefined,error}));
  let waiting=false;
- try{for(let i=0;i<75;i++){await db.query('select pg_stat_clear_snapshot()');waiting=(await db.query("select exists(select 1 from pg_stat_activity where pid<>pg_backend_pid() and wait_event_type='Lock' and query like 'select id from public.autorizacoes_publicacao%') waiting")).rows[0].waiting;if(waiting)break;await new Promise(r=>setTimeout(r,20));}await db.query('commit');}finally{await db.query('rollback');}
+ try{for(let i=0;i<75;i++){await db.query('select pg_stat_clear_snapshot()');waiting=(await db.query("select exists(select 1 from pg_stat_activity where pid<>pg_backend_pid() and wait_event_type='Lock' and pg_backend_pid()=any(pg_blocking_pids(pid))) waiting")).rows[0].waiting;if(waiting)break;await new Promise(r=>setTimeout(r,20));}await db.query('commit');}finally{await db.query('rollback');}
  expect(waiting).toBe(true);expect((await result).error?.status).toBe(422);expect((await services[0].get(id)).estado_editorial).toBe('em_revisao');
 });

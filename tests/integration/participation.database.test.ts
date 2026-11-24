@@ -13,7 +13,7 @@ const services:ReturnType<typeof createActivityService>[]=[];
 const input=()=>({titulo:'Confirmação Fictícia '+randomUUID(),descricao:'Atividade fictícia para testar participação privada.',inicio_previsto:new Date(Date.now()+86400000*3).toISOString(),orientacao_acesso:'Local fictício sem público real.',referencia_oficial:null});
 async function published(){
  const row=await services[2].create(input());ids.push(row.id);
- await services[2].submit(row.id,{versao_esperada:1});
+ await services[2].submit(row.id,{versao_esperada:1,autoriza_publicacao:true});
  const auth=randomUUID();authorizations.push(auth);
  await db.query("insert into public.autorizacoes_publicacao(id,objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em) values($1,'atividade',$2,$3,'Responsável fictício','Autorização fictícia restrita',now()-interval '1 minute')",[auth,row.id,['divulgacao','atividade:versao:1']]);
  await services[3].review(row.id,{acao:'iniciar',estado_esperado:'enviada',versao_esperada:1,pedido_id:randomUUID()});
@@ -53,6 +53,7 @@ afterAll(async()=>{
   await db.query('delete from public.confirmacoes where sujeito_id=any($1::uuid[]) or atividade_id=any($2::uuid[])',[subjects,ids]);
   await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);
   await db.query('delete from public.autorizacoes_publicacao where id=any($1::uuid[])',[authorizations]);
+  await db.query("delete from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=any($1::uuid[])",[ids]);
   await db.query('delete from public.atividades where id=any($1::uuid[])',[ids]);
   await db.query('delete from public.vinculos_publicadores where conta_id in (select id from public.contas_acesso where auth_user_id=any($1::uuid[]))',[users]);
   await db.query('delete from public.pessoas_fisicas where sujeito_id=any($1::uuid[])',[subjects]);
