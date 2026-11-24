@@ -1,3 +1,42 @@
+# R4 — recuperação e validação física local, 24/11/2026
+
+- [CÓDIGO] Em `BASE_R4` (`146ffd135d5b56f47b880edc1f4c3ca4174845c0`), o candidato Kong já corrigido foi reutilizado. Os logs da tentativa anterior mostraram início de workers e leitura da configuração declarativa cerca de três segundos após a partida. `State.Error` estava vazio, sem OOM, e o exit 137 ocorreu no intervalo do rollback. Os eventos disponíveis foram incompletos. A causa exata da leitura inicial do binding permaneceu indeterminada.
+- [CÓDIGO] A ativação aguardou publicação e prontidão em janela limitada. Docker confirmou a publicação exclusiva em `127.0.0.1:56151` após 0,4 s, seguida de HTTP 200 para Auth, PostgREST e Storage. O original permanece desligado como `supabase_kong_a-praca-v1-5-rollback-20261124T173340Z`, com reinício desativado. IDs, horários de início, contagens de reinício e montagens dos demais serviços foram preservados na ativação.
+- [CÓDIGO] Preflight SQL somente leitura confirmou 14 tabelas, o RPC, colunas exigidas, 15 migrations já aplicadas e namespace vazio na instância Docker local. PostgreSQL passou 4/4 com Gateway simulado. Chromium com sandbox habilitado passou no smoke e os dois cenários Playwright passaram (2 PASS, 0 FAIL, 0 SKIP). O Gateway simulado registrou quatro chamadas, duas contextuais e uma falha simulada. Duas tentativas de `fetch` externo foram bloqueadas pelo preload. O isolamento observado se refere ao harness e às interfaces verificadas.
+- [CÓDIGO] O servidor Next desta rodada foi encerrado e o cleanup dos testes foi confirmado por IDs próprios e consulta posterior somente leitura, com zero usuários sintéticos G4 e zero marcadores. Typecheck e diff passaram. Lint teve zero erros e quatro avisos preexistentes. O Next gerou apenas a troca dos imports de tipos em `next-env.d.ts` para `.next/dev/types`; o arquivo foi preservado para revisão e fica fora de um futuro commit R4.
+- [EVIDÊNCIA] PostgreSQL e readiness em `operations/evidence/g4-03b-recovery-kong-20261124T173340Z`. Playwright, Gateway, bloqueios, encerramento e cleanup em `operations/evidence/g4-03b-recovery-20261124T173552Z`. Cópia sanitizada independente conferida por SHA-256 em `~/projects/digitap-evidencias/g4-recovery/20261124T173552Z`. Validação física local de R4 concluída, sem inferência real, instalação, migração, commit ou deploy. G5, G6 e prontidão de produção permanecem fora do escopo.
+
+---
+
+# R4 — tentativa integrada de recuperar o Kong, 24/11/2026
+
+- [CÓDIGO] Na base `146ffd135d5b56f47b880edc1f4c3ca4174845c0`, os metadados do Docker confirmaram que `kong.yml` mantinha conteúdo e modo, mas o dono havia mudado de `0:0` para `100:65533`. Os outros três arquivos estavam ausentes ou ilegíveis no candidato inicial. A cópia dos TARs sem a opção de remapeamento do proprietário corrigiu a divergência. A leitura de retorno confirmou conteúdo, UID, GID e modo dos quatro arquivos antes da ativação.
+- [BLOQUEADO] A tentativa integrada iniciou a ativação do candidato com configuração de porta `127.0.0.1:56151`. A verificação imediata do binding efetivo falhou e acionou rollback. O original voltou ao nome `supabase_kong_a-praca-v1-5`, desligado com exit 127 e política `unless-stopped`. O candidato ficou desligado com política `no` e nome `supabase_kong_a-praca-v1-5-failed-20261124T172912Z`. PostgreSQL, Auth, PostgREST, Storage e Inbucket foram observados em execução após o rollback. A causa da divergência do binding não foi comprovada.
+- [PENDENTE] Auth, PostgREST e Storage via Kong ficaram sem validação. Os quatro testes PostgreSQL e os dois testes Playwright permanecem sem execução. A frente foi encerrada após esta tentativa integrada. Nenhum volume foi removido e nenhuma fixture foi criada. Evidência sanitizada em `operations/evidence/g4-03b-recovery-kong-20261124T172912Z`.
+
+---
+
+# R4 — recuperação estática, 24/11/2026
+
+- [CÓDIGO] Em `BASE_R4` (`146ffd135d5b56f47b880edc1f4c3ca4174845c0`), o spec e o preload foram recuperados do snapshot verificado e o patch complementar foi aplicado com `git apply --check` seguido de `git apply`. Os hashes das fontes estão no registro de preflight anterior. O Playwright descobriu os dois cenários seriais. A raiz da worktree persistente é conferida pelo diretório corrente e pelo caminho real do módulo.
+- [CÓDIGO] `scripts/e2e-server.mjs` integra o preload somente no modo G4-03B. Esse modo exige configuração sintética explícita, recusa arquivos env que o Next carregaria e passa um ambiente restrito ao filho. Os testes estáticos verificaram guardas de raiz e configuração, destinos bloqueados, falha simulada e rejeição de projeção fora do contrato. Um processo filho Node com o mesmo parser e formatador de opções do Next recebeu o preload. A árvore de processos do Next real permanece sem verificação.
+- [CÓDIGO] O preload bloqueia destinos externos de `fetch` e redirecionamentos no transporte local. O spec mantém interceptação HTTP do contexto, bloqueia service workers e restringe WebSockets ao Next local. As chamadas `page.request` usam a origem fixa do Next e desativam redirecionamentos. O cliente Supabase do spec também restringe a origem e recusa redirecionamentos. Esses controles atuam nas interfaces testadas, sem comprovar isolamento de rede no sistema operacional.
+- [INFORMADO] O fundador validou Chromium no Terminal e reportou Docker operacional, PostgreSQL ativo em 56152 e Kong encerrado com exit 127, sem listener na porta 56151. O diagnóstico do sandbox da rodada anterior permanece registrado abaixo.
+- [BLOQUEADO] Os dois cenários Playwright exigem a API local em 56151. Os quatro cenários PostgreSQL também dependem dela, apesar das consultas SQL diretas e dos handlers em processo. O `beforeAll` chama criação de usuários Auth e o RPC `criar_pf_com_sujeito` via HTTP, e o `afterAll` exclui os usuários pelo Auth. A suíte original e seu hash foram preservados. A execução segue condicionada à API local isolada, conferência de schema e RPC, namespace sintético vazio e limpeza por IDs.
+- [EVIDÊNCIA] Verificações do harness em `operations/evidence/g4-03b-recovery-20261124T170707Z`. As chamadas registradas são simulações do preload, sem servidor Next, navegador ou execução física. Nenhuma fixture foi criada. G4 mantém os gates físicos pendentes.
+
+---
+
+# R4 — preflight bloqueado, 24/11/2026
+
+- [CÓDIGO] `BASE_R4` é `146ffd135d5b56f47b880edc1f4c3ca4174845c0`, filho direto de `1fd3d721c0676cf4041ed09cbfbfddaf413c214d`. O commit R3 contém os nove arquivos esperados. A worktree iniciou limpa e a regressão 123/123 de R3 permanece vinculada a essa base.
+- [CÓDIGO] Os hashes do snapshot G4-03, do spec, do preload, do ZIP complementar, do patch e da suíte PostgreSQL conferem. O README e o patch foram lidos. As fontes permaneceram no pacote nesta rodada. A adaptação da raiz, a integração do preload no servidor e seus testes negativos ficaram pendentes após o bloqueio de preflight.
+- [BLOQUEADO] O CLI local do Supabase retornou exit 1 por acesso negado ao socket do Docker. Origem da instância, Auth, schema e namespace sintético ficaram sem confirmação. O Playwright 1.64.1 encontrou Chromium 1248 no cache do projeto principal. O smoke com as proteções do Chromium habilitadas terminou com `SIGTRAP` antes de abrir a página. A causa do sinal não foi comprovada.
+- [PENDENTE] Quatro cenários PostgreSQL preparados e dois cenários Playwright identificados nas fontes. Nenhum foi executado. Nenhuma fixture foi criada, nenhum servidor foi iniciado, nenhuma chamada ao Gateway ocorreu e nenhum arquivo gerado mudou. O isolamento do harness e a validação física seguem pendentes. Typecheck e diff passaram. Lint teve zero erros e quatro avisos preexistentes.
+- [EVIDÊNCIA] Preflight sanitizado, hashes das fontes e manifesto em `operations/evidence/g4-03b-recovery-20261124T165356Z`. A escrita da cópia independente foi recusada pelo sandbox. G4 permanece com gates pendentes. G5 e G6 continuam fora deste escopo.
+
+---
+
 # Recuperação seletiva do G4, R3 — 24/11/2026
 
 - [CÓDIGO] O fundador versionou R2 em `1fd3d721c0676cf4041ed09cbfbfddaf413c214d` (`BASE_R3`), filho de `487669e8e510a19f5e4703342ce95f20c2bdc29b`. O gate de minimização registrado abaixo confirmou titularidade e colaboração ativa com dados sintéticos. A projeção anterior falhou em 2 de 11 testes por enviar `provenance.access`; o código versionado passou 11/11. A regressão de R3 incluiu os dois casos.
