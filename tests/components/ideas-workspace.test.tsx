@@ -65,9 +65,20 @@ it('exclui somente após confirmação explícita e atualiza a lista privada', a
   render(<IdeasWorkspace initialIdeas={[saved]} />);
   fireEvent.click(screen.getByRole('button', { name: 'Excluir' }));
   await waitFor(() => expect(confirm).toHaveBeenCalledOnce());
+  expect(confirm).toHaveBeenCalledWith(expect.stringMatching(/histórico de decisões.*fotografia decisória.*atividade associada.*atividade permanecerá/s));
   await screen.findByText('Rascunho excluído.');
   expect(JSON.parse(fetcher.mock.calls[0][1].body)).toEqual({ action: 'delete', id: saved.id, confirmDelete: true });
   expect(screen.queryByText(saved.title)).toBeNull();
+});
+
+it('mantém a ideia e suas decisões quando a pessoa cancela a exclusão', () => {
+  const fetcher = vi.fn();
+  vi.stubGlobal('confirm', vi.fn(() => false));
+  vi.stubGlobal('fetch', fetcher);
+  render(<IdeasWorkspace initialIdeas={[saved]} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Excluir' }));
+  expect(fetcher).not.toHaveBeenCalled();
+  expect(screen.getByRole('heading', { name: saved.title })).toBeTruthy();
 });
 
 it('oferece conversão explícita do rascunho próprio para o formulário de atividade', () => {

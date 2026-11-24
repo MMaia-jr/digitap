@@ -15,6 +15,7 @@ import {ScheduleForm} from '../../../../components/ScheduleForm';
 import {WithdrawForm} from '../../../../components/WithdrawForm';
 import {PublishForm} from '../../../../components/PublishForm';
 import {ExecutionPlanWorkspace,type ExecutionPlan} from '../../../../components/ExecutionPlanWorkspace';
+import type { DecisionSnapshot } from '../../../../lib/ideas/decisions';
 import {PrivateEvidenceAttachments} from '../../../../components/PrivateEvidenceAttachments';
 export const dynamic='force-dynamic';
 export default async function ActivityDetail({params}:{params:Promise<{id:string}>}){
@@ -50,6 +51,11 @@ export default async function ActivityDetail({params}:{params:Promise<{id:string
  if(activity.pode_editar&&activity.criado_por_sujeito_id){
   try{const plan=await activities.getExecutionPlan(activity.id);if(plan)executionPlan={version:plan.version,total_previsto_centavos:plan.total_previsto_centavos,recursos:plan.recursos};}catch(error){if(!(error instanceof ActivityError&&error.status===404))planUnavailable=true;}
  }
+ let decisions:DecisionSnapshot|null=null;let decisionsUnavailable=false;
+ if(activity.pode_ler_privado&&activity.criado_por_sujeito_id){
+  try{decisions=await activities.getIdeaDecisionSnapshot(activity.id);}
+  catch(error){if(!(error instanceof ActivityError&&error.status===404))decisionsUnavailable=true;}
+ }
  let record;let recordUnavailable=false;
  try{record=await activities.getRecord(activity.id);}catch(error){if(!(error instanceof ActivityError&&error.status===404))recordUnavailable=true;}
  const labels={rascunho:'Rascunho privado',enviada:'Enviada — continua privada',em_revisao:'Em revisão — continua privada',aprovada:'Aprovada — continua privada',devolvida:'Devolvida — continua privada',rejeitada:'Rejeitada — continua privada',publicada:'Publicada',retirada:'Retirada — não está pública'};
@@ -61,6 +67,15 @@ export default async function ActivityDetail({params}:{params:Promise<{id:string
   <section id="acompanhamento" aria-labelledby="titulo-acompanhamento">
     <h2 id="titulo-acompanhamento">Acompanhamento da atividade</h2>
     <p>Reúna o planejamento, a realização declarada e suas evidências no mesmo lugar. Use esses registros para preparar uma prestação de contas, inclusive em projetos da Política Nacional Aldir Blanc.</p>
+  {decisionsUnavailable&&<p role="alert">Decisões privadas da origem indisponíveis.</p>}
+  {decisions&&<section aria-label="Decisões na origem da atividade">
+    <h3>Decisões na origem da atividade</h3>
+    <p>Registro privado da versão {decisions.versao_ideia} da ideia.</p>
+    <ul>{decisions.decisoes.filter(decision=>decision.estado!=='EXCLUÍDO').map(decision=><li key={decision.chave}>{decision.estado} · {decision.descricao}</li>)}</ul>
+    {decisions.decisoes.some(decision=>decision.estado==='EXCLUÍDO')&&<details><summary>Alternativas excluídas</summary>
+      <ul>{decisions.decisoes.filter(decision=>decision.estado==='EXCLUÍDO').map(decision=><li key={decision.chave}>{decision.descricao}</li>)}</ul>
+    </details>}
+  </section>}
   {activity.pode_editar&&activity.criado_por_sujeito_id&&(planUnavailable?<p role="alert">Planejamento privado indisponível. Tente novamente.</p>:<ExecutionPlanWorkspace activityId={activity.id} initialPlan={executionPlan}/>)}
   {record?<section aria-label="Registro privado"><h2>Registro privado</h2><p>Data efetiva: {String(record.data_realizacao)}</p><p>Apuração — {String(record.estado_apuracao)}. Registro não é evidência nem reputação.</p><p>{String(record.descricao_factual)}</p><p>Origem: {String(record.origem_informacao)}</p><h3>Referências privadas</h3><p>Uma referência sustenta somente a afirmação indicada. Não valida automaticamente o relato completo.</p><ul>{record.evidencias.map((e:{id:string;tipo_fonte:string;afirmacao_sustentada:string})=><li key={e.id}>{e.tipo_fonte}: {e.afirmacao_sustentada}</li>)}</ul><PrivateEvidenceAttachments key={record.id} registroId={record.id} canUpload={activity.pode_editar}/>{!activity.acesso_editorial&&record.estado_editorial==='rascunho'&&<EvidenceForm id={activity.id}/>}{record.contestacoes.length>0&&<section aria-label="Divergências restritas"><h3>Divergências registradas — sem conclusão consensual</h3>{record.contestacoes.map((c:{divergencia:string;registrada_em:Date},i:number)=><p key={i}>{c.divergencia} — {new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(new Date(c.registrada_em))}</p>)}</section>}<ContestRecordForm id={activity.id} digest={record.conteudo_sha256}/><RecordWorkflowForm apuracao={record.estado_apuracao} id={activity.id} state={record.estado_editorial} digest={record.conteudo_sha256} editorial={activity.acesso_editorial} evidence={record.evidencias}/></section>:recordUnavailable?<p>Registro indisponível. Tente novamente.</p>:!activity.acesso_editorial&&<RecordForm id={activity.id} version={activity.versao_submetida}/>}
   </section>

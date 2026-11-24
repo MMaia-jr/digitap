@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import type { IdeaView } from '../lib/ideas/service.server';
+import { IdeaDecisions } from './IdeaDecisions';
 import { ProposalForm, type ProposalDraft } from './ProposalForm';
 
 const subscribe = () => () => {};
@@ -48,7 +49,8 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
   }
 
   async function remove(idea: IdeaView) {
-    if (!window.confirm(`Excluir definitivamente “${idea.title}”?`)) return;
+    const warning = `Excluir definitivamente “${idea.title}”? Isso também apaga o histórico de decisões e a fotografia decisória de origem de cada atividade associada, se existirem. Cada atividade permanecerá salva.`;
+    if (!window.confirm(warning)) return;
     setWorking(true); setNotice(''); setError('');
     try {
       const response = await fetch('/api/ideias', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'delete', id: idea.id, confirmDelete: true }) });
@@ -76,6 +78,10 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
       </li>)}</ul>}
     </section>
     <section aria-labelledby="editor-ideia"><h2 id="editor-ideia">{selected ? `Retomar: ${selected.title}` : 'Nova ideia'}</h2>
+      {selected && <IdeaDecisions key={selected.id} idea={selected} onConfirmed={confirmed => {
+        setIdeas(current => current.map(idea => idea.id === confirmed.id && idea.version < confirmed.version ? confirmed : idea));
+        setSelected(current => current?.id === confirmed.id && current.version < confirmed.version ? confirmed : current);
+      }} />}
       <ProposalForm key={selected?.id ?? 'new'} initialIdea={selected} onSave={save} />
     </section>
   </>;

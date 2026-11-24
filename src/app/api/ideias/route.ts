@@ -34,8 +34,13 @@ export async function GET(request: Request): Promise<Response> {
     const trustedHosts = trustedOrigins.map(value => new URL(value).host);
     if (request.headers.get('sec-fetch-site') === 'cross-site' || (requested !== null && (!trustedOrigins.includes(requested) || host !== new URL(requested).host)) || (host !== null && !trustedHosts.includes(host))) return json({ message: 'Origem não permitida.' }, 403);
     const owner = await identity();
-    const id = new URL(request.url).searchParams.get('id');
+    const params = new URL(request.url).searchParams;
+    const id = params.get('id');
     try {
+      if (params.get('decisions') === '1') {
+        if (!id) throw new FlowError(400, 'Informe a ideia.');
+        return json(await service.decisionHistory(owner, id));
+      }
       return json(id ? { ideia: ideaView(await service.get(owner, id)) } : { ideias: (await service.list(owner)).map(ideaView) });
     } catch (error) { serviceError(error); }
   } catch (error) {
@@ -59,6 +64,11 @@ export async function POST(request: Request): Promise<Response> {
           if (Object.keys(input).some(key => !['action', 'id', 'expectedVersion', 'title', 'revisedText', 'revisedInterpretation'].includes(key)) || typeof input.id !== 'string') throw new FlowError(400, 'Pedido inválido.');
           const idea = await service.update(owner, input.id, { expectedVersion: input.expectedVersion, title: input.title, revisedText: input.revisedText, revisedInterpretation: input.revisedInterpretation } as UpdateIdea);
           return { message: 'Rascunho atualizado.', ideia: ideaView(idea) };
+        }
+        if (input.action === 'confirm-decisions') {
+          if (Object.keys(input).some(key => !['action', 'id', 'expectedVersion', 'decisions'].includes(key)) || typeof input.id !== 'string') throw new FlowError(400, 'Pedido inválido.');
+          const idea = await service.confirmDecisions(owner, input.id, { expectedVersion: input.expectedVersion, decisions: input.decisions });
+          return { message: 'Decisões privadas confirmadas.', ideia: ideaView(idea) };
         }
         if (input.action === 'delete') {
           if (Object.keys(input).some(key => !['action', 'id', 'confirmDelete'].includes(key)) || typeof input.id !== 'string' || input.confirmDelete !== true) throw new FlowError(400, 'Confirme a exclusão do rascunho.');

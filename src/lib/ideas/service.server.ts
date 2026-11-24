@@ -1,5 +1,7 @@
 import 'server-only';
 import { withTransaction, type Sql, type Transaction } from '../database.server';
+import { decisionState, type Decision, type DecisionHistory, type DecisionRevision } from './decisions';
+import { currentDecisions } from './decisions.server';
 import type { ProposalInterpretation } from '../proposals/interpret.server';
 
 export class IdeasError extends Error {
@@ -17,6 +19,7 @@ export type Idea = {
   version: number;
   created_at: string;
   updated_at: string;
+  decisions?: DecisionRevision[];
 };
 export type IdeaView = Omit<Idea, 'owner_id'>;
 export function ideaView(idea: Idea): IdeaView {
@@ -36,6 +39,23 @@ export type UpdateIdea = {
   revisedText: string;
   revisedInterpretation: ProposalInterpretation | null;
 };
+
+export type ConfirmDecisions = { expectedVersion: unknown; decisions: unknown };
+
+function checkDecisions(input: ConfirmDecisions): Decision[] {
+  const invalid = () => new IdeasError(422, 'Confira os estados e as descrições das decisões.');
+  if (typeof input.expectedVersion !== 'number' || !Number.isSafeInteger(input.expectedVersion)
+      || input.expectedVersion < 1 || input.expectedVersion >= 2147483647
+      || !Array.isArray(input.decisions) || input.decisions.length < 1 || input.decisions.length > 20) throw invalid();
+  const keys = new Set<string>();
+  return input.decisions.map(item => {
+    if (!isRecord(item) || !exact(item, ['chave', 'estado', 'descricao'])
+      || typeof item.chave !== 'string' || !/^[a-z0-9][a-z0-9-]{0,39}$/.test(item.chave) || keys.has(item.chave)
+      || !decisionState(item.estado) || !validText(item.descricao) || item.descricao.trim().length > 500) throw invalid();
+    keys.add(item.chave);
+    return { chave: item.chave, estado: item.estado, descricao: item.descricao.trim() };
+  });
+}
 
 const select = 'id,owner_id,title,original_text,revised_text,original_interpretation,revised_interpretation,version,created_at,updated_at';
 const categories = ['sujeitos', 'projetos', 'atividades', 'capacidades', 'relacoes', 'fontes', 'informacoes_nao_verificadas'] as const;
@@ -122,6 +142,38 @@ export function createIdeasService(transaction: Transaction = withTransaction) {
         // A stale version is 409 only while the record still belongs to this owner.
         await owned(db, owner, id);
         throw new IdeasError(409, 'Este rascunho mudou em outra sessão. Recarregue antes de salvar.');
+      });
+    },
+    async confirmDecisions(owner: string, id: string, input: ConfirmDecisions): Promise<Idea> {
+      checkOwner(owner); checkIdeaId(id);
+      const decisions = checkDecisions(input);
+      return transaction(async db => {
+        const account = (await db.query<{ situacao: string }>(
+          'select situacao from public.contas_acesso where auth_user_id=$1 for share', [owner])).rows[0];
+        if (account && account.situacao !== 'ativa') throw new IdeasError(403, 'Acesso indisponível para esta conta.');
+        await owned(db, owner, id);
+        const updated = (await db.query<Idea>(`update public.ideias_privadas set version=version+1,updated_at=now()
+          where owner_id=$1 and id=$2 and version=$3 returning ${select}`, [owner, id, input.expectedVersion])).rows[0];
+        if (!updated) {
+          await owned(db, owner, id);
+          throw new IdeasError(409, 'Este rascunho mudou em outra sessão. Recarregue antes de confirmar.');
+        }
+        await db.query(`insert into public.ideia_decisoes_revisoes(ideia_id,versao_ideia,chave,estado,descricao,autor_id)
+          select $1,$2,item.chave,item.estado,item.descricao,$3
+          from jsonb_to_recordset($4::jsonb) as item(chave text,estado text,descricao text)`,
+        [id, updated.version, owner, JSON.stringify(decisions)]);
+        return { ...updated, decisions: await currentDecisions(db, id, updated.version) };
+      });
+    },
+    async decisionHistory(owner: string, id: string): Promise<DecisionHistory> {
+      checkOwner(owner); checkIdeaId(id);
+      return transaction(async db => {
+        const { version } = await owned(db, owner, id);
+        const decisions = await currentDecisions(db, id, version);
+        const { rows } = await db.query<DecisionRevision>(`select chave,estado,descricao,versao_ideia,confirmada_em
+          from public.ideia_decisoes_revisoes where ideia_id=$1 and versao_ideia<=$2
+          order by versao_ideia desc,chave limit 51`, [id, version]);
+        return { decisions, history: rows.slice(0, 50), hasMore: rows.length > 50 };
       });
     },
     async delete(owner: string, id: string): Promise<true> {

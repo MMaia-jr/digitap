@@ -17,6 +17,8 @@ import {validateRevocation,revokeAuthorization} from './revocation.server';
 import {validateRecordTransition} from './record-workflow';
 import {validateRealization} from './realization';
 import {transitionRecord,recordContent,recordHash} from './records.server';
+import type { DecisionSnapshot } from '../ideas/decisions';
+import { currentDecisions } from '../ideas/decisions.server';
 const columns='criado_por_sujeito_id,projeto_aprovacao,projeto_versao_aprovada,projeto_parecer,projeto_id,id,titulo,descricao,inicio_previsto,orientacao_acesso,referencia_oficial,estado_editorial,versao_submetida,numero_versao_publicada,estado_programacao';
 const privateStates="('rascunho','enviada','em_revisao','aprovada','devolvida','rejeitada','publicada','retirada')";
 type Row=Omit<PrivateActivity,'inicio_previsto'> & {inicio_previsto:Date|string};
@@ -421,8 +423,25 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
     if(!idea)throw new ActivityError(404,'Rascunho não encontrado.');
     if(idea.version!==version)throw new ActivityError(409,'A ideia mudou. Reabra a versão atual antes de criar a atividade.');
     const created=await createDraft(sql,actor,value,input);
+    const decisions=await currentDecisions(sql,ideaId,version);
+    if(decisions.length){
+     await sql.query(`insert into public.atividade_decisoes_origem(atividade_id,sujeito_id,ideia_id,versao_ideia,decisoes)
+      values($1,$2,$3,$4,$5::jsonb)`,[created.id,created.criado_por_sujeito_id,ideaId,version,JSON.stringify(decisions)]);
+    }
     await sql.query(`insert into public.eventos_editoriais(objeto_tipo,objeto_id,acao,executada_por_conta_id,estado_novo,justificativa_restrita) values('atividade',$1,'atividade_criada_de_ideia',$2,'rascunho',$3)`,[created.id,actor.id,JSON.stringify({tipo:'conversao-ideia.v1',idea_id:ideaId,idea_version:version,pedido_id:request,payload_sha256:payloadHash})]);
     return {...created,repetida:false};
+   });
+  },
+  async getIdeaDecisionSnapshot(id:string):Promise<DecisionSnapshot|null>{
+   return run('plano_privado_leitura',async(sql,actor)=>{
+    const activity=await load(sql,actor,id);
+    if(!actor.sujeito_id)return null;
+    const result=await sql.query<DecisionSnapshot>(`select d.versao_ideia,d.decisoes
+     from public.atividade_decisoes_origem d
+     join public.ideias_privadas i on i.id=d.ideia_id
+     where d.atividade_id=$1 and d.sujeito_id=$2 and i.owner_id=$3 for share of i`,
+    [activity.id,actor.sujeito_id,actor.auth_user_id]);
+    return result.rows[0]??null;
    });
   },
   async list(){return run('listar_rascunhos',async(sql,actor)=>{

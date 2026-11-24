@@ -528,3 +528,79 @@ if (live) test('G4-REAL: painel, contexto, interpretação e retomada privada', 
   expect(page.externalAttempts).toEqual([]);
   log('saved-and-reopened', { private: true, revised: true, gatewaySends: 1, browserBlockedRequests: page.externalAttempts.length });
 });
+
+if (!live) test('G4 decisões: confirmação versionada e fotografia privada no acompanhamento', async ({ browser }) => {
+  const owner = await newUser('decisoes', true);
+  const page = await localPage(browser);
+  await signIn(page, owner);
+  await addPrivateCapability(page, owner, ownMarker);
+  await page.goto('/dashboard/pessoa-fisica');
+  await page.getByRole('link', { name: 'Organizar uma ideia', exact: true }).click();
+  const ideaTitle = 'Oficina sintética com decisões';
+  await page.getByLabel('Título do rascunho').fill(ideaTitle);
+  await page.getByLabel('Sua proposta').fill(proposal);
+  await chooseContextAndConsent(page, owner);
+  await page.getByRole('button', { name: 'Interpretar proposta', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Prévia para revisão humana' })).toBeVisible();
+  await page.getByLabel('Descrição — Atividades propostas 1').fill('Oficina de leitura, revisada pela pessoa.');
+  await page.getByRole('button', { name: 'Salvar rascunho', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Rascunho privado salvo' })).toBeVisible();
+  await page.getByRole('button', { name: 'Consultar decisões' }).click();
+  const editor = page.getByRole('region', { name: 'Decisões da ideia' });
+  await expect(editor.getByText('Nenhuma decisão confirmada.')).toBeVisible();
+
+  async function confirm(key, state, description, edit = false) {
+    if (edit) await editor.getByRole('button', { name: `Alterar decisão ${key}`, exact: true }).click();
+    else await editor.getByLabel('Chave da decisão').fill(key);
+    await editor.getByLabel('Estado da decisão').selectOption(state);
+    await editor.getByLabel('Descrição da decisão').fill(description);
+    const completed = page.waitForResponse(response => response.url() === origin + '/api/ideias'
+      && response.request().method() === 'POST');
+    await editor.getByRole('button', { name: 'Confirmar decisão', exact: true }).click();
+    expect((await completed).status()).toBe(200);
+    await expect(editor.getByRole('status').filter({ hasText: 'Decisão privada confirmada.' })).toBeVisible();
+    await expect(editor.getByRole('button', { name: 'Confirmar decisão', exact: true })).toBeEnabled();
+  }
+
+  await confirm('formato', 'PROVISÓRIO', 'Presencial, sujeito a revisão.');
+  await confirm('formato', 'DEFINIDO', 'Presencial confirmado.', true);
+  await confirm('horario', 'PROVISÓRIO', 'Sábado às 15h.');
+  await confirm('local', 'PENDENTE', 'Local acessível a definir.');
+  await confirm('cobranca', 'EXCLUÍDO', 'Cobrança de ingresso.');
+  await editor.getByText('Histórico de decisões', { exact: true }).click();
+  await expect(editor.getByText(/Versão 2.*PROVISÓRIO.*sujeito a revisão/)).toBeVisible();
+  await expect(editor.getByText(/Versão 3.*DEFINIDO.*Presencial confirmado/)).toBeVisible();
+
+  await page.getByRole('link', { name: 'Usar esta ideia para criar uma atividade' }).click();
+  const activityTitle = 'Oficina sintética — origem decisória';
+  await page.getByLabel('Título', { exact: true }).fill(activityTitle);
+  await page.getByLabel('Descrição', { exact: true }).fill('Atividade privada, revisada pela pessoa.');
+  await page.getByLabel('Data e horário (America/Sao_Paulo)', { exact: true }).fill('2026-12-10T18:00');
+  await page.getByLabel('Orientação de acesso', { exact: true }).fill('Acesso a combinar.');
+  await page.getByRole('button', { name: 'Criar rascunho privado a partir desta ideia' }).click();
+  await expect(page).toHaveURL(origin + '/dashboard/pessoa-fisica');
+  await page.getByRole('link', { name: 'Acompanhar compromissos e evidências' }).click();
+  await page.getByRole('link', { name: `Acompanhar ${activityTitle}`, exact: true }).click();
+  const snapshot = page.getByRole('region', { name: 'Decisões na origem da atividade' });
+  await expect(snapshot.getByText('Registro privado da versão 6 da ideia.')).toBeVisible();
+  await expect(snapshot.getByText('DEFINIDO · Presencial confirmado.')).toBeVisible();
+  await expect(snapshot.getByText('PROVISÓRIO · Sábado às 15h.')).toBeVisible();
+  await expect(snapshot.getByText('PENDENTE · Local acessível a definir.')).toBeVisible();
+  await expect(snapshot.getByText('Cobrança de ingresso.')).not.toBeVisible();
+  await snapshot.getByText('Alternativas excluídas', { exact: true }).click();
+  await expect(snapshot.getByText('Cobrança de ingresso.')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Planejamento privado de recursos e custos previstos' })).toBeVisible();
+  expect(gatewayCalls()).toHaveLength(1);
+  expect(gatewayCalls()[0]).toMatchObject({ mock: true, contextual: true });
+
+  await page.goto('/meu-espaco/ideia');
+  const deletionWarning = new Promise(resolve => page.once('dialog', async dialog => {
+    const message = dialog.message();
+    await dialog.dismiss();
+    resolve(message);
+  }));
+  await page.getByRole('button', { name: 'Excluir', exact: true }).click();
+  expect(await deletionWarning).toMatch(/histórico de decisões.*fotografia decisória.*atividade associada.*atividade permanecerá/s);
+  await expect(page.getByRole('heading', { name: ideaTitle, exact: true })).toBeVisible();
+  expect(page.externalAttempts).toEqual([]);
+});

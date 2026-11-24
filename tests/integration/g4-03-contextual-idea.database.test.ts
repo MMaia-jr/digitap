@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { Client } from 'pg';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { closeDatabasePool } from '../../src/lib/database.server';
+import { createIdeasService } from '../../src/lib/ideas/service.server';
+import { closeDatabasePool, withTransaction, type Sql, type Transaction } from '../../src/lib/database.server';
 import { e4Service, createE4Service } from '../../src/lib/capabilities/service.server';
 import { createActivityService } from '../../src/lib/activities/service.server';
 import { createPublicQueries } from '../../src/lib/queries/public.server';
@@ -51,6 +52,7 @@ let noProfileId = '';
 let ownerSubjectId = '';
 let otherSubjectId = '';
 let savedIdeaId = '';
+let decisionActivityId = '';
 let capture: ReturnType<typeof vi.fn>;
 let interpretPost: typeof import('../../src/app/api/propostas/interpretar/route').POST;
 let ideaPost: typeof import('../../src/app/api/ideias/route').POST;
@@ -128,6 +130,7 @@ afterAll(async () => {
     try {
       await db.query("delete from public.eventos_editoriais where objeto_tipo='atividade' and objeto_id=any($1::uuid[])", [activities]);
       await db.query("delete from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=any($1::uuid[])", [activities]);
+      await db.query('delete from public.planos_execucao where atividade_id=any($1::uuid[])', [activities]);
       await db.query('delete from public.atividades where id=any($1::uuid[])', [activities]);
       await db.query('delete from public.ideias_privadas where id=any($1::uuid[]) or owner_id=any($2::uuid[])', [ideas, users]);
       await db.query('delete from public.capacidades where id=any($1::uuid[])', [capabilities]);
@@ -303,6 +306,16 @@ it('G4-03: revisão manual chega ao PostgreSQL e vira atividade privada sem recu
       id: created.id, descricao: draft.descricao, estado_editorial: 'rascunho',
     });
     await expect(outsider.get(created.id)).rejects.toMatchObject({ status: 404 });
+    const plan = await owner.createExecutionPlan(created.id, {
+      recursos: [{ descricao: 'Material de apoio da feira sintética.', quantidade: 2, unidade: 'itens' }],
+    });
+    expect(plan).toMatchObject({
+      activity_id: created.id, version: 1, estado: 'privado',
+      recursos: [{ descricao: 'Material de apoio da feira sintética.', quantidade: 2, unidade: 'itens' }],
+    });
+    expect(await owner.getExecutionPlan(created.id)).toEqual(plan);
+    await expect(outsider.getExecutionPlan(created.id)).rejects.toMatchObject({ status: 404 });
+
     await expect(createPublicQueries().get(created.id)).rejects.toMatchObject({ status: 404 });
     const authorizations = await db!.query(`select count(*)::int n from public.autorizacoes_publicacao
       where objeto_tipo='atividade' and objeto_id=$1`, [created.id]);
@@ -310,6 +323,108 @@ it('G4-03: revisão manual chega ao PostgreSQL e vira atividade privada sem recu
     expect(externalFetch).not.toHaveBeenCalled();
   } finally {
     externalFetch.mockRestore();
+  }
+});
+
+it('G4 decisões: confirma como titular, serializa versões e preserva a origem na atividade', async () => {
+  session.userId = ownerId;
+  const decisions = [
+    { chave: 'formato', estado: 'DEFINIDO', descricao: 'Presencial.' },
+    { chave: 'horario', estado: 'PROVISÓRIO', descricao: 'Sábado às 15h.' },
+    { chave: 'local', estado: 'PENDENTE', descricao: 'Escolher local acessível.' },
+    { chave: 'cobranca', estado: 'EXCLUÍDO', descricao: 'Cobrança de ingresso.' },
+  ];
+  const command = { action: 'confirm-decisions', id: savedIdeaId, expectedVersion: 2, decisions };
+  const { GET: ideaGet } = await import('../../src/app/api/ideias/route');
+  const historyRequest = () => new Request(origin + '/api/ideias?decisions=1&id=' + savedIdeaId);
+  const denyInference = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Inferência não autorizada neste percurso.'));
+  const failingTransaction = (statement: string): Transaction => operation => withTransaction(sql =>
+    operation({ query: ((query: string, values?: unknown[]) => {
+      if (query.includes(statement)) throw new Error('Falha sintética de persistência.');
+      return sql.query(query, values);
+    }) as Sql['query'] }));
+  const ideasService = createIdeasService();
+  const activityService = createActivityService({ verifyUser: async () => ({
+    id: session.userId, email_confirmed_at: '2026-11-23T12:00:00.000Z',
+  }) });
+  try {
+    session.userId = otherId;
+    expect((await ideaPost(request('/api/ideias', command))).status).toBe(404);
+    expect((await ideaGet(historyRequest())).status).toBe(404);
+    session.userId = ownerId;
+    expect((await ideaPost(request('/api/ideias', { ...command, autor_id: otherId }))).status).toBe(400);
+    expect((await ideaPost(request('/api/ideias', { ...command, decisions: [decisions[0], decisions[0]] }))).status).toBe(422);
+    await expect(createIdeasService(failingTransaction('insert into public.ideia_decisoes_revisoes'))
+      .confirmDecisions(ownerId, savedIdeaId, command)).rejects.toThrow('Falha sintética');
+    expect(await ideasService.get(ownerId, savedIdeaId)).toMatchObject({ version: 2 });
+    expect((await ideasService.decisionHistory(ownerId, savedIdeaId)).history).toEqual([]);
+
+    const first = await ideaPost(request('/api/ideias', command));
+    expect(first.status).toBe(200);
+    const payload = await first.json();
+    expect(payload.ideia).toMatchObject({ version: 3, decisions: expect.arrayContaining(decisions.map(item => expect.objectContaining(item))) });
+    expect(payload.ideia).not.toHaveProperty('owner_id');
+    expect(payload.ideia.decisions.every((item: Record<string, unknown>) => !Object.hasOwn(item, 'autor_id'))).toBe(true);
+    const by = await db!.query('select distinct autor_id from public.ideia_decisoes_revisoes where ideia_id=$1', [savedIdeaId]);
+    expect(by.rows).toEqual([{ autor_id: ownerId }]);
+
+    const next = { ...command, expectedVersion: 3, decisions: [{ ...decisions[1], estado: 'DEFINIDO' }] };
+    const concurrent = await Promise.all([
+      ideaPost(request('/api/ideias', next)), ideaPost(request('/api/ideias', next)),
+    ]);
+    expect(concurrent.map(result => result.status).sort()).toEqual([200, 409]);
+    const report = await (await ideaGet(historyRequest())).json();
+    expect(report.decisions).toHaveLength(4);
+    expect(report.history.filter((row: { chave: string }) => row.chave === 'horario')).toMatchObject([
+      { estado: 'DEFINIDO', versao_ideia: 4 }, { estado: 'PROVISÓRIO', versao_ideia: 3 },
+    ]);
+
+    const draft = {
+      versao_esperada: 4, pedido_id: randomUUID(), titulo: 'G4 decisão — atividade sintética',
+      descricao: 'Atividade sintética com decisões humanas.', inicio_previsto: '2026-12-15T18:00:00-03:00',
+      orientacao_acesso: 'Acesso a combinar.', referencia_oficial: null,
+    };
+    const activityCount = async () => (await db!.query(
+      'select count(*)::int as n from public.atividades where titulo=$1', [draft.titulo])).rows[0].n;
+    const blockedActivity = createActivityService({
+      verifyUser: async () => ({ id: ownerId, email_confirmed_at: 'synthetic' }),
+      transaction: failingTransaction('insert into public.atividade_decisoes_origem'),
+    });
+    await expect(blockedActivity.convertIdea(savedIdeaId, draft)).rejects.toMatchObject({ status: 503 });
+    expect(await activityCount()).toBe(0);
+    const converted = await activityService.convertIdea(savedIdeaId, draft);
+    activities.push(converted.id);
+    decisionActivityId = converted.id;
+    expect(await activityCount()).toBe(1);
+    expect(await activityService.convertIdea(savedIdeaId, draft)).toMatchObject({ id: converted.id, repetida: true });
+    const originSnapshot = await activityService.getIdeaDecisionSnapshot(converted.id);
+    expect(originSnapshot).toMatchObject({ versao_ideia: 4, decisoes: expect.arrayContaining([
+      expect.objectContaining({ chave: 'horario', estado: 'DEFINIDO' }),
+      expect.objectContaining({ chave: 'cobranca', estado: 'EXCLUÍDO' }),
+    ]) });
+    expect(originSnapshot?.decisoes).toHaveLength(4);
+    await ideasService.confirmDecisions(ownerId, savedIdeaId, { expectedVersion: 4, decisions: [
+      { chave: 'local', estado: 'DEFINIDO', descricao: 'Biblioteca.' },
+    ] });
+    await ideasService.update(ownerId, savedIdeaId, { expectedVersion: 5, title: 'Ideia revisada',
+      revisedText: 'Texto humano alterado sem nova interpretação.', revisedInterpretation: null });
+    expect((await ideasService.decisionHistory(ownerId, savedIdeaId)).decisions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ chave: 'local', estado: 'DEFINIDO', descricao: 'Biblioteca.' }),
+    ]));
+    expect(await activityService.getIdeaDecisionSnapshot(converted.id)).toEqual(originSnapshot);
+    session.userId = otherId;
+    await expect(activityService.getIdeaDecisionSnapshot(converted.id)).rejects.toMatchObject({ status: 404 });
+    await expect(createPublicQueries().get(converted.id)).rejects.toMatchObject({ status: 404 });
+    const privileges = (await db!.query(`select relrowsecurity,relforcerowsecurity,
+      has_table_privilege('anon',oid,'SELECT') as anon_read,
+      has_table_privilege('authenticated',oid,'SELECT,INSERT,UPDATE,DELETE') as authenticated_access
+      from pg_class where oid in ('public.ideia_decisoes_revisoes'::regclass, 'public.atividade_decisoes_origem'::regclass)`)).rows;
+    expect(privileges).toEqual(Array.from({length: 2}, () => ({
+      relrowsecurity: true, relforcerowsecurity: true, anon_read: false, authenticated_access: false,
+    })));
+    expect(denyInference).not.toHaveBeenCalled();
+  } finally {
+    denyInference.mockRestore();
   }
 });
 
@@ -322,4 +437,14 @@ it('revogação de vínculo impede uma nova recuperação e não chama o Gateway
   expect(response.status).toBe(403);
   expect(capture).not.toHaveBeenCalled();
   await expect(e4Service.context(ownerSubjectId)).rejects.toMatchObject({ status: 403 });
+  const formerOwner = createActivityService({ verifyUser: async () => ({ id: ownerId, email_confirmed_at: 'synthetic' }) });
+  expect(decisionActivityId).toBeTruthy();
+  await expect(formerOwner.getIdeaDecisionSnapshot(decisionActivityId)).rejects.toMatchObject({ status: 403 });
+  await createIdeasService().delete(ownerId, savedIdeaId);
+  const retention = (await db!.query(`select
+    (select count(*)::int from public.ideia_decisoes_revisoes where ideia_id=$1) revisions,
+    (select count(*)::int from public.atividade_decisoes_origem where atividade_id=$2) snapshots,
+    (select count(*)::int from public.atividades where id=$2) activities`,
+  [savedIdeaId, decisionActivityId])).rows[0];
+  expect(retention).toEqual({ revisions: 0, snapshots: 0, activities: 1 });
 });
