@@ -50,6 +50,26 @@ it('preserva o timeout de 30 segundos e entrega o sinal ao transporte do SDK',as
  expect(timeout).toHaveBeenCalledWith(30000);
  expect(fetcher.mock.calls[0][1]!.signal).toBeInstanceOf(AbortSignal);
 });
+it('aborta um transporte pendente sem retry e permite uma interpretação posterior',async()=>{
+ const deadline=new AbortController();
+ const nextDeadline=new AbortController();
+ vi.spyOn(AbortSignal,'timeout').mockReturnValueOnce(deadline.signal).mockReturnValue(nextDeadline.signal);
+ let reached!:()=>void;
+ const sent=new Promise<void>(resolve=>{reached=resolve;});
+ fetcher.mockImplementationOnce((_url,init)=>new Promise((_resolve,reject)=>{
+  const signal=init!.signal!;
+  signal.addEventListener('abort',()=>reject(signal.reason),{once:true});
+  reached();
+ }));
+ const pending=interpretProposal(proposal);
+ const failure=expect(pending).rejects.toMatchObject({code:'UNAVAILABLE'});
+ await sent;
+ deadline.abort(new DOMException('Prazo simulado','TimeoutError'));
+ await failure;
+ expect(fetcher).toHaveBeenCalledOnce();
+ await expect(interpretProposal(proposal)).resolves.toMatchObject({estado:'revisao_humana_pendente',verificacao:'nao_verificada'});
+ expect(fetcher).toHaveBeenCalledTimes(2);
+});
 it('modelo configurável aceita somente família Kimi via configuração do servidor',async()=>{
  vi.stubEnv('AI_GATEWAY_MODEL','moonshotai/kimi-k2.6');await interpretProposal(proposal);
  expect(new Headers(fetcher.mock.calls[0][1]!.headers).get('ai-language-model-id')).toBe('moonshotai/kimi-k2.6');

@@ -26,6 +26,15 @@ type ContextRealization={recordType:'realization';recordId:string;activityId:str
 type AuthenticatedE4Context={subjectId:string;capabilities:ContextCapability[];projects:ContextProject[];needs:ContextNeed[];realizations:ContextRealization[];matches:ReturnType<typeof findCapabilityMatches>};
 const C=`c.id,c.sujeito_id,s.nome_publico,s.tipo,c.descricao,c.categoria,c.condicoes,c.visibilidade,c.estado,c.versao,c.criada_em,c.atualizada_em`;
 const N=`n.id,n.projeto_id,p.titulo,s.nome_publico,p.sujeito_id,n.descricao,n.categorias,n.condicoes,n.visibilidade,n.estado,n.versao,n.criada_em,n.atualizada_em`;
+async function activeContextProjects(sql:Sql,subjectId:string){
+ return (await sql.query<{id:string;sujeito_id:string;titulo:string;descricao:string;ano:number}>(
+  `select p.id,p.sujeito_id,p.titulo,p.descricao,p.ano from public.projetos p
+   join public.vinculos_colaboracao v on v.projeto_id=p.id
+   join public.sujeitos_publicadores s on s.id=p.sujeito_id
+   where v.sujeito_id=$1 and v.status='ativo' and s.estado in ('pendente','ativo')
+   order by p.ano desc,p.titulo,p.id for share of v,p,s`,[subjectId],
+ )).rows;
+}
 const cleanText=(v:unknown,max:number,min=0)=>{if(typeof v!=='string')throw new E4Error(422,'Confira os dados informados.');const s=v.trim().normalize('NFC');if(s.length<min||s.length>max||/[<>\u0000-\u001f\u007f]/.test(s))throw new E4Error(422,'Confira os dados informados.');return s;};
 const ver=(v:unknown)=>{if(!Number.isSafeInteger(v)||Number(v)<1)throw new E4Error(422,'Versão inválida.');return Number(v);};
 const cat=(v:unknown)=>{if(typeof v!=='string'||!capabilityCategories.includes(v as CapabilityCategory))throw new E4Error(422,'Selecione uma categoria válida.');return v as CapabilityCategory;};
@@ -63,7 +72,7 @@ export function createE4Service(options:Options={}){
      createdAt:instant(row.criada_em),updatedAt:instant(row.atualizada_em),description:row.descricao,category:row.categoria,conditions:row.condicoes,
     }));
     const owned=owner.tipo==='pessoa_fisica'?[]:(await sql.query<{id:string;sujeito_id:string;titulo:string;descricao:string;ano:number}>(`select p.id,p.sujeito_id,p.titulo,p.descricao,p.ano from public.projetos p where p.sujeito_id=$1 order by p.ano desc,p.criado_em desc for share of p`,[sid])).rows;
-    const collaborations=owner.tipo==='pessoa_fisica'?(await sql.query<{id:string;sujeito_id:string;nome_publico:string;titulo:string;descricao:string;ano:number}>(`select p.id,p.sujeito_id,s.nome_publico,p.titulo,p.descricao,p.ano from public.projetos p join public.vinculos_colaboracao v on v.projeto_id=p.id join public.sujeitos_publicadores s on s.id=p.sujeito_id where v.sujeito_id=$1 and v.status='ativo' and s.estado in ('pendente','ativo') order by p.ano desc,p.titulo,p.id for share of v,p,s`,[sid])).rows:[];
+    const collaborations=owner.tipo==='pessoa_fisica'?await activeContextProjects(sql,sid):[];
     const projects:ContextProject[]=[
      ...owned.map(row=>({recordType:'project' as const,projectId:row.id,ownerSubjectId:row.sujeito_id,source:'projetos' as const,access:'owner' as const,authorizedScope:'titular_do_projeto' as const,title:row.titulo,description:row.descricao,year:row.ano})),
      ...collaborations.filter(row=>!owned.some(project=>project.id===row.id)).map(row=>({recordType:'project' as const,projectId:row.id,ownerSubjectId:row.sujeito_id,source:'projetos' as const,access:'colaboracao_ativa' as const,authorizedScope:'vinculo_colaboracao' as const,title:row.titulo,description:row.descricao,year:row.ano})),
@@ -93,6 +102,16 @@ export function createE4Service(options:Options={}){
     const matchCapabilities=capabilities.filter(row=>row.visibility==='publica').map(row=>({id:row.recordId,subjectId:row.subjectId,subjectName:owner.nome_publico,description:row.description,category:row.category,conditions:row.conditions,visibility:row.visibility,status:row.state,version:row.version,createdAt:row.createdAt,updatedAt:row.updatedAt}));
     const matchNeeds=needs.map(row=>({id:row.recordId,projectId:row.projectId,projectTitle:projects.find(project=>project.projectId===row.projectId)?.title,description:row.description,categories:row.categories,conditions:row.conditions,visibility:row.visibility,status:row.state,ownerSubjectId:row.ownerSubjectId,version:row.version,createdAt:row.createdAt,updatedAt:row.updatedAt}));
     return{subjectId:sid,capabilities,projects,needs,realizations,matches:findCapabilityMatches(matchCapabilities,matchNeeds)};
+   });
+  },
+  async contextCollaborationsStillActive(context:AuthenticatedE4Context):Promise<boolean>{
+   const expected=context.projects.filter(project=>project.access==='colaboracao_ativa');
+   if(!expected.length)return true;
+   const u=await user();
+   return tx(async sql=>{
+    await subject(sql,u.id,context.subjectId,true);
+    const active=await activeContextProjects(sql,context.subjectId);
+    return expected.every(project=>active.some(row=>row.id===project.projectId&&row.sujeito_id===project.ownerSubjectId));
    });
   },
   async createCapability(i:{subjectId:string;description:string;category:string;conditions?:string}){const u=await user(),sid=idOf(i.subjectId),d=cleanText(i.description,1000,3),k=cat(i.category),c=cleanText(i.conditions??'',1000);return tx(async sql=>{const o=await subject(sql,u.id,sid,true);const inserted=await sql.query<{id:string}>(`insert into public.capacidades(sujeito_id,criado_por_conta_id,descricao,categoria,condicoes) values($1,$2,$3,$4,$5) returning id`,[sid,o.conta_id,d,k,c]);const r=(await sql.query<CapabilityRow>(`select ${C} from public.capacidades c join public.sujeitos_publicadores s on s.id=c.sujeito_id where c.id=$1`,[inserted.rows[0].id])).rows[0];return{id:r.id,subject_id:r.sujeito_id,description:r.descricao,category:r.categoria,conditions:r.condicoes,visibility:r.visibilidade as 'privada'|'publica',status:r.estado,version:r.versao};});},

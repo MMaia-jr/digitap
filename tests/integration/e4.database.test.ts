@@ -7,6 +7,21 @@ import { createE4Service } from '../../src/lib/capabilities/service.server';
 import { createActivityService } from '../../src/lib/activities/service.server';
 import { closeDatabasePool,withTransaction,type Sql,type Transaction } from '../../src/lib/database.server';
 vi.mock('server-only',()=>({}));
+const proposalRoute=vi.hoisted(()=>({user:'',interpret:vi.fn()}));
+vi.mock('../../src/lib/supabase/server',()=>({userClient:async()=>({})}));
+vi.mock('../../src/lib/supabase/admin.server',()=>({adminClient:()=>({})}));
+vi.mock('../../src/lib/auth/gateway.server',()=>({createGateway:()=>({
+ currentUser:async()=>({id:proposalRoute.user,email_confirmed_at:'2026-11-24T00:00:00Z'}),
+ account:async()=>null,
+})}));
+vi.mock('../../src/lib/proposals/interpret.server',()=>({interpretProposal:proposalRoute.interpret}));
+
+function barrier(){
+ let signal!:()=>void,release!:()=>void;
+ const reached=new Promise<void>(resolve=>{signal=resolve;});
+ const resume=new Promise<void>(resolve=>{release=resolve;});
+ return {reached,release,async pause(){signal();await resume;}};
+}
 
 let db:Client,admin:SupabaseClient,local:Record<string,string>;
 const users:string[]=[],subjects:string[]=[],orgs:string[]=[],projects:string[]=[],activities:string[]=[],records:string[]=[],authClients:SupabaseClient[]=[];
@@ -75,6 +90,67 @@ describe('E4 — integração com PostgreSQL local, sessão e isolamento',()=>{
    if(Object.values(residuals).some(value=>value!==0))throw new Error('Limpeza E4 deixou resíduos nos IDs próprios da execução.');
   }finally{await db.end();}}
  },30000);
+
+ it.each(['before','after-subjects','after-context','during-inference','active'] as const)(
+  'G5 E4: colaboração %s entre consulta e resposta',async phase=>{
+   vi.resetModules();
+   const runtime=(await import('../../src/lib/capabilities/service.server')).e4Service;
+   const {POST}=await import('../../src/app/api/propostas/interpretar/route');
+   const point=barrier(),origin='http://127.0.0.1:3215';
+   const marker='Projeto sintético E4.';
+   proposalRoute.user=users[0];
+   proposalRoute.interpret.mockReset();
+   vi.stubEnv('APP_ORIGIN',origin);
+   const context=runtime.context.bind(runtime);
+   const contextSpy=vi.spyOn(runtime,'context').mockImplementation(async sid=>{
+    if(phase==='after-subjects')await point.pause();
+    const data=await context(sid);
+    if(phase==='after-context')await point.pause();
+    return data;
+   });
+   proposalRoute.interpret.mockImplementation(async()=>{
+    if(phase==='during-inference')await point.pause();
+    return {estado:'revisao_humana_pendente', marcador:marker};
+   });
+   // The UPDATE commits on the fixture connection; E4 reads through its separate pool.
+   const setStatus=async(status:string)=>{
+    const result=await db.query('update public.vinculos_colaboracao set status=$1 where sujeito_id=$2 and projeto_id=$3',[status,pfA,projectId]);
+    expect(result.rowCount).toBe(1);
+   };
+   let pending:Promise<Response>|undefined;
+   try{
+    if(phase==='before')await setStatus('recusado');
+    pending=POST(new Request(origin+'/api/propostas/interpretar',{
+     method:'POST',headers:{origin,host:'127.0.0.1:3215','content-type':'application/json'},
+     body:JSON.stringify({texto:'Organizar uma oficina.',contexto:{subjectId:pfA,consentimento:true}}),
+    }));
+    if(phase!=='before'&&phase!=='active'){
+     await Promise.race([point.reached,pending.then(response=>{throw new Error('Resposta antes da barreira: '+response.status);})]);
+     await setStatus('recusado');
+     point.release();
+    }
+    const response=await pending;
+    if(phase==='after-context'||phase==='during-inference'){
+     expect(response.status).toBe(403);
+     expect(await response.text()).not.toContain(marker);
+     if(phase==='after-context')expect(proposalRoute.interpret).not.toHaveBeenCalled();
+     else expect(proposalRoute.interpret).toHaveBeenCalledOnce();
+    }else{
+     expect(response.status).toBe(200);
+     expect(proposalRoute.interpret).toHaveBeenCalledOnce();
+     const projection=proposalRoute.interpret.mock.calls[0][1];
+     if(phase==='active')expect(projection.projects).toContainEqual(expect.objectContaining({description:marker}));
+     else expect(projection.projects).toEqual([]);
+    }
+   }finally{
+    point.release();
+    await pending;
+    contextSpy.mockRestore();
+    vi.unstubAllEnvs();
+    await setStatus('ativo');
+    await (await import('../../src/lib/database.server')).closeDatabasePool();
+   }
+  });
 
  it('RLS e grants bloqueiam acesso direto de anon/authenticated; somente service_role tem privilégio de tabela',async()=>{
   const tables=['capacidades','necessidades_projeto','interesses_necessidade'];

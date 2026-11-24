@@ -49,7 +49,17 @@ it('C05 RED PostgreSQL: autorização própria aprova sem publicar; publicação
  const {id,recordId}=await record(),auth=await authorization(recordId);await inReview(id);await transition(id,'aprovar','em_revisao',{autorizacao_id:auth,evidencias_aprovadas:[]});expect((await services[0].getRecord(id)).estado_editorial).toBe('aprovada');expect((await db.query('select versao_publicada from public.registros_realizacao where id=$1',[recordId])).rows[0].versao_publicada).toBeNull();
  await transition(id,'publicar','aprovada');const row=(await db.query('select estado_editorial,versao_publicada from public.registros_realizacao where id=$1',[recordId])).rows[0];expect(row.estado_editorial).toBe('publicada');expect(row.versao_publicada).toMatchObject({tipo:'registro-publico.v1',versao:1,estado_apuracao:'declarado',evidencias:[]});expect(JSON.stringify(row.versao_publicada)).not.toMatch(/Prova fictícia|autorizacao_id|executada_por/);
 });
-async function announce(id:string){await services[0].submit(id,{versao_esperada:1});await services[2].review(id,{...command(),acao:'iniciar',estado_esperado:'enviada'});const auth=await authorization(id,'atividade',['divulgacao','atividade:versao:1']);await services[2].review(id,{...command(),acao:'aprovar',estado_esperado:'em_revisao',autorizacao_id:auth});await services[2].publish(id,command());return auth;}
+async function announce(id:string){
+ await services[0].submit(id,{versao_esperada:1,autoriza_publicacao:true});
+ const consent=await db.query<{id:string}>("select id from public.autorizacoes_publicacao where objeto_tipo='atividade' and objeto_id=$1",[id]);
+ auths.push(...consent.rows.map(row=>row.id));
+ expect(consent.rows).toHaveLength(1);
+ const auth=consent.rows[0].id;
+ await services[2].review(id,{...command(),acao:'iniciar',estado_esperado:'enviada'});
+ await services[2].review(id,{...command(),acao:'aprovar',estado_esperado:'em_revisao',autorizacao_id:auth});
+ await services[2].publish(id,command());
+ return auth;
+}
 async function publishRecord(id:string,recordId:string,evidence:string[]=[]){const auth=await authorization(recordId);await inReview(id);await transition(id,'aprovar','em_revisao',{autorizacao_id:auth,evidencias_aprovadas:evidence});await transition(id,'publicar','aprovada');return auth;}
 it('C05: público recebe só snapshot do registro e referências examinadas, sem prova/histórico',async()=>{
  const {id,recordId}=await record();await announce(id);const evidence=await services[0].addEvidence(id,{pedido_id:randomUUID(),tipo_fonte:'Fonte fictícia examinada',url_publica:'https://example.invalid/relato',afirmacao_sustentada:'A fonte sustenta somente a abertura fictícia.',consultada_em:new Date(Date.now()-60000).toISOString()});

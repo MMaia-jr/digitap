@@ -5,7 +5,7 @@ import { Client } from 'pg';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { createIdeasService } from '../../src/lib/ideas/service.server';
 import { createActivityService } from '../../src/lib/activities/service.server';
-import { closeDatabasePool } from '../../src/lib/database.server';
+import { closeDatabasePool, withTransaction, type Sql } from '../../src/lib/database.server';
 import { createPublicQueries } from '../../src/lib/queries/public.server';
 
 vi.mock('server-only', () => ({}));
@@ -70,7 +70,7 @@ beforeAll(async () => {
   await db.connect();
   admin = createClient(local.API_URL, local.SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
   const staleFixtures = (await db.query<{ id: string }>("select id from auth.users where email like $1", [`${emailPrefix}%@example.invalid`])).rows.map(row => row.id);
-  await cleanupFixtures(staleFixtures);
+  if (staleFixtures.length) throw new Error('Namespace de conversão ocupado; nenhuma fixture preexistente será alterada.');
   for (let i = 0; i < 2; i++) {
     const created = await admin.auth.admin.createUser({ email: `${emailPrefix}${randomUUID()}@example.invalid`, password: `${randomUUID()}aA1!`, email_confirm: true });
     if (created.error || !created.data.user) throw new Error('Não foi possível criar identidade sintética local.');
@@ -129,4 +129,31 @@ it('E3 converte ideia própria em rascunho privado, rejeita titular alheio/vers�
   expect(await ideas.get(userIds[0], first.id)).toMatchObject({ original_text: source, revised_text: `${source} trecho revisto`, revised_interpretation: interpretation, version: current.version });
   expect((await db.query('select criada_por_conta_id,sujeito_id,organizacao_id,estado_editorial,versao_publicada,numero_versao_publicada from public.atividades where id=$1', [activityId])).rows[0]).toMatchObject({ criada_por_conta_id: expect.any(String), sujeito_id: subjectIds[0], organizacao_id: null, estado_editorial: 'rascunho', versao_publicada: null, numero_versao_publicada: null });
   await expect(Reflect.get(createActivityService({ verifyUser: async () => null }), 'convertIdea')?.(first.id, next)).rejects.toMatchObject({ status: 401 });
+});
+
+it('reverte a atividade se a conversão for interrompida antes da auditoria e permite repetir o pedido', async () => {
+  const idea = await ideas.create(userIds[0], { title: 'Ideia para recuperação', originalText: source, originalInterpretation: interpretation, revisedInterpretation: interpretation });
+  const payload = command();
+  let interrupted = false;
+  const service = createActivityService({
+    verifyUser: async () => ({ id: userIds[0], email_confirmed_at: '2026-11-24T00:00:00Z' }),
+    transaction: operation => withTransaction(sql => operation({
+      query: async (statement: string, values?: unknown[]) => {
+        if (statement.includes('insert into public.eventos_editoriais') && statement.includes("'atividade_criada_de_ideia'")) {
+          const pending = await sql.query('select id from public.atividades where id=$1', [values?.[0]]);
+          expect(pending.rowCount).toBe(1);
+          interrupted = true;
+          throw new Error('Interrupção sintética da auditoria de conversão');
+        }
+        return sql.query(statement, values);
+      },
+    } as Sql)),
+  });
+  await expect(service.convertIdea(idea.id, payload)).rejects.toMatchObject({ status: 503 });
+  expect(interrupted).toBe(true);
+  expect((await db.query('select id from public.atividades where sujeito_id=$1 and titulo=$2', [subjectIds[0], payload.titulo])).rows).toEqual([]);
+  expect(await ideas.get(userIds[0], idea.id)).toMatchObject({ version: 1, original_text: source, original_interpretation: interpretation });
+  const recovered = await services[0].convertIdea(idea.id, payload);
+  expect(recovered).toMatchObject({ repetida: false, estado_editorial: 'rascunho' });
+  expect(await services[0].convertIdea(idea.id, payload)).toMatchObject({ id: recovered.id, repetida: true });
 });

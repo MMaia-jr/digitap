@@ -1,10 +1,11 @@
 'use client';
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import type { IdeaView } from '../lib/ideas/service.server';
 import { ProposalForm, type ProposalDraft } from './ProposalForm';
 
 const subscribe = () => () => {};
+const savedNotice = 'Rascunho privado salvo. Ele não foi verificado nem publicado.';
 
 export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
   const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
@@ -13,6 +14,10 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
   const [working, setWorking] = useState(false);
+  const saveStatus = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (notice === savedNotice) saveStatus.current?.focus();
+  }, [notice, selected?.version]);
 
   async function save(draft: ProposalDraft) {
     if (working) return;
@@ -34,7 +39,7 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
       if (!body.ideia?.id) throw new Error('save');
       setIdeas(current => [body.ideia!, ...current.filter(item => item.id !== body.ideia!.id)]);
       setSelected(body.ideia);
-      setNotice('Rascunho privado salvo. Ele não foi verificado nem publicado.');
+      setNotice(savedNotice);
     } catch (cause) {
       if (cause instanceof Error && cause.message === 'conflict') throw cause;
       setError('Não foi possível salvar o rascunho. Tente novamente.');
@@ -57,7 +62,7 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
 
   return <>
     <p>As ideias salvas são privadas da sua conta, não verificadas e não publicadas. Interpretar não salva; use o botão explícito abaixo. A interpretação revisada é reaberta sem uma nova chamada à IA.</p>
-    {notice && <p role="status">{notice}</p>}{error && <p role="alert">{error}</p>}
+    {notice && <p ref={saveStatus} role="status" tabIndex={notice === savedNotice ? -1 : undefined}>{notice}</p>}{error && <p role="alert">{error}</p>}
     <section aria-labelledby="minhas-ideias">
       <h2 id="minhas-ideias">Minhas ideias</h2>
       {ideas.length === 0 ? <p>Nenhum rascunho salvo.</p> : <ul>{ideas.map(idea => <li key={idea.id}>

@@ -354,3 +354,87 @@ test('G4-03B: ideia revisada manualmente vira atividade privada sem interpretaç
   expect(gatewayCalls()).toHaveLength(gatewayCount);
   expect(page.externalAttempts).toEqual([]);
 });
+
+test('G5: teclado, consentimento, revisão e retorno de foco após salvar', async ({ browser }) => {
+  const owner = await newUser('teclado-g5', true);
+  const page = await localPage(browser);
+  await signIn(page, owner);
+  await page.goto('/dashboard/pessoa-fisica');
+
+  async function tabTo(target) {
+    await expect(target).toBeEnabled();
+    for (let step = 0; step < 60; step++) {
+      if (await target.evaluate(element => element === document.activeElement)) return;
+      await page.keyboard.press('Tab');
+    }
+    await expect(target).toBeFocused();
+  }
+
+  const tap = page.getByRole('navigation', { name: 'Taps para participar' }).getByRole('link', { name: 'Organizar uma ideia' });
+  await tabTo(tap);
+  await expect(tap).toBeFocused();
+  await expect(tap).toHaveCSS('outline-style', 'solid');
+  await expect(tap).toHaveCSS('outline-width', '3px');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(origin + '/meu-espaco/ideia');
+
+  const title = page.getByRole('textbox', { name: 'Título do rascunho' });
+  const text = page.getByRole('textbox', { name: 'Sua proposta' });
+  const context = page.getByRole('checkbox', { name: 'Usar contexto autorizado' });
+  await tabTo(title);
+  await page.keyboard.insertText('Ideia sintética por teclado');
+  await page.keyboard.press('Tab');
+  await expect(text).toBeFocused();
+  await page.keyboard.insertText(proposal);
+  await page.keyboard.press('Tab');
+  await expect(context).toBeFocused();
+  await page.keyboard.press('Space');
+
+  const selection = page.getByRole('combobox', { name: 'Sujeito do contexto' });
+  await tabTo(selection);
+  await expect(selection).toHaveAccessibleDescription(/enviado a um provedor externo de IA/);
+  // Native type-ahead selects the PF option in Chromium's macOS headless shell.
+  await page.keyboard.press('p');
+  await expect(selection).toHaveValue(owner.subjectId);
+  const consent = page.getByRole('checkbox', { name: /Autorizo o envio do contexto selecionado/ });
+  await page.keyboard.press('Tab');
+  await expect(consent).toBeFocused();
+  const interpret = page.getByRole('button', { name: 'Interpretar proposta' });
+  await page.keyboard.press('Tab');
+  await expect(interpret).toBeFocused();
+  const before = gatewayCalls().length;
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('alert').filter({ hasText: 'autorize explicitamente' })).toBeVisible();
+  expect(gatewayCalls()).toHaveLength(before);
+
+  await page.keyboard.press('Shift+Tab');
+  await expect(consent).toBeFocused();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(/Interpretação não verificada/)).toBeVisible();
+  const discard = page.getByRole('button', { name: 'Descartar Atividades propostas 1' });
+  await tabTo(discard);
+  await page.keyboard.press('Enter');
+  const restore = page.getByRole('button', { name: 'Restaurar prévia original' });
+  await expect(restore).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Oficina de leitura sugerida', { exact: true })).toBeVisible();
+
+  await tabTo(page.getByRole('button', { name: 'Salvar rascunho' }));
+  await page.keyboard.press('Enter');
+  const savedStatus = page.getByRole('status').filter({ hasText: 'Rascunho privado salvo' });
+  await expect(savedStatus).toBeVisible();
+
+  await tabTo(page.getByRole('button', { name: 'Retomar' }));
+  await page.keyboard.press('Enter');
+  await tabTo(text);
+  await page.keyboard.press('ControlOrMeta+A');
+  await page.keyboard.insertText('Agora vou preparar uma feira comunitária.');
+  await tabTo(page.getByRole('button', { name: 'Salvar alterações' }));
+  await page.keyboard.press('Enter');
+  await expect(savedStatus).toBeFocused();
+  await expect(page.getByText('Privada · não verificada · não publicada')).toBeVisible();
+  expect(gatewayCalls()).toHaveLength(before + 1);
+  expect(page.externalAttempts).toEqual([]);
+});

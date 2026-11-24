@@ -180,7 +180,8 @@ it.each([
   const response = await post(request({ texto: proposal, contexto: { subjectId, consentimento: true } }));
 
   expect(response.status).toBe(200);
-  expect(deps.events).toEqual(['e4.subjects', 'e4.context', 'e4.context.capabilities', 'interpret']);
+  const revalidation = access === 'colaboracao_ativa' ? ['e4.context'] : [];
+  expect(deps.events).toEqual(['e4.subjects', 'e4.context', 'e4.context.capabilities', ...revalidation, 'interpret', ...revalidation]);
   expect(deps.interpret).toHaveBeenCalledExactlyOnceWith(proposal, {
     ...projectedContext,
     projects: [{

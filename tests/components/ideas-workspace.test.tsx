@@ -137,3 +137,39 @@ it('restaura somente as sugestões da versão revisada ao retomar a ideia', () =
   fireEvent.click(screen.getByRole('button', { name: 'Restaurar prévia original' }));
   expect(description.value).toBe('Feira comunitária');
 });
+
+it.each([503, 409])('mantém a revisão privada recuperável após falha de salvamento %s', async status => {
+  const revisedText = 'Agora vou organizar uma feira comunitária.';
+  const fetcher = vi.fn()
+    .mockResolvedValueOnce({ ok: false, status })
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ ideia: {
+      ...saved, revised_text: revisedText, revised_interpretation: null, version: 2,
+    } }) });
+  vi.stubGlobal('fetch', fetcher);
+  render(<IdeasWorkspace initialIdeas={[saved]} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Retomar' }));
+  const text = screen.getByRole('textbox', { name: 'Sua proposta' }) as HTMLTextAreaElement;
+  fireEvent.change(text, { target: { value: revisedText } });
+  const save = () => fireEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
+
+  save();
+  await waitFor(() => {
+    const message = status === 409 ? 'alterado em outra sessão' : 'Não foi possível salvar';
+    expect(screen.getAllByRole('alert').some(alert => alert.textContent?.includes(message))).toBe(true);
+  });
+  expect(text.value).toBe(revisedText);
+  expect(screen.queryByRole('status')).toBeNull();
+
+  if (status === 503) {
+    save();
+    await screen.findByText(/Rascunho privado salvo/);
+    expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull();
+  }
+  expect(fetcher.mock.calls).toHaveLength(status === 503 ? 2 : 1);
+  for (const [url, request] of fetcher.mock.calls) {
+    expect(url).toBe('/api/ideias');
+    expect(JSON.parse(request.body)).toMatchObject({
+      action: 'update', id: saved.id, expectedVersion: 1, revisedText, revisedInterpretation: null,
+    });
+  }
+});

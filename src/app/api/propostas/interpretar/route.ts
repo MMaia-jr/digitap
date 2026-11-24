@@ -52,20 +52,33 @@ export async function POST(request: Request): Promise<Response> {
       const account = await gateway.account(user.id);
       if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa')) throw new FlowError(403, 'Acesso indisponível para esta conta.');
       let contexto: ProposalContext | undefined;
+      let authorizedContext: Awaited<ReturnType<typeof e4Service.context>> | undefined;
       if (selection) {
         let subjects;
         try { subjects = await e4Service.subjects(); }
         catch { throw new FlowError(503, 'Contexto autorizado indisponível. Tente novamente mais tarde.'); }
         if (!subjects.some(subject => subject.id === selection.subjectId)) throw new FlowError(403, 'O sujeito selecionado não está autorizado para este contexto.');
-        try { contexto = projectProposalContext(await e4Service.context(selection.subjectId)); }
+        try {
+          authorizedContext = await e4Service.context(selection.subjectId);
+          contexto = projectProposalContext(authorizedContext);
+        }
         catch { throw new FlowError(503, 'Contexto autorizado indisponível. Tente novamente mais tarde.'); }
       }
       const release = reserve(user.id);
       try {
-        const interpretacao = contexto ? await interpretProposal(texto, contexto) : await interpretProposal(texto);
+        // Check committed collaboration state at the send and response boundaries.
+        // The provider call is outside the database transaction.
+        const revalidate = async () => {
+          if (authorizedContext && !await e4Service.contextCollaborationsStillActive(authorizedContext)) {
+            throw new FlowError(403, 'O contexto da colaboração selecionada não está mais autorizado.');
+          }
+        };
+        await revalidate();
+        let interpretacao;
+        try { interpretacao = contexto ? await interpretProposal(texto, contexto) : await interpretProposal(texto); }
+        catch { throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.'); }
+        await revalidate();
         return { message: 'Prévia para revisão humana.', interpretacao };
-      } catch {
-        throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.');
       } finally { release(); }
     });
   } catch {

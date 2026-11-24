@@ -115,15 +115,11 @@ async function publishActivity(owner, ownerPath, title, description, reviewer) {
     await expect(card.getByText('Enviada para revisão', { exact: true })).toBeVisible();
   } else {
     await expect(owner).toHaveURL(/\/dashboard\/atividade\/[0-9a-f-]{36}$/);
+    await owner.getByRole('checkbox', { name: 'Autorizo a divulgação desta versão após revisão editorial.' }).check();
     await owner.getByRole('button', { name: 'Enviar atividade', exact: true }).click();
     await expect(owner.getByText('Enviada — continua privada', { exact: true })).toBeVisible();
   }
   console.log('E4 trace: atividade enviada para curadoria.');
-  if (ownerPath !== '/dashboard/pessoa-fisica/nova') {
-    const row = (await db.query('select id,versao_submetida from public.atividades where titulo=$1', [title])).rows[0];
-    if (!row) throw new Error('Fixture sintética da atividade organizacional não foi localizada.');
-    await db.query("insert into public.autorizacoes_publicacao(objeto_tipo,objeto_id,escopo_autorizado,papel_autorizante,comprovante_restrito,autorizada_em) values('atividade',$1,$2,'Coordenação fictícia E4',$3,clock_timestamp())", [row.id, ['divulgacao', `atividade:versao:${row.versao_submetida}`], JSON.stringify({ tipo: 'consentimento-fixture-e4.v1', titular_sintetico: true })]);
-  }
   await reviewer.goto('/admin/atividades');
   console.log('E4 trace: fila editorial carregada.');
   const review = reviewer.getByRole('article', { name: title, exact: true });
