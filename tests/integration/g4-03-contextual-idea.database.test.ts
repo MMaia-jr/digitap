@@ -196,7 +196,9 @@ it('E4 real autoriza somente o titular; a projeção exata chega ao SDK e a deci
   }
   expect(providerRequest.prompt[0].content).toContain('não confiável');
   expect(providerRequest.tools).toBeUndefined();
-  expect(providerRequest.providerOptions.gateway).toMatchObject({ only: ['parasail'], zeroDataRetention: true, disallowPromptTraining: true });
+  expect(providerRequest.providerOptions.gateway).toMatchObject({ zeroDataRetention: true, disallowPromptTraining: true });
+  expect(providerRequest.providerOptions.gateway.only).toBeUndefined();
+  expect(providerRequest.providerOptions.gateway.order).toBeUndefined();
 
   const ideaResponse = await ideaPost(request('/api/ideias', {
     action: 'create', title: 'G4-03 oficina sintética', originalText: proposal,

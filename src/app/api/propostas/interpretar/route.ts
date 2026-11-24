@@ -75,8 +75,11 @@ export async function POST(request: Request): Promise<Response> {
         };
         await revalidate();
         let interpretacao;
-        try { interpretacao = contexto ? await interpretProposal(texto, contexto) : await interpretProposal(texto); }
-        catch { throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.'); }
+        try { interpretacao = await interpretProposal(texto, contexto, request.signal); }
+        catch {
+          if (request.signal.aborted) throw new FlowError(499, 'Interpretação cancelada.');
+          throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.');
+        }
         await revalidate();
         return { message: 'Prévia para revisão humana.', interpretacao };
       } finally { release(); }

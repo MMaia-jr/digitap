@@ -129,3 +129,18 @@ it('invalida a prévia contextual e revoga o consentimento ao mudar de sujeito',
   expect((screen.getByLabelText('Autorizo o envio do contexto selecionado ao provedor de IA') as HTMLInputElement).checked).toBe(false);
   expect(f).toHaveBeenCalledTimes(2); // não envia nada ao provedor ao trocar de sujeito
 });
+
+it('permite cancelar a espera sem aceitar uma resposta tardia', async()=>{
+ let finish!:(value:unknown)=>void;
+ const transport=vi.fn<(url:string,init:RequestInit)=>Promise<unknown>>(()=>new Promise(resolve=>{finish=resolve;}));
+ vi.stubGlobal('fetch',transport);
+ render(<ProposalForm/>);
+ fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Uma ideia de oficina'}});
+ fireEvent.click(screen.getByRole('button',{name:'Interpretar proposta'}));
+ expect(screen.getByRole('status').textContent).toContain('Aguarde');
+ fireEvent.click(screen.getByRole('button',{name:'Cancelar interpretação'}));
+ expect(transport.mock.calls[0][1].signal?.aborted).toBe(true);
+ finish({ok:true,json:async()=>({interpretacao:preview})});
+ await screen.findByText('Interpretação cancelada.');
+ expect(screen.queryByRole('heading',{name:'Prévia para revisão humana'})).toBeNull();
+});

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { existsSync, readFileSync, realpathSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Client } from 'pg';
 import { createClient } from '@supabase/supabase-js';
@@ -13,7 +13,8 @@ const allowedLocal = new Set([origin, supabaseOrigin, 'http://127.0.0.1:56154'])
 const out = process.env.A_PRACA_EVIDENCE_DIR;
 const ownMarker = 'G4-03B-PRIVATE-SYNTHETIC-20261123-01';
 const foreignMarker = 'G4-03B-FOREIGN-PRIVATE-SYNTHETIC-20261123-01';
-const callsFile = `${out}/g4-03b-gateway-mock.jsonl`;
+const live = process.env.DIGITAP_G4_03B_GATEWAY_REAL === '1';
+const callsFile = `${out}/g4-03b-gateway-${live ? "real" : "mock"}.jsonl`;
 const fixtures = { users: [], subjects: [], capabilities: [] };
 const contexts = [];
 const ids = { idea: '', activity: '' };
@@ -108,9 +109,9 @@ async function chooseContextAndConsent(page, fixture) {
 
 test.beforeAll(async () => {
   if (process.cwd() !== root || realpathSync(fileURLToPath(new URL('../../', import.meta.url))) !== root
-    || process.env.DIGITAP_G4_03B_GATEWAY_MOCK !== '1'
+    || (live === (process.env.DIGITAP_G4_03B_GATEWAY_MOCK === '1'))
     || process.env.A_PRACA_ALLOW_FIXTURE_CLEANUP !== '1'
-    || process.env.AI_GATEWAY_API_KEY !== 'g4-03b-synthetic-only'
+    || (!live && process.env.AI_GATEWAY_API_KEY !== 'g4-03b-synthetic-only')
     || process.env.AI_GATEWAY_MODEL !== 'moonshotai/kimi-k2.6'
     || process.env.G4_03B_CONTEXT_MARKER !== ownMarker
     || !/^operations\/evidence\/g4-03b-recovery-[a-zA-Z0-9-]+$/.test(out ?? '')
@@ -171,6 +172,7 @@ test.afterAll(async () => {
       (select count(*)::int from public.ideias_privadas where id=any($4::uuid[])) ideas,
       (select count(*)::int from public.atividades where id=any($5::uuid[])) activities`, [accountIds, fixtures.subjects, fixtures.capabilities, ideaIds, activityIds])).rows[0];
     if (Object.values(residual).some(count => count !== 0)) throw new Error('Cleanup G4-03B deixou fixture sintética residual.');
+    if (live) appendFileSync(`${out}/jornada.jsonl`, JSON.stringify({ event: 'cleanup', residual }) + '\n');
   } finally { await db.end(); }
 });
 
@@ -222,7 +224,7 @@ test('G4-03B: Tap, contexto E4, revisão humana e atividade privada sem publica�
   let audits = gatewayCalls();
   const legacyAudit = audits.find(call => call.mode === 'ok' && call.contextual === false);
   const contextAudit = audits.find(call => call.mode === 'ok' && call.contextual === true);
-  expect(legacyAudit).toMatchObject({ endpoint: '/v4/ai/language-model', model: 'moonshotai/kimi-k2.6', provider: ['parasail'], zeroDataRetention: true, disallowPromptTraining: true, tools: false });
+  expect(legacyAudit).toMatchObject({ endpoint: '/v4/ai/language-model', model: 'moonshotai/kimi-k2.6', providerPolicy: 'gateway-default', zeroDataRetention: true, disallowPromptTraining: true, tools: false });
   expect(contextAudit).toMatchObject({ hasOwnedMarker: true, hasForeignMarker: false, hasUuid: false, hasForbiddenFields: false });
   expect(contextAudit.contextKeys).toEqual(['capabilities', 'needs', 'projects', 'realizations']);
   expect(contextAudit.capabilityKeys).toEqual(['category', 'conditions', 'createdAt', 'description', 'provenance', 'state', 'updatedAt', 'version', 'visibility']);
@@ -437,4 +439,92 @@ test('G5: teclado, consentimento, revisão e retorno de foco após salvar', asyn
   await expect(page.getByText('Privada · não verificada · não publicada')).toBeVisible();
   expect(gatewayCalls()).toHaveLength(before + 1);
   expect(page.externalAttempts).toEqual([]);
+});
+
+
+if (live) test('G4-REAL: painel, contexto, interpretação e retomada privada', async ({ browser }) => {
+  test.setTimeout(0);
+  const log = (event, details = {}) => appendFileSync(`${out}/jornada.jsonl`, JSON.stringify({ event, ...details }) + '\n');
+  const owner = await newUser('real-titular', true);
+  const page = await localPage(browser);
+  await signIn(page, owner);
+  await addPrivateCapability(page, owner, ownMarker);
+  await page.goto('/dashboard/pessoa-fisica');
+  await page.getByRole('navigation', { name: 'Taps para participar' }).getByRole('link', { name: 'Organizar uma ideia' }).click();
+  await expect(page).toHaveURL(origin + '/meu-espaco/ideia');
+  const title = 'Oficina sintética G4 contextual real';
+  const text = 'Quero organizar uma oficina de dança no projeto sintético Raízes. Proponho uma aula no sábado e preciso confirmar o espaço.';
+  const review = 'Oficina de dança revisada pela pessoa responsável.';
+  await page.getByLabel('Título do rascunho').fill(title);
+  await page.getByLabel('Sua proposta').fill(text);
+  await chooseContextAndConsent(page, owner);
+  log('panel-tap-consent');
+
+  // Check the browser cancellation in isolation, with the request held before it reaches Next.
+  const path = '**/api/propostas/interpretar';
+  let intercepted;
+  let finishHold;
+  const received = new Promise(resolve => { intercepted = resolve; });
+  const held = new Promise(resolve => { finishHold = resolve; });
+  let heldRequest;
+  const hold = async route => {
+    heldRequest = route.request();
+    intercepted();
+    await held;
+    await route.abort().catch(() => {});
+  };
+  await page.route(path, hold);
+  const submit = page.getByRole('button', { name: 'Interpretar proposta', exact: true });
+  await submit.click();
+  await received;
+  await expect(page.getByRole('status').filter({ hasText: 'Aguarde a interpretação.' })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancelar interpretação' }).click();
+  try {
+    await expect(page.getByRole('status').filter({ hasText: 'Interpretação cancelada.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Prévia para revisão humana' })).toHaveCount(0);
+    expect(gatewayCalls()).toEqual([]);
+  } finally {
+    finishHold();
+    await page.unroute(path, hold);
+  }
+  log('browser-cancelled-before-egress');
+
+  await expect(page.getByLabel('Autorizo o envio do contexto selecionado ao provedor de IA')).not.toBeChecked();
+  await page.getByLabel('Autorizo o envio do contexto selecionado ao provedor de IA').check();
+  const responsePromise = page.waitForResponse(response => response.url() === origin + '/api/propostas/interpretar'
+    && response.request().method() === 'POST' && response.request() !== heldRequest, { timeout: 0 });
+  const started = performance.now();
+  await submit.click();
+  await expect(page.getByRole('status').filter({ hasText: 'Aguarde a interpretação.' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cancelar interpretação' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Prévia para revisão humana' })).toHaveCount(0);
+  log('real-pending-visible');
+  const response = await responsePromise;
+  log('interpretation-response', { status: response.status(), latencyMs: Math.round(performance.now() - started) });
+  expect(response.status()).toBe(200);
+  const apiBody = await response.json();
+  expect(apiBody.interpretacao).toMatchObject({ estado: 'revisao_humana_pendente', verificacao: 'nao_verificada' });
+  await expect(page.getByRole('heading', { name: 'Prévia para revisão humana' })).toBeVisible();
+  const audit = gatewayCalls();
+  expect(audit).toHaveLength(2);
+  expect(audit[0]).toMatchObject({ event: 'reserved', mock: false, contextual: true, hasOwnedMarker: true, hasForeignMarker: false, hasUuid: false, hasForbiddenFields: false, zeroDataRetention: true, disallowPromptTraining: true });
+  expect(audit[1]).toMatchObject({ event: 'response', status: 200 });
+  expect((await db.query('select count(*)::int n from public.ideias_privadas where owner_id=$1', [owner.id])).rows[0].n).toBe(0);
+
+  await page.getByLabel('Descrição — Atividades propostas 1').fill(review);
+  await page.getByRole('button', { name: 'Salvar rascunho', exact: true }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Rascunho privado salvo' })).toBeVisible();
+  const saved = (await db.query('select title,version,original_text,original_interpretation,revised_interpretation from public.ideias_privadas where owner_id=$1', [owner.id])).rows;
+  expect(saved).toHaveLength(1);
+  expect(saved[0]).toMatchObject({ title, version: 1, original_text: text, original_interpretation: apiBody.interpretacao });
+  expect(saved[0].revised_interpretation.dados.atividades[0].descricao).toBe(review);
+
+  await page.reload();
+  await expect(page.getByText('Privada · não verificada · não publicada')).toBeVisible();
+  await page.getByRole('button', { name: 'Retomar' }).click();
+  await expect(page.getByLabel('Sua proposta')).toHaveValue(text);
+  await expect(page.getByLabel('Descrição — Atividades propostas 1')).toHaveValue(review);
+  expect(gatewayCalls()).toEqual(audit);
+  expect(page.externalAttempts).toEqual([]);
+  log('saved-and-reopened', { private: true, revised: true, gatewaySends: 1, browserBlockedRequests: page.externalAttempts.length });
 });

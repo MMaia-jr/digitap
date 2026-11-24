@@ -131,7 +131,7 @@ it('modo legado continua sem sujeito e sem chamar E4', async () => {
 
   expect(response.status).toBe(200);
   expect(deps.events).toEqual(['interpret']);
-  expect(deps.interpret).toHaveBeenCalledExactlyOnceWith(proposal);
+  expect(deps.interpret).toHaveBeenCalledExactlyOnceWith(proposal, undefined, expect.any(AbortSignal));
   expect(await response.json()).toMatchObject({ interpretacao: suggestion });
   expect(fetch).not.toHaveBeenCalled();
 });
@@ -165,7 +165,7 @@ it('revalida contexto após consentimento e encaminha somente a projeção míni
 
   expect(response.status).toBe(200);
   expect(deps.events).toEqual(['e4.subjects', 'e4.context', 'e4.context.capabilities', 'interpret']);
-  expect(deps.interpret).toHaveBeenCalledExactlyOnceWith(proposal, projectedContext);
+  expect(deps.interpret).toHaveBeenCalledExactlyOnceWith(proposal, projectedContext, expect.any(AbortSignal));
   const body = await response.json();
   expect(body).toEqual({ message: 'Prévia para revisão humana.', interpretacao: suggestion });
   expect(JSON.stringify(body)).not.toContain(subjectId);
@@ -188,7 +188,7 @@ it.each([
       title: project.titulo, description: project.descricao, year: project.ano,
       provenance: { source: 'projetos' },
     }],
-  });
+  }, expect.any(AbortSignal));
   const serialized = JSON.stringify(deps.interpret.mock.calls[0][1]);
   for (const forbidden of ['"projectId"', '"ownerSubjectId"', '"authorizedScope"', '"access"', project.id, project.sujeito_id, subjectId, JSON.stringify(access), JSON.stringify(scope)]) {
     expect(serialized).not.toContain(forbidden);

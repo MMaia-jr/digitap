@@ -21,7 +21,7 @@ beforeEach(async()=>{
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();vi.restoreAllMocks();});
 it('sessão confirmada sem perfil pode interpretar sem criar conta de aplicação',async()=>{
  const r=await post(request());expect(r.status).toBe(200);expect(await r.json()).toMatchObject({interpretacao:result});
- expect(deps.account).toHaveBeenCalledWith(id);expect(deps.interpret).toHaveBeenCalledExactlyOnceWith('Uma oficina comunitária.');expect(fetch).not.toHaveBeenCalled();expect(r.headers.get('cache-control')).toContain('no-store');
+ expect(deps.account).toHaveBeenCalledWith(id);expect(deps.interpret).toHaveBeenCalledExactlyOnceWith('Uma oficina comunitária.',undefined,expect.any(AbortSignal));expect(fetch).not.toHaveBeenCalled();expect(r.headers.get('cache-control')).toContain('no-store');
 });
 it.each([null,{id,email_confirmed_at:null},{email_confirmed_at:'2026-11-06'}])('sessão ausente, não confirmada ou incompleta não usa IA',async user=>{
  deps.currentUser.mockResolvedValue(user);const r=await post(request());expect(r.status).toBe(401);expect(deps.interpret).not.toHaveBeenCalled();
@@ -57,6 +57,22 @@ it('limite agregado impede contorno por múltiplas identidades no mesmo processo
 it.each(['CONFIGURATION','OUTPUT','UNAVAILABLE'])('falha IA %s tem resposta pública genérica e não vaza',async code=>{
  deps.interpret.mockRejectedValue(Object.assign(new Error('SENSITIVE_MARKER'),{code}));const log=vi.spyOn(console,'error');
  const r=await post(request());expect(r.status).toBe(503);expect(await r.json()).toEqual({message:'Interpretação indisponível. Tente novamente mais tarde.'});expect(log).not.toHaveBeenCalled();
+});
+it('cancelamento voluntário devolve 499 e libera a interpretação em andamento',async()=>{
+ const controller=new AbortController();
+ let reached!:()=>void;
+ const started=new Promise<void>(resolve=>{ reached=resolve; });
+ deps.interpret.mockImplementationOnce((_text,_context,signal:AbortSignal)=>new Promise((_resolve,reject)=>{
+  signal.addEventListener('abort',()=>reject(signal.reason),{once:true});
+  reached();
+ }));
+ const pending=post(new Request(request(),{signal:controller.signal}));
+ await started;
+ controller.abort();
+ const cancelled=await pending;
+ expect(cancelled.status).toBe(499);
+ expect(await cancelled.json()).toEqual({message:'Interpretação cancelada.'});
+ expect((await post(request())).status).toBe(200);
 });
 it('falha de Auth ou consulta não vira ausência de conta',async()=>{
  deps.account.mockRejectedValue(new Error('SENSITIVE_MARKER'));expect((await post(request())).status).toBe(503);expect(deps.interpret).not.toHaveBeenCalled();

@@ -38,7 +38,8 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   const [contextLoading, setContextLoading] = useState(false);
   const [contextLoadError, setContextLoadError] = useState('');
   const restoreButton = useRef<HTMLButtonElement>(null);
-  const inFlight = useRef(false);
+  const inFlight = useRef<AbortController | null>(null);
+  const [cancelled, setCancelled] = useState(false);
   const textChanged = Boolean(initialIdea && text !== (initialIdea.revised_text ?? initialIdea.original_text));
   // A manually revised idea can be saved without another paid interpretation.
   // Null means there is no interpretation for this version, not that the old one is current.
@@ -86,26 +87,35 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!ready || inFlight.current) return;
-    setPreview(null); setOriginal(null); setError('');
+    setPreview(null); setOriginal(null); setError(''); setCancelled(false);
     if (!text.trim() || text.length > 2000) { setError('Escreva uma proposta de até 2.000 caracteres.'); return; }
     if (contextEnabled && (!contextSubjectId || !contextConsent)) { setError('Escolha um sujeito e autorize explicitamente o envio do contexto, ou interprete sem contexto.'); return; }
-    inFlight.current = true; setPending(true);
+    const controller = new AbortController();
+    inFlight.current = controller; setPending(true);
     try {
       const response = await fetch('/api/propostas/interpretar', {
-        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', credentials: 'same-origin', signal: controller.signal, headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contextEnabled ? { texto: text, contexto: { subjectId: contextSubjectId, consentimento: true } } : { texto: text }),
       });
+      if (controller.signal.aborted) return;
       if (!response.ok) {
         setError(response.status === 401 ? 'Entre novamente com uma conta confirmada.' : response.status === 429 ? 'Limite temporário atingido. Tente novamente mais tarde.' : 'Não foi possível interpretar agora. Tente novamente mais tarde.');
         return;
       }
       // Server validates the full schema. Never render provider error messages.
       const body = await response.json();
+      if (controller.signal.aborted) return;
       const value = body.interpretacao as ProposalInterpretation;
       if (value?.estado !== 'revisao_humana_pendente' || value.verificacao !== 'nao_verificada' || !value.dados || ![...Object.keys(labels), 'relacoes'].every(key => Array.isArray(value.dados[key as keyof typeof value.dados]))) throw new Error('invalid preview');
       setOriginal(value); setPreview(value);
-    } catch { setError('Não foi possível interpretar agora. Tente novamente mais tarde.'); }
-    finally { inFlight.current = false; setPending(false); if (contextEnabled) setContextConsent(false); }
+    } catch {
+      if (!controller.signal.aborted) setError('Não foi possível interpretar agora. Tente novamente mais tarde.');
+    } finally {
+      inFlight.current = null;
+      setPending(false);
+      if (controller.signal.aborted) setCancelled(true);
+      if (contextEnabled) setContextConsent(false);
+    }
   }
   async function saveDraft() {
     const originalInterpretation = initialIdea?.original_interpretation ?? original;
@@ -146,7 +156,11 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       </fieldset>
       <button type="submit" disabled={pending || !ready}>{pending ? 'Interpretando…' : 'Interpretar proposta'}</button>
     </form>
-    {pending && <p role="status">Aguarde a interpretação.</p>}
+    {pending && <>
+      <p role="status">Aguarde a interpretação.</p>
+      <button type="button" onClick={() => inFlight.current?.abort()}>Cancelar interpretação</button>
+    </>}
+    {cancelled && <p role="status">Interpretação cancelada.</p>}
     {error && <p role="alert">{error}</p>}
     {manualRevision && onSave && <section aria-label="Revisão manual da ideia">
       <p>A interpretação anterior não vale para este texto revisado. Você pode salvar suas alterações sem novas sugestões de IA, ou interpretar novamente depois.</p>
