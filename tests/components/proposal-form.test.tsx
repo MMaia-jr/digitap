@@ -19,7 +19,7 @@ const preview={estado:'revisao_humana_pendente',verificacao:'nao_verificada',dad
 beforeEach(()=>{viewer.mockResolvedValue({kind:'ready',name:'Ana',dashboard:'/meu-espaco'});});
 afterEach(()=>{cleanup();vi.unstubAllGlobals();vi.clearAllMocks();});
 it('entrada em Meu espaço e navegação de perfil existente permitem descrever ideia',async()=>{
- render(await Workspace());expect(screen.getByRole('link',{name:'Descreva sua ideia'}).getAttribute('href')).toBe('/meu-espaco/ideia');cleanup();
+ render(await Workspace());expect(screen.getByRole('link',{name:'Organizar uma ideia'}).getAttribute('href')).toBe('/meu-espaco/ideia');cleanup();
  viewer.mockResolvedValue({kind:'ready',name:'Ana',dashboard:'/dashboard/pessoa-fisica'});render(await AppHeader());expect(screen.getByRole('link',{name:'Descreva sua ideia'}).getAttribute('href')).toBe('/meu-espaco/ideia');
 });
 it('página exige sessão e falha fechada se indisponível',async()=>{
@@ -49,4 +49,83 @@ it('apresenta saída como texto, nunca como HTML executável',async()=>{
 });
 it('editar a proposta descarta a prévia anterior',async()=>{
  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>({interpretacao:preview})}));render(<ProposalForm/>);fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Ideia'}});fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);await screen.findByRole('heading',{name:'Prévia para revisão humana'});fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Outra ideia'}});await waitFor(()=>expect(screen.queryByRole('heading',{name:'Prévia para revisão humana'})).toBeNull());
+});
+it('permite optar pelo contexto, escolher um sujeito e consentir separadamente com o envio ao provedor',async()=>{
+ const subjectId='22222222-2222-4222-8222-222222222222';
+ const f=vi.fn().mockImplementation(async(url:string)=>url==='/api/e4?action=subjects'
+  ?{ok:true,json:async()=>({subjects:[{id:subjectId,name:'Pessoa sintética Alfa',type:'pessoa_fisica'}]})}
+  :{ok:true,json:async()=>({interpretacao:preview})});
+ vi.stubGlobal('fetch',f);render(<ProposalForm/>);
+ expect(screen.getByLabelText('Usar contexto autorizado')).toBeTruthy();
+ fireEvent.click(screen.getByLabelText('Usar contexto autorizado'));
+ expect(screen.getByText(/contexto selecionado poderá conter dados privados.*será enviado a um provedor externo de IA/i)).toBeTruthy();
+ await screen.findByRole('option',{name:/Pessoa sintética Alfa/});
+ expect((screen.getByLabelText('Sujeito do contexto') as HTMLSelectElement).value).toBe('');
+ fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Uma oficina gratuita'}});
+ fireEvent.change(screen.getByLabelText('Sujeito do contexto'),{target:{value:subjectId}});
+ fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);
+ await screen.findByRole('alert');expect(f).toHaveBeenCalledTimes(1);
+ fireEvent.click(screen.getByLabelText('Autorizo o envio do contexto selecionado ao provedor de IA'));
+ fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);
+ await screen.findByRole('heading',{name:'Prévia para revisão humana'});
+ expect(f).toHaveBeenNthCalledWith(2,'/api/propostas/interpretar',expect.objectContaining({
+  method:'POST',credentials:'same-origin',body:JSON.stringify({texto:'Uma oficina gratuita',contexto:{subjectId,consentimento:true}}),
+ }));
+ expect(screen.getByText(/^Interpretação não verificada\./)).toBeTruthy();
+ expect(screen.queryByRole('button',{name:/publicar|criar atividade/i})).toBeNull();
+});
+
+it('invalida a prévia ao ativar ou desativar o contexto depois de interpretar', async () => {
+  const subjectId = '22222222-2222-4222-8222-222222222222';
+  const save = vi.fn().mockResolvedValue(undefined);
+  const f = vi.fn().mockImplementation(async (url: string) => url === '/api/e4?action=subjects'
+    ? { ok: true, json: async () => ({ subjects: [{ id: subjectId, name: 'Pessoa sintética Alfa', type: 'pessoa_fisica' }] }) }
+    : { ok: true, json: async () => ({ interpretacao: preview }) });
+  vi.stubGlobal('fetch', f);
+  render(<ProposalForm onSave={save} />);
+  fireEvent.change(screen.getByLabelText('Sua proposta'), { target: { value: 'Uma oficina gratuita' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Interpretar proposta' }));
+  await screen.findByRole('heading', { name: 'Prévia para revisão humana' });
+  expect(screen.getByRole('button', { name: 'Salvar rascunho' })).toBeTruthy();
+
+  fireEvent.click(screen.getByLabelText('Usar contexto autorizado'));
+  await waitFor(() => expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull());
+  expect(screen.queryByRole('button', { name: 'Salvar rascunho' })).toBeNull();
+
+  await screen.findByRole('option', { name: /Pessoa sintética Alfa/ });
+  fireEvent.change(screen.getByLabelText('Sujeito do contexto'), { target: { value: subjectId } });
+  fireEvent.click(screen.getByLabelText('Autorizo o envio do contexto selecionado ao provedor de IA'));
+  fireEvent.click(screen.getByRole('button', { name: 'Interpretar proposta' }));
+  await screen.findByRole('heading', { name: 'Prévia para revisão humana' });
+
+  fireEvent.click(screen.getByLabelText('Usar contexto autorizado'));
+  await waitFor(() => expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull());
+  expect(screen.queryByRole('button', { name: 'Salvar rascunho' })).toBeNull();
+  expect(save).not.toHaveBeenCalled();
+  expect(f).toHaveBeenCalledTimes(3); // duas interpretações e uma consulta E4
+});
+
+it('invalida a prévia contextual e revoga o consentimento ao mudar de sujeito', async () => {
+  const first = '22222222-2222-4222-8222-222222222222';
+  const second = '33333333-3333-4333-8333-333333333333';
+  const f = vi.fn().mockImplementation(async (url: string) => url === '/api/e4?action=subjects'
+    ? { ok: true, json: async () => ({ subjects: [
+      { id: first, name: 'Pessoa sintética Alfa', type: 'pessoa_fisica' },
+      { id: second, name: 'Coletivo sintético Beta', type: 'coletivo_informal' },
+    ] }) }
+    : { ok: true, json: async () => ({ interpretacao: preview }) });
+  vi.stubGlobal('fetch', f);
+  render(<ProposalForm />);
+  fireEvent.change(screen.getByLabelText('Sua proposta'), { target: { value: 'Uma oficina gratuita' } });
+  fireEvent.click(screen.getByLabelText('Usar contexto autorizado'));
+  await screen.findByRole('option', { name: /Pessoa sintética Alfa/ });
+  fireEvent.change(screen.getByLabelText('Sujeito do contexto'), { target: { value: first } });
+  fireEvent.click(screen.getByLabelText('Autorizo o envio do contexto selecionado ao provedor de IA'));
+  fireEvent.click(screen.getByRole('button', { name: 'Interpretar proposta' }));
+  await screen.findByRole('heading', { name: 'Prévia para revisão humana' });
+
+  fireEvent.change(screen.getByLabelText('Sujeito do contexto'), { target: { value: second } });
+  await waitFor(() => expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull());
+  expect((screen.getByLabelText('Autorizo o envio do contexto selecionado ao provedor de IA') as HTMLInputElement).checked).toBe(false);
+  expect(f).toHaveBeenCalledTimes(2); // não envia nada ao provedor ao trocar de sujeito
 });

@@ -11,6 +11,7 @@ type DescriptionCategory = keyof typeof labels;
 type Category = keyof ProposalInterpretation['dados'];
 type SubjectType = ProposalInterpretation['dados']['sujeitos'][number]['tipo'];
 export type ProposalDraft = { title: string; originalText: string; originalInterpretation: ProposalInterpretation; revisedInterpretation: ProposalInterpretation | null; expectedVersion?: number; id?: string };
+type ContextSubjectOption = { id: string; name: string; type: string };
 const subjectLabels: Record<SubjectType, string> = {
   pessoa_fisica: 'Pessoa física', coletivo_informal: 'Coletivo informal',
   organizacao: 'Organização', nao_informado: 'Não informado',
@@ -24,8 +25,32 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   const [preview, setPreview] = useState<ProposalInterpretation | null>(initialIdea?.revised_interpretation ?? initialIdea?.original_interpretation ?? null);
   const [original, setOriginal] = useState<ProposalInterpretation | null>(initialIdea?.original_interpretation ?? null);
   const [saving, setSaving] = useState(false);
+  const [contextEnabled, setContextEnabled] = useState(false);
+  const [contextSubjects, setContextSubjects] = useState<ContextSubjectOption[] | null>(null);
+  const [contextSubjectId, setContextSubjectId] = useState('');
+  const [contextConsent, setContextConsent] = useState(false);
+  const [contextLoading, setContextLoading] = useState(false);
+  const [contextLoadError, setContextLoadError] = useState('');
   const restoreButton = useRef<HTMLButtonElement>(null);
   const inFlight = useRef(false);
+  async function toggleContext(enabled: boolean) {
+    setContextEnabled(enabled); setContextConsent(false); setContextSubjectId(''); setContextLoadError('');
+    // A preview belongs to the context used for its inference; never reuse it after a scope change.
+    setPreview(null); setOriginal(null);
+    if (!enabled || contextSubjects !== null) return;
+    setContextLoading(true);
+    try {
+      const response = await fetch('/api/e4?action=subjects', { credentials: 'same-origin' });
+      if (!response.ok) throw new Error('context unavailable');
+      const body = await response.json() as { subjects?: unknown };
+      const subjects = Array.isArray(body.subjects) ? body.subjects.filter((item): item is ContextSubjectOption =>
+        item !== null && typeof item === 'object' && typeof item.id === 'string' && typeof item.name === 'string' && typeof item.type === 'string',
+      ).map(({ id, name, type }) => ({ id, name, type })) : [];
+      setContextSubjects(subjects);
+    } catch {
+      setContextSubjects([]); setContextLoadError('Não foi possível carregar os sujeitos autorizados. Você pode continuar sem contexto.');
+    } finally { setContextLoading(false); }
+  }
   function editDescription(category: DescriptionCategory, index: number, value: string) {
     setPreview(current => current && ({ ...current, dados: { ...current.dados,
       [category]: current.dados[category].map((item, i) => i === index ? { ...item, descricao: value.slice(0, 1000) } : item),
@@ -53,11 +78,12 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
     if (!ready || inFlight.current) return;
     setPreview(null); setOriginal(null); setError('');
     if (!text.trim() || text.length > 2000) { setError('Escreva uma proposta de até 2.000 caracteres.'); return; }
+    if (contextEnabled && (!contextSubjectId || !contextConsent)) { setError('Escolha um sujeito e autorize explicitamente o envio do contexto, ou interprete sem contexto.'); return; }
     inFlight.current = true; setPending(true);
     try {
       const response = await fetch('/api/propostas/interpretar', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ texto: text }),
+        body: JSON.stringify(contextEnabled ? { texto: text, contexto: { subjectId: contextSubjectId, consentimento: true } } : { texto: text }),
       });
       if (!response.ok) {
         setError(response.status === 401 ? 'Entre novamente com uma conta confirmada.' : response.status === 429 ? 'Limite temporário atingido. Tente novamente mais tarde.' : 'Não foi possível interpretar agora. Tente novamente mais tarde.');
@@ -69,7 +95,7 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       if (value?.estado !== 'revisao_humana_pendente' || value.verificacao !== 'nao_verificada' || !value.dados || ![...Object.keys(labels), 'relacoes'].every(key => Array.isArray(value.dados[key as keyof typeof value.dados]))) throw new Error('invalid preview');
       setOriginal(value); setPreview(value);
     } catch { setError('Não foi possível interpretar agora. Tente novamente mais tarde.'); }
-    finally { inFlight.current = false; setPending(false); }
+    finally { inFlight.current = false; setPending(false); if (contextEnabled) setContextConsent(false); }
   }
   async function saveDraft() {
     if (!onSave || !preview || !original || saving) return;
@@ -89,6 +115,23 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       <label htmlFor="proposal-text">Sua proposta</label>
       <textarea id="proposal-text" name="texto" rows={8} required maxLength={initialIdea ? 20000 : 2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); if (!initialIdea) { setPreview(null); setOriginal(null); } setError(''); }} />
       <p id="proposal-limit">Até {initialIdea ? '20.000' : '2.000'} caracteres. Reveja as sugestões: fontes e trechos não comprovam os fatos.</p>
+      <fieldset>
+        <legend>Contexto opcional</legend>
+        <label htmlFor="use-authorized-context"><input id="use-authorized-context" type="checkbox" checked={contextEnabled} disabled={pending || contextLoading} onChange={event => void toggleContext(event.target.checked)} /> Usar contexto autorizado</label>
+        {contextEnabled && <>
+          <p id="context-disclosure">O contexto selecionado poderá conter dados privados do sujeito escolhido e será enviado a um provedor externo de IA para gerar sugestões. Ele não será publicado ou salvo por esta interpretação. Você também pode desmarcar a opção e interpretar sem contexto.</p>
+          {contextLoading && <p role="status">Carregando sujeitos autorizados…</p>}
+          {contextLoadError && <p role="alert">{contextLoadError}</p>}
+          {contextSubjects && contextSubjects.length > 0 && <label htmlFor="context-subject">Sujeito do contexto
+            <select id="context-subject" value={contextSubjectId} disabled={pending || contextLoading} aria-describedby="context-disclosure" onChange={event => { setContextSubjectId(event.target.value); setContextConsent(false); setPreview(null); setOriginal(null); }}>
+              <option value="">Escolha explicitamente um sujeito</option>
+              {contextSubjects.map(subject => <option key={subject.id} value={subject.id}>{subject.name} — {subject.type}</option>)}
+            </select>
+          </label>}
+          {contextSubjects?.length === 0 && !contextLoading && <p>Nenhum sujeito autorizado disponível para contextualizar. Você pode continuar sem contexto.</p>}
+          {contextSubjectId && <label htmlFor="context-consent"><input id="context-consent" type="checkbox" checked={contextConsent} disabled={pending} onChange={event => setContextConsent(event.target.checked)} /> Autorizo o envio do contexto selecionado ao provedor de IA</label>}
+        </>}
+      </fieldset>
       <button type="submit" disabled={pending || !ready}>{pending ? 'Interpretando…' : 'Interpretar proposta'}</button>
     </form>
     {pending && <p role="status">Aguarde a interpretação.</p>}

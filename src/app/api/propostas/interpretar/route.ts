@@ -4,6 +4,8 @@ import { createGateway } from '../../../../lib/auth/gateway.server';
 import { userClient } from '../../../../lib/supabase/server';
 import { adminClient } from '../../../../lib/supabase/admin.server';
 import { appOrigin } from '../../../../lib/supabase/config.server';
+import { e4Service } from '../../../../lib/capabilities/service.server';
+import { projectProposalContext, type ProposalContext } from '../../../../lib/proposals/context.server';
 import { interpretProposal } from '../../../../lib/proposals/interpret.server';
 
 export const runtime = 'nodejs';
@@ -28,7 +30,20 @@ function reserve(id: string): () => void {
 export async function POST(request: Request): Promise<Response> {
   try {
     return await handleMutation(request, appOrigin(), async input => {
-      if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).length !== 1 || !Object.hasOwn(input, 'texto')) throw new FlowError(422, 'Escreva uma proposta de até 2.000 caracteres.');
+      if (!input || typeof input !== 'object' || Array.isArray(input) || !Object.hasOwn(input, 'texto')) throw new FlowError(422, 'Escreva uma proposta de até 2.000 caracteres.');
+      const keys = Object.keys(input);
+      let selection: { subjectId: string; consentimento: true } | undefined;
+      if (keys.length === 2 && keys.includes('texto') && keys.includes('contexto')) {
+        const contextual = (input as { contexto?: unknown }).contexto;
+        if (!contextual || typeof contextual !== 'object' || Array.isArray(contextual)) throw new FlowError(422, 'Escolha um sujeito e autorize o envio do contexto.');
+        const values = contextual as Record<string, unknown>;
+        if (Object.keys(values).length !== 2 || !Object.hasOwn(values, 'subjectId') || !Object.hasOwn(values, 'consentimento') || typeof values.subjectId !== 'string' || !values.subjectId.trim() || values.consentimento !== true) {
+          throw new FlowError(422, 'Escolha um sujeito e autorize o envio do contexto.');
+        }
+        selection = { subjectId: values.subjectId, consentimento: true };
+      } else if (keys.length !== 1 || keys[0] !== 'texto') {
+        throw new FlowError(422, 'Pedido inválido.');
+      }
       const texto = (input as { texto: unknown }).texto;
       if (typeof texto !== 'string' || !texto.trim() || texto.length > 2000) throw new FlowError(422, 'Escreva uma proposta de até 2.000 caracteres.');
       const gateway = createGateway(await userClient(), adminClient, () => {});
@@ -36,9 +51,18 @@ export async function POST(request: Request): Promise<Response> {
       if (!user?.id || !user.email_confirmed_at) throw new FlowError(401, 'Entre com uma conta confirmada para interpretar sua proposta.');
       const account = await gateway.account(user.id);
       if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa')) throw new FlowError(403, 'Acesso indisponível para esta conta.');
+      let contexto: ProposalContext | undefined;
+      if (selection) {
+        let subjects;
+        try { subjects = await e4Service.subjects(); }
+        catch { throw new FlowError(503, 'Contexto autorizado indisponível. Tente novamente mais tarde.'); }
+        if (!subjects.some(subject => subject.id === selection.subjectId)) throw new FlowError(403, 'O sujeito selecionado não está autorizado para este contexto.');
+        try { contexto = projectProposalContext(await e4Service.context(selection.subjectId)); }
+        catch { throw new FlowError(503, 'Contexto autorizado indisponível. Tente novamente mais tarde.'); }
+      }
       const release = reserve(user.id);
       try {
-        const interpretacao = await interpretProposal(texto);
+        const interpretacao = contexto ? await interpretProposal(texto, contexto) : await interpretProposal(texto);
         return { message: 'Prévia para revisão humana.', interpretacao };
       } catch {
         throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.');
