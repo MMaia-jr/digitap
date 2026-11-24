@@ -224,6 +224,93 @@ it('E4 real autoriza somente o titular; a projeção exata chega ao SDK e a deci
   expect(publication.rows[0].n).toBe(0);
 });
 
+it('G4-03: revisão manual chega ao PostgreSQL e vira atividade privada sem recuperar interpretação antiga', async () => {
+  // O teste anterior já criou o titular, a ideia original e a primeira atividade.
+  session.userId = ownerId;
+  expect(savedIdeaId).toBeTruthy();
+  const revisedText = 'A oficina foi cancelada. Agora a proposta é uma feira comunitária gratuita.';
+  const updated = await ideaPost(request('/api/ideias', {
+    action: 'update', id: savedIdeaId, expectedVersion: 1,
+    title: 'G4-03 feira comunitária — revisão humana', revisedText,
+    revisedInterpretation: null,
+  }));
+  expect(updated.status).toBe(200);
+  const updatedBody = await updated.json();
+  expect(updatedBody.ideia).toMatchObject({
+    id: savedIdeaId, version: 2, revised_text: revisedText, revised_interpretation: null,
+  });
+  const storedIdea = (await db!.query(`select owner_id,version,original_text,revised_text,
+    original_interpretation,revised_interpretation from public.ideias_privadas where id=$1`, [savedIdeaId])).rows[0];
+  expect(storedIdea).toMatchObject({
+    owner_id: ownerId, version: 2, original_text: proposal, revised_text: revisedText,
+    revised_interpretation: null,
+  });
+  expect(storedIdea.original_interpretation.dados.atividades[0].descricao).toBe('Oficina de leitura proposta');
+
+  const owner = createActivityService({ verifyUser: async () => ({
+    id: ownerId, email_confirmed_at: '2026-11-23T12:00:00.000Z',
+  }) });
+  const outsider = createActivityService({ verifyUser: async () => ({
+    id: otherId, email_confirmed_at: '2026-11-23T12:00:00.000Z',
+  }) });
+  const requestId = randomUUID();
+  const draft = {
+    versao_esperada: 2, pedido_id: requestId,
+    titulo: 'Feira comunitária — rascunho humano',
+    descricao: 'Feira comunitária descrita manualmente pela pessoa, sem sugestão anterior da oficina.',
+    inicio_previsto: '2026-12-15T18:00:00-03:00',
+    orientacao_acesso: 'Local e acesso ainda precisam de confirmação.',
+    referencia_oficial: null,
+  };
+
+  // Nenhum novo processamento de IA participa da revisão ou conversão.
+  const externalFetch = vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {
+    throw new Error('A revisão e a conversão não podem fazer inferência externa.');
+  });
+  try {
+    await expect(outsider.convertIdea(savedIdeaId, draft)).rejects.toMatchObject({ status: 404 });
+    await expect(owner.convertIdea(savedIdeaId, { ...draft, versao_esperada: 1 }))
+      .rejects.toMatchObject({ status: 409 });
+
+    const created = await owner.convertIdea(savedIdeaId, draft);
+    activities.push(created.id);
+    expect(created).toMatchObject({ estado_editorial: 'rascunho', repetida: false });
+    const retried = await owner.convertIdea(savedIdeaId, draft);
+    expect(retried).toMatchObject({ id: created.id, repetida: true });
+    await expect(owner.convertIdea(savedIdeaId, {
+      ...draft, descricao: 'Alteração incompatível com a chave idempotente.',
+    })).rejects.toMatchObject({ status: 409 });
+
+    const stored = (await db!.query(`select titulo,descricao,estado_editorial,
+      versao_publicada,numero_versao_publicada from public.atividades where id=$1`, [created.id])).rows[0];
+    expect(stored).toMatchObject({
+      titulo: draft.titulo, descricao: draft.descricao,
+      estado_editorial: 'rascunho', versao_publicada: null, numero_versao_publicada: null,
+    });
+    expect(stored.descricao).not.toContain('Oficina de leitura proposta');
+
+    const provenance = (await db!.query(`select justificativa_restrita from public.eventos_editoriais
+      where objeto_tipo='atividade' and objeto_id=$1 and acao='atividade_criada_de_ideia'`, [created.id])).rows;
+    expect(provenance).toHaveLength(1);
+    expect(JSON.parse(provenance[0].justificativa_restrita)).toMatchObject({
+      tipo: 'conversao-ideia.v1', idea_id: savedIdeaId,
+      idea_version: 2, pedido_id: requestId,
+    });
+    const restored = await owner.get(created.id);
+    expect(restored).toMatchObject({
+      id: created.id, descricao: draft.descricao, estado_editorial: 'rascunho',
+    });
+    await expect(outsider.get(created.id)).rejects.toMatchObject({ status: 404 });
+    await expect(createPublicQueries().get(created.id)).rejects.toMatchObject({ status: 404 });
+    const authorizations = await db!.query(`select count(*)::int n from public.autorizacoes_publicacao
+      where objeto_tipo='atividade' and objeto_id=$1`, [created.id]);
+    expect(authorizations.rows[0].n).toBe(0);
+    expect(externalFetch).not.toHaveBeenCalled();
+  } finally {
+    externalFetch.mockRestore();
+  }
+});
+
 it('revogação de vínculo impede uma nova recuperação e não chama o Gateway', async () => {
   session.userId = ownerId;
   const link = (await db!.query("select id from public.vinculos_publicadores where sujeito_id=$1 and atual and situacao='ativo' and papel_vinculo='titular'", [ownerSubjectId])).rows[0];

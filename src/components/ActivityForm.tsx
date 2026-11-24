@@ -5,6 +5,8 @@ import type { IdeaView } from '../lib/ideas/service.server';
 import type { ActionTemplate } from '../lib/actions/catalog';
 const subscribeHydration=()=>()=>{};
 function suggestedDescription(idea:IdeaView){
+ // A manual text revision without a new interpretation invalidates old AI suggestions.
+ if(idea.revised_text!==null&&idea.revised_interpretation===null)return '';
  const interpretation=idea.revised_interpretation??idea.original_interpretation;
  return interpretation.dados.atividades.map(item=>item.descricao).join('\n');
 }
@@ -51,7 +53,7 @@ export function ActivityForm({activity,sourceIdea,actionTemplate,returnTo,onNavi
   {projects.length>0&&<div className="field"><label htmlFor="projeto_id">Projeto (opcional)</label><select id="projeto_id" name="projeto_id" defaultValue={activity?.projeto_id??''} aria-invalid={Boolean(feedback?.fields?.projeto_id)} aria-describedby={feedback?.fields?.projeto_id?'projeto-error':undefined}><option value="">Sem projeto</option>{projects.map(project=><option key={project.id} value={project.id}>{project.titulo}</option>)}</select>{feedback?.fields?.projeto_id&&<p className="error" id="projeto-error">{feedback.fields.projeto_id}</p>}</div>}{field('titulo','Título',180)}{field('descricao','Descrição',5000)}{field('inicio_previsto',retrospective?'Início informado (America/Sao_Paulo)':'Data e horário (America/Sao_Paulo)',32,'datetime-local')}{field('orientacao_acesso','Orientação de acesso',600)}{!returnTo&&field('referencia_oficial','Link oficial (opcional)',2048,'url')}
   <p>{activity?.estado_editorial==='publicada'?'Salvar cria uma versão pendente; a versão pública atual continua visível até a aprovação editorial.':'O rascunho e o envio permanecem privados. Enviar não significa publicar.'}</p>
   {actionTemplate&&<p>Modelo sugerido; ainda não é uma atividade real. Adapte o título e a descrição, informe os dados verdadeiros e confirme para criar um rascunho privado. O modelo não fornece data, local, autorização ou resultado realizado.</p>}
-  {sourceIdea&&<p>Usar a ideia não a altera. Confira as sugestões, complete os campos e confirme a criação; a atividade ficará privada como rascunho.</p>}
+  {sourceIdea&&<p>Usar a ideia não a altera. {sourceIdea.revised_text!==null&&sourceIdea.revised_interpretation===null?'O texto revisado não possui interpretação atualizada. Descreva manualmente a atividade; sugestões anteriores não serão usadas.':'Confira as sugestões.'} Complete os campos e confirme a criação; a atividade ficará privada como rascunho.</p>}
   <button type="submit" disabled={!ready||pending}>{pending?'Aguarde…':sourceIdea?'Criar rascunho privado a partir desta ideia':activity?'Salvar alterações':'Salvar rascunho'}</button>
   </>}
   {!returnTo&&activity?.estado_editorial==='rascunho'&&<>

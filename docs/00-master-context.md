@@ -1,3 +1,13 @@
+# Recuperação seletiva do G4, R3 — 24/11/2026
+
+- [CÓDIGO] O fundador versionou R2 em `1fd3d721c0676cf4041ed09cbfbfddaf413c214d` (`BASE_R3`), filho de `487669e8e510a19f5e4703342ce95f20c2bdc29b`. O gate de minimização registrado abaixo confirmou titularidade e colaboração ativa com dados sintéticos. A projeção anterior falhou em 2 de 11 testes por enviar `provenance.access`; o código versionado passou 11/11. A regressão de R3 incluiu os dois casos.
+- [CÓDIGO] R3-A recuperou os patches RED e GREEN de `digitap-g4-03-correcao-revisao-manual.zip` (SHA-256 `42f9841e2483ddf1490b25943758b9b9c8d71b3514a6ba85bb2d286589e126f8`). RED com 5 PASS e 3 FAIL por prévia e sugestões obsoletas na edição, lista e preparação. GREEN com 23/23 na regressão de componentes. A revisão humana prevalece. A edição invalida a interpretação anterior, pode ser salva sem nova inferência com `revisedInterpretation: null` e respeita `expectedVersion`. O histórico original é preservado. Um ajuste local com regressão garante que restaurar a prévia de uma ideia revisada recupere apenas sugestões da versão revisada.
+- [CÓDIGO] R3-B recuperou os patches RED e GREEN de `digitap-g4-03-activityform-incremento.zip` (SHA-256 `0233f09cdb4bdb730692926d9907eeeb527c7e64e8044761e43ee1b9a918444e`). RED com 2 PASS e 2 FAIL pelo preenchimento da descrição com a interpretação antiga. GREEN com 4/4. Com texto revisado e interpretação nula, o campo inicia vazio e a pessoa informa a descrição antes de confirmar a criação do rascunho privado.
+- [PENDENTE] R3-C aplicou `01-teste-persistencia.patch` de `digitap-g4-03-persistencia-manual.zip` (SHA-256 `ea06d0422f28f21249900d398cbc312cb2fe5a439209a2efb1ae4c5009b8effc`). O quarto cenário foi inserido antes da revogação, com fixtures e limpeza originais preservadas. **4 CENÁRIOS PREPARADOS — EXECUÇÃO PENDENTE.**
+- [CÓDIGO] Regressão conjunta com mocks de R1, R2, R3 e HTTP passou 123/123 em 10 arquivos. Typecheck e diff passaram. Lint registrou zero erros e os mesmos quatro avisos preexistentes. A sessão não executou inferência real, publicação, banco, build, deploy ou Playwright. R3 permanece sem commit. A regressão de navegador de R4 e a revogação concorrente de G5 permanecem pendentes.
+
+---
+
 # Recuperação seletiva do G4 — 24/11/2026
 
 - [CÓDIGO] R1 foi versionado localmente pelo fundador no commit `487669e8e510a19f5e4703342ce95f20c2bdc29b`, que é a `BASE_R2`. O snapshot B forneceu `ParticipationTaps.tsx`, as páginas de Meu espaço e do dashboard PF e os dois testes de R1. O dashboard organizacional foi reconstruído a partir do HEAD anterior, com import, renderização após autorização e âncora junto ao perfil. Histórico de R1 com 7 PASS e 6 FAIL no RED e 13/13 no GREEN. A revalidação focal antes do commit também passou 13/13.

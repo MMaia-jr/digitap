@@ -77,3 +77,63 @@ it('oferece conversão explícita do rascunho próprio para o formulário de ati
   expect(screen.getByText(source)).toBeTruthy();
   expect(screen.getByText('Privada · não verificada · não publicada')).toBeTruthy();
 });
+
+
+it('permite corrigir o texto de uma ideia salva sem reaproveitar interpretações desatualizadas nem chamar a IA', async () => {
+  const revisedText = 'Pessoa NÃO propõe mais oficina no projeto Raízes em Movimento.';
+  const updated: IdeaView = { ...saved, revised_text: revisedText, revised_interpretation: null, version: 2 };
+  const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ideia: updated }) });
+  vi.stubGlobal('fetch', fetcher);
+  render(<IdeasWorkspace initialIdeas={[saved]} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Retomar' }));
+  expect(screen.getByRole('heading', { name: 'Prévia para revisão humana' })).toBeTruthy();
+
+  fireEvent.change(screen.getByLabelText('Sua proposta'), { target: { value: revisedText } });
+  expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull();
+  expect(screen.getByText(/A interpretação anterior não vale para este texto revisado/)).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
+  await screen.findByText('Rascunho privado salvo. Ele não foi verificado nem publicado.');
+  expect(fetcher).toHaveBeenCalledOnce();
+  expect(JSON.parse(fetcher.mock.calls[0][1].body)).toMatchObject({
+    action: 'update', id: saved.id, expectedVersion: 1,
+    revisedText, revisedInterpretation: null,
+  });
+  expect(screen.getByRole('link', { name: 'Usar esta ideia para criar uma atividade' })).toBeTruthy();
+});
+
+it('não apresenta sugestões do texto original como atuais quando o texto revisado não tem interpretação', () => {
+  const manuallyRevised: IdeaView = {
+    ...saved,
+    revised_text: 'Agora pretendo organizar uma feira, sem a oficina anterior.',
+    revised_interpretation: null,
+  };
+  render(<IdeasWorkspace initialIdeas={[manuallyRevised]} />);
+  expect(screen.getByText(/O texto revisado ainda não tem interpretação atualizada/)).toBeTruthy();
+  expect(screen.queryByText('Oficina')).toBeNull();
+  expect(screen.getByRole('link', { name: 'Usar esta ideia para criar uma atividade' })).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Retomar' }));
+  expect(screen.queryByRole('heading', { name: 'Prévia para revisão humana' })).toBeNull();
+  fireEvent.change(screen.getByLabelText('Título do rascunho'), { target: { value: 'Novo título da revisão manual' } });
+  expect(screen.getByRole('button', { name: 'Salvar alterações' })).toBeTruthy();
+});
+
+it('restaura somente as sugestões da versão revisada ao retomar a ideia', () => {
+  const revised: IdeaView = {
+    ...saved,
+    revised_text: 'Quero organizar uma feira.',
+    revised_interpretation: {
+      ...interpretation,
+      dados: {
+        ...interpretation.dados,
+        atividades: [{ descricao: 'Feira comunitária', trecho: 'feira' }],
+      },
+    },
+    version: 2,
+  };
+  render(<IdeasWorkspace initialIdeas={[revised]} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Retomar' }));
+  const description = screen.getByRole('textbox', { name: 'Descrição — Atividades propostas 1' }) as HTMLInputElement;
+  fireEvent.change(description, { target: { value: 'Feira editada' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Restaurar prévia original' }));
+  expect(description.value).toBe('Feira comunitária');
+});

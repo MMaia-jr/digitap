@@ -22,8 +22,14 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   const [title, setTitle] = useState(initialIdea?.title ?? '');
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
-  const [preview, setPreview] = useState<ProposalInterpretation | null>(initialIdea?.revised_interpretation ?? initialIdea?.original_interpretation ?? null);
-  const [original, setOriginal] = useState<ProposalInterpretation | null>(initialIdea?.original_interpretation ?? null);
+  const [preview, setPreview] = useState<ProposalInterpretation | null>(
+    initialIdea && initialIdea.revised_text !== null && initialIdea.revised_interpretation === null
+      ? null : initialIdea?.revised_interpretation ?? initialIdea?.original_interpretation ?? null,
+  );
+  const [original, setOriginal] = useState<ProposalInterpretation | null>(
+    initialIdea && initialIdea.revised_text !== null
+      ? initialIdea.revised_interpretation : initialIdea?.original_interpretation ?? null,
+  );
   const [saving, setSaving] = useState(false);
   const [contextEnabled, setContextEnabled] = useState(false);
   const [contextSubjects, setContextSubjects] = useState<ContextSubjectOption[] | null>(null);
@@ -33,6 +39,10 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   const [contextLoadError, setContextLoadError] = useState('');
   const restoreButton = useRef<HTMLButtonElement>(null);
   const inFlight = useRef(false);
+  const textChanged = Boolean(initialIdea && text !== (initialIdea.revised_text ?? initialIdea.original_text));
+  // A manually revised idea can be saved without another paid interpretation.
+  // Null means there is no interpretation for this version, not that the old one is current.
+  const manualRevision = Boolean(initialIdea && !preview && (textChanged || title !== initialIdea.title));
   async function toggleContext(enabled: boolean) {
     setContextEnabled(enabled); setContextConsent(false); setContextSubjectId(''); setContextLoadError('');
     // A preview belongs to the context used for its inference; never reuse it after a scope change.
@@ -98,11 +108,13 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
     finally { inFlight.current = false; setPending(false); if (contextEnabled) setContextConsent(false); }
   }
   async function saveDraft() {
-    if (!onSave || !preview || !original || saving) return;
+    const originalInterpretation = initialIdea?.original_interpretation ?? original;
+    if (!onSave || saving || !originalInterpretation || (!manualRevision && (!preview || !original))) return;
     if (!title.trim() || title.length > 160) { setError('Informe um título de até 160 caracteres.'); return; }
+    if (!text.trim() || text.length > 20000) { setError('Informe um texto de até 20.000 caracteres.'); return; }
     setSaving(true); setError('');
     try {
-      await onSave({ title, originalText: text, originalInterpretation: original, revisedInterpretation: preview, ...(initialIdea ? { id: initialIdea.id, expectedVersion: initialIdea.version } : {}) });
+      await onSave({ title, originalText: text, originalInterpretation, revisedInterpretation: preview, ...(initialIdea ? { id: initialIdea.id, expectedVersion: initialIdea.version } : {}) });
     } catch (cause) {
       setError(cause instanceof Error && cause.message === 'conflict' ? 'Este rascunho foi alterado em outra sessão. Reabra a versão atual antes de salvar.' : 'Não foi possível salvar o rascunho. Tente novamente.');
     } finally { setSaving(false); }
@@ -113,7 +125,7 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       <label htmlFor="idea-title">Título do rascunho</label>
       <input id="idea-title" name="titulo" maxLength={160} value={title} onChange={event => setTitle(event.target.value)} />
       <label htmlFor="proposal-text">Sua proposta</label>
-      <textarea id="proposal-text" name="texto" rows={8} required maxLength={initialIdea ? 20000 : 2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); if (!initialIdea) { setPreview(null); setOriginal(null); } setError(''); }} />
+      <textarea id="proposal-text" name="texto" rows={8} required maxLength={initialIdea ? 20000 : 2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); setPreview(null); setOriginal(null); setError(''); }} />
       <p id="proposal-limit">Até {initialIdea ? '20.000' : '2.000'} caracteres. Reveja as sugestões: fontes e trechos não comprovam os fatos.</p>
       <fieldset>
         <legend>Contexto opcional</legend>
@@ -136,6 +148,10 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
     </form>
     {pending && <p role="status">Aguarde a interpretação.</p>}
     {error && <p role="alert">{error}</p>}
+    {manualRevision && onSave && <section aria-label="Revisão manual da ideia">
+      <p>A interpretação anterior não vale para este texto revisado. Você pode salvar suas alterações sem novas sugestões de IA, ou interpretar novamente depois.</p>
+      <button type="button" onClick={saveDraft} disabled={saving || pending || !title.trim() || !text.trim()}>{saving ? 'Salvando…' : 'Salvar alterações'}</button>
+    </section>}
     {preview && <section aria-label="Prévia da proposta" aria-live="polite">
       <h2>Prévia para revisão humana</h2>
       <p>Interpretação não verificada. Revise cada sugestão e seu trecho de origem. Ela não cria titularidade, representação institucional, vínculo de confiança ou publicação.</p>
