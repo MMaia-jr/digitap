@@ -157,3 +157,32 @@ it('reverte a atividade se a conversão for interrompida antes da auditoria e pe
   expect(recovered).toMatchObject({ repetida: false, estado_editorial: 'rascunho' });
   expect(await services[0].convertIdea(idea.id, payload)).toMatchObject({ id: recovered.id, repetida: true });
 });
+
+it('QA-03 converte a ideia de uma atividade acontecendo agora e registra horário privado uma única vez', async () => {
+  const idea = await ideas.create(userIds[0], { title: 'Ideia em andamento', originalText: source, originalInterpretation: interpretation, revisedInterpretation: interpretation });
+  const instant = new Date(Date.now() + 15000);
+  const inicioEmItaperuna = new Date(instant.getTime() - 3 * 3600000).toISOString().replace('Z', '-03:00');
+  const payload = command({ inicio_previsto: inicioEmItaperuna, acontecendo_agora: true });
+  const owner = services[0];
+  await expect(services[1].convertIdea(idea.id, payload)).rejects.toMatchObject({ status: 404 });
+  const created = await owner.convertIdea(idea.id, payload);
+  expect(created).toMatchObject({ estado_editorial: 'rascunho', inicio_previsto: instant.toISOString(), repetida: false });
+  expect(await owner.get(created.id)).toMatchObject({ inicio_previsto: instant.toISOString() });
+  expect(await owner.convertIdea(idea.id, payload)).toMatchObject({ id: created.id, repetida: true });
+  await expect(owner.convertIdea(idea.id, { ...payload, acontecendo_agora: false })).rejects.toMatchObject({ status: 409 });
+  await expect(publicQueries.get(created.id)).rejects.toMatchObject({ status: 404 });
+  const timing = await db.query<{ declaration: unknown }>(`select justificativa_restrita::jsonb as declaration
+    from public.eventos_editoriais where objeto_id=$1 and acao='atividade_horario_atual'`, [created.id]);
+  expect(timing.rows).toEqual([{ declaration: { tipo: 'horario-atual.v1', versao: 1, inicio_previsto: instant.toISOString() } }]);
+});
+
+it('QA-03 valida e recupera o modo retrospectivo que o mesmo formulário oferece', async () => {
+  const idea = await ideas.create(userIds[0], { title: 'Ideia retrospectiva', originalText: source, originalInterpretation: interpretation, revisedInterpretation: interpretation });
+  const owner = services[0];
+  const payload = command({ inicio_previsto: '2026-01-10T10:30:00-03:00', retrospectiva: true });
+  await expect(owner.convertIdea(idea.id, { ...payload, acontecendo_agora: true })).rejects.toMatchObject({ status: 422 });
+  const created = await owner.convertIdea(idea.id, payload);
+  expect(await owner.get(created.id)).toMatchObject({ retrospectiva: true, estado_editorial: 'rascunho', inicio_previsto: '2026-01-10T13:30:00.000Z' });
+  expect(await owner.convertIdea(idea.id, payload)).toMatchObject({ id: created.id, repetida: true });
+  await expect(publicQueries.get(created.id)).rejects.toMatchObject({ status: 404 });
+});

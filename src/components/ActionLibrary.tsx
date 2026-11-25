@@ -24,7 +24,8 @@ export function ActionLibrary({ templates }: { templates: ActionTemplate[] }) {
     <section className="workspace-page" aria-labelledby="action-library-title">
       <p className="eyebrow">Modelos para adaptar</p>
       <h1 id="action-library-title">Biblioteca de Ações</h1>
-      <p>Estes são modelos sugeridos; não são atividades reais, eventos anunciados nem resultados realizados. Consulte sem entrar; para criar uma atividade, entre e adapte o modelo.</p>
+      <p>Estes são modelos sugeridos; não são atividades reais, eventos anunciados nem resultados realizados. A consulta é pública.</p>
+      <p id="action-library-adaptation">Para transformar um modelo em rascunho, entre com um perfil de pessoa física.</p>
       <div className="workspace-panel" aria-label="Filtros da Biblioteca de Ações">
         <div className="field">
           <label htmlFor="action-category">Interesse</label>
@@ -63,7 +64,7 @@ export function ActionLibrary({ templates }: { templates: ActionTemplate[] }) {
                 <p><strong>Resultado esperado, ainda não realizado:</strong> {template.expectedOutcome}</p>
                 <h3>Cuidados</h3>
                 <ul>{template.care.map((care, index) => <li key={index}>{care}</li>)}</ul>
-                <Link className="button" href={`/dashboard/pessoa-fisica/nova?modelo=${encodeURIComponent(template.id)}`}>Adaptar {template.title}</Link>
+                <Link className="button" aria-describedby="action-library-adaptation" href={`/dashboard/pessoa-fisica/nova?modelo=${encodeURIComponent(template.id)}`}>Adaptar {template.title}</Link>
               </article>
             </li>
           ))}

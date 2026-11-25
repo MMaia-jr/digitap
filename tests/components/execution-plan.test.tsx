@@ -1,15 +1,16 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createElement, type ReactNode } from 'react';
 import type { ExecutionPlan } from '../../src/components/ExecutionPlanWorkspace';
 
-const mocks = vi.hoisted(() => ({ get: vi.fn(), getRecord: vi.fn(), getPlan: vi.fn(), managedProfile: vi.fn() }));
+const mocks = vi.hoisted(() => ({ get: vi.fn(), getRecord: vi.fn(), getPlan: vi.fn(), getIdeaDecisionSnapshot: vi.fn(), managedProfile: vi.fn(), getViewer: vi.fn() }));
 vi.mock('next/link', () => ({ default: ({ href, children, ...props }: { href: string; children: ReactNode }) => createElement('a', { href, ...props }, children) }));
 vi.mock('next/navigation', () => ({ notFound: vi.fn(), redirect: vi.fn() }));
-vi.mock('../../src/lib/activities/service.server', () => ({ activities: { get: mocks.get, getRecord: mocks.getRecord, getExecutionPlan: mocks.getPlan } }));
+vi.mock('../../src/lib/activities/service.server', () => ({ activities: { get: mocks.get, getRecord: mocks.getRecord, getExecutionPlan: mocks.getPlan, getIdeaDecisionSnapshot: mocks.getIdeaDecisionSnapshot } }));
 vi.mock('../../src/lib/queries/projects.server', () => ({ managedProfile: mocks.managedProfile }));
+vi.mock('../../src/components/Viewer.server', () => ({ getViewer: mocks.getViewer }));
 // Keep the existing activity editor independent: ECO-01 may be a distinct
 // private interface or route linked from activity management.
 vi.mock('../../src/components/ActivityForm', () => ({ ActivityForm: () => createElement('form', { 'aria-label': 'Edição da atividade existente' }) }));
@@ -74,6 +75,19 @@ it('apresenta o planejamento como área privada acessível pela gestão da ativi
     expect(plan.textContent).toMatch(/previstos/i);
     expect(plan.textContent).toMatch(/não são despesas nem pagamentos/i);
   }
+});
+
+it('volta ao painel da pessoa física depois de acompanhar uma atividade própria', async () => {
+  await renderActivityManagement();
+  expect(screen.getByRole('link', { name: 'Voltar à área restrita' }).getAttribute('href')).toBe('/dashboard/pessoa-fisica');
+});
+
+it('volta ao painel da pessoa física quando a atividade própria está em modo de leitura', async () => {
+  mocks.get.mockResolvedValue({...activity, pode_editar: false, estado_editorial: 'enviada'});
+  mocks.getRecord.mockResolvedValue(undefined);
+  mocks.getViewer.mockResolvedValueOnce({kind:'ready', dashboard:'/dashboard/pessoa-fisica'});
+  render(await ActivityDetail({ params: Promise.resolve({ id: activity.id }) }));
+  expect(screen.getByRole('link', { name: 'Voltar à área restrita' }).getAttribute('href')).toBe('/dashboard/pessoa-fisica');
 });
 
 it('só persiste depois da ação explícita de salvar', async () => {
@@ -201,6 +215,11 @@ it('TAP 08 reúne o plano e o relato existentes na área de acompanhamento', asy
   expect(followUp.contains(screen.getByRole('region', { name: 'Registro privado' }))).toBe(true);
   expect(followUp.contains(screen.getByRole('region', { name: 'Anexos privados' }))).toBe(true);
   expect(followUp.textContent).toMatch(/prestação de contas.*Aldir Blanc/i);
+  expect(screen.queryByRole('link', { name: 'Decisões da atividade' })).toBeNull();
+  for (const name of ['Planejamento e recursos', 'Realização', 'Evidências privadas']) {
+    const link = screen.getByRole('link', { name });
+    expect(followUp.querySelector(link.getAttribute('href')!)).toBeTruthy();
+  }
 });
 
 it('TAP 08 não concede acompanhamento nem consulta registros a um representante com acesso restrito ao envio', async () => {
@@ -210,4 +229,29 @@ it('TAP 08 não concede acompanhamento nem consulta registros a um representante
   expect(screen.getByText('Seu acesso a esta atividade é restrito ao envio.').id).toBe('acompanhamento');
   expect(mocks.getPlan).not.toHaveBeenCalled();
   expect(mocks.getRecord).not.toHaveBeenCalled();
+});
+
+it('distingue as alternativas excluídas das decisões vigentes da versão de origem', async () => {
+  mocks.get.mockResolvedValue({ ...activity, pode_ler_privado: true });
+  mocks.getRecord.mockResolvedValue(undefined);
+  mocks.getPlan.mockResolvedValue(null);
+  mocks.managedProfile.mockResolvedValue({ subject: { tipo: 'pessoa_fisica' }, availableProjects: [] });
+  mocks.getIdeaDecisionSnapshot.mockResolvedValue({ versao_ideia: 3, decisoes: [
+    { chave: 'custo', estado: 'DEFINIDO', descricao: 'Oferecer gratuitamente' },
+    { chave: 'formato', estado: 'PROVISÓRIO', descricao: 'Preparar encontros presenciais' },
+    { chave: 'local', estado: 'PENDENTE', descricao: 'Consultar espaços' },
+    { chave: 'ingresso', estado: 'EXCLUÍDO', descricao: 'Cobrar inscrição' },
+  ] });
+  render(await ActivityDetail({ params: Promise.resolve({ id: activity.id }) }));
+
+  const decisions = screen.getByRole('region', { name: 'Decisões na origem da atividade' });
+  const current = within(decisions).getByRole('list', { name: 'Decisões e pendências de origem' });
+  expect(within(current).getAllByRole('listitem')).toHaveLength(3);
+  for (const state of ['Definido', 'Provisório', 'Pendente']) expect(within(current).getByText(state)).toBeTruthy();
+  expect(within(current).queryByText('Cobrar inscrição')).toBeNull();
+  const excluded = within(decisions).getByText('Alternativas excluídas').closest('details');
+  expect(excluded?.hasAttribute('open')).toBe(false);
+  expect(excluded?.textContent).toContain('Cobrar inscrição');
+  expect(screen.getByRole('link', { name: 'Decisões da atividade' }).getAttribute('href')).toBe('#decisoes-atividade');
+  expect(screen.getByRole('link', { name: 'Abrir o planejamento' }).getAttribute('href')).toBe('#planejamento-atividade');
 });

@@ -77,6 +77,35 @@ it.each(['CONFIGURATION','OUTPUT','UNAVAILABLE'])('falha IA %s tem resposta púb
  deps.interpret.mockRejectedValue(Object.assign(new Error('SENSITIVE_MARKER'),{code}));const log=vi.spyOn(console,'error');
  const r=await post(request());expect(r.status).toBe(503);expect(await r.json()).toEqual({message:'Interpretação indisponível. Tente novamente mais tarde.'});expect(log).not.toHaveBeenCalled();
 });
+it('registra a etapa de uma falha sem texto, IDs de usuário ou mensagem da exceção',async()=>{
+ const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+ deps.interpret.mockRejectedValueOnce(new Error('PRIVATE_PROVIDER_DETAIL'));
+ const r=await post(request({texto:'PRIVATE_USER_TEXT'}));
+ expect(r.status).toBe(503);
+ expect(warn).toHaveBeenCalledExactlyOnceWith('proposal_interpretation_failed',{stage:'gateway',status:503,contextual:false,elapsedMs:expect.any(Number)});
+ expect(JSON.stringify(warn.mock.calls)).not.toMatch(/PRIVATE_|11111111/);
+});
+it('preserva 503 sanitizado e associa a causa técnica do adaptador ao registro interno',async()=>{
+ const {InterpretationError}=await import('../../src/lib/proposals/diagnostics.server');
+ const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+ deps.interpret.mockRejectedValueOnce(new InterpretationError('OUTPUT',{reason:'semantic_validation',rule:'quote_not_in_proposal',category:'atividades',field:'trecho'}));
+ const r=await post(request());
+ expect(await r.json()).toEqual({message:'Interpretação indisponível. Tente novamente mais tarde.'});
+ expect(r.status).toBe(503);
+ expect(r.headers.get('cache-control')).toContain('no-store');
+ expect(warn).toHaveBeenCalledExactlyOnceWith('proposal_interpretation_failed',{
+  stage:'gateway',status:503,contextual:false,elapsedMs:expect.any(Number),reason:'semantic_validation',rule:'quote_not_in_proposal',category:'atividades',field:'trecho',
+ });
+});
+it('registra autorização negada separadamente de uma falha de recuperação contextual',async()=>{
+ const warn=vi.spyOn(console,'warn').mockImplementation(()=>{});
+ vi.stubEnv('AI_BETA_AUTH_USER_ID','22222222-2222-4222-8222-222222222222');
+ await post(request());
+ vi.stubEnv('AI_BETA_AUTH_USER_ID',id);
+ await post(request({texto:'Uma oficina',contexto:{subjectId:id,consentimento:true}}));
+ expect(warn.mock.calls.map(([,diagnostic])=>[diagnostic.stage,diagnostic.status])).toEqual([['authorization',403],['context',503]]);
+ expect(deps.interpret).not.toHaveBeenCalled();
+});
 it('cancelamento voluntário devolve 499 e libera a interpretação em andamento',async()=>{
  const controller=new AbortController();
  let reached!:()=>void;

@@ -6,6 +6,7 @@ const deps = vi.hoisted(() => ({
   personState: vi.fn(),
   institutionalState: vi.fn(),
   managedProfile: vi.fn(),
+  getViewer: vi.fn(),
   activitiesList: vi.fn(),
   publicPortfolio: vi.fn(),
 }));
@@ -15,6 +16,7 @@ vi.mock('next/navigation', () => ({ redirect: (path: string) => { throw new Erro
 vi.mock('../../src/lib/auth/person-access.server', () => ({ personState: deps.personState }));
 vi.mock('../../src/lib/auth/dashboard.server', () => ({ institutionalState: deps.institutionalState }));
 vi.mock('../../src/lib/queries/projects.server', () => ({ managedProfile: deps.managedProfile }));
+vi.mock('../../src/components/Viewer.server', () => ({ getViewer: deps.getViewer }));
 vi.mock('../../src/lib/activities/service.server', () => ({ activities: { list: deps.activitiesList } }));
 vi.mock('../../src/lib/queries/portfolio.server', () => ({ publicPortfolio: deps.publicPortfolio }));
 vi.mock('../../src/components/ConfirmationCounts', () => ({ ConfirmationCounts: () => null }));
@@ -33,6 +35,7 @@ beforeEach(() => {
   deps.personState.mockResolvedValue({ kind: 'ready', person: { sujeito_id: 'person-id', nome_publico: 'Pessoa de teste', estado: 'ativo' } });
   deps.institutionalState.mockResolvedValue({ kind: 'ready', organization: { id: 'org-id', nome_publico: 'Organização de teste', estado_validacao: 'pendente' } });
   deps.managedProfile.mockResolvedValue({ subject: { id: 'subject-id', bio: null }, projects: [] });
+  deps.getViewer.mockResolvedValue({ kind: 'ready', canInterpret: false });
   deps.activitiesList.mockResolvedValue([]);
   deps.publicPortfolio.mockResolvedValue({ subject: { id: 'subject-id' }, activities: [], evidence: { unavailable: false, items: [] } });
 });
@@ -42,22 +45,41 @@ it('pessoa física cadastrada encontra os Taps dentro do dashboard autorizado', 
   render(await PersonDashboard({ searchParams: Promise.resolve({}) }));
   expect(screen.getByRole('navigation', { name: 'Taps para participar' })).toBeTruthy();
   expect(screen.getByRole('link', { name: 'Preparar uma atividade' }).getAttribute('href')).toBe('/dashboard/pessoa-fisica/nova');
-  expect(screen.getByRole('link', { name: 'Completar meu perfil' }).getAttribute('href')).toBe('#profile-pessoa-fisica');
+  expect(screen.getByRole('link', { name: 'Revisar meu perfil' }).getAttribute('href')).toBe('#profile-pessoa-fisica');
   expect(screen.getByRole('link', { name: 'Cadastrar uma organização' }).getAttribute('href')).toBe('/cadastro/organizacao');
   expect(screen.getByRole('link', { name: 'Apresentar minhas capacidades' }).getAttribute('href')).toBe('/meu-espaco/capacidades');
   expect(screen.getByRole('link', { name: 'Organizar uma ideia' }).getAttribute('href')).toBe('/meu-espaco/ideia');
   expect(screen.getByText(/navegação não concede escopos, representação ou autorização de publicação/i)).toBeTruthy();
+  expect(screen.getByRole('heading', { name: 'Por onde começamos?', level: 1 })).toBeTruthy();
+  expect(screen.queryByRole('region', { name: 'Ou conte sua ideia' })).toBeNull();
+  expect(screen.queryByRole('link', { name: 'Acompanhar compromissos e evidências' })).toBeNull();
 });
 
 it('organização cadastrada encontra os Taps no dashboard com seu destino de atividade', async () => {
   render(await OrganizationDashboard({ searchParams: Promise.resolve({}) }));
   expect(screen.getByRole('navigation', { name: 'Taps para participar' })).toBeTruthy();
   expect(screen.getByRole('link', { name: 'Preparar uma atividade' }).getAttribute('href')).toBe('/dashboard/nova-atividade');
-  expect(screen.getByRole('link', { name: 'Completar meu perfil' }).getAttribute('href')).toBe('#profile-organizacao');
+  expect(screen.getByRole('link', { name: 'Revisar perfil da organização' }).getAttribute('href')).toBe('#profile-organizacao');
   expect(screen.getByRole('link', { name: 'Acessar minha organização' }).getAttribute('href')).toBe('/dashboard/organizacao');
   expect(screen.getByRole('link', { name: 'Apresentar minhas capacidades' }).getAttribute('href')).toBe('/meu-espaco/capacidades');
   expect(screen.getByRole('link', { name: 'Organizar uma ideia' }).getAttribute('href')).toBe('/meu-espaco/ideia');
   expect(screen.getByText(/navegação não concede escopos, representação ou autorização de publicação/i)).toBeTruthy();
+});
+
+it('coletivo informal consulta seu vínculo no próprio painel sem entrar no cadastro organizacional', async () => {
+  deps.institutionalState.mockResolvedValue({ kind: 'ready', organization: { id: 'collective-id', nome_publico: 'Coletivo de teste', estado_validacao: 'coletivo' } });
+  const {container} = render(await OrganizationDashboard({ searchParams: Promise.resolve({}) }));
+  const tap = screen.getByRole('link', { name: 'Consultar meu coletivo' });
+  expect(tap.getAttribute('href')).toBe('#vinculo-coletivo');
+  expect(container.querySelector('#vinculo-coletivo')?.textContent).toContain('Coletivo informal');
+  expect(screen.queryByRole('link', { name: 'Acessar minha organização' })).toBeNull();
+});
+
+it('conta autorizada encontra a entrada aberta de IA e segue ao editor existente', async () => {
+  deps.getViewer.mockResolvedValue({ kind: 'ready', canInterpret: true });
+  render(await PersonDashboard({ searchParams: Promise.resolve({}) }));
+  expect(screen.getByRole('region', { name: 'Ou conte sua ideia' })).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Começar' }).getAttribute('href')).toBe('/meu-espaco/ideia#editor-ideia');
 });
 
 it('dashboard PF mantém o redirecionamento de visitante ao login e não revela Taps', async () => {

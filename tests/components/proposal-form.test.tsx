@@ -55,6 +55,18 @@ it('orçamento indisponível conserva o texto e explica que o resto do produto c
  expect(screen.queryByText(/SECRET_MARKER/)).toBeNull();
  expect(fetcher).toHaveBeenCalledOnce();
 });
+it('retira a ação de IA se o servidor informar revogação da autorização do beta e preserva o texto', async () => {
+ const fetcher=vi.fn().mockResolvedValue(Response.json({fields:{interpretationAccess:'beta'}},{status:403}));
+ vi.stubGlobal('fetch',fetcher);
+ render(<ProposalForm/>);
+ fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Texto para preservar.'}});
+ fireEvent.click(screen.getByRole('button',{name:'Interpretar proposta'}));
+ expect((await screen.findByRole('alert')).textContent).toContain('reservada às contas autorizadas no beta');
+ expect(screen.getByLabelText('Sua proposta')).toHaveProperty('value','Texto para preservar.');
+ expect(screen.queryByRole('button',{name:'Interpretar proposta'})).toBeNull();
+ expect(screen.queryByLabelText('Usar contexto autorizado')).toBeNull();
+ expect(fetcher).toHaveBeenCalledOnce();
+});
 it('apresenta saída como texto, nunca como HTML executável',async()=>{
  const malicious={...preview,dados:{...preview.dados,atividades:[{descricao:'<img src=x onerror=alert(1)>',trecho:'trecho declarado'}]}};
  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>({interpretacao:malicious})}));render(<ProposalForm/>);fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Ideia'}});fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);await screen.findByRole('heading',{name:'Prévia para revisão humana'});expect(screen.getByText('<img src=x onerror=alert(1)>')).toBeTruthy();expect(document.querySelector('img[src="x"]')).toBeNull();

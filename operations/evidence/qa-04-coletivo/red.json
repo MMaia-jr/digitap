@@ -1,0 +1,7 @@
+{
+  "mode": "red",
+  "cleanup": true,
+  "label": "Acessar minha organizaçãoConsulte o cadastro institucional.",
+  "destination": "/dashboard/organizacao",
+  "visibleResult": "Acesso indisponível"
+}

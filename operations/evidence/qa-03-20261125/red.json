@@ -1,0 +1,132 @@
+{
+  "mode": "red",
+  "head": "b9e92b1b4a70d3dcb5ba63edb5d8741e63c672cd",
+  "conversion": {
+    "http": 400,
+    "safeMessage": "Pedido inválido.",
+    "anchorFixtureScheduled": true,
+    "privateDraft": true,
+    "snapshotMatches": true
+  },
+  "anchor": [
+    {
+      "label": "entrada-acompanhamento",
+      "hash": "acompanhamento",
+      "top": 194,
+      "bottom": 252,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1267
+    },
+    {
+      "label": "salto-decisoes-atividade",
+      "hash": "decisoes-atividade",
+      "top": 128,
+      "bottom": 149,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": false,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1805
+    },
+    {
+      "label": "retorno-historico-1",
+      "hash": "acompanhamento",
+      "top": 194,
+      "bottom": 252,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1267
+    },
+    {
+      "label": "salto-planejamento-atividade",
+      "hash": "planejamento-atividade",
+      "top": 182,
+      "bottom": 279,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": false,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 2105
+    },
+    {
+      "label": "retorno-historico-2",
+      "hash": "acompanhamento",
+      "top": 194,
+      "bottom": 252,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1267
+    },
+    {
+      "label": "salto-realizacao-atividade",
+      "hash": "realizacao-atividade",
+      "top": 159,
+      "bottom": 191,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": false,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 3199
+    },
+    {
+      "label": "retorno-historico-3",
+      "hash": "acompanhamento",
+      "top": 194,
+      "bottom": 252,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1267
+    },
+    {
+      "label": "salto-evidencias-atividade",
+      "hash": "evidencias-atividade",
+      "top": 112,
+      "bottom": 136,
+      "headerBottom": 185,
+      "viewport": 664,
+      "visible": false,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 3675
+    }
+  ],
+  "cleanup": {
+    "fixtures": 1,
+    "bucketRemoved": false,
+    "remaining": {
+      "users": 0,
+      "activities": 0,
+      "records": 0
+    }
+  },
+  "returnRoute": {
+    "expected": "/dashboard/pessoa-fisica",
+    "path": "/dashboard",
+    "href": "/dashboard",
+    "accessDenied": true
+  }
+}

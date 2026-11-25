@@ -16,7 +16,11 @@ const subjectLabels: Record<SubjectType, string> = {
   pessoa_fisica: 'Pessoa física', coletivo_informal: 'Coletivo informal',
   organizacao: 'Organização', nao_informado: 'Não informado',
 };
-export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; onSave?: (draft: ProposalDraft) => Promise<void> }) {
+export function ProposalForm({ initialIdea, onSave, canInterpret = true }: {
+  initialIdea?: IdeaView;
+  onSave?: (draft: ProposalDraft) => Promise<void>;
+  canInterpret?: boolean;
+}) {
   const ready = useSyncExternalStore(subscribe, () => true, () => false);
   const [text, setText] = useState(initialIdea?.revised_text ?? initialIdea?.original_text ?? '');
   const [title, setTitle] = useState(initialIdea?.title ?? '');
@@ -40,6 +44,8 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
   const restoreButton = useRef<HTMLButtonElement>(null);
   const inFlight = useRef<AbortController | null>(null);
   const [cancelled, setCancelled] = useState(false);
+  const [betaAccessDenied, setBetaAccessDenied] = useState(false);
+  const interpretationAvailable = canInterpret && !betaAccessDenied;
   const textChanged = Boolean(initialIdea && text !== (initialIdea.revised_text ?? initialIdea.original_text));
   // A manually revised idea can be saved without another paid interpretation.
   // Null means there is no interpretation for this version, not that the old one is current.
@@ -84,9 +90,9 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
     } }));
     restoreButton.current?.focus();
   }
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLElement>) {
     event.preventDefault();
-    if (!ready || inFlight.current) return;
+    if (!ready || !interpretationAvailable || inFlight.current) return;
     setPreview(null); setOriginal(null); setError(''); setCancelled(false);
     if (!text.trim() || text.length > 2000) { setError('Escreva uma proposta de até 2.000 caracteres.'); return; }
     if (contextEnabled && (!contextSubjectId || !contextConsent)) { setError('Escolha um sujeito e autorize explicitamente o envio do contexto, ou interprete sem contexto.'); return; }
@@ -99,6 +105,15 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       });
       if (controller.signal.aborted) return;
       if (!response.ok) {
+        if (response.status === 403) {
+          const body = await response.json().catch(() => null);
+          if (body?.fields?.interpretationAccess === 'beta') {
+            setBetaAccessDenied(true);
+          } else {
+            setError('A conta ou o contexto selecionado não tem autorização para esta interpretação.');
+          }
+          return;
+        }
         if (response.status === 402) {
           setError('O orçamento de interpretação está indisponível. As demais funcionalidades continuam disponíveis.');
           return;
@@ -133,15 +148,20 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       setError(cause instanceof Error && cause.message === 'conflict' ? 'Este rascunho foi alterado em outra sessão. Reabra a versão atual antes de salvar.' : 'Não foi possível salvar o rascunho. Tente novamente.');
     } finally { setSaving(false); }
   }
+  const Editor = interpretationAvailable ? 'form' : 'div';
+  const editorProps = interpretationAvailable
+    ? { action: '/api/propostas/interpretar', method: 'post', onSubmit: submit, 'aria-busy': pending }
+    : {};
   return <>
-    <p>Descreva a proposta sem senhas, documentos ou dados pessoais desnecessários. Ao interpretar, o texto será enviado a um serviço de IA para gerar sugestões. Nada será salvo ou publicado por este formulário.</p>
-    <form action="/api/propostas/interpretar" method="post" onSubmit={submit} aria-busy={pending}>
+    {interpretationAvailable && <p>Descreva a proposta sem senhas, documentos ou dados pessoais desnecessários. Ao interpretar, o texto será enviado a um serviço de IA para gerar sugestões. Nada será salvo ou publicado por este formulário.</p>}
+    {betaAccessDenied && <p role="alert">A interpretação com IA é reservada às contas autorizadas no beta. O texto continua no formulário.</p>}
+    <Editor {...editorProps}>
       <label htmlFor="idea-title">Título do rascunho</label>
       <input id="idea-title" name="titulo" maxLength={160} value={title} onChange={event => setTitle(event.target.value)} />
       <label htmlFor="proposal-text">Sua proposta</label>
       <textarea id="proposal-text" name="texto" rows={8} required maxLength={initialIdea ? 20000 : 2000} disabled={pending} value={text} aria-describedby="proposal-limit" onChange={event => { setText(event.target.value); setPreview(null); setOriginal(null); setError(''); }} />
       <p id="proposal-limit">Até {initialIdea ? '20.000' : '2.000'} caracteres. Reveja as sugestões: fontes e trechos não comprovam os fatos.</p>
-      <fieldset>
+      {interpretationAvailable && <><fieldset>
         <legend>Contexto opcional</legend>
         <label htmlFor="use-authorized-context"><input id="use-authorized-context" type="checkbox" checked={contextEnabled} disabled={pending || contextLoading} onChange={event => void toggleContext(event.target.checked)} /> Usar contexto autorizado</label>
         {contextEnabled && <>
@@ -158,8 +178,8 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
           {contextSubjectId && <label htmlFor="context-consent"><input id="context-consent" type="checkbox" checked={contextConsent} disabled={pending} onChange={event => setContextConsent(event.target.checked)} /> Autorizo o envio do contexto selecionado ao provedor de IA</label>}
         </>}
       </fieldset>
-      <button type="submit" disabled={pending || !ready}>{pending ? 'Interpretando…' : 'Interpretar proposta'}</button>
-    </form>
+      <button type="submit" disabled={pending || !ready}>{pending ? 'Interpretando…' : 'Interpretar proposta'}</button></>}
+    </Editor>
     {pending && <>
       <p role="status">Aguarde a interpretação.</p>
       <button type="button" onClick={() => inFlight.current?.abort()}>Cancelar interpretação</button>
@@ -167,7 +187,7 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
     {cancelled && <p role="status">Interpretação cancelada.</p>}
     {error && <p role="alert">{error}</p>}
     {manualRevision && onSave && <section aria-label="Revisão manual da ideia">
-      <p>A interpretação anterior não vale para este texto revisado. Você pode salvar suas alterações sem novas sugestões de IA, ou interpretar novamente depois.</p>
+      <p>A interpretação anterior não vale para este texto revisado. Você pode salvar suas alterações sem novas sugestões de IA.{interpretationAvailable && ' Também pode interpretar novamente depois.'}</p>
       <button type="button" onClick={saveDraft} disabled={saving || pending || !title.trim() || !text.trim()}>{saving ? 'Salvando…' : 'Salvar alterações'}</button>
     </section>}
     {preview && <section aria-label="Prévia da proposta" aria-live="polite">

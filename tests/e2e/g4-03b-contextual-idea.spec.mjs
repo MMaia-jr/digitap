@@ -31,10 +31,10 @@ function gatewayCalls() {
   return readFileSync(callsFile, 'utf8').split('\n').filter(Boolean).map(line => JSON.parse(line));
 }
 
-async function newUser(label, withProfile) {
+async function newUser(label, withProfile, authId) {
   const email = `g4-03b-${label}-${randomUUID()}@example.invalid`;
   const password = `${randomUUID()}aA1!`;
-  const created = await admin.auth.admin.createUser({ email, password, email_confirm: true });
+  const created = await admin.auth.admin.createUser({ email, password, email_confirm: true, ...(authId ? { id: authId } : {}) });
   if (created.error || !created.data.user) throw new Error('Auth local não criou identidade sintética.');
   const fixture = { id: created.data.user.id, email, password, subjectId: '' };
   fixtures.users.push(fixture);
@@ -445,7 +445,9 @@ test('G5: teclado, consentimento, revisão e retorno de foco após salvar', asyn
 if (live) test('G4-REAL: painel, contexto, interpretação e retomada privada', async ({ browser }) => {
   test.setTimeout(0);
   const log = (event, details = {}) => appendFileSync(`${out}/jornada.jsonl`, JSON.stringify({ event, ...details }) + '\n');
-  const owner = await newUser('real-titular', true);
+  const authId = process.env.AI_BETA_AUTH_USER_ID;
+  if (!authId || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(authId)) throw new Error('O ensaio requer uma conta Beta sintética local exclusiva.');
+  const owner = await newUser('real-titular', true, authId);
   const page = await localPage(browser);
   await signIn(page, owner);
   await addPrivateCapability(page, owner, ownMarker);
@@ -504,6 +506,10 @@ if (live) test('G4-REAL: painel, contexto, interpretação e retomada privada', 
   expect(response.status()).toBe(200);
   const apiBody = await response.json();
   expect(apiBody.interpretacao).toMatchObject({ estado: 'revisao_humana_pendente', verificacao: 'nao_verificada' });
+  const suggestions = apiBody.interpretacao.dados.atividades;
+  const relevant = suggestions.findIndex(({ descricao, trecho }) => /oficina/i.test(descricao) && /dança/i.test(`${descricao} ${trecho}`));
+  log('usefulness-check', { proposedActivities: suggestions.length, workshopRecognized: relevant >= 0 });
+  expect(relevant).toBeGreaterThanOrEqual(0);
   await expect(page.getByRole('heading', { name: 'Prévia para revisão humana' })).toBeVisible();
   const audit = gatewayCalls();
   expect(audit).toHaveLength(2);
@@ -511,19 +517,20 @@ if (live) test('G4-REAL: painel, contexto, interpretação e retomada privada', 
   expect(audit[1]).toMatchObject({ event: 'response', status: 200 });
   expect((await db.query('select count(*)::int n from public.ideias_privadas where owner_id=$1', [owner.id])).rows[0].n).toBe(0);
 
-  await page.getByLabel('Descrição — Atividades propostas 1').fill(review);
+  const reviewedActivity = page.getByLabel(`Descrição — Atividades propostas ${relevant + 1}`);
+  await reviewedActivity.fill(review);
   await page.getByRole('button', { name: 'Salvar rascunho', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: 'Rascunho privado salvo' })).toBeVisible();
   const saved = (await db.query('select title,version,original_text,original_interpretation,revised_interpretation from public.ideias_privadas where owner_id=$1', [owner.id])).rows;
   expect(saved).toHaveLength(1);
   expect(saved[0]).toMatchObject({ title, version: 1, original_text: text, original_interpretation: apiBody.interpretacao });
-  expect(saved[0].revised_interpretation.dados.atividades[0].descricao).toBe(review);
+  expect(saved[0].revised_interpretation.dados.atividades[relevant].descricao).toBe(review);
 
   await page.reload();
   await expect(page.getByText('Privada · não verificada · não publicada')).toBeVisible();
   await page.getByRole('button', { name: 'Retomar' }).click();
   await expect(page.getByLabel('Sua proposta')).toHaveValue(text);
-  await expect(page.getByLabel('Descrição — Atividades propostas 1')).toHaveValue(review);
+  await expect(reviewedActivity).toHaveValue(review);
   expect(gatewayCalls()).toEqual(audit);
   expect(page.externalAttempts).toEqual([]);
   log('saved-and-reopened', { private: true, revised: true, gatewaySends: 1, browserBlockedRequests: page.externalAttempts.length });

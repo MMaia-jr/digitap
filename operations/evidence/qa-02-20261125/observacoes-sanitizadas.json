@@ -1,0 +1,63 @@
+{
+  "observations": [
+    {
+      "checkpoint": "authorized-preview-save-revise-reload",
+      "humanDecisionPreserved": true
+    },
+    {
+      "checkpoint": "off-beta-manual-activity",
+      "interpretationHidden": true,
+      "contextHidden": true,
+      "authorizationStatus": 403,
+      "reloadPrivateDraft": true
+    },
+    {
+      "checkpoint": "cleanup",
+      "fixtures": 2
+    }
+  ],
+  "network": [
+    {
+      "path": "/api/e4",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/propostas/interpretar",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "pageErrors": [],
+  "consoleDiagnostics": []
+}

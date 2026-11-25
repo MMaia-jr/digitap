@@ -1,7 +1,7 @@
 import 'server-only';
 import {createHash,randomUUID} from 'node:crypto';
 import {recordDraftTiming,draftTimingDeclaration,draftValidationClock,recordPersonConsent,versionAuthorization,initialPersonCuration,activePersonPublisher} from './editorial-pf.server';
-import { ActivityError,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,activityLocalDay,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
+import { ActivityError,draftFields,validateDraft,validateVersion,validateReview,validateWithdrawal,validateScheduling,validateRecord,activityLocalDay,validateEvidence,validateExecutionPlan,assertExecutionPlanVersion,objectInput,type PrivateActivity,type ReviewAction,type ExecutionPlanResource } from './domain';
 import { withTransaction,type Transaction,type Sql } from '../database.server';
 import { authorize,AccessError,type AccessAccount,type VerifiedUser } from '../auth/permissions.server';
 import { userClient } from '../supabase/server';
@@ -404,12 +404,16 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
   },
   async convertIdea(ideaId:string,input:unknown):Promise<PrivateActivity&{repetida:boolean}>{
    if(typeof ideaId!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(ideaId))throw new ActivityError(404,'Rascunho não encontrado.');
-   const body=objectInput(input,['versao_esperada','pedido_id','titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','projeto_id']);
+   const body=objectInput(input,['versao_esperada','pedido_id',...draftFields]);
    const version=validateVersion(body.versao_esperada);
    if(typeof body.pedido_id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.pedido_id))throw new ActivityError(422,'Identificador de pedido inválido.');
    const {versao_esperada:ignoredVersion,pedido_id:requestId,...draftInput}=body;void ignoredVersion;
    const value=validateDraft(draftInput,now()),request=requestId.toLowerCase();
-   const payloadHash=createHash('sha256').update(JSON.stringify({ideaId,version,value})).digest('hex');
+   // Keep existing scheduled fingerprints and distinguish explicit timing declarations.
+   const payloadHash=createHash('sha256').update(JSON.stringify({ideaId,version,value,
+    ...(draftInput.acontecendo_agora===true&&{acontecendo_agora:true}),
+    ...(draftInput.retrospectiva===true&&{retrospectiva:true}),
+   })).digest('hex');
    return run('converter_ideia',async(sql,actor)=>{
     // The account row lock serializes this actor's idempotency keys across ideas.
     const history=(await sql.query<{objeto_id:string;justificativa_restrita:string}>(`select objeto_id,justificativa_restrita from public.eventos_editoriais where objeto_tipo='atividade' and acao='atividade_criada_de_ideia' and executada_por_conta_id=$1`,[actor.id])).rows;
@@ -474,7 +478,7 @@ export function createActivityService(deps:{verifyUser?:()=>Promise<VerifiedUser
    return {...activity,autorizacao_organizacional:organizationalAuthority,...(retrospective?{retrospectiva:true as const}:{}),pode_editar:podeEditar&&(['rascunho','publicada'].includes(activity.estado_editorial)||activity.projeto_aprovacao==='rejeitada'),pode_ler_privado:podeLerPrivado,acesso_editorial:editorial,pode_revisar:editorial&&['enviada','em_revisao'].includes(activity.estado_editorial),pode_publicar:editorial&&activity.estado_editorial==='aprovada',tem_publicacao:!!activity.numero_versao_publicada,pode_alterar_programacao:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'&&['programada','adiada'].includes(activity.estado_programacao??''),pode_retirar:editorial&&!!activity.numero_versao_publicada&&activity.estado_editorial!=='retirada'};
   });},
   async update(id:string,input:unknown){
-   const body=objectInput(input,['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','versao_esperada','acontecendo_agora','retrospectiva','projeto_id']);const version=validateVersion(body.versao_esperada);
+   const body=objectInput(input,[...draftFields,'versao_esperada']);const version=validateVersion(body.versao_esperada);
    const {versao_esperada:ignored,...content}=body;void ignored;const value=validateDraft(content,now());
    return run('criar_rascunho',async(sql,actor)=>{
     const row=await load(sql,actor,id,true);

@@ -8,7 +8,11 @@ import { ProposalForm, type ProposalDraft } from './ProposalForm';
 const subscribe = () => () => {};
 const savedNotice = 'Rascunho privado salvo. Ele não foi verificado nem publicado.';
 
-export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
+export function IdeasWorkspace({ initialIdeas, canInterpret = true, manualActivityHref }: {
+  initialIdeas: IdeaView[];
+  canInterpret?: boolean;
+  manualActivityHref?: string;
+}) {
   const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
   const [ideas, setIdeas] = useState<IdeaView[]>(initialIdeas);
   const [selected, setSelected] = useState<IdeaView | undefined>();
@@ -63,7 +67,11 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
   }
 
   return <>
-    <p>As ideias salvas são privadas da sua conta, não verificadas e não publicadas. Interpretar não salva; use o botão explícito abaixo. A interpretação revisada é reaberta sem uma nova chamada à IA.</p>
+    <p>As ideias salvas são privadas da sua conta, não verificadas e não publicadas. Você pode retomar uma ideia salva sem usar IA.</p>
+    {!canInterpret && <>
+      <p>A interpretação com IA é reservada às contas autorizadas no beta. Você pode revisar suas ideias salvas e continuar suas atividades.</p>
+      {manualActivityHref && <p><Link href={manualActivityHref}>Preparar uma atividade manualmente</Link></p>}
+    </>}
     {notice && <p ref={saveStatus} role="status" tabIndex={notice === savedNotice ? -1 : undefined}>{notice}</p>}{error && <p role="alert">{error}</p>}
     <section aria-labelledby="minhas-ideias">
       <h2 id="minhas-ideias">Minhas ideias</h2>
@@ -77,12 +85,12 @@ export function IdeasWorkspace({ initialIdeas }: { initialIdeas: IdeaView[] }) {
         <button type="button" disabled={!hydrated || working} onClick={() => remove(idea)}>Excluir</button>
       </li>)}</ul>}
     </section>
-    <section aria-labelledby="editor-ideia"><h2 id="editor-ideia">{selected ? `Retomar: ${selected.title}` : 'Nova ideia'}</h2>
-      {selected && <IdeaDecisions key={selected.id} idea={selected} onConfirmed={confirmed => {
+    {(selected || canInterpret) && <section aria-labelledby="editor-ideia"><h2 id="editor-ideia">{selected ? `Retomar: ${selected.title}` : 'Nova ideia'}</h2>
+      {selected && <IdeaDecisions key={`decisions:${selected.id}`} idea={selected} onConfirmed={confirmed => {
         setIdeas(current => current.map(idea => idea.id === confirmed.id && idea.version < confirmed.version ? confirmed : idea));
         setSelected(current => current?.id === confirmed.id && current.version < confirmed.version ? confirmed : current);
       }} />}
-      <ProposalForm key={selected?.id ?? 'new'} initialIdea={selected} onSave={save} />
-    </section>
+      <ProposalForm key={`proposal:${selected?.id ?? 'new'}`} initialIdea={selected} onSave={save} canInterpret={canInterpret} />
+    </section>}
   </>;
 }

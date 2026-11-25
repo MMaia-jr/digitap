@@ -1,0 +1,7 @@
+{"event":"panel-tap-consent"}
+{"event":"browser-cancelled-before-egress"}
+{"event":"real-pending-visible"}
+{"event":"interpretation-response","status":200,"latencyMs":82749}
+{"event":"usefulness-check","proposedActivities":3,"workshopRecognized":true}
+{"event":"saved-and-reopened","private":true,"revised":true,"gatewaySends":1,"browserBlockedRequests":0}
+{"event":"cleanup","residual":{"auth":0,"subjects":0,"capabilities":0,"ideas":0,"activities":0}}

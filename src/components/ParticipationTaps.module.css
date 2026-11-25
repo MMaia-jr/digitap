@@ -1,0 +1,154 @@
+.screen {
+  --surface: #f4f7f5;
+  --ink: #183d32;
+  --muted: #52675f;
+  --accent: #167c70;
+  --tint: #e0f1e9;
+  --icon: #277c6b;
+  max-width: 43rem;
+  margin-inline: auto;
+  margin-bottom: 1.75rem;
+  border: 1px solid #d4e0d9;
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 1rem/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.screen h1, .screen h2, .screen p { margin: 0; font-family: inherit; }
+.screen h1 { margin: 5px 0 8px; font-size: clamp(1.625rem, 4vw, 2rem); line-height: 1.15; letter-spacing: -.035em; }
+.screen svg { display: block; flex: none; }
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+.top strong { font-size: 1.3125rem; letter-spacing: -.04em; }
+.top > svg, .profile svg { width: 25px; height: 25px; }
+.profile {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--accent);
+  border-radius: 11px;
+}
+.profile:hover { background: #e0f1e9; }
+
+.eyebrow, .description, .screen small, .destination p, .note { font-size: .8125rem; color: var(--muted); }
+.navigation { display: grid; gap: 10px; margin-top: 18px; }
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tiles li { min-width: 0; }
+.tile, .wide {
+  background: #fff;
+  border: 1px solid #dee7e1;
+  color: var(--ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.tile:hover, .wide:hover { border-color: #699283; }
+.tile strong, .wide strong { display: block; font-size: .875rem; line-height: 1.25; }
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 150px;
+  height: 100%;
+  border-radius: 15px;
+  padding: 12px;
+}
+.iconbox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  color: var(--icon);
+  background: var(--tint);
+}
+.tile .iconbox { margin-bottom: 3px; }
+.tileArrow { color: var(--icon); width: 18px; height: 18px; margin-top: auto; align-self: flex-end; }
+.screen [data-tone='capacity'] { --icon: #8062af; --tint: #eee7fa; }
+.screen [data-tone='idea'] { --icon: #b78625; --tint: #fff1cc; }
+.screen [data-tone='calendar'] { --icon: #327fa5; --tint: #dfeff8; }
+.screen [data-tone='organization'] { --icon: #af6b43; --tint: #f8e8db; }
+.screen [data-tone='library'] { --icon: #4b799b; --tint: #e4eef6; }
+.screen [data-tone='discovery'] { --tint: #def1ed; }
+.wide { display: flex; align-items: center; gap: 10px; border-radius: 13px; padding: 12px; }
+.wide .chevron { margin-left: auto; color: #527165; }
+.resume { background: #e0f0e9; }
+.resume .iconbox { background: #fff; }
+
+.intelligence {
+  background: #173e36;
+  color: #fff;
+  border-radius: 17px;
+  padding: 18px;
+  margin-top: 14px;
+}
+.intelligence h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 1.125rem;
+  letter-spacing: -.02em;
+}
+.intelligence h2 svg { color: #99dcc2; }
+.intelligence .example {
+  border-radius: 10px;
+  background: #fff;
+  color: var(--muted);
+  min-height: 80px;
+  padding: 12px;
+  font-size: .875rem;
+}
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #a1e2cd;
+  color: #173e36;
+  font-size: .875rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.cta svg { width: 18px; height: 18px; }
+.cta:hover { background: #b3ecd9; }
+
+.destination {
+  margin-top: 18px;
+  border-top: 1px solid #d4e0d9;
+  padding-top: 14px;
+  scroll-margin-top: 1rem;
+}
+.destination h2 { font-size: 1.125rem; margin-bottom: 8px; }
+.destinationLinks { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.destinationLinks a { display: inline-flex; align-items: center; min-height: 44px; font-size: .875rem; }
+.screen .note { margin-top: 10px; }
+
+@media (min-width: 641px) {
+  .screen { padding: 20px; }
+}
+
+@media (max-width: 640px) {
+  :global(body):has(.screen) { padding-top: 0; }
+  :global(body):has(.screen) :global(.app-header) { position: relative; inset: auto; }
+}

@@ -11,7 +11,7 @@ describe('E4Workspaces', () => {
   beforeEach(() => { vi.restoreAllMocks(); });
 
   it('oferece cadastro privado por padrão e permite publicar só por escolha explícita', async () => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(Response.json({ capabilities: [capability] })).mockResolvedValueOnce(Response.json({ capability: { ...capability, visibility: 'publica', version: 2 } }));
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(Response.json({ capability: { ...capability, visibility: 'publica', version: 2 } }));
     render(<CapabilitiesWorkspace subjects={[{ id: capability.subject_id, name: 'Pessoa declarada', type: 'pessoa_fisica' }]} initialCapabilities={[capability]} />);
     expect(screen.getByText(/privadas da sua conta/i)).toBeTruthy();
     expect(screen.getByLabelText('Descrição')).toBeTruthy();
@@ -23,6 +23,27 @@ describe('E4Workspaces', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Salvar capacidade' }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body))).toMatchObject({ action: 'update-capability', expectedVersion: 1, visibility: 'publica' });
+  });
+
+  it('exibe a capacidade confirmada pelo POST sem depender de nova consulta', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(Response.json({ capability }));
+    render(<CapabilitiesWorkspace subjects={[{ id: capability.subject_id, name: 'Pessoa declarada', type: 'pessoa_fisica' }]} initialCapabilities={[]} />);
+    fireEvent.change(screen.getByLabelText('Descrição'), { target: { value: capability.description } });
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar capacidade privada' }));
+    expect((await screen.findByRole('status')).textContent).toContain('Capacidade salva');
+    expect(screen.getByRole('article').textContent).toContain(capability.description);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it.each([Response.json({message:'Confira os dados informados.'}, {status:422}), Response.json({message:'OK'})])('mantém o texto sem anunciar sucesso se o POST falhar ou não confirmar o registro', async response => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(response);
+    render(<CapabilitiesWorkspace subjects={[{ id: capability.subject_id, name: 'Pessoa declarada', type: 'pessoa_fisica' }]} initialCapabilities={[]} />);
+    fireEvent.change(screen.getByLabelText('Descrição'), { target: { value: capability.description } });
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar capacidade privada' }));
+    expect(await screen.findByRole('alert')).toBeTruthy();
+    expect(screen.getByLabelText('Descrição')).toHaveProperty('value', capability.description);
+    expect(screen.queryByText(/Capacidade salva/)).toBeNull();
+    expect(screen.queryByRole('article')).toBeNull();
   });
 
   it('apresenta compatibilidade como sugestão e permite manifestar interesse explicitamente', async () => {

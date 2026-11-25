@@ -5,6 +5,13 @@ import { ActionLibrary } from '../../src/components/ActionLibrary';
 import { actionTemplates } from '../../src/lib/actions/catalog';
 
 describe('ActionLibrary', () => {
+  it('informa em cada adaptação que a criação pelo modelo exige perfil de pessoa física', () => {
+    render(<ActionLibrary templates={[actionTemplates[0]]} />);
+    expect(screen.queryByRole('link', {
+      name: `Adaptar ${actionTemplates[0].title}`,
+      description: 'Para transformar um modelo em rascunho, entre com um perfil de pessoa física.',
+    })).not.toBeNull();
+  });
   afterEach(() => cleanup());
 
   it('identifica o conteúdo como modelo e oferece filtros acessíveis', () => {

@@ -1,0 +1,23 @@
+{
+  "mode": "local_adapter_diagnostic",
+  "model": "moonshotai/kimi-k2.6",
+  "contextual": false,
+  "tokenLimit": 16000,
+  "hostedLimitSeconds": 300,
+  "sends": 1,
+  "reservationUSD": 0.9391104,
+  "budgetSpendBeforeUSD": 0.0364712,
+  "httpStatus": 200,
+  "inputTokens": 391,
+  "outputTokens": 3159,
+  "reasoningTokens": 3009,
+  "answerTokens": 150,
+  "finishReason": "stop",
+  "generationId": "gen_01M89C4JTWJYZ0FP32GCC2DC77",
+  "provider": "moonshotai",
+  "providerEstimateUSD": 0.01300745,
+  "structuredOutput": "rejected",
+  "adapterCode": "OUTPUT",
+  "fragility": "semantic_validation",
+  "latencyMs": 83880
+}

@@ -1,0 +1,148 @@
+{
+  "mode": "green",
+  "head": "b9e92b1b4a70d3dcb5ba63edb5d8741e63c672cd",
+  "conversion": {
+    "http": 200,
+    "privateDraft": true,
+    "snapshotMatches": true,
+    "timestamp": {
+      "startAt": "2026-11-25T13:38:04.752Z",
+      "betweenClickAndResponse": true,
+      "matchesSubmittedInstant": true
+    },
+    "timingEventMatches": true
+  },
+  "anchor": [
+    {
+      "label": "entrada-acompanhamento",
+      "hash": "acompanhamento",
+      "top": 82,
+      "bottom": 139,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1432
+    },
+    {
+      "label": "salto-decisoes-atividade",
+      "hash": "decisoes-atividade",
+      "top": 16,
+      "bottom": 37,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1970
+    },
+    {
+      "label": "retorno-historico-1",
+      "hash": "acompanhamento",
+      "top": 82,
+      "bottom": 139,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1432
+    },
+    {
+      "label": "salto-planejamento-atividade",
+      "hash": "planejamento-atividade",
+      "top": 70,
+      "bottom": 168,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 2269
+    },
+    {
+      "label": "retorno-historico-2",
+      "hash": "acompanhamento",
+      "top": 82,
+      "bottom": 139,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1432
+    },
+    {
+      "label": "salto-realizacao-atividade",
+      "hash": "realizacao-atividade",
+      "top": 46,
+      "bottom": 79,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 3364
+    },
+    {
+      "label": "retorno-historico-3",
+      "hash": "acompanhamento",
+      "top": 82,
+      "bottom": 139,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 1432
+    },
+    {
+      "label": "salto-evidencias-atividade",
+      "hash": "evidencias-atividade",
+      "top": 0,
+      "bottom": 24,
+      "headerBottom": 0,
+      "viewport": 664,
+      "visible": true,
+      "focusAtTarget": false,
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "scrollY": 3866
+    }
+  ],
+  "cleanup": {
+    "fixtures": 2,
+    "bucketRemoved": true,
+    "remaining": {
+      "users": 0,
+      "activities": 0,
+      "records": 0
+    }
+  },
+  "private": {
+    "persistedAfterReload": true,
+    "ownerBytesMatch": true,
+    "thirdPartyStatus": 403,
+    "publicActivityStatus": 404
+  },
+  "returnRoute": {
+    "expected": "/dashboard/pessoa-fisica",
+    "path": "/dashboard/pessoa-fisica",
+    "href": "/dashboard/pessoa-fisica",
+    "accessDenied": false
+  },
+  "secondary": {
+    "organizationCardAsPerson": {
+      "path": "/cadastro/organizacao",
+      "asksForNewAccess": true
+    }
+  }
+}

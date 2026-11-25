@@ -23,15 +23,21 @@ if(g4){
     !/^operations\/evidence\/g4-03b-recovery-[a-zA-Z0-9-]+$/.test(out)||
     process.env.NODE_ENV==='production')throw new Error('Configuração do harness G4-03B incompleta ou inválida.');
   if(['.env.development.local','.env.development','.env'].some(path=>existsSync(path)))throw new Error('O modo G4-03B recusa arquivos env adicionais.');
-  if(live||existsSync('.env.local')){
-    const file=lstatSync('.env.local');
-    const vars=parseEnv(readFileSync('.env.local','utf8'));
+  const credentialFile=live?'.env.cons-03d.local':'.env.local';
+  if(live||existsSync(credentialFile)){
+    const file=lstatSync(credentialFile);
+    const vars=parseEnv(readFileSync(credentialFile,'utf8'));
     if(!file.isFile()||(file.mode&0o777)!==0o600||Object.keys(vars).length!==1||
       !vars.AI_GATEWAY_API_KEY||(live&&vars.AI_GATEWAY_API_KEY!==required.AI_GATEWAY_API_KEY))throw new Error('Arquivo de credencial G4 fora do contrato.');
   }
   const baseEnv=Object.fromEntries(['HOME','PATH','TMPDIR'].filter(name=>process.env[name]).map(name=>[name,process.env[name]]));
   const preload=pathToFileURL(realpathSync('tests/e2e/helpers/g4-03b-gateway-preload.mjs')).href;
   childEnv={...baseEnv,...required,A_PRACA_EVIDENCE_DIR:out,NODE_ENV:'development',SUPABASE_TELEMETRY_DISABLED:'1',NODE_OPTIONS:`--import=${preload}`};
+  if(live||process.env.AI_BETA_AUTH_USER_ID){
+    const fixtureId=process.env.AI_BETA_AUTH_USER_ID;
+    if(!fixtureId||!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(fixtureId))throw new Error('UUID sintético QA inválido.');
+    childEnv.AI_BETA_AUTH_USER_ID=fixtureId;
+  }
   const fixtureBucket=process.env.SUPABASE_PRIVATE_EVIDENCE_BUCKET;
   if(fixtureBucket!==undefined){
     if(!/^oss01d-private-[a-z0-9-]+$/.test(fixtureBucket))throw new Error('Bucket fora do escopo sintético.');

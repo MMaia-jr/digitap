@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, devices, expect } from '@playwright/test';
 
 function safePath(raw) {
   try {
@@ -140,4 +140,32 @@ test('visitante: detalhe de atividade pública, quando houver atividade publicad
   await expect(page.locator('main h1').first()).toBeVisible();
 });
 
-// All navigation above is anonymous and read-only; no field is filled and no submit control is clicked.
+test.describe('visitante em viewport móvel', () => {
+  const { viewport, deviceScaleFactor, hasTouch, isMobile, userAgent } = devices['iPhone 13'];
+  test.use({ viewport, deviceScaleFactor, hasTouch, isMobile, userAgent, serviceWorkers: 'block' });
+
+  test('abre a biblioteca pelo menu e encontra o login quando tenta acessar área privada', async ({ page }) => {
+    async function fitsViewport() {
+      await expect.poll(() => page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      )).toBeLessThanOrEqual(1);
+    }
+
+    await page.goto('/');
+    const nav = page.getByRole('navigation', { name: 'Navegação principal' });
+    await expect(nav).toBeVisible();
+    await fitsViewport();
+    await nav.getByRole('link', { name: 'Biblioteca de Ações' }).click();
+    await expect(page).toHaveURL(/\/biblioteca-acoes$/);
+    await expect(page.getByRole('heading', { name: 'Biblioteca de Ações', exact: true })).toBeVisible();
+    await fitsViewport();
+
+    await page.goto('/meu-espaco/capacidades');
+    await expect(page).toHaveURL(/\/login(?:\?.*)?$/);
+    await expect(page.getByRole('heading', { name: 'Entre na sua conta' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Entrar', exact: true })).toBeVisible();
+    await fitsViewport();
+  });
+});
+
+// Checagens de cadastro e login em produção terminam nos formulários públicos.

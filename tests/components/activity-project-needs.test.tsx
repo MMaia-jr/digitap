@@ -8,6 +8,7 @@ vi.mock('../../src/lib/activities/service.server', () => ({
   activities: {get: mocks.activity, getRecord: async () => null},
 }));
 vi.mock('../../src/lib/queries/projects.server', () => ({managedProfile: mocks.profile}));
+vi.mock('../../src/components/Viewer.server', () => ({getViewer: async () => ({kind:'unavailable'})}));
 
 const id = '10000000-0000-4000-8000-000000000001';
 const project = {id: '10000000-0000-4000-8000-000000000002', titulo: 'Projeto fictício'};

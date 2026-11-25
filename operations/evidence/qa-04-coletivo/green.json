@@ -1,0 +1,14 @@
+{
+  "mode": "green",
+  "cleanup": true,
+  "label": "Consultar meu coletivoConfira o tipo de participação do coletivo.",
+  "destination": "#vinculo-coletivo",
+  "viewports": [
+    "iPhone 13",
+    "1440 × 900"
+  ],
+  "visibleResult": "Vínculo de coletivo consultável após recarga",
+  "directOrganizationAccessDenied": true,
+  "guestRedirectsToLogin": true,
+  "writeRequests": 0
+}

@@ -1,0 +1,30 @@
+{
+  "observations": [
+    {
+      "checkpoint": "workspace-actions",
+      "focusStyle": {
+        "visible": true,
+        "outline": "solid",
+        "shadow": "none"
+      },
+      "sixTiles": true,
+      "noEmptyResume": true,
+      "betaOnly": true,
+      "localAnchors": true
+    },
+    {
+      "checkpoint": "cleanup",
+      "fixtures": 4,
+      "bucketRemoved": true
+    }
+  ],
+  "network": [],
+  "pageErrors": [],
+  "consoleDiagnostics": [],
+  "conversion": {
+    "requestedMode": "Em andamento",
+    "visibleFeedback": "Pedido inválido.",
+    "cause": "A interface envia acontecendo_agora, mas convertIdea exclui o campo da lista de aceitação.",
+    "classification": "produto, preexistente"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "design01": {
+    "status": "passed",
+    "chromiumDurationMs": 56681,
+    "stats": {
+      "startTime": "2026-11-25T13:15:12.763Z",
+      "duration": 57640.105,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "qa01": {
+    "status": "passed",
+    "chromiumDurationMs": 25458,
+    "stats": {
+      "startTime": "2026-11-25T13:16:11.155Z",
+      "duration": 26639.304,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "mock": [
+    {
+      "mock": true,
+      "endpoint": "/v4/ai/language-model",
+      "model": "moonshotai/kimi-k2.6",
+      "providerPolicy": "gateway-default",
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true,
+      "tools": false,
+      "structuredJson": true,
+      "contextual": true,
+      "mode": "ok",
+      "contextKeys": [
+        "capabilities",
+        "needs",
+        "projects",
+        "realizations"
+      ],
+      "capabilityKeys": [],
+      "hasOwnedMarker": false,
+      "hasForeignMarker": false,
+      "hasUuid": false,
+      "hasForbiddenFields": false,
+      "projectionKeysValid": true
+    },
+    {
+      "mock": true,
+      "endpoint": "/v4/ai/language-model",
+      "model": "moonshotai/kimi-k2.6",
+      "providerPolicy": "gateway-default",
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true,
+      "tools": false,
+      "structuredJson": true,
+      "contextual": true,
+      "mode": "failure",
+      "contextKeys": [
+        "capabilities",
+        "needs",
+        "projects",
+        "realizations"
+      ],
+      "capabilityKeys": [
+        "category",
+        "conditions",
+        "createdAt",
+        "description",
+        "provenance",
+        "state",
+        "updatedAt",
+        "version",
+        "visibility"
+      ],
+      "hasOwnedMarker": true,
+      "hasForeignMarker": false,
+      "hasUuid": false,
+      "hasForbiddenFields": false,
+      "projectionKeysValid": true
+    },
+    {
+      "mock": true,
+      "endpoint": "/v4/ai/language-model",
+      "model": "moonshotai/kimi-k2.6",
+      "providerPolicy": "gateway-default",
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true,
+      "tools": false,
+      "structuredJson": true,
+      "contextual": true,
+      "mode": "ok",
+      "contextKeys": [
+        "capabilities",
+        "needs",
+        "projects",
+        "realizations"
+      ],
+      "capabilityKeys": [
+        "category",
+        "conditions",
+        "createdAt",
+        "description",
+        "provenance",
+        "state",
+        "updatedAt",
+        "version",
+        "visibility"
+      ],
+      "hasOwnedMarker": true,
+      "hasForeignMarker": false,
+      "hasUuid": false,
+      "hasForbiddenFields": false,
+      "projectionKeysValid": true
+    }
+  ],
+  "blockedExternalAttempts": 2,
+  "serverStopped": true
+}

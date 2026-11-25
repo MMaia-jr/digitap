@@ -6,8 +6,8 @@ export type PrivateState='rascunho'|'enviada'|'em_revisao'|'aprovada'|'devolvida
 export interface PrivateActivity extends DraftInput {retrospectiva?:true;pode_ler_privado?:boolean;criado_por_sujeito_id?:string;projeto_aprovacao?:'pendente'|'aprovada'|'rejeitada'|null;projeto_versao_aprovada?:number|null;projeto_parecer?:string|null;id:string;estado_editorial:PrivateState;versao_submetida:number;estado_programacao?:string;motivo_editorial?:string;registro_estado?:string|null;motivo_retirada?:string;numero_versao_publicada?:number|null}
 export type ReviewAction='iniciar'|'aprovar'|'devolver'|'rejeitar';
 export interface ReviewInput {pedido_id:string;acao:ReviewAction;versao_esperada:number;estado_esperado:'enviada'|'em_revisao';motivo:string|null;autorizacao_id:string|null}
-const fields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','retrospectiva','projeto_id'];
-export function objectInput(input:unknown,allowed:string[]):Record<string,unknown>{
+export const draftFields=['titulo','descricao','inicio_previsto','orientacao_acesso','referencia_oficial','acontecendo_agora','retrospectiva','projeto_id'] as const;
+export function objectInput(input:unknown,allowed:readonly string[]):Record<string,unknown>{
  if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!allowed.includes(k)))throw new ActivityError(400,'Pedido inválido.');
  return input as Record<string,unknown>;
 }
@@ -33,7 +33,7 @@ function start(value:unknown,now:Date,retrospective=false){
  return instant.toISOString();
 }
 export function validateDraft(input:unknown,now=new Date()):DraftInput{
- const body=objectInput(input,fields);
+ const body=objectInput(input,draftFields);
  const titulo=text(body.titulo,'titulo',3,180),descricao=text(body.descricao,'descricao',10,5000),orientacao_acesso=text(body.orientacao_acesso,'orientacao_acesso',3,600);
  if(body.acontecendo_agora!==undefined&&typeof body.acontecendo_agora!=='boolean')throw new ActivityError(422,'Informe se a atividade está acontecendo agora.');
  if(body.retrospectiva!==undefined&&typeof body.retrospectiva!=='boolean')throw new ActivityError(422,'Informe se a atividade já aconteceu.');

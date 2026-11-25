@@ -1,0 +1,26 @@
+{
+  "head": "b9e92b1b4a70d3dcb5ba63edb5d8741e63c672cd",
+  "profile": "organização sintética exclusivamente institucional",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "catalog": {
+    "cards": 12,
+    "noticeVisible": true,
+    "notice": "Para transformar um modelo em rascunho, entre com um perfil de pessoa física.",
+    "descriptionBoundToAll": true,
+    "accessibleDescriptionVerified": true
+  },
+  "adapt": {
+    "route": "/dashboard/pessoa-fisica/nova?modelo=…",
+    "accessDenied": true,
+    "personFormAbsent": true,
+    "persistedProductWrites": 0
+  },
+  "cleanup": {
+    "users": 0,
+    "organizations": 0,
+    "subjects": 0
+  }
+}

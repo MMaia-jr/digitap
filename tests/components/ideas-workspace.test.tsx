@@ -23,6 +23,7 @@ const saved: IdeaView = {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 it('salva somente após ação explícita e mostra o rascunho como privado e não publicado', async () => {
+  const consoleError = vi.spyOn(console, 'error');
   const fetcher = vi.fn()
     .mockResolvedValueOnce({ ok: true, json: async () => ({ interpretacao: interpretation }) })
     .mockResolvedValueOnce({ ok: true, json: async () => ({ ideia: saved }) });
@@ -39,9 +40,11 @@ it('salva somente após ação explícita e mostra o rascunho como privado e nã
   expect(fetcher).toHaveBeenCalledTimes(2);
   expect(JSON.parse(fetcher.mock.calls[1][1].body)).toMatchObject({ action: 'create', title: 'Minha proposta', originalText: source, originalInterpretation: interpretation });
   expect(screen.getByText(/Privada · não verificada · não publicada/)).toBeTruthy();
+  expect(consoleError).not.toHaveBeenCalledWith(expect.stringContaining('same key'), expect.anything());
 });
 
 it('retoma rascunho sem chamar a interpretação novamente e salva com versão otimista', async () => {
+  const consoleError = vi.spyOn(console, 'error');
   const updated = { ...saved, title: 'Minha proposta editada', version: 2 };
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ideia: updated }) });
   vi.stubGlobal('fetch', fetcher);
@@ -56,6 +59,33 @@ it('retoma rascunho sem chamar a interpretação novamente e salva com versão o
   fireEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
   await screen.findByText('Rascunho privado salvo. Ele não foi verificado nem publicado.');
   expect(JSON.parse(fetcher.mock.calls[0][1].body)).toMatchObject({ action: 'update', id: saved.id, expectedVersion: 1, title: updated.title, revisedText: source });
+  expect(consoleError.mock.calls.flat().join(' ')).not.toContain('same key');
+});
+
+it('explica a restrição antes de oferecer interpretação e aponta para a atividade manual', () => {
+  const fetcher = vi.fn();
+  vi.stubGlobal('fetch', fetcher);
+  render(<IdeasWorkspace initialIdeas={[]} canInterpret={false} manualActivityHref="/dashboard/pessoa-fisica/nova" />);
+  expect(screen.getByText(/reservada às contas autorizadas no beta/i)).toBeTruthy();
+  expect(screen.queryByRole('button', {name: 'Interpretar proposta'})).toBeNull();
+  expect(screen.queryByLabelText('Usar contexto autorizado')).toBeNull();
+  expect(screen.getByRole('link', {name: 'Preparar uma atividade manualmente'}).getAttribute('href')).toBe('/dashboard/pessoa-fisica/nova');
+  expect(fetcher).not.toHaveBeenCalled();
+});
+
+it('mantém revisão manual de uma ideia salva mesmo sem acesso à IA', async () => {
+  const revisedText = 'Agora a ideia é uma roda de conversa.';
+  const fetcher = vi.fn().mockResolvedValue({ok:true,json:async()=>({ideia:{...saved,revised_text:revisedText,revised_interpretation:null,version:2}})});
+  vi.stubGlobal('fetch', fetcher);
+  render(<IdeasWorkspace initialIdeas={[saved]} canInterpret={false} />);
+  fireEvent.click(screen.getByRole('button', {name:'Retomar'}));
+  expect(screen.queryByRole('button', {name:'Interpretar proposta'})).toBeNull();
+  fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:revisedText}});
+  fireEvent.click(screen.getByRole('button', {name:'Salvar alterações'}));
+  await screen.findByRole('status');
+  expect(fetcher).toHaveBeenCalledOnce();
+  expect(fetcher.mock.calls[0][0]).toBe('/api/ideias');
+  expect(JSON.parse(fetcher.mock.calls[0][1].body)).toMatchObject({action:'update',revisedText,revisedInterpretation:null,expectedVersion:1});
 });
 
 it('exclui somente após confirmação explícita e atualiza a lista privada', async () => {

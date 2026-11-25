@@ -1,0 +1,170 @@
+{
+  "observations": [
+    {
+      "checkpoint": "mobile-pf-taps",
+      "renderedTaps": [
+        [
+          "Revisar meu perfil",
+          "#profile-pessoa-fisica"
+        ],
+        [
+          "Apresentar minhas capacidades",
+          "/meu-espaco/capacidades"
+        ],
+        [
+          "Organizar uma ideia",
+          "/meu-espaco/ideia"
+        ],
+        [
+          "Preparar uma atividade",
+          "/dashboard/pessoa-fisica/nova"
+        ],
+        [
+          "Cadastrar uma organização",
+          "/cadastro/organizacao"
+        ],
+        [
+          "Explorar a Biblioteca de Ações",
+          "/biblioteca-acoes"
+        ],
+        [
+          "Descobrir atividades e encontros",
+          "#descobrir-publicamente"
+        ]
+      ],
+      "keyboardActivation": true,
+      "horizontalOverflow": false
+    },
+    {
+      "checkpoint": "cap-create-edit-reload",
+      "invalidStayed": true,
+      "foreignStatus": 403,
+      "private": true
+    },
+    {
+      "checkpoint": "idea-mock",
+      "processing": true,
+      "cancel": true,
+      "errorPreservedText": true,
+      "humanDecisionReload": true
+    },
+    {
+      "checkpoint": "idea-conversion",
+      "visibility": "private",
+      "decisionSnapshot": true
+    },
+    {
+      "checkpoint": "cap-archive-reload",
+      "state": "arquivada",
+      "private": true
+    },
+    {
+      "checkpoint": "mobile-tap-destinations",
+      "shortcuts": [
+        {
+          "label": "Revisar meu perfil",
+          "href": "#profile-pessoa-fisica",
+          "destination": "/dashboard/pessoa-fisica#profile-pessoa-fisica",
+          "heading": "Bio Pessoal"
+        },
+        {
+          "label": "Preparar uma atividade",
+          "href": "/dashboard/pessoa-fisica/nova",
+          "destination": "/dashboard/pessoa-fisica/nova",
+          "heading": "Criar atividade"
+        },
+        {
+          "label": "Cadastrar uma organização",
+          "href": "/cadastro/organizacao",
+          "destination": "/cadastro/organizacao",
+          "heading": "Crie seu acesso"
+        },
+        {
+          "label": "Explorar a Biblioteca de Ações",
+          "href": "/biblioteca-acoes",
+          "destination": "/biblioteca-acoes",
+          "heading": "Biblioteca de Ações"
+        },
+        {
+          "label": "Descobrir atividades e encontros",
+          "href": "#descobrir-publicamente",
+          "destination": "/dashboard/pessoa-fisica#descobrir-publicamente",
+          "heading": "Descobrir atividades e encontros"
+        }
+      ]
+    },
+    {
+      "checkpoint": "cleanup",
+      "fixtures": 2
+    }
+  ],
+  "network": [
+    {
+      "path": "/api/e4",
+      "method": "POST",
+      "status": 422
+    },
+    {
+      "path": "/api/e4",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/e4",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/e4",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/propostas/interpretar",
+      "method": "POST",
+      "status": 503
+    },
+    {
+      "path": "/api/propostas/interpretar",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/ideias",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/e4",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/e4",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "pageErrors": [],
+  "consoleDiagnostics": []
+}

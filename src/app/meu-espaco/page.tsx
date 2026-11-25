@@ -18,5 +18,5 @@ export default async function WorkspaceEntry() {
   }
   if (viewer.dashboard !== '/meu-espaco') redirect(viewer.dashboard);
 
-  return <ParticipationTaps variant="unlinked" />;
+  return <ParticipationTaps variant="unlinked" canInterpret={viewer.canInterpret} />;
 }

@@ -106,7 +106,7 @@ globalThis.fetch = async (input, init) => {
         || !['projects','needs','realizations'].every(collection => Array.isArray(context[collection]) && context[collection].length === 0)
         || body.prompt.length !== 2 || body.prompt[1].content.length !== 1 || body.temperature !== undefined
         || body.maxOutputTokens !== 6000) throw new Error('Somente a projeção da fixture sintética pode sair do harness.');
-      const reserveUSD = 0.763682;
+      const reserveUSD = 0.8191104;
       // Exclusive creation across Next workers. A second upstream request cannot spend.
       writeFileSync(auditPath, JSON.stringify({ ...safeAudit, event: 'reserved', reserveUSD }) + '\n', { flag: 'wx', mode: 0o600 });
       const started = performance.now();
@@ -146,7 +146,9 @@ globalThis.fetch = async (input, init) => {
         const slug = value => typeof value === 'string' && /^[a-zA-Z0-9_.-]{1,100}$/.test(value) ? value : undefined;
         Object.assign(receipt, { generationId: slug(gateway?.generationId), provider: slug(gateway?.routing?.finalProvider ?? gateway?.provider),
           costUSD: Number.isFinite(Number(gateway?.cost)) ? Number(gateway.cost) : undefined,
-          inputTokens: body.usage?.inputTokens?.total, outputTokens: body.usage?.outputTokens?.total, finishReason: slug(body.finishReason?.unified) });
+          inputTokens: body.usage?.inputTokens?.total, outputTokens: body.usage?.outputTokens?.total,
+          reasoningTokens: body.usage?.outputTokens?.reasoning, answerTokens: body.usage?.outputTokens?.text,
+          finishReason: slug(body.finishReason?.unified) });
       } catch {
         // Preserve the original response even when it has no JSON receipt.
       } finally {
