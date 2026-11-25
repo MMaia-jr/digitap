@@ -50,19 +50,55 @@ for (const mode of ['development', 'production'] as const) {
       expect(response.cookies.get('ap-auth.0')).toMatchObject({ value: 'renewed', secure, httpOnly: true, sameSite: 'lax', path: '/' });
       expect(response.headers.get('Cache-Control')).toBe('private, no-store');
     });
-    it('browser configura Secure sem mudar PKCE nem validação do endpoint existente', async () => {
-      // Endpoint já permitido: isola a opção de cookie. Não autoriza OAuth Cloud.
-      vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'http://127.0.0.1:56151');
+    it('browser configura PKCE e Secure para o endpoint do ambiente', async () => {
+      const url = secure ? 'https://fixture.supabase.co' : 'http://127.0.0.1:56151';
+      vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', url);
       vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'fixture-publishable-key');
       const { browserClient } = await import('../../src/lib/supabase/browser');
       browserClient();
-      expect(mocks.browser).toHaveBeenCalledExactlyOnceWith('http://127.0.0.1:56151', 'fixture-publishable-key', {
+      expect(mocks.browser).toHaveBeenCalledExactlyOnceWith(url, 'fixture-publishable-key', {
         cookieOptions: { name: 'ap-auth', path: '/', sameSite: 'lax', secure },
         auth: { flowType: 'pkce', detectSessionInUrl: false, autoRefreshToken: false },
       });
-      vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'https://fixture.supabase.co');
-      expect(browserClient).toThrow('Supabase local não configurado.');
-      expect(mocks.browser).toHaveBeenCalledOnce();
+    });
+    it('browser rejeita o endpoint do outro ambiente antes de passar a chave ao SDK', async () => {
+      vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', secure ? 'http://127.0.0.1:56151' : 'https://fixture.supabase.co');
+      vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'fixture-publishable-key');
+      const { browserClient } = await import('../../src/lib/supabase/browser');
+      expect(browserClient).toThrow();
+      expect(mocks.browser).not.toHaveBeenCalled();
     });
   });
 }
+
+describe('endpoint Supabase hospedado no navegador', () => {
+  beforeEach(() => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'fixture-publishable-key');
+  });
+
+  it('aceita a raiz HTTPS do projeto com barra final', async () => {
+    const url = 'https://fixture.supabase.co/';
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', url);
+    const { browserClient } = await import('../../src/lib/supabase/browser');
+    browserClient();
+    expect(mocks.browser).toHaveBeenCalledWith(url, 'fixture-publishable-key', expect.anything());
+  });
+
+  it.each([
+    undefined,
+    'http://fixture.supabase.co',
+    'https://fixture.supabase.co.other.invalid',
+    'https://fixture.supabase.co:8443',
+    'https://user:password@fixture.supabase.co',
+    'https://fixture.supabase.co/storage/v1',
+    'https://fixture.supabase.co/?fixture=1',
+    'https://fixture.supabase.co/#fragment',
+    'https://fixture.supabase.co/fixture/..',
+  ])('rejeita o endpoint %s antes de criar o cliente', async url => {
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', url);
+    const { browserClient } = await import('../../src/lib/supabase/browser');
+    expect(browserClient).toThrow();
+    expect(mocks.browser).not.toHaveBeenCalled();
+  });
+});
