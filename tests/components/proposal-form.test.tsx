@@ -43,6 +43,18 @@ it('impede envio duplicado durante a espera',async()=>{
 it.each([401,429,503])('falha HTTP %s nunca mostra detalhes internos',async status=>{
  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:false,status,json:async()=>({message:'SECRET_MARKER'})}));render(<ProposalForm/>);fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Ideia'}});fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);await screen.findByRole('alert');expect(screen.queryByText(/SECRET_MARKER/)).toBeNull();
 });
+it('orçamento indisponível conserva o texto e explica que o resto do produto continua disponível',async()=>{
+ const fetcher=vi.fn().mockResolvedValue({ok:false,status:402,json:async()=>({message:'SECRET_MARKER'})});
+ vi.stubGlobal('fetch',fetcher);
+ render(<ProposalForm/>);
+ const field=screen.getByLabelText('Sua proposta') as HTMLTextAreaElement;
+ fireEvent.change(field,{target:{value:'Uma ideia privada'}});
+ fireEvent.click(screen.getByRole('button',{name:'Interpretar proposta'}));
+ expect((await screen.findByRole('alert')).textContent).toContain('As demais funcionalidades continuam disponíveis.');
+ expect(field.value).toBe('Uma ideia privada');
+ expect(screen.queryByText(/SECRET_MARKER/)).toBeNull();
+ expect(fetcher).toHaveBeenCalledOnce();
+});
 it('apresenta saída como texto, nunca como HTML executável',async()=>{
  const malicious={...preview,dados:{...preview.dados,atividades:[{descricao:'<img src=x onerror=alert(1)>',trecho:'trecho declarado'}]}};
  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>({interpretacao:malicious})}));render(<ProposalForm/>);fireEvent.change(screen.getByLabelText('Sua proposta'),{target:{value:'Ideia'}});fireEvent.submit(screen.getByRole('button',{name:'Interpretar proposta'}).closest('form')!);await screen.findByRole('heading',{name:'Prévia para revisão humana'});expect(screen.getByText('<img src=x onerror=alert(1)>')).toBeTruthy();expect(document.querySelector('img[src="x"]')).toBeNull();

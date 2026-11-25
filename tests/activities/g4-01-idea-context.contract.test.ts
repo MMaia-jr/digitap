@@ -113,6 +113,7 @@ beforeEach(async () => {
   deps.projectAccess = null;
   vi.stubEnv('NODE_ENV', 'test');
   vi.stubEnv('APP_ORIGIN', origin);
+  vi.stubEnv('AI_BETA_AUTH_USER_ID', userId);
   vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Rede externa indisponível no teste')));
   deps.currentUser.mockResolvedValue({ id: userId, email_confirmed_at: '2026-11-06' });
   deps.account.mockResolvedValue(null);

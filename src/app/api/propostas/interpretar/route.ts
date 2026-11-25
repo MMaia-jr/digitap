@@ -11,6 +11,7 @@ import { interpretProposal } from '../../../../lib/proposals/interpret.server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 const windowMs = 600000;
+const authUserId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 // Process-local cost guard, not a distributed quota. Only verified Auth IDs are
 // keys. No proposal text or user data is retained here; failures consume attempts.
 const attempts = new Map<string, { until: number; count: number }>();
@@ -49,6 +50,10 @@ export async function POST(request: Request): Promise<Response> {
       const gateway = createGateway(await userClient(), adminClient, () => {});
       const user = await gateway.currentUser();
       if (!user?.id || !user.email_confirmed_at) throw new FlowError(401, 'Entre com uma conta confirmada para interpretar sua proposta.');
+      const authorizedUserId = process.env.AI_BETA_AUTH_USER_ID;
+      if (!authorizedUserId || !authUserId.test(authorizedUserId) || user.id !== authorizedUserId) {
+        throw new FlowError(403, 'Esta conta não está autorizada a usar a interpretação do beta.');
+      }
       const account = await gateway.account(user.id);
       if (account && (account.auth_user_id !== user.id || account.situacao !== 'ativa')) throw new FlowError(403, 'Acesso indisponível para esta conta.');
       let contexto: ProposalContext | undefined;
@@ -76,8 +81,11 @@ export async function POST(request: Request): Promise<Response> {
         await revalidate();
         let interpretacao;
         try { interpretacao = await interpretProposal(texto, contexto, request.signal); }
-        catch {
+        catch (error) {
           if (request.signal.aborted) throw new FlowError(499, 'Interpretação cancelada.');
+          if (error instanceof Error && 'code' in error && error.code === 'BUDGET') {
+            throw new FlowError(402, 'O orçamento de interpretação está indisponível. As demais funcionalidades continuam disponíveis.');
+          }
           throw new FlowError(503, 'Interpretação indisponível. Tente novamente mais tarde.');
         }
         await revalidate();

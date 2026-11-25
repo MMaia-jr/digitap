@@ -99,6 +99,10 @@ export function ProposalForm({ initialIdea, onSave }: { initialIdea?: IdeaView; 
       });
       if (controller.signal.aborted) return;
       if (!response.ok) {
+        if (response.status === 402) {
+          setError('O orçamento de interpretação está indisponível. As demais funcionalidades continuam disponíveis.');
+          return;
+        }
         setError(response.status === 401 ? 'Entre novamente com uma conta confirmada.' : response.status === 429 ? 'Limite temporário atingido. Tente novamente mais tarde.' : 'Não foi possível interpretar agora. Tente novamente mais tarde.');
         return;
       }

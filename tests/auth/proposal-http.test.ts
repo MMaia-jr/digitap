@@ -14,14 +14,20 @@ function request(body:unknown={texto:'Uma oficina comunitária.'},headers:Record
  return new Request(origin+'/api/propostas/interpretar',{method,headers:values,body:method==='GET'?undefined:JSON.stringify(body)});
 }
 beforeEach(async()=>{
- vi.resetModules();vi.clearAllMocks();vi.stubEnv('NODE_ENV','test');vi.stubEnv('APP_ORIGIN',origin);vi.stubGlobal('fetch',vi.fn().mockRejectedValue(new Error('Rede não autorizada no teste')));
+ vi.resetModules();vi.clearAllMocks();vi.stubEnv('NODE_ENV','test');vi.stubEnv('APP_ORIGIN',origin);vi.stubEnv('AI_BETA_AUTH_USER_ID',id);vi.stubGlobal('fetch',vi.fn().mockRejectedValue(new Error('Rede não autorizada no teste')));
  deps.currentUser.mockResolvedValue({id,email_confirmed_at:'2026-11-06'});deps.account.mockResolvedValue(null);deps.client.mockResolvedValue({});deps.interpret.mockResolvedValue(result);
  post=(await import('../../src/app/api/propostas/interpretar/route')).POST;
 });
 afterEach(()=>{vi.unstubAllEnvs();vi.unstubAllGlobals();vi.restoreAllMocks();});
-it('sessão confirmada sem perfil pode interpretar sem criar conta de aplicação',async()=>{
+it('a identidade autorizada e confirmada pode interpretar sem criar conta de aplicação',async()=>{
  const r=await post(request());expect(r.status).toBe(200);expect(await r.json()).toMatchObject({interpretacao:result});
  expect(deps.account).toHaveBeenCalledWith(id);expect(deps.interpret).toHaveBeenCalledExactlyOnceWith('Uma oficina comunitária.',undefined,expect.any(AbortSignal));expect(fetch).not.toHaveBeenCalled();expect(r.headers.get('cache-control')).toContain('no-store');
+});
+it.each([undefined,'','malformado','22222222-2222-4222-8222-222222222222'])('nega por padrão sem autorização explícita correspondente (%s)',async authorizedId=>{
+ vi.stubEnv('AI_BETA_AUTH_USER_ID',authorizedId);
+ deps.currentUser.mockResolvedValue({id,email_confirmed_at:'2026-11-06',app_metadata:{role:'admin'}});
+ const r=await post(request({texto:'Uma oficina comunitária.',contexto:{subjectId:id,consentimento:true}}));
+ expect(r.status).toBe(403);expect(deps.account).not.toHaveBeenCalled();expect(deps.interpret).not.toHaveBeenCalled();
 });
 it.each([null,{id,email_confirmed_at:null},{email_confirmed_at:'2026-11-06'}])('sessão ausente, não confirmada ou incompleta não usa IA',async user=>{
  deps.currentUser.mockResolvedValue(user);const r=await post(request());expect(r.status).toBe(401);expect(deps.interpret).not.toHaveBeenCalled();
@@ -50,9 +56,22 @@ it('impede duas interpretações simultâneas da mesma pessoa',async()=>{
 it('janela expirada libera nova tentativa',async()=>{
  vi.useFakeTimers();try{for(let i=0;i<3;i++)await post(request());vi.advanceTimersByTime(600001);expect((await post(request())).status).toBe(200);}finally{vi.useRealTimers();}
 });
-it('limite agregado impede contorno por múltiplas identidades no mesmo processo',async()=>{
- for(let i=0;i<20;i++){deps.currentUser.mockResolvedValue({id:'fixture-'+i,email_confirmed_at:'2026-11-06'});expect((await post(request())).status).toBe(200);}
- deps.currentUser.mockResolvedValue({id:'fixture-extra',email_confirmed_at:'2026-11-06'});expect((await post(request())).status).toBe(429);expect(deps.interpret).toHaveBeenCalledTimes(20);
+it('limite agregado continua valendo se a identidade autorizada mudar',async()=>{
+ const authorize=(i:number)=>{
+  const actor='11111111-1111-4111-8111-'+String(i).padStart(12,'0');
+  vi.stubEnv('AI_BETA_AUTH_USER_ID',actor);
+  deps.currentUser.mockResolvedValue({id:actor,email_confirmed_at:'2026-11-06'});
+ };
+ for(let i=0;i<20;i++){authorize(i);expect((await post(request())).status).toBe(200);}
+ authorize(20);expect((await post(request())).status).toBe(429);expect(deps.interpret).toHaveBeenCalledTimes(20);
+});
+it('esgotamento do orçamento retorna mensagem sanitizada sem retry',async()=>{
+ deps.interpret.mockRejectedValueOnce(Object.assign(new Error('SENSITIVE_MARKER'),{code:'BUDGET'}));
+ const r=await post(request());
+ expect(r.status).toBe(402);
+ expect(await r.json()).toEqual({message:'O orçamento de interpretação está indisponível. As demais funcionalidades continuam disponíveis.'});
+ expect(deps.interpret).toHaveBeenCalledOnce();
+ expect((await post(request())).status).toBe(200);
 });
 it.each(['CONFIGURATION','OUTPUT','UNAVAILABLE'])('falha IA %s tem resposta pública genérica e não vaza',async code=>{
  deps.interpret.mockRejectedValue(Object.assign(new Error('SENSITIVE_MARKER'),{code}));const log=vi.spyOn(console,'error');

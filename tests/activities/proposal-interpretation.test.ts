@@ -112,8 +112,13 @@ it.each([
 ])('schema inválido, autoridade inventada e fonte sem trecho são rejeitados (%#)',async bad=>{
  fetcher.mockResolvedValue(response(bad()));await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'OUTPUT'});
 });
-it.each([401,402,429,500,503])('falha HTTP %s não expõe corpo nem repete chamada',async status=>{
+it.each([401,429,500,503])('falha HTTP %s não expõe corpo nem repete chamada',async status=>{
  fetcher.mockResolvedValue(new Response('SENSITIVE_PROVIDER_MARKER',{status}));await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'UNAVAILABLE',message:'Interpretação indisponível.'});expect(fetcher).toHaveBeenCalledOnce();
+});
+it('classifica orçamento indisponível sem encaminhar o corpo do provedor nem repetir',async()=>{
+ fetcher.mockResolvedValue(Response.json({error:{type:'quota_for_entity_exceeded',message:'SENSITIVE_PROVIDER_MARKER'}},{status:402}));
+ await expect(interpretProposal(proposal)).rejects.toMatchObject({code:'BUDGET',message:'Orçamento de interpretação indisponível.',cause:undefined});
+ expect(fetcher).toHaveBeenCalledOnce();
 });
 it('falha fechada quando o Gateway não encontra provedor elegível',async()=>{
  fetcher.mockResolvedValue(Response.json({error:{type:'no_zdr_providers_available'}},{status:400}));

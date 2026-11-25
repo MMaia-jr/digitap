@@ -101,6 +101,7 @@ describe('E4 — integração com PostgreSQL local, sessão e isolamento',()=>{
    proposalRoute.user=users[0];
    proposalRoute.interpret.mockReset();
    vi.stubEnv('APP_ORIGIN',origin);
+   vi.stubEnv('AI_BETA_AUTH_USER_ID',users[0]);
    const context=runtime.context.bind(runtime);
    const contextSpy=vi.spyOn(runtime,'context').mockImplementation(async sid=>{
     if(phase==='after-subjects')await point.pause();

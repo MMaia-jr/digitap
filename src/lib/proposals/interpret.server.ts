@@ -15,11 +15,11 @@ export type ProposalInterpretation = {
   verificacao: 'nao_verificada';
   dados: Extraction;
 };
-type ErrorCode = 'INPUT' | 'CONFIGURATION' | 'OUTPUT' | 'CANCELLED' | 'UNAVAILABLE';
+type ErrorCode = 'INPUT' | 'CONFIGURATION' | 'OUTPUT' | 'CANCELLED' | 'BUDGET' | 'UNAVAILABLE';
 class InterpretationError extends Error {
   override readonly cause = undefined;
   constructor(readonly code: ErrorCode) {
-    super(code === 'INPUT' ? 'Proposta inválida.' : code === 'CONFIGURATION' ? 'Interpretação não configurada.' : code === 'OUTPUT' ? 'Resposta de interpretação inválida.' : code === 'CANCELLED' ? 'Interpretação cancelada.' : 'Interpretação indisponível.');
+    super(code === 'INPUT' ? 'Proposta inválida.' : code === 'CONFIGURATION' ? 'Interpretação não configurada.' : code === 'OUTPUT' ? 'Resposta de interpretação inválida.' : code === 'CANCELLED' ? 'Interpretação cancelada.' : code === 'BUDGET' ? 'Orçamento de interpretação indisponível.' : 'Interpretação indisponível.');
   }
 }
 function fail(code: ErrorCode): never { throw new InterpretationError(code); }
@@ -67,6 +67,7 @@ function validate(value: unknown, proposal: string): Extraction {
 }
 const maxResponseBytes = 128000;
 class ResponseTooLarge extends Error {}
+class GatewayBudgetUnavailable extends Error {}
 function hasCause(error: unknown, predicate: (value: unknown) => boolean): boolean {
   let current = error;
   for (let depth = 0; depth < 5 && current !== undefined; depth++) {
@@ -79,6 +80,10 @@ function hasCause(error: unknown, predicate: (value: unknown) => boolean): boole
 /** Keep the existing transport limits while letting the SDK own the protocol. */
 async function boundedGatewayFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const response = await fetch(input, { ...init, redirect: 'error', cache: 'no-store' });
+  if (response.status === 402) {
+    await response.body?.cancel();
+    throw new GatewayBudgetUnavailable();
+  }
   const declaredLength = Number(response.headers.get('content-length'));
   if (Number.isFinite(declaredLength) && declaredLength > maxResponseBytes) {
     await response.body?.cancel();
@@ -123,6 +128,7 @@ export async function interpretProposal(input: unknown, context?: ProposalContex
     output = result.output;
   } catch (error) {
     if (signal?.aborted) return fail('CANCELLED');
+    if (hasCause(error, value => value instanceof GatewayBudgetUnavailable)) return fail('BUDGET');
     if (hasCause(error, value => value instanceof ResponseTooLarge || NoObjectGeneratedError.isInstance(value) || NoOutputGeneratedError.isInstance(value))) return fail('OUTPUT');
     return fail('UNAVAILABLE');
   }

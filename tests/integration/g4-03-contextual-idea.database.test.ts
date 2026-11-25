@@ -65,7 +65,7 @@ function request(path: string, payload: unknown) {
 
 function gatewayResponse() { return Response.json(body); }
 
-async function withSimulatedGateway<T>(operation: () => Promise<T>) {
+async function withSimulatedGateway<T>(authorizedUserId: string, operation: () => Promise<T>) {
   const original = globalThis.fetch;
   capture = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(typeof input === 'string' || input instanceof URL ? input : input.url);
@@ -74,6 +74,7 @@ async function withSimulatedGateway<T>(operation: () => Promise<T>) {
   });
   vi.stubEnv('AI_GATEWAY_API_KEY', 'g4-03-synthetic-only');
   vi.stubEnv('AI_GATEWAY_MODEL', 'moonshotai/kimi-k2.6');
+  vi.stubEnv('AI_BETA_AUTH_USER_ID', authorizedUserId);
   vi.stubGlobal('fetch', capture);
   try { return await operation(); }
   finally { globalThis.fetch = original; vi.unstubAllEnvs(); }
@@ -159,7 +160,7 @@ it('conta sem perfil segue o modo legado sem consultar contexto; Gateway simulad
   session.userId = noProfileId;
   const subjectsSpy = vi.spyOn(e4Service, 'subjects');
   const contextSpy = vi.spyOn(e4Service, 'context');
-  const response = await withSimulatedGateway(() => interpretPost(request('/api/propostas/interpretar', { texto: proposal })));
+  const response = await withSimulatedGateway(noProfileId, () => interpretPost(request('/api/propostas/interpretar', { texto: proposal })));
   expect(response.status).toBe(200);
   const result = await response.json();
   expect(result.interpretacao).toMatchObject({ estado: 'revisao_humana_pendente', verificacao: 'nao_verificada' });
@@ -177,11 +178,11 @@ it('E4 real autoriza somente o titular; a projeção exata chega ao SDK e a deci
   const foreign = await createE4Service({ verifyUser: async () => ({ id: otherId, email_confirmed_at: '2026-11-23T12:00:00.000Z' }) }).createCapability({ subjectId: otherSubjectId, description: 'G4-03-PRIVATE-BETA-MUST-NOT-LEAK', category: 'cultura' });
   capabilities.push(foreign.id);
 
-  const denied = await withSimulatedGateway(() => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: otherSubjectId, consentimento: true } })));
+  const denied = await withSimulatedGateway(ownerId, () => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: otherSubjectId, consentimento: true } })));
   expect(denied.status).toBe(403);
   expect(capture).not.toHaveBeenCalled();
 
-  const response = await withSimulatedGateway(() => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: ownerSubjectId, consentimento: true } })));
+  const response = await withSimulatedGateway(ownerId, () => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: ownerSubjectId, consentimento: true } })));
   expect(response.status).toBe(200);
   const returned = await response.json();
   expect(returned.interpretacao).toMatchObject({ estado: 'revisao_humana_pendente', verificacao: 'nao_verificada' });
@@ -433,7 +434,7 @@ it('revogação de vínculo impede uma nova recuperação e não chama o Gateway
   const link = (await db!.query("select id from public.vinculos_publicadores where sujeito_id=$1 and atual and situacao='ativo' and papel_vinculo='titular'", [ownerSubjectId])).rows[0];
   expect(link?.id).toBeTruthy();
   await db!.query("update public.vinculos_publicadores set situacao='revogado',revogada_em=clock_timestamp(),atualizada_em=clock_timestamp() where id=$1", [link.id]);
-  const response = await withSimulatedGateway(() => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: ownerSubjectId, consentimento: true } })));
+  const response = await withSimulatedGateway(ownerId, () => interpretPost(request('/api/propostas/interpretar', { texto: proposal, contexto: { subjectId: ownerSubjectId, consentimento: true } })));
   expect(response.status).toBe(403);
   expect(capture).not.toHaveBeenCalled();
   await expect(e4Service.context(ownerSubjectId)).rejects.toMatchObject({ status: 403 });
