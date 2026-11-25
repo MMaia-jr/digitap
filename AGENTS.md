@@ -8,6 +8,13 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Autenticação operacional
+
+- Reutilize as autenticações existentes. Não solicite novas senhas nem redefina credenciais.
+- Priorize o MCP já autenticado ou o mecanismo nativo de credenciais temporárias da CLI.
+- Não use conexão direta por senha quando houver alternativa oficial funcional.
+- Se uma credencial estiver indisponível, registre o bloqueio da operação que depende dela e prossiga com as demais tarefas.
+
 <!-- sitrep:start -->
 ## SitRep
 
