@@ -1,3 +1,20 @@
+# CONS-03D — autorização e orçamento do beta, 25/11/2026
+
+- A interpretação exige sessão Auth confirmada e correspondência exata com `AI_BETA_AUTH_USER_ID`, configurado no servidor para a conta informada pelo fundador e verificada no Supabase. Configuração ausente, inválida ou divergente bloqueia a rota antes da consulta contextual e do Gateway. A autorização não é derivada de e-mail, papel ou identificadores do navegador.
+- A chave exclusiva `digitap-beta-cons-03d` tem orçamento ativo de US$ 5,00 por chave, sem renovação, separado do experimental. O orçamento nativo permite que requisições em andamento terminem. O limite por processo continua sendo defesa adicional. O HTTP 402 do Gateway vira aviso sanitizado sem retry, preserva o texto e se limita à interpretação. O contrato de Kimi K2.6, failover e privacidade permanece.
+- RED com seis falhas no servidor e uma na interface. GREEN com 106/106 testes focais, typecheck, lint focal e integridade do diff. A candidata `7c6942146e245cfc2506022945956aa34ee85538` fica preservada. O deployment público de retorno permanece `dpl_ovMkpued6TcgVR7ZSFGYLYeX7ohR`.
+
+---
+
+# CONS-03C — homologação hospedada do anexo privado, 25/11/2026
+
+- Correção e regressão local versionadas em `52584531a029fd822fd5b9b66b7094948688c61c` (`fix(storage)`). Diretriz de autenticação e contexto versionados em `7c6942146e245cfc2506022945956aa34ee85538` (`docs(ops)`). A release `release/digitap-cons-03` aponta para o segundo SHA. A candidata `625698b` permanece na ancestralidade como ponto de recuperação. A `main` permaneceu em `cfa65fe37e5aae2113e92dd64c2b410e97f8d16e`.
+- Deployment `dpl_EevZvg6LrHPFNKHuep5HKoj1q8CH` em READY, com configuração Production, Vercel Authentication e sem associação ao domínio público. Chromium com sandbox confirmou inicialização do anexo, upload no Storage e confirmação com HTTP 200. Após reabrir a atividade, o titular recebeu redirecionamento assinado e baixou os mesmos bytes com HTTP 200. Uma segunda identidade autenticada recebeu 403 na listagem e no download, sem URL assinada.
+- Limpeza por IDs confirmada. As duas identidades sintéticas e seus registros foram removidos, sem objeto residual no Storage para a chave usada. Chromium encerrado. Evidência sanitizada com SHA-256 conferido em `operations/evidence/cons-03c-storage-20261125`.
+- Sem inferência, ajuste de orçamento, migration, backup ou promoção. O domínio público continuou em `dpl_ovMkpued6TcgVR7ZSFGyLYeX7ohR`. O gate financeiro e de acesso à IA continua separado da homologação do anexo.
+
+---
+
 # CONS-03C — correção local do cliente Supabase, 25/11/2026
 
 - Diretriz operacional permanente. Reutilizar autenticações existentes, sem solicitar novas senhas ou redefinir credenciais. Priorizar o MCP autenticado ou as credenciais temporárias nativas da CLI. Evitar conexão direta por senha quando houver alternativa oficial funcional. Se uma credencial faltar, registrar apenas o bloqueio da operação dependente e continuar as demais tarefas. A mesma regra consta no `AGENTS.md`.
